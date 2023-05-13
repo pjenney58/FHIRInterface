@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  palisaidpod:
+    image: ${DOCKER_REGISTRY-}palisaidpod
+    build:
+      context: .
+      dockerfile: src/PalisaidPod/Dockerfile
