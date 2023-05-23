@@ -1,13 +1,21 @@
 {
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:15471",
+      "sslPort": 44373
+    }
+  },
   "profiles": {
     "PalisaidPod": {
       "commandName": "Project",
       "launchBrowser": true,
+      "applicationUrl": "https://localhost:7182;http://localhost:5222",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
-      },
-      "applicationUrl": "https://localhost:7182;http://localhost:5222"
+      }
     },
     "IIS Express": {
       "commandName": "IISExpress",
@@ -21,16 +29,9 @@
       "commandName": "Docker",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "environmentVariables": {},
       "publishAllPorts": true,
       "useSSL": true
-    }
-  },
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:15471",
-      "sslPort": 44373
     }
   }
 }
