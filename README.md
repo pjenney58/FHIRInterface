@@ -4,15 +4,19 @@
 
 ## Backend
 
-* Primary API
-    * Primary object management
-        * Patients
-        * Practitioners
-        * Locations
-        * Encounters  
-    * Secondary object management
-        * Calendaring
-        * Messaging
+* Primary API / Control Pod
+   * Authentication
+   * Aggregation
+   * Query
+* Data API
+   * Patients
+   * Practitioners
+   * Encounters
+   * Locations
+   * Diagnoses
+   * Diagnostics
+   * Prescriptions
+   * Treatments
 * Vector API
     * Raw data
     * Statistical 
@@ -25,9 +29,24 @@
     * Tenant Instance Management
         * User Management
         * Reporting
-* Identity Management API
-    * Authentication
-    * Authorization 
+* Code API
+    * SNOMED
+    * ICD*
+    * Billing Codes
+ * Calendar
+    * Schedule Events
+    * Participants
+    * Meeting Spaces
+ * PobulationHealth
+    * CDC
+    * NIS
+    * NHS (UK)
+ * Collectors
+    * HL7
+    * X12
+    * REST (Bespoke)
+    * Socket (Bespoke)
+    * HTTP/2 (Bespoke)       
 
 # Deployment
 Deployment is orchestrated by Kubernetes which manages pods for:
