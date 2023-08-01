@@ -1,0 +1,45 @@
+openapi: '3.0.2'
+info:
+  title: Palisaid Practice Management Authentication
+  version: '1.0'
+components:
+    securitySchemems:
+      developerAuth:       # <-- for quick developer access
+        type: http
+        scheme: bearer
+      apiKeyAuth:          # <-- Production pod access
+        type: apiKey
+        in: header
+        name: X-API-Key
+      openID:
+        type: openIdConnect
+        openIdConnectUrl: https://example.com/.well-known/openid-configuration
+    security:
+        - developerAuth: []
+        - apiKeyAuth: []
+        - openApi: []
+servers:
+   - url: https://development.authenticate.palisaid.com/v1
+   description: Development server
+
+   - url: https://staging.authenticate.palisaid.com/v1
+   description: Staging server
+
+   - url: https://api.authenticate.palisaid.com/v1
+   description: Production server
+paths:
+  /login/{username/password}:
+    post:
+      operationId: authenticateUser
+      responses:
+        '200':
+         description: Login succeeded
+        '401':
+         description: Login failed
+        '500':
+         description: Server Error
+parameters:
+- name: username
+  in: path
+  description: username
+

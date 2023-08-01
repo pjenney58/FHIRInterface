@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/petejenney/Projects/Tests/DevTests/DevTests.csproj": {}
+    "/Users/petejenney/Projects/Palisaid-Practice-Management/test/DevTests/DevTests.csproj": {}
   },
   "projects": {
-    "/Users/petejenney/Projects/Tests/DevTests/DevTests.csproj": {
+    "/Users/petejenney/Projects/Palisaid-Practice-Management/test/DevTests/DevTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/petejenney/Projects/Tests/DevTests/DevTests.csproj",
+        "projectUniqueName": "/Users/petejenney/Projects/Palisaid-Practice-Management/test/DevTests/DevTests.csproj",
         "projectName": "DevTests",
-        "projectPath": "/Users/petejenney/Projects/Tests/DevTests/DevTests.csproj",
+        "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/test/DevTests/DevTests.csproj",
         "packagesPath": "/Users/petejenney/.nuget/packages/",
-        "outputPath": "/Users/petejenney/Projects/Tests/DevTests/obj/",
+        "outputPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/test/DevTests/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/petejenney/.nuget/NuGet/NuGet.Config"
