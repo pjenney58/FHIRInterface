@@ -6,3 +6,66 @@ services:
     build:
       context: .
       dockerfile: src/PalisaidPod/Dockerfile
+
+  authentication:
+    image: ${DOCKER_REGISTRY-}authentication
+    build:
+      context: .
+      dockerfile: src/Authentication/Dockerfile
+
+
+  administration:
+    image: ${DOCKER_REGISTRY-}administration
+    build:
+      context: .
+      dockerfile: src/Administration/Dockerfile
+
+
+  calendar:
+    image: ${DOCKER_REGISTRY-}calendar
+    build:
+      context: .
+      dockerfile: src/Calendar/Dockerfile
+
+
+  codes:
+    image: ${DOCKER_REGISTRY-}codes
+    build:
+      context: .
+      dockerfile: src/Codes/Dockerfile
+
+
+  collectors:
+    image: ${DOCKER_REGISTRY-}collectors
+    build:
+      context: .
+      dockerfile: src/Collectors/Dockerfile
+
+
+  data:
+    image: ${DOCKER_REGISTRY-}data
+    build:
+      context: .
+      dockerfile: src/Data/Dockerfile
+
+
+  populationhealth:
+    image: ${DOCKER_REGISTRY-}populationhealth
+    build:
+      context: .
+      dockerfile: src/PopulationHealth/Dockerfile
+
+
+  reports:
+    image: ${DOCKER_REGISTRY-}reports
+    build:
+      context: .
+      dockerfile: src/Reports/Dockerfile
+
+
+  vectors:
+    image: ${DOCKER_REGISTRY-}vectors
+    build:
+      context: .
+      dockerfile: src/Vectors/Dockerfile
+
