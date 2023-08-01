@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevTests", "test\DevTests\D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vectors", "src\Vectors\Vectors.csproj", "{53BB11D1-D1C5-4821-B16D-211F50531FFC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Administration", "src\Administration\Administration.csproj", "{0851325A-6DBE-4679-B884-EF64024F656A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{53BB11D1-D1C5-4821-B16D-211F50531FFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53BB11D1-D1C5-4821-B16D-211F50531FFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53BB11D1-D1C5-4821-B16D-211F50531FFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0851325A-6DBE-4679-B884-EF64024F656A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0851325A-6DBE-4679-B884-EF64024F656A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0851325A-6DBE-4679-B884-EF64024F656A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0851325A-6DBE-4679-B884-EF64024F656A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,5 +109,6 @@ Global
 		{0FF59276-7E06-454B-861B-13771D945AC3} = {7DF53970-678F-4077-AC87-C93175309E34}
 		{1AE08B7F-7D86-4A6F-94B7-71D485F23DE8} = {7DF53970-678F-4077-AC87-C93175309E34}
 		{53BB11D1-D1C5-4821-B16D-211F50531FFC} = {2B863462-583A-43F2-970A-F9E8EF17652D}
+		{0851325A-6DBE-4679-B884-EF64024F656A} = {2B863462-583A-43F2-970A-F9E8EF17652D}
 	EndGlobalSection
 EndGlobal
