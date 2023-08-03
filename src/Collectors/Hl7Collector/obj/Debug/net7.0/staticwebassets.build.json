@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "EuhD+t6Xy/bUatRiO0q2W2B8Hm6CMusWAEuaOb0BxvM=",
+  "Source": "Hl7Collector",
+  "BasePath": "_content/Hl7Collector",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

@@ -1,0 +1,28 @@
+﻿
+namespace DataShapes.Model
+{
+    public class Specimen : Entity
+	{
+		public Specimen() { }
+		
+        public Specimen(Guid ownerId, Guid tenantId)
+            : base(ownerId, tenantId) { }
+
+        public Code? SpecimenType { get; set; } = new();
+		public DateTimeOffset DateCollected { get; set; } = DateTimeOffset.Now;
+		public List<string> Request { get; set; } = new();
+		public Code? Role { get; set; } = new();
+		public Tuple<Code, string>? Feature { get; set; }
+
+		protected override void Dispose(bool disposing)
+		{
+			SpecimenType?.Dispose();
+			Role?.Dispose();
+			DateCollected = DateTimeOffset.MinValue;
+			Request.Clear();
+			Request.TrimExcess();
+			Feature = null;
+		}
+	}
+}
+
