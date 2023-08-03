@@ -127,4 +127,12 @@ Global
 		{66E31B7F-9218-46E2-B8CC-9ECA45F0E6CD} = {4114A5B3-F34C-4B6B-B984-F171BF237FFD}
 		{6A789D89-9DA2-4F8E-927E-48226423FCA6} = {2B863462-583A-43F2-970A-F9E8EF17652D}
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
+		$0.TextStylePolicy = $2
+		$2.inheritsSet = null
+		$2.scope = text/x-web
+	EndGlobalSection
 EndGlobal
