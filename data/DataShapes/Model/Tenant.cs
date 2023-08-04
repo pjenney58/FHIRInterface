@@ -22,7 +22,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 namespace DataShapes.Model
 {
     [Serializable]
-    public class Customer : Entity
+    public class Tenant : Entity
     {
         public string? Name { get; set; }
         public string? Department { get; set; }
@@ -42,14 +42,14 @@ namespace DataShapes.Model
         public DisposableList<Contact>? Contacts { get; set; } = new();
         public DisposableList<PaymentMethod>? PaymentMethods { get; set; } = new();
 
-        public Customer() { }
+        public Tenant() { }
        
 
         /// <summary>
         /// The root object for each partition
         /// </summary>
         /// <param name="key"> </param>
-        public Customer(Guid ownerId, Guid tenantId)
+        public Tenant(Guid ownerId, Guid tenantId)
             : base(ownerId, tenantId) { }
     
         

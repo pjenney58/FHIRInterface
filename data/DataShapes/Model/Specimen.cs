@@ -12,12 +12,15 @@ namespace DataShapes.Model
 		public DateTimeOffset DateCollected { get; set; } = DateTimeOffset.Now;
 		public List<string> Request { get; set; } = new();
 		public Code? Role { get; set; } = new();
-		public Tuple<Code, string>? Feature { get; set; }
+		public Code? Feature { get; set; }
+		public string? FeatureDescription { get; set; }
 
 		protected override void Dispose(bool disposing)
 		{
 			SpecimenType?.Dispose();
 			Role?.Dispose();
+			Feature?.Dispose();
+			FeatureDescription = null;
 			DateCollected = DateTimeOffset.MinValue;
 			Request.Clear();
 			Request.TrimExcess();

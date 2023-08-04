@@ -23,12 +23,8 @@ namespace DataShapes.Model
 
 		#region key
 		[Key]
-        public Guid Id { get; set; }
-
-		[Key]
+        public Guid Id { get; set; }	
 		public Guid OwnerId { get; set; }
-
-		[Key]
 		public Guid TenantId { get; set; }
         #endregion key
 

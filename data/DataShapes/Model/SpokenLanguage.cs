@@ -34,7 +34,7 @@ namespace DataShapes.Model
         public string? NativeLanguageName { get; set; }    // Deutsch
         public int Fluency { get; set; }   // 1-10
 
-        [Key]
+
         public SpokenLanguageUse Use { get; set; }
 
         public SpokenLanguage() {}
