@@ -55,7 +55,7 @@ namespace Hl7Harmonizer.Adapters.Model
             var fhir = payloadIN as Hl7.Fhir.Model.Practitioner;
             var meta = new DataShapes.Model.Practitioner();
 
-            meta.EntityID = Guid.Parse(fhir.Id);
+            meta.EntityId = Guid.Parse(fhir.Id);
 
             var n = AdapterFactory<Hl7.Fhir.Model.HumanName, DataShapes.Model.PersonName>.GetAdapter(tenant, version);
             foreach (var name in fhir.Name)

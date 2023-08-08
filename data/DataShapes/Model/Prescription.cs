@@ -78,10 +78,10 @@ namespace DataShapes.Model
     public class Prescription : Entity
     {
         public Prescription() { }
-       
+
         private void Init(Guid ownerId, Guid tenantId)
         {
-            DoseSchedule = new(ownerId,tenantId);
+            DoseSchedule = new(ownerId, tenantId);
         }
 
         /// <summary>
@@ -98,12 +98,18 @@ namespace DataShapes.Model
 
         public RxType RxType { get; set; }
         public string? PriorPrescriptionName { get; set; }
-        public PrescriptionStatus ScripStatus { get; set; }
-        public string? StatusReason { get; set; }
+
+        public List<string>? StatusReasons { get; set; } = new();
+        public List<PrescriptionCatagory> Catagories {get;set;} = new();
+
         public PrescriptionIntent Intent { get; set; }
         public PrescriptionCatagory Catagory { get; set; }
+        public PrescriptionStatus Status { get; set; }
+        public PrescriptionPriority Priority { get; set; }
+
         public bool DoNotPerform { get; set; }
 
+        public Code? Code { get; set; }
         public Location? FillingPharmacy { get; set; }
         public Patient? Patient { get; set; }
         public Practitioner? Practitioner { get; set; }
@@ -137,13 +143,17 @@ namespace DataShapes.Model
             {
                 PrescriptionName = null;
                 PriorPrescriptionName = null;
-                StatusReason = null;
+
+                StatusReasons?.Clear();
+                StatusReasons?.TrimExcess();
+                StatusReasons = null;
 
                 Patient?.Dispose();
                 Practitioner?.Dispose();
                 FillingPharmacy?.Dispose();
                 Medication?.Dispose();
                 DoseSchedule?.Dispose();
+                Code?.Dispose();
             }
         }
     }

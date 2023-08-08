@@ -100,7 +100,7 @@ namespace Hl7Harmonizer.Adapters.Model
             }
 
             meta.TenantId = this.tenant;
-            meta.Id = Guid.Parse(fhir.Id);
+            meta.EntityId = Guid.Parse(fhir.Id);
 
             var codes = new List<DataShapes.Model.Code>();
 
@@ -109,7 +109,7 @@ namespace Hl7Harmonizer.Adapters.Model
                 meta.EncounterType = EncounterType.Appointment;
 
                 meta.TenantId = Constants.Transform;
-                meta.Id = Guid.Parse(fhir.Id);
+                meta.EntityId = Guid.Parse(fhir.Id);
 
                 if (fhir.Participant != null)
                 {
@@ -202,7 +202,7 @@ namespace Hl7Harmonizer.Adapters.Model
             var meta = new DataShapes.Model.Encounter()
             {
                 TenantId = this.tenant,
-                Id = Guid.Parse(fhir.Id),
+                EntityId = Guid.Parse(fhir.Id),
                 OwnerId = Guid.Parse(fhir.Subject.Reference.Substring("urn:uuid:".Length)),
                 CreateDate = DateTimeOffset.UtcNow,
                 LastUpdate = DateTimeOffset.UtcNow
@@ -278,7 +278,7 @@ namespace Hl7Harmonizer.Adapters.Model
                     foreach (var diagnosis in fhir.Diagnosis)
                     {
                         var diag = new DataShapes.Model.Diagnosis();
-                        diag.Id = Guid.Parse(diagnosis.ElementId.Substring("urn:uuid:".Length));
+                        diag.EntityId = Guid.Parse(diagnosis.ElementId.Substring("urn:uuid:".Length));
 
                         // meta.Diagnoses.Add(Guid.Parse(diagnosis.ElementId));
                     }
@@ -388,14 +388,14 @@ namespace Hl7Harmonizer.Adapters.Model
 
         private async Task<OEntity> ConvertV2_MSG_ToMeta()
         {
-            // var meta = new Hl7Harmonizer.DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new DataShapes.Model..{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
 
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToV2_MSG()
         {
-            // var meta = new Hl7Harmonizer.DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new DataShapes.Model..{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
             throw new NotImplementedException();
         }
 
@@ -431,10 +431,10 @@ namespace Hl7Harmonizer.Adapters.Model
             // be several similar messages required, e.g. SIU & SRM
             Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Encounter => Hl7Harmonizer.DataShapes.Model.Encounter", Hl7Version.R4), ConvertR4FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"Hl7Harmonizer.DataShapes.Model.Encounter => Hl7.Fhir.Model.Encounter", Hl7Version.R4), ConvertMetaToR4Fhir },
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Encounter => Hl7Harmonizer.DataShapes.Model.Encounter", Hl7Version.R5), ConvertR5FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"Hl7Harmonizer.DataShapes.Model.Encounter => Hl7.Fhir.Model.Encounter", Hl7Version.R5), ConvertMetaToR5Fhir }
+                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Encounter => DataShapes.Model..Encounter", Hl7Version.R4), ConvertR4FhirToMeta },
+                { new Tuple<string, Hl7Version>(@"DataShapes.Model..Encounter => Hl7.Fhir.Model.Encounter", Hl7Version.R4), ConvertMetaToR4Fhir },
+                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Encounter => DataShapes.Model..Encounter", Hl7Version.R5), ConvertR5FhirToMeta },
+                { new Tuple<string, Hl7Version>(@"DataShapes.Model..Encounter => Hl7.Fhir.Model.Encounter", Hl7Version.R5), ConvertMetaToR5Fhir }
             };
 
             payloadIN = payload;

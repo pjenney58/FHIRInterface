@@ -59,7 +59,7 @@ namespace Hl7Harmonizer.Adapters.Model
             var meta = new DataShapes.Model.ObservationItem();
 
             meta.TenantId = this.tenant;
-            meta.Id = Guid.Parse(fhir.Id);
+            meta.EntityId = Guid.Parse(fhir.Id);
 
             await Task.Run(() =>
             {
@@ -100,7 +100,7 @@ namespace Hl7Harmonizer.Adapters.Model
             var meta = payloadIN as DataShapes.Model.ObservationItem; ;
             var fhir = new Hl7.Fhir.Model.Observation();
 
-            fhir.Id = meta.Id.ToString();
+            fhir.Id = meta.EntityId.ToString();
 
             await Task.Run(() =>
             {

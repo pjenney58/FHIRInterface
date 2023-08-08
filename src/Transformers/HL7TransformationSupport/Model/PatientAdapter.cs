@@ -31,6 +31,8 @@ using R4 = r4::Hl7.Fhir.Model;
 using Stu3 = stu3::Hl7.Fhir.Model;
 */
 
+using DataShapes.Model;
+using Hl7.Fhir.Model;
 using Task = System.Threading.Tasks.Task;
 
 namespace Hl7Harmonizer.Adapters.Model
@@ -70,10 +72,10 @@ namespace Hl7Harmonizer.Adapters.Model
         private async Task<OEntity> ConvertR4FhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Patient;
-            var meta = new MetaTypes.Model.Patient()
+            var meta = new DataShapes.Model.Patient()
             {
-                TenantID = tenant == Guid.Empty ? Constants.Transform : tenant,
-                EntityID = Guid.Parse(fhir.Id),
+                TenantId = tenant == Guid.Empty ? Constants.Transform : tenant,
+                EntityId = Guid.Parse(fhir.Id),
                 CreateDate = DateTimeOffset.Now,
                 LastUpdate = DateTimeOffset.Now,
                 PrimaryPatientIdString = fhir.Id
@@ -97,7 +99,7 @@ namespace Hl7Harmonizer.Adapters.Model
             foreach (var practioner in fhir.GeneralPractitioner)
             {
                 PatientPractitioner pp = new();
-                pp.Practitioner = new MetaTypes.Model.Practitioner();
+                pp.Practitioner = new DataShapes.Model.Practitioner();
                 pp.Relationship = PractitionerRelationship.Primary;
                 meta.Practitioners.Add(pp);
             }
@@ -111,7 +113,7 @@ namespace Hl7Harmonizer.Adapters.Model
             {
                 foreach (var id in fhir.Identifier)
                 {
-                    var idset = new MetaTypes.Model.Identifier()
+                    var idset = new DataShapes.Model.Identifier()
                     {
                         IdType = id.Type?.Text,
                         IdValue = id.Value,

@@ -27,7 +27,7 @@ namespace DataShapes.Model
             : base(ownerId, tenantId) { }
 
        
-        public Guid MedicationId { get => Id; set => Id = value; }
+        public Guid MedicationId { get => EntityId; set => EntityId = value; }
 
         public string? MedicationCode { get; set; }
         public bool IsGeneric { get; set; }
@@ -45,6 +45,8 @@ namespace DataShapes.Model
         public string? LongVisualDescription { get; set; }
         public string? SpecialInstructions { get; set; }
         public string? Schedule { get; set; }       
+        public string? RxCuiCode { get; set; }
+
 
         protected override void Dispose(bool disposing)
         {

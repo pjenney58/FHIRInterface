@@ -104,11 +104,12 @@ namespace Hl7Harmonizer.Adapters.Model
                         case "practitioner":
                             return new PractitionerAdapter<IEntity, OEntity>(tenant, format, version, source);
 
-                        case "prescription":
+                        case "medicationrequest":
                             return new PrescriptionAdapter<IEntity, OEntity>(tenant, format, version, source);
 
-                        case "schedule":
-                            return new ScheduleAdapter<IEntity, OEntity>(tenant, format, version, source);
+                        // Hl7 v2 using NHapi
+                        //case "schedule":
+                        //    return new ScheduleAdapter<IEntity, OEntity>(tenant, format, version, source);
 
                         case "communication":
                             break;
@@ -122,7 +123,7 @@ namespace Hl7Harmonizer.Adapters.Model
                     switch (OUT.Name.ToLower())
                     {
                         case "careevent":
-                            return new ScheduleAdapter<IEntity, OEntity>(tenant, format, version, source);
+                            //return new ScheduleAdapter<IEntity, OEntity>(tenant, format, version, source);
 
                         default:
                             break;

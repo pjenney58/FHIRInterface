@@ -456,7 +456,7 @@ namespace Hl7Harmonizer.Adapters.Model
 
                         metaobx.PatientId = meta.Patients.FirstOrDefault();
                         metaobx.PractitionerId = meta.Practitioners.FirstOrDefault();
-                        metaobx.Items.Add(new ObservationItem(new IdentityKey { TenantId = metaobx.TenantID, OwnerId = metaobx.EntityID })
+                        metaobx.Items.Add(new ObservationItem(new IdentityKey { TenantId = metaobx.TenantId, OwnerId = metaobx.EntityID })
                         {
                             ObservationType = ObservationType.Note,
                             Description = obx.ObservationSubID.Description.ToString(),

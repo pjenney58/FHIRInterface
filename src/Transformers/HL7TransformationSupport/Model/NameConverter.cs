@@ -60,7 +60,7 @@ namespace Hl7Harmonizer.Adapters.Model
             var fhir = payloadIN as Hl7.Fhir.Model.HumanName;
             var meta = new DataShapes.Model.PersonName();
 
-            meta.Id = fhir.ElementId == null
+            meta.EntityId = fhir.ElementId == null
                 ? Guid.NewGuid()
                 : Guid.Parse(fhir.ElementId);
 
@@ -128,7 +128,7 @@ namespace Hl7Harmonizer.Adapters.Model
                 throw new ArgumentNullException(nameof(fhir));
             }
 
-            fhir.ElementId = meta.Id.ToString();
+            fhir.ElementId = meta.EntityId.ToString();
 
             foreach (var given in meta.GivenName)
             {

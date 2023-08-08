@@ -17,6 +17,8 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using DataShapes.Model;
+
 namespace Hl7Harmonizer.Adapters.Model
 {
     public class ObservationAdapter<IEntity, OEntity> : IAdapter<IEntity, OEntity>
@@ -57,7 +59,7 @@ namespace Hl7Harmonizer.Adapters.Model
             var fhir = payloadIN as Hl7.Fhir.Model.Observation;
             var meta = new DataShapes.Model.Observation();
 
-            meta.Id = Guid.Parse(fhir.Id);
+            meta.EntityId = Guid.Parse(fhir.Id);
 
             // Find all the list entries and add their contents as OservationItems
             //Type _observation = typeof(Hl7.Fhir.Model.Observation);

@@ -17,4 +17,7 @@
 	  <PackageReference Include="Hl7.Fhir.R4" Version="5.3.0" />
 	  <PackageReference Include="NLog" Version="5.2.3" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="Model\ScheduleAdapter.cs" />
+	</ItemGroup>
 </Project>

@@ -9,9 +9,9 @@ namespace DataShapes.Model
 
 		public Entity(Guid OwnerId, Guid TenantId)
 		{
-			if(Id == Guid.Empty)
+			if(EntityId == Guid.Empty)
 			{
-				Id = Guid.NewGuid();
+				EntityId = Guid.NewGuid();
 				CreateDate = DateTimeOffset.Now;
 				Version = 1;
 				IsActive = true;
@@ -23,7 +23,7 @@ namespace DataShapes.Model
 
 		#region key
 		[Key]
-        public Guid Id { get; set; }	
+        public Guid EntityId { get; set; }	
 		public Guid OwnerId { get; set; }
 		public Guid TenantId { get; set; }
         #endregion key

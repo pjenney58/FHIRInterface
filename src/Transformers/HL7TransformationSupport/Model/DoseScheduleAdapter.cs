@@ -58,8 +58,8 @@ namespace Hl7Harmonizer.Adapters.Model
             var fhir = payloadIN as Hl7.Fhir.Model.Dosage;
             var meta = new DataShapes.Model.DoseSchedule();
 
-            meta.TenantID = tenant;
-            meta.EntityID = Guid.Parse(fhir.ElementId);
+            meta.TenantId = tenant;
+            meta.EntityId = Guid.Parse(fhir.ElementId);
             meta.DoseScheduleName = fhir.Text;
 
             return meta as OEntity;

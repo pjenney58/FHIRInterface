@@ -55,10 +55,10 @@ namespace Hl7Harmonizer.Adapters.Model
         private async Task<OEntity> ConvertR4FhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Location;
-            var meta = new MetaTypes.Model.Location()
+            var meta = new DataShapes.Model.Location()
             {
-                TenantID = tenant == Guid.Empty ? Constants.Transform : tenant,
-                EntityID = Guid.Parse(fhir.Id),
+                TenantId = tenant == Guid.Empty ? Constants.Transform : tenant,
+                EntityId = Guid.Parse(fhir.Id),
                 CreateDate = DateTimeOffset.Now,
                 LastUpdate = DateTimeOffset.Now,
             };
@@ -68,11 +68,11 @@ namespace Hl7Harmonizer.Adapters.Model
 
             if (fhir.ManagingOrganization != null)
             {
-                meta.OwnerID = Guid.Parse(fhir.ManagingOrganization.Identifier.Value);
+                meta.OwnerId = Guid.Parse(fhir.ManagingOrganization.Identifier.Value);
             }
 
             // Known addresses
-            var addressAdapter = AdapterFactory<Hl7.Fhir.Model.Address, MetaTypes.Model.Address>.GetAdapter(tenant, version);
+            var addressAdapter = AdapterFactory<Hl7.Fhir.Model.Address, DataShapes.Model.Address>.GetAdapter(tenant, version);
 
             var address = await addressAdapter.Convert(fhir.Address);
             if (address != null)

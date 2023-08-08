@@ -23,6 +23,8 @@ using DataShapes.Model;
 
 namespace Hl7Harmonizer.Adapters.Model
 {
+
+
     public class PrescriptionAdapter<IEntity, OEntity> : IAdapter<IEntity, OEntity>
         where OEntity : class, new()
         where IEntity : class, new()
@@ -59,9 +61,168 @@ namespace Hl7Harmonizer.Adapters.Model
         private async Task<OEntity> ConvertR4FhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.MedicationRequest;
-            var meta = new DataShapes.Model.Prescription();
+            if (fhir == null)
+            {
+                throw new ArgumentNullException(nameof(fhir));
+            }
+
+            var meta = new DataShapes.Model.Prescription()
+            {
+                TenantId = this.tenant,
+                EntityId = Guid.Parse(fhir.Id),
+                OwnerId = Guid.Parse(fhir.Subject.Reference.Substring("urn:uuid:".Length)),
+                CreateDate = DateTimeOffset.UtcNow,
+                LastUpdate = DateTimeOffset.UtcNow,
+                WrittenDate = DateTimeOffset.Parse(fhir.AuthoredOn),
+                DoNotPerform = fhir.DoNotPerform != null ? (bool)fhir.DoNotPerform.Value : false,
+                IsActive = true
+            };
+
+            if (meta == null)
+            {
+                throw new ArgumentNullException(nameof(meta));
+            }
+
+
+            if (fhir.Status != null && Enum.TryParse<PrescriptionStatus>(fhir.Status.Value.ToString(), out PrescriptionStatus _status))
+            {
+                meta.Status = _status;
+            }
+
+            if (fhir.Intent != null && Enum.TryParse<PrescriptionIntent>(fhir.Intent.Value.ToString(), out PrescriptionIntent _intent))
+            {
+                meta.Intent = _intent;
+            }
+
+            if (fhir.Priority != null && Enum.TryParse<PrescriptionPriority>(fhir.Priority.Value.ToString(), out PrescriptionPriority _priority))
+            {
+                meta.Priority = _priority;
+            }
+
+            if (fhir.StatusReason != null && fhir.StatusReason.Count() > 0)
+            {
+                foreach (var reason in fhir.StatusReason)
+                {
+                    meta.StatusReasons.Add(reason.Value.ToString());
+                }
+            }
+
+            if (fhir.Category != null)
+            {
+                foreach (var catagory in fhir.Category)
+                {
+                    if (Enum.TryParse<PrescriptionCatagory>(catagory.Text, out PrescriptionCatagory _catagory))
+                        meta.Catagories.Add(_catagory);
+                }
+            }
+
+            if (fhir.DispenseRequest != null)
+            {
+                meta.WrittenQuantity = (decimal)fhir.DispenseRequest.InitialFill.Quantity.Value;
+                meta.StartDate = DateTimeOffset.Parse(fhir.DispenseRequest.ValidityPeriod.Start);
+                meta.StopDate = DateTimeOffset.Parse(fhir.DispenseRequest.ValidityPeriod.End);
+                meta.MaximumRefills = fhir.DispenseRequest.NumberOfRepeatsAllowed.Value + 1;
+            }
+
+            meta.PriorPrescriptionName = fhir.PriorPrescription?.Display;
+
+            if (fhir.DosageInstruction != null)
+            {
+                foreach (var instruction in fhir.DosageInstruction)
+                {
+                    meta.Sig += $"{instruction?.PatientInstruction}\r";
+
+                    foreach (var time in instruction.Timing.Repeat.TimeOfDay)
+                    {
+                        if (instruction.DoseAndRate != null)
+                        {
+                            var day = new DoseDay()
+                            {
+                                TenantId = tenant,
+                                OwnerId = meta.EntityId,
+                                EntityId = Guid.NewGuid(),
+                                CreateDate = DateTimeOffset.Now,
+                                IsActive = true
+                            };
+
+                            foreach (var dose in instruction.DoseAndRate)
+                            {
+                                day.DoseEvents.Add(new DoseEvent()
+                                {
+                                    MaxmumCount = (decimal)dose.Dose.ElementAt(0).Value,
+                                    Time = DateTime.Parse(time).TimeOfDay
+                                });
+                            }
+
+                            meta.DoseSchedule?.DoseDays.Add(day);
+                        }
+                    }
+                }
+
+                if (fhir.Medication != null)
+                {
+                    if (fhir?.Medication?.TypeName == "CodeableConcept")
+                    {
+                        var med = fhir.Medication as CodeableConcept;
+                        meta.Code = new()
+                        {
+                            Name = med?.Coding?.FirstOrDefault()?.Code,
+                            Description = med?.Coding?.FirstOrDefault()?.Display,
+                            Link = med?.Coding?.FirstOrDefault()?.System
+                        };
+
+
+
+                        // Medication lookup
+                        // https://rxnav.nlm.nih.gov/REST/rxcui?idtype=SNOMEDCT&id=261000 Returns NDC
+                        // list by labeler Call for individual NDC details
+                        // TODO: Hook up medication Retriever
+
+                        /* 
+                        meta.Medication = await ndc.GetByRxcui(med.Coding.FirstOrDefault().Code);
+
+                        if (meta.Medication != null)
+                        {
+                            meta.Medication.TenantId = this.tenant;
+                            meta.Medication.EntityId = Guid.Parse(fhir.Id);
+                            meta.Medication.OwnerId = Guid.Parse(fhir.Subject.Reference.Substring("urn:uuid:".Length));
+                            meta.Medication.RxCuiCode = med.Coding.FirstOrDefault().Code;
+                            meta.Medication.Description = med.Text;
+                        }
+                        */
+
+
+
+
+
+                        // CourseOfTherapyType DetectedIssues DispenseRequest DoNotPerform
+                        // DosageInstruction.DoseAndRate.Dose DoseInstruction.AdditionalInstruction
+                        // DoseInstruction.AsNeeded (PRN) DosageInstruction.Type
+                        // DosageInstruction.MaxDosePerAdministration DosageInstruction.MaxDosePerLifetime
+                        // DosageInstruction.MaxDosePerPeriod DosageInstruction.Method
+                        // DosageInstruction.PatientInstruction DosageInstruction.Route
+                        // DosageInstruction.Sequence DosageInstruction.Site DosageInstruction.Text
+                        // DosageInstruction.Timing DosageInstruction.Timing.Repeat.DayOfWeek
+                        // DosageInstruction.Timing.Repeat.Duration DosageInstruction.Timing.Repeat.DurationMax
+                        // DosageInstruction.Timing.Repeat.DurationUnit
+                        // DosageInstruction.Timing.Repeat.Frequency
+                        // DosageInstruction.Timing.Repeat.FrequencyMax DosageInstruction.Timing.Repeat.Offset
+                        // DosageInstruction.Timing.Repeat.Period DosageInstruction.Timing.Repeat.PeriodMax
+                        // DosageInstruction.Timing.Repeat.PeriodUnit DosageInstruction.Timing.Repeat.TimeOfDay
+                        // DosageInstruction.Timing.Repeat.When Encounter EventHistory ImplicitRules Insurance
+                        // ScripIntent Language Medication Medication.Coding Medication.Coding.Code
+                        // Medication.Coding.Display Medication.Coding.System Medication.Text Note Performer
+                        // PerformerType PriorPrescription Priority ReasonCode ReasonReference Recorder Reported
+                        // Requester Status StatusReason Subject Substitution SupportingInforrmation
+
+                    }
+                }
+
+
+            }
 
             return meta as OEntity;
+
         }
 
         private async Task<OEntity> ConvertR5FhirToMeta()

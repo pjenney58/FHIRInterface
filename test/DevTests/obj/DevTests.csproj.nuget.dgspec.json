@@ -4,14 +4,14 @@
     "/Users/petejenney/Projects/Palisaid-Practice-Management/test/DevTests/DevTests.csproj": {}
   },
   "projects": {
-    "/Users/petejenney/Projects/Palisaid-Practice-Management/test/DevTests/DevTests.csproj": {
+    "/Users/petejenney/Projects/Palisaid-Practice-Management/data/DataShapes/DataShapes.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/petejenney/Projects/Palisaid-Practice-Management/test/DevTests/DevTests.csproj",
-        "projectName": "DevTests",
-        "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/test/DevTests/DevTests.csproj",
+        "projectUniqueName": "/Users/petejenney/Projects/Palisaid-Practice-Management/data/DataShapes/DataShapes.csproj",
+        "projectName": "DataShapes",
+        "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/data/DataShapes/DataShapes.csproj",
         "packagesPath": "/Users/petejenney/.nuget/packages/",
-        "outputPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/test/DevTests/obj/",
+        "outputPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/data/DataShapes/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/petejenney/.nuget/NuGet/NuGet.Config"
@@ -39,6 +39,175 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.9, )"
+            },
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL.Design": {
+              "target": "Package",
+              "version": "[1.1.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.306/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Transformers/HL7TransformationSupport/HL7TransformationSupport.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Transformers/HL7TransformationSupport/HL7TransformationSupport.csproj",
+        "projectName": "HL7TransformationSupport",
+        "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Transformers/HL7TransformationSupport/HL7TransformationSupport.csproj",
+        "packagesPath": "/Users/petejenney/.nuget/packages/",
+        "outputPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Transformers/HL7TransformationSupport/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/petejenney/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "/Users/petejenney/Projects/Palisaid-Practice-Management/data/DataShapes/DataShapes.csproj": {
+                "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/data/DataShapes/DataShapes.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "Hl7.Fhir.R4": {
+              "target": "Package",
+              "version": "[5.3.0, )"
+            },
+            "NLog": {
+              "target": "Package",
+              "version": "[5.2.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.306/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/petejenney/Projects/Palisaid-Practice-Management/test/DevTests/DevTests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/petejenney/Projects/Palisaid-Practice-Management/test/DevTests/DevTests.csproj",
+        "projectName": "DevTests",
+        "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/test/DevTests/DevTests.csproj",
+        "packagesPath": "/Users/petejenney/.nuget/packages/",
+        "outputPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/test/DevTests/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/petejenney/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "/Users/petejenney/Projects/Palisaid-Practice-Management/data/DataShapes/DataShapes.csproj": {
+                "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/data/DataShapes/DataShapes.csproj"
+              },
+              "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Transformers/HL7TransformationSupport/HL7TransformationSupport.csproj": {
+                "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Transformers/HL7TransformationSupport/HL7TransformationSupport.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "Bogus": {
+              "target": "Package",
+              "version": "[34.0.2, )"
+            },
+            "Hl7.Fhir.R4": {
+              "target": "Package",
+              "version": "[5.3.0, )"
+            },
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
               "version": "[17.5.0, )"

@@ -86,7 +86,7 @@ namespace Hl7Harmonizer.Adapters.Model
             }
 
             meta.TenantId = this.tenant;
-            meta.Id = fhir.ElementId == null
+            meta.EntityId = fhir.ElementId == null
                ? Guid.NewGuid()
                : Guid.Parse(fhir.ElementId);
 
@@ -146,7 +146,7 @@ namespace Hl7Harmonizer.Adapters.Model
             var meta = payloadIN as DataShapes.Model.Address;
             var fhir = new Hl7.Fhir.Model.Address();
 
-            fhir.ElementId = meta.Id.ToString();
+            fhir.ElementId = meta.EntityId.ToString();
 
             await Task.Run(() =>
             {
@@ -201,8 +201,8 @@ namespace Hl7Harmonizer.Adapters.Model
             Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
 
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Address => Hl7Harmonizer.DataShapes.Model.Address", Hl7Version.R4), ConvertR4FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"Hl7Harmonizer.DataShapes.Model.Address => Hl7.Fhir.Model.Address", Hl7Version.R4), ConvertMetaToR4Fhir }            
+                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Address => DataShapes.Model..Address", Hl7Version.R4), ConvertR4FhirToMeta },
+                { new Tuple<string, Hl7Version>(@"DataShapes.Model..Address => Hl7.Fhir.Model.Address", Hl7Version.R4), ConvertMetaToR4Fhir }            
             };
 
             payloadIN = payload;

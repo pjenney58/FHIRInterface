@@ -60,6 +60,7 @@ namespace DataShapes.Model
         public DisposableList<PatientPractitioner>? Practitioners { get; set; } = new();
         public DisposableList<Location>? Locations { get; set; } = new();
         public DisposableList<ContactMethod>? ContactMethods { get; set; } = new();
+        public DisposableList<Device> Devices { get; set; } = new();
 
         /// <summary>
         /// Identifiers - list of ids from Hl7-Fhir
