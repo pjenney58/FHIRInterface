@@ -474,9 +474,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Data/Data.csproj",
-      "projectName": "Data",
-      "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Data/Data.csproj",
+      "projectUniqueName": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Data/Primary.csproj",
+      "projectName": "Primary",
+      "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Data/Primary.csproj",
       "packagesPath": "/Users/petejenney/.nuget/packages/",
       "outputPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Data/obj/",
       "projectStyle": "PackageReference",

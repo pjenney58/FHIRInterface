@@ -36,7 +36,8 @@ namespace DataShapes.Model
         GTIN,
         NDC,
         DIN,
-        Unknown
+        Unknown,
+        v3_ActCode
     }
 
     public class Code : Entity

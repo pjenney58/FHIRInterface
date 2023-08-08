@@ -1,0 +1,66 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <SingleProject>true</SingleProject>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Hl7Harmonizer.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Remove="Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="Model\Context\" />
+    <Folder Include="Model\MongoDB\" />
+    <Folder Include="Model\CosmosDB\" />
+  </ItemGroup>
+ 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MongoDB.Driver" Version="2.19.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.32.3" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+    <None Remove="Model\MongoDB\" />
+    <None Remove="Model\PostgreSQL\" />
+    <None Remove="System.Configuration.ConfigurationManager" />
+    <None Remove="Microsoft.Windows.Compatibility" />
+    <None Remove="Npgsql.Json.NET" />
+    <None Remove="Microsoft.Extensions.Configuration" />
+    <None Remove="Microsoft.Extensions.Hosting" />
+    <None Remove="Npgsql" />
+    <None Remove="Model\CosmosDB\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MetaTypes\MetaTypes.csproj" />
+    <ProjectReference Include="..\Support\Support.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="repositorysettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Model\MongoDB\MongoStore.cs" />
+  </ItemGroup>
+</Project>

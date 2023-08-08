@@ -9,7 +9,7 @@ namespace Collectors.Data
 {
     public class TargetDataContext : DbContext
     {
-        public DbSet<TargetConfiguration>? Targets;
+        public DbSet<TargetConfiguration>? Targets { get; set; }  
 
         internal IConfiguration? config;
         internal string? connectionString;

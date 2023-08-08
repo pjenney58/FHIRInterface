@@ -1,0 +1,123 @@
+{
+  "RepositoryIntent": {
+    "DataStorage": {
+      "ConnectionKey": "AtlasMongoDb",
+      "DatabaseName": "PalisaidTesting"
+    },
+    "SeedData": {
+      "ConnectionKey": "AtlasMongoDb",
+      "DatabaseName": "PalisaidTesting"
+    },
+    "RawDataStorage": {
+      "ConnectionKey": "AtlasMongoDb",
+      "DatabaseName": "PalisaidTesting"
+    },
+    "Testing": {
+      "ConnectionKey": "DockerMongoDb",
+      "DatabaseName": "PalisaidTesting"
+    },
+    "Logging": {
+      "ConnectionKey": "DockerPostgreSql",
+      "DatabaseName": "Palisaid"
+    },
+    "Configuration": {
+      "ConnectionKey": "DockerPostgreSql",
+      "DatabaseName": "Palisaid"
+    },
+    "Credentials": {
+      "ConnectionKey": "IdentityApiManagerContextConnection",
+      "DatabaseName": "Palisaid"
+    },
+    "SqlAdmin": {
+      "Local": {
+        "ConnectionKey": "LocalPostgresAdmin",
+        "DatabaseName": "Palisaid"
+      },
+      "Container": {
+        "ConnectionKey": "DockerPostgreSql",
+        "DatabaseName": "Palisaid"
+      },
+      "Cloud": {
+        "ConnectionKey": "CloudPostgreSql",
+        "DatabaseName": "Palisaid"
+      }
+    },
+    "NoSqlAdmin": {
+      "Local": {
+        "ConnectionKey": "LocalMongoAdmin",
+        "DatabaseName": "Palisaid"
+      },
+      "Container": {
+        "ConnectionKey": "DockerMongoDb",
+        "DatabaseName": "Palisaid"
+      },
+      "Cloud": {
+        "ConnectionKey": "CloudMongoDb",
+        "DatabaseName": "PalisaidTesting"
+      }
+    },
+    "SqlTesting": {
+      "Local": {
+        "ConnectionKey": "LocalPostgresAdmin",
+        "DatabaseName": "PalisaidTesting"
+      },
+      "Container": {
+        "ConnectionKey": "DockerPostgreSql",
+        "DatabaseName": "PalisaidTesting"
+      },
+      "Cloud": {
+        "ConnectionKey": "CloudPostgreSql",
+        "DatabaseName": "Palisaid"
+      }
+    },
+    "NoSqlTesting": {
+      "Local": {
+        "ConnectionKey": "LocalMongoAdmin",
+        "DatabaseName": "PalisaidTesting"
+      },
+      "Container": {
+        "ConnectionKey": "DockerMongoDb",
+        "DatabaseName": "PalisaidTesting"
+      },
+      "Cloud": {
+        "ConnectionKey": "CloudMongoDb",
+        "DatabaseName": "PalisaidTesting"
+      }
+    }
+  },
+  "ConnectionStrings": {
+    "Default": "Server=palisaid-cloud-sql-dd.postgres.database.azure.com;Database=PalisaidUsers;Port=5432;User Id=pjenney58;Password=$!Secure2023;Ssl Mode=VerifyFull;",
+
+    "DockerPostgreSql": "Host=localhost;port=5432;Database=PalisaidUsers;User Id=PalisaidAdmin;Password=password",
+    "DockerMongoDb": "mongodb://localhost:27018",
+
+    "AtlasMongoDb": "mongodb+srv://pjenney58:$!PalisaidDevDb@palisaid0.vibxqh5.mongodb.net/?retryWrites=true&w=majority",
+
+    "IdentityApiManagerContextConnection": "Server=palisaid-cloud-sql-dd.postgres.database.azure.com;Database=PalisaidUsers;Port=5432;User Id=pjenney58;Password=$!Secure2023;Ssl Mode=VerifyFull;",
+
+    "AzurePostgreSql": "Server=palisaid-cloud-sql-dd.postgres.database.azure.com;Database=PalisaidUsers;Port=5432;User Id=pjenney58;Password=$!Secure2023;Ssl Mode=VerifyFull;",
+    "AzureCosmosDb": "https://palisaid-cosmos-db.documents.azure.com:443/",
+    "AzureCosmosPkey": "1omnDylLUHdmmQ6t4fseQVZ1wBto7ZMlh7PGl1K39QakZJ0Yd09i4cpJ3rgK3eu6nqEPqJUCoDDsACDb7yR00A==",
+    "AzureCosmosSkey": "j5Wxe8cnV3vWzB9gm8slM72k1xoYG6bxbsmKuJiurgnOcXjvrJPEQu2gcY35hQILFYJlKapAveFCACDbdVtvhw==",
+    "AzureCosmosDbP": "AccountEndpoint=https://palisaid-cosmos-db.documents.azure.com:443/;AccountKey=1omnDylLUHdmmQ6t4fseQVZ1wBto7ZMlh7PGl1K39QakZJ0Yd09i4cpJ3rgK3eu6nqEPqJUCoDDsACDb7yR00A==",
+    "AzureCosmosDbS": "AccountEndpoint=https://palisaid-cosmos-db.documents.azure.com:443/;AccountKey=j5Wxe8cnV3vWzB9gm8slM72k1xoYG6bxbsmKuJiurgnOcXjvrJPEQu2gcY35hQILFYJlKapAveFCACDbdVtvhw=="
+  },
+  "Token": {
+    "TokenTTL": "2000",
+    "RefreshTokenTTL": "1000"
+  },
+  "JWT": {
+    "ValidAudience": "http://localhost:4200",
+    "ValidIssuer": "http://localhost:5043",
+    "Secret": "JWTRefreshTokenHIGHsecuredPasswordVVVp1OH7Xzyr",
+    "TokenValidityInMinutes": 10,
+    "RefreshTokenValidityInDays": 7
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
+}

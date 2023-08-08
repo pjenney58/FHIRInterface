@@ -27,11 +27,13 @@
     <None Remove="Model\" />
     <None Remove="Data\" />
     <None Remove="Controllers\" />
+    <None Remove="Migrations\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interface\" />
     <Folder Include="Model\" />
     <Folder Include="Data\" />
     <Folder Include="Controllers\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 </Project>

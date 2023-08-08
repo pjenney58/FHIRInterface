@@ -28,7 +28,6 @@ namespace DataShapes.Model
     {
         public DataShapeContextFactory() {}
 
-
         private IConfiguration config;
 
         public DataShapeContextFactory(IConfiguration configuration)
