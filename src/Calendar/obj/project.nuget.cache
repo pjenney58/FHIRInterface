@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "Z1mJL+5DEQu6R2hQx4QvBXVWAczKL+qjSgiaKHHwdQPTQxK3hLQkhhm4W4V4cDfOlELwC8D580d3ILuR96onLQ==",
+  "dgSpecHash": "O6IeAEHQZ4cjhHYvxaHq1oV4olrTPdr3TfE/MJvDyzgRxY4hp4/WuVhL0wcnzJopuEVH0nkcPmIIQIfCj4//MA==",
   "success": true,
   "projectFilePath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Calendar/Calendar.csproj",
   "expectedPackageFiles": [
-    "/Users/petejenney/.nuget/packages/microsoft.aspnetcore.openapi/7.0.9/microsoft.aspnetcore.openapi.7.0.9.nupkg.sha512",
+    "/Users/petejenney/.nuget/packages/microsoft.aspnetcore.openapi/7.0.10/microsoft.aspnetcore.openapi.7.0.10.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/microsoft.openapi/1.4.3/microsoft.openapi.1.4.3.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/swashbuckle.aspnetcore/6.5.0/swashbuckle.aspnetcore.6.5.0.nupkg.sha512",

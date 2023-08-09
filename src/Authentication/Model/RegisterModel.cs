@@ -15,8 +15,13 @@ namespace Authentication.Model
         [Required(ErrorMessage = "Password is required")]
         public string? Password { get; set; }
 
+        [Required(ErrorMessage = "Phone is required")]
+        public string? Phone { get; set; }
+
         [Required(ErrorMessage = "Tenant ID is required")]
         public Guid Tenant { get; set; }
+
+        public bool Use2Factor { get; set; }
     }
 
     public class RegisterAdminModel
@@ -30,6 +35,9 @@ namespace Authentication.Model
 
         [Required(ErrorMessage = "Password is required")]
         public string? Password { get; set; }
+
+        [Required(ErrorMessage = "Phone is required")]
+        public string? Phone { get; set; }
     }
 }
 

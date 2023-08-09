@@ -19,11 +19,6 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 
 //using MongoDB.Bson.Serialization.Serializers;
 
-using System.Collections.Generic;
-
-using System.Net.Http.Headers;
-using System.Text.Json.Serialization;
-
 namespace DataShapes.Model
 {
     public enum PractitionerTypes
@@ -74,7 +69,6 @@ namespace DataShapes.Model
         /// Filter for doctor vs other provider types
         /// </summary>
         [NotMapped]
-        [JsonIgnore]
         public bool IsMD => PractitionerType == PractitionerTypes.MD;
 
         /// <summary>

@@ -1,5 +1,4 @@
-﻿using System;
-namespace DataShapes.Model
+﻿namespace DataShapes.Model
 {
     public class ServiceProvider : Entity
     {

@@ -17,8 +17,6 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using System.ComponentModel.DataAnnotations;
-
 namespace DataShapes.Model
 {
     /// <summary>
@@ -36,12 +34,9 @@ namespace DataShapes.Model
         /// Unique name for the diagnosis
         /// </summary>
         public string? DiagnosisName { get; set; }
-
-        public DisposableList<Code>? Codes { get; set; } = new();
-
-        [Required]
         public Patient Patient { get; set; } = new();
 
+        public DisposableList<Code>? Codes { get; set; } = new();
         public DisposableList<Practitioner>? Practitioners { get; set; }
 
         // This could be an aggregate of all practitioner and patient locations
@@ -54,10 +49,8 @@ namespace DataShapes.Model
         /// <summary>
         /// Condition begin and end, if ended
         /// </summary>
-        public DateTimeOffset StartDate { get; set; }
-
-        public DateTimeOffset StopDate { get; set; }
-
+        public Duration Duration {get;set; }  = new();
+        
         // Calculate this from the practioner list ...
         /// <summary>
         /// Tests, consults, visits, ...
@@ -97,8 +90,8 @@ namespace DataShapes.Model
             Prescriptions?.Dispose();
             Treatments?.Dispose();
 
-            StartDate = DateTimeOffset.MinValue;
-            StopDate = DateTimeOffset.MinValue;
+            Duration.StartDate = DateTimeOffset.MinValue;
+            Duration.EndDate = DateTimeOffset.MinValue;
         }
     }
 }

@@ -17,9 +17,6 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using System;
-using System.ComponentModel.DataAnnotations;
-
 namespace DataShapes.Model
 {
     public enum PractitionerRelationship
@@ -42,7 +39,6 @@ namespace DataShapes.Model
         // Whole practitioner may be coelesed
         public Practitioner? Practitioner { get; set; }
 
-        [Required]
         public Guid PractitionerId { get; set; }
 
         public DateTimeOffset StartDate { get; set; }

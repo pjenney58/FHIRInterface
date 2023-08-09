@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +15,7 @@ namespace DataShapes.Model
                .Build();
 
             service.AddDbContext<DataShapeContext>(options =>
-                options.UseNpgsql(config.GetConnectionString("pgDocker")));
+                options.UseNpgsql(config.GetConnectionString("default")));
 
             return service;
         }
@@ -28,7 +27,7 @@ namespace DataShapes.Model
     {
         public DataShapeContextFactory() {}
 
-        private IConfiguration config;
+        internal IConfiguration? config;
 
         public DataShapeContextFactory(IConfiguration configuration)
         {
@@ -42,7 +41,7 @@ namespace DataShapes.Model
                .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<DataShapeContext>();
-            optionsBuilder.UseNpgsql(config.GetConnectionString("pgDocker"));
+            optionsBuilder.UseNpgsql(config.GetConnectionString("default"));
 
             return new DataShapeContext(optionsBuilder.Options);
         }
@@ -66,7 +65,6 @@ namespace DataShapes.Model
 
         internal IConfiguration? config;
         internal string? connectionString;
-        internal string? databaseName;
 
         public DataShapeContext()
         {
@@ -74,7 +72,7 @@ namespace DataShapes.Model
                .AddJsonFile("appsettings.json")
                .Build();
 
-            connectionString = config.GetConnectionString("pgDocker");
+            connectionString = config.GetConnectionString("default");
         }
 
         public DataShapeContext(DbContextOptions<DataShapeContext> options)
@@ -91,12 +89,14 @@ namespace DataShapes.Model
                .AddJsonFile("appsettings.json")
                .Build();
 
-            optionsBuilder.UseNpgsql(config.GetConnectionString("pgDocker"));
+            optionsBuilder.UseNpgsql(config.GetConnectionString("default"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            //base.OnModelCreating(modelBuilder);
+            //modelBuilder.Entity<Entity>().HasKey(pk => new { pk.EntityId, pk.TenantId });
+            //EntityTypeBuilder.Ignore("CustomAttributeData");
         }
     }
     #endregion

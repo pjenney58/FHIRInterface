@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace DataShapes.Migrations
+namespace Authentication.Migrations
 {
     /// <inheritdoc />
-    public partial class TargetDb1 : Migration
+    public partial class AuthDb2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

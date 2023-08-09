@@ -19,7 +19,7 @@ namespace Authentication.Data
               .AddJsonFile("appsettings.json")
               .Build();
 
-            connectionString = config.GetConnectionString("pgDocker");
+            connectionString = config.GetConnectionString("identity");
         }
 
         public IdentityDataContext(DbContextOptions<IdentityDataContext> options)
@@ -39,7 +39,7 @@ namespace Authentication.Data
               .AddJsonFile("appsettings.json")
               .Build();
 
-            connectionString = config.GetConnectionString("pgDocker");
+            connectionString = config.GetConnectionString("identity");
         
             base.OnConfiguring(options);
         }

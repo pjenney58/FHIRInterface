@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "KlLV4QdbUERwnXsfZ3wA/MlT372IWAylC73+BnzaUXrJJuLOK4tL2FpSp+l7tdpIc6OxKXi0kU1xLZ2ULJc8pQ==",
+  "dgSpecHash": "DgbKr4Q0u0QmWHwu1eKMyLB9aV46QLaBKCGfR2hkXIpUUj+RGQLI8Xk1dj02umBqBPFFQdexAyf2A6Ee/sT8pQ==",
   "success": true,
   "projectFilePath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Collectors/X12Collector/X12Collector.csproj",
   "expectedPackageFiles": [
-    "/Users/petejenney/.nuget/packages/microsoft.aspnetcore.openapi/7.0.9/microsoft.aspnetcore.openapi.7.0.9.nupkg.sha512",
+    "/Users/petejenney/.nuget/packages/microsoft.aspnetcore.openapi/7.0.10/microsoft.aspnetcore.openapi.7.0.10.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/microsoft.openapi/1.4.3/microsoft.openapi.1.4.3.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/swashbuckle.aspnetcore/6.5.0/swashbuckle.aspnetcore.6.5.0.nupkg.sha512",

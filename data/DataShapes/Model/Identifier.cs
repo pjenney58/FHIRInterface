@@ -21,7 +21,7 @@ namespace DataShapes.Model
 {
     public class Identifier : Entity
     {
-        public new Guid Id { get; set; }
+        public Guid ThisId { get; set; }
         public string? IdType { get; set; }
         public string? IdValue { get; set; }
         public string? IdUse { get; set; }
