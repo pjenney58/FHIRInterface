@@ -1,16 +1,10 @@
-﻿using Hl7.Fhir.Model;
+﻿using DataShapes.Model;
+using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Hl7Harmonizer.Adapters.Model;
-using DataShapes.Model;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.Metrics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
 using RandomDataGenerator;
+using Settings;
+using System.Diagnostics;
 
 /*
 extern alias r5;
@@ -29,7 +23,6 @@ namespace DevTests
     public class TFhirParser
     {
         private readonly string sourcedir = "/Users/petejenney/Projects/SyntheaData";
-        
 
         public TFhirParser()
         {
@@ -343,6 +336,7 @@ namespace DevTests
             var med = await ndc.GetByRxcui(code);
         }
         */
+
         [Theory]
         //[InlineData(Hl7Version.Stu3)]
         //[InlineData(Hl7Version.R4b)]

@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\data\Settings\Settings\Settings.csproj" />
     <ProjectReference Include="..\..\src\Transformers\HL7TransformationSupport\HL7TransformationSupport.csproj" />
     <ProjectReference Include="..\..\data\DataShapes\DataShapes.csproj" />
   </ItemGroup>
