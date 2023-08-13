@@ -225,7 +225,9 @@ _pkginfo.txt
 
 # Visual Studio cache files
 # files ending in .cache can be ignored
+*.cache
 *.[Cc]ache
+*.editorconfig
 # but keep track of directories ending in .cache
 !?*.[Cc]ache/
 
@@ -367,3 +369,7 @@ FodyWeavers.xsd
 
 # next.js
 */**/.next/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
