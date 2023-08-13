@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import style from 'styles/Home.module.css'
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useSession, signIn, signOut } from 'next-auth/react'
 
 
 type Inputs = {
@@ -25,11 +25,10 @@ const translations = {
 }
 // TODO derive lang from browser and pass in as prop
 export default function Home() {
-  const {register, handleSubmit, formState: {errors}} = useForm<Inputs>()
+  const {data: session} = useSession();
   const lang = 'en';
   const text = translations[lang];
 
-  const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
 
   return (
     <>
@@ -44,19 +43,20 @@ export default function Home() {
         <h1 className={style.title}>{text.title}</h1>
         <div className={style.card} >
           <h2>{text.login}</h2>
-          <form onSubmit={handleSubmit(onSubmit)} >
-            <div>
-              <label htmlFor="username">Username
-                <input {...register("username", {required: true})} />
-              </label>
-            </div>
-            <div>
-              <label htmlFor="password">Password
-                <input {...register("password", {required: true})} type='password' />
-              </label>
-            </div>
-            <button type="submit">Login</button>
-          </form>
+          <>
+            {session && (
+              <div>
+                Signed in as {session?.user?.email} <br />
+                <button onClick={() => signOut()}>Sign out</button>
+              </div>
+            )}
+            {!session && (
+              <div>
+                Not signed in <br />
+                <button onClick={() => signIn()}>Sign in</button>
+              </div>
+            )}
+          </>
         </div>
       </main>
     </>
