@@ -1,10 +1,9 @@
-﻿using System;
-using DataShapes.Model;
+﻿using DataShapes.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Administration.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("admin/[controller]")]
     [ApiController]
     public class TenantsController : Controller
     {
@@ -17,6 +16,7 @@ namespace Administration.Controllers
         }
 
         [HttpGet]
+        [Route("get-tenants")]
         public async Task<ActionResult<IEnumerable<Tenant>>> GetTenants()
         {
             try
@@ -35,6 +35,7 @@ namespace Administration.Controllers
         }
 
         [HttpGet("{id}")]
+        [Route("get-tenant-by-id")]
         public async Task<ActionResult<Tenant>> GetTenant(Guid id)
         {
             try
@@ -53,6 +54,7 @@ namespace Administration.Controllers
         }
 
         [HttpGet("{name}")]
+        [Route("create-new-tenant")]
         public async Task<ActionResult<Tenant>> CreateNewEmptyTenant(string name)
         {
             if (_context == null)
@@ -82,6 +84,7 @@ namespace Administration.Controllers
         }
 
         [HttpPost]
+        [Route("add-existing-tenant")]
         public async Task<ActionResult<Tenant>> AddTenant(Tenant tenant)
         {
             try
@@ -103,6 +106,7 @@ namespace Administration.Controllers
         }
 
         [HttpPut]
+        [Route("update-tenant")]
         public async Task<ActionResult<Tenant>> UpdateTenant(Tenant tenant)
         {
             try
@@ -124,6 +128,7 @@ namespace Administration.Controllers
         }
 
         [HttpDelete]
+        [Route("delete-tenant")]
         public async Task<ActionResult<Tenant>> DeleteTenant(Tenant tenant)
         {
             try
