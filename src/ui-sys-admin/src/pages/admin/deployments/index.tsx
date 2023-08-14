@@ -1,4 +1,4 @@
-import style from 'styles/Deployments.module.css';
+
 
 export default function Deployments() {
   return (
