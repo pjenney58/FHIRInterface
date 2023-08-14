@@ -1,9 +1,18 @@
-import style from 'styles/Billing.module.css';
+import AccessDenied from "components/AccessDenied";
+import { useSession } from "next-auth/react";
 
 export default function Billing() {
+  const { data: session } = useSession();
+
+  if (!session) {
+    return (
+      <AccessDenied />
+    )
+  }
+
   return (
-    <main className={style.main} >
+    <div>
       <h1>Billing</h1>
-    </main>
+    </div>
   )
 }

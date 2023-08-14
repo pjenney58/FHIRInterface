@@ -1,8 +1,4 @@
 
-// use getServerSidePros to check for auth
-// if not logged in, redirect to login page
-// if logged in, render admin page
-import style from 'styles/Admin.module.css';
 import Link from 'next/link';
 
 const navItems = [
@@ -14,7 +10,7 @@ const navItems = [
 
 export default function Admin() {
   return (
-    <main className={style.main} >
+    <div>
       <h1>Admin</h1>
       <section>
         <nav>
@@ -30,6 +26,6 @@ export default function Admin() {
           </ul>
         </nav>
       </section>
-    </main>
+    </div>
   )
 }
