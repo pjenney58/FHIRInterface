@@ -15,13 +15,21 @@ namespace Authentication
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            var builder = WebApplication.CreateBuilder(args);          
+           
+            /*
+            var settingPath  = Path.GetFullPath(Path.Combine(@"../../appsettings.json")); // get absolute path
+
+            var config = new ConfigurationBuilder()
+                    .SetBasePath(builder.Environment.ContentRootPath)
+                    .AddJsonFile(settingPath);
+            */
+
             ConfigurationManager configuration = builder.Configuration;
 
             var connection = builder.Configuration.GetConnectionString("identity")
                             ?? throw new InvalidOperationException("Connection string 'identity' not found.");
 
-            
 
             // Add services to the container.
             builder.Services.AddDbContext<IdentityDataContext>(
