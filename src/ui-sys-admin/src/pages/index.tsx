@@ -14,20 +14,26 @@ export async function getServerSideProps(context: NextPageContext) {
 const translations = {
   en: {
     title: 'PPM - System Administration',
-    login: 'Login'
+    login: 'Login',
+    signedInMessage: 'Signed in as',
+    signedOutMessage: 'Not signed in',
   },
   fr: {
     title: 'PPM - Administration du système',
-    login: 'Connexion'
+    login: 'Connexion',
+    signedInMessage: 'Connecté en tant que',
+    signedOutMessage: 'Non connecté'
   },
   es: {
     title: 'PPM - Administración del sistema',
-    login: 'Iniciar sesión'
+    login: 'Iniciar sesión',
+    signedInMessage: 'Conectado como',
+    signedOutMessage: 'No conectado'
   }
 }
 // TODO derive lang from browser and pass in as prop
 export default function Home() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const lang = 'en';
   const text = translations[lang];
 
@@ -47,13 +53,13 @@ export default function Home() {
           <>
             {session && (
               <div>
-                <p>Signed in as {session?.user?.email}</p>
+                <p>{text.signedInMessage} {session?.user?.email}</p>
                 <button className='button' onClick={() => signOut()}>Sign out</button>
               </div>
             )}
             {!session && (
               <div>
-                <p>Not signed in</p>
+                <p>{text.signedOutMessage}</p>
                 <button className='button' onClick={() => signIn()}>Sign in</button>
               </div>
             )}

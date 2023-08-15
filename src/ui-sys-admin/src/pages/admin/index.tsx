@@ -1,4 +1,4 @@
-
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 const navItems = [
@@ -9,6 +9,12 @@ const navItems = [
 ]
 
 export default function Admin() {
+  const { data: session, status } = useSession({ required: true });
+  if (status === 'loading') return (
+    <div>
+      <h1>Loading...</h1>
+    </div>
+  )
   return (
     <div>
       <h1>Admin</h1>
