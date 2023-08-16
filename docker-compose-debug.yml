@@ -1,8 +1,8 @@
-version: '3.4'
+version: '3.5'
 
 services:
-  palisaidpod:
-    image: ${DOCKER_REGISTRY-}palisaidpod
+  Authentication:
+    image: ${DOCKER_REGISTRY-}authentication-api
     build:
       context: .
-      dockerfile: src/PalisaidPod/DebugDockerfile
+      dockerfile: src/Authentication/DebugDockerfile
