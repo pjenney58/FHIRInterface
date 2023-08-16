@@ -7,7 +7,7 @@ import type { AppProps } from 'next/app';
 // We can use the auth flag to conditionally require authentication
 // Can be extended to include roles, etc by converting to an object
 export type NextPageWithAuth<P = {}, IP = P> = NextPage<P, IP> & {
-  auth?: boolean
+  bypassAuth?: boolean
 }
 
 type MyAppProps = AppProps<any> & {
@@ -28,12 +28,12 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <main className={classNames}>
-        {Component.auth ? (
+        {Component.bypassAuth ? (
+          <Component {...pageProps} />
+        ) : (
           <Auth>
             <Component {...pageProps} />
           </Auth>
-        ) : (
-          <Component {...pageProps} />
         )}
       </main>
     </SessionProvider>

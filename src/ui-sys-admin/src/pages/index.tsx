@@ -3,6 +3,7 @@ import Image from 'next/image'
 import style from 'styles/Home.module.css'
 import type { InferGetServerSidePropsType, GetServerSideProps, NextPageContext } from 'next';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import { NextPageWithAuth } from './_app';
 
 
 export async function getServerSideProps(context: NextPageContext) {
@@ -32,7 +33,7 @@ const translations = {
   }
 }
 // TODO derive lang from browser and pass in as prop
-export default function Home() {
+const Home: NextPageWithAuth = () => {
   const { data: session, status } = useSession();
   const lang = 'en';
   const text = translations[lang];
@@ -69,3 +70,5 @@ export default function Home() {
     </>
   )
 }
+Home.bypassAuth = true;
+export default Home;
