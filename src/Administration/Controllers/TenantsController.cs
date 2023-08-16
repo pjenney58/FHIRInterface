@@ -1,8 +1,10 @@
 ﻿using DataShapes.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Administration.Controllers
 {
+    [Authorize]
     [Route("admin/[controller]")]
     [ApiController]
     public class TenantsController : Controller

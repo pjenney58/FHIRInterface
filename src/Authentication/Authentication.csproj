@@ -39,8 +39,8 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\data\DataShapes\DataShapes.csproj">
-      <GlobalPropertiesToRemove />
+    <ProjectReference Include="..\DataShapes\DataShapes.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>
 </Project>

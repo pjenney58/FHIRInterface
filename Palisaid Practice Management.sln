@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Administration", "src\Admin
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataManagement", "DataManagement", "{4114A5B3-F34C-4B6B-B984-F171BF237FFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataShapes", "data\DataShapes\DataShapes.csproj", "{66E31B7F-9218-46E2-B8CC-9ECA45F0E6CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataShapes", "src\DataShapes\DataShapes.csproj", "{66E31B7F-9218-46E2-B8CC-9ECA45F0E6CD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authentication", "src\Authentication\Authentication.csproj", "{6A789D89-9DA2-4F8E-927E-48226423FCA6}"
 EndProject

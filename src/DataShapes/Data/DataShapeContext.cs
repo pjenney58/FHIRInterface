@@ -11,7 +11,7 @@ namespace DataShapes.Model
         public static IServiceCollection configureservice(this IServiceCollection service, IConfiguration Configuration)
         {
             IConfiguration config = new ConfigurationBuilder()
-               .AddJsonFile("appsettings.json")
+               .AddJsonFile("appdataconfig.json")
                .Build();
 
             service.AddDbContext<DataShapeContext>(options =>
@@ -37,7 +37,7 @@ namespace DataShapes.Model
         public DataShapeContext CreateDbContext(string[] args)
         {
              config = new ConfigurationBuilder()
-               .AddJsonFile("appsettings.json")
+               .AddJsonFile("appdataconfig.json")
                .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<DataShapeContext>();
@@ -69,7 +69,7 @@ namespace DataShapes.Model
         public DataShapeContext()
         {
             config = new ConfigurationBuilder()
-               .AddJsonFile("appsettings.json")
+               .AddJsonFile("appdataconfig.json")
                .Build();
 
             connectionString = config.GetConnectionString("default");
@@ -86,7 +86,7 @@ namespace DataShapes.Model
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             config = new ConfigurationBuilder()
-               .AddJsonFile("appsettings.json")
+               .AddJsonFile("appdataconfig.json")
                .Build();
 
             optionsBuilder.UseNpgsql(config.GetConnectionString("default"));

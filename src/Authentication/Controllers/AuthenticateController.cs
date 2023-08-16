@@ -35,6 +35,7 @@ using System.Text;
 
 namespace Authentication.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticateController : ControllerBase
@@ -53,6 +54,7 @@ namespace Authentication.Controllers
             _configuration = configuration;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel? model)
@@ -105,6 +107,7 @@ namespace Authentication.Controllers
                     validTo = token.ValidTo
                 });
             }
+
             return Unauthorized();
         }
 
@@ -119,10 +122,14 @@ namespace Authentication.Controllers
 
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
+            {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+            }
 
             ApplicationUser user = new()
             {
+                PhoneNumber = model.Phone,
+                TwoFactorEnabled = model.Use2Factor,
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username,
@@ -137,6 +144,7 @@ namespace Authentication.Controllers
                 {
                     errors += $"{error.Code}\n{error.Description}\n";
                 }
+
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = errors });
             }
 
@@ -152,7 +160,7 @@ namespace Authentication.Controllers
                 return BadRequest("Null parameter");
             }
 
-            var userExists = await _userManager.FindByNameAsync(model.Username);
+            var userExists = await _userManager.FindByNameAsync(model?.Username);
             if (userExists != null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
@@ -200,6 +208,7 @@ namespace Authentication.Controllers
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("refresh-token")]
         public async Task<IActionResult> RefreshToken(TokenModel? tokenModel)
@@ -218,8 +227,6 @@ namespace Authentication.Controllers
             {
                 return BadRequest("Invalid refresh token");
             }
-
-            //var id = JwtTenantId.Get(Request).ToString();
 
             string? accessToken = tokenModel.AccessToken;
             string? refreshToken = tokenModel.RefreshToken;
@@ -270,7 +277,7 @@ namespace Authentication.Controllers
             });
         }
 
-        [Authorize]
+       
         [HttpPost]
         [Route("revoke/{username}")]
         public async Task<IActionResult> Revoke(string username)
@@ -287,7 +294,6 @@ namespace Authentication.Controllers
             return NoContent();
         }
 
-        [Authorize]
         [HttpPost]
         [Route("revoke-all")]
         public async Task<IActionResult> RevokeAll()
@@ -300,6 +306,20 @@ namespace Authentication.Controllers
             }
 
             return NoContent();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("validata")]
+        public async Task<ActionResult<bool>> ValidateUser(string username, string token)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return BadRequest("Invalid user name");
+            }
+
+            return false;
         }
 
         private JwtSecurityToken CreateToken(List<Claim> authClaims)
