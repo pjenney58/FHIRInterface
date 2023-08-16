@@ -1,22 +1,22 @@
 import { SessionProvider, useSession } from "next-auth/react"
 import 'styles/globals.css';
 import { NextPage } from 'next';
-import { Roboto } from '@next/font/google';
+import { Roboto } from "next/font/google";
 import type { AppProps } from 'next/app';
 
 // We can use the auth flag to conditionally require authentication
 // Can be extended to include roles, etc by converting to an object
-export type NextPageWithAuth<P = {}, IP = P> = NextPage<P, IP> & {
+export type NextPageWithAuthBypass<P = {}, IP = P> = NextPage<P, IP> & {
   bypassAuth?: boolean
 }
 
-export type NextPageWithAuthRequired<P = {}, IP = P> = NextPageWithAuth<P, IP> & {
+export type NextPageWithAuthRequired<P = {}, IP = P> = NextPageWithAuthBypass<P, IP> & {
   bypassAuth: false,
   requiredRoles?: string[]
 }
 
 type MyAppProps = AppProps<any> & {
-  Component: NextPageWithAuth | NextPageWithAuthRequired
+  Component: NextPageWithAuthBypass | NextPageWithAuthRequired
 }
 
 // Next Fonts. Self hosts the font automatically instead of using Google Fonts
