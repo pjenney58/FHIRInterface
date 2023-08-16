@@ -10,11 +10,16 @@ export type NextPageWithAuth<P = {}, IP = P> = NextPage<P, IP> & {
   bypassAuth?: boolean
 }
 
-type MyAppProps = AppProps<any> & {
-  Component: NextPageWithAuth;
+export type NextPageWithAuthRequired<P = {}, IP = P> = NextPageWithAuth<P, IP> & {
+  bypassAuth: false,
+  requiredRoles?: string[]
 }
 
+type MyAppProps = AppProps<any> & {
+  Component: NextPageWithAuth | NextPageWithAuthRequired
+}
 
+// Next Fonts. Self hosts the font automatically instead of using Google Fonts
 const roboto = Roboto({
   subsets: ['latin'],
   weight: ['400', '700']
@@ -28,6 +33,8 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <main className={classNames}>
+        {/* If we don't care about a "landing page", we could wrap everything in the auth check */}
+        {/* The first page would just be the generic signin from NextAuth */}
         {Component.bypassAuth ? (
           <Component {...pageProps} />
         ) : (

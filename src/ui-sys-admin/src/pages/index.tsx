@@ -5,7 +5,7 @@ import type { InferGetServerSidePropsType, GetServerSideProps, NextPageContext }
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { NextPageWithAuth } from './_app';
 
-
+// Use this for translations 
 export async function getServerSideProps(context: NextPageContext) {
 
   return {
