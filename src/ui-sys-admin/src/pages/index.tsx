@@ -5,13 +5,14 @@ import type { InferGetServerSidePropsType, GetServerSideProps, NextPageContext }
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { NextPageWithAuth } from './_app';
 
-// Use this for translations 
 export async function getServerSideProps(context: NextPageContext) {
+  // Use this for translations 
 
   return {
     props: { message: `Next.js is awesome` }, // will be passed to the page component as props
   }
 }
+// Fake translations for now
 const translations = {
   en: {
     title: 'PPM - System Administration',
