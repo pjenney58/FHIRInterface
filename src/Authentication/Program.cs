@@ -100,6 +100,7 @@ namespace Authentication
                 app.UseSwaggerUI();
             }
 
+            // TODO: Turn on HTTPS redirection
             //app.UseHttpsRedirection();
 
             app.UseAuthorization();

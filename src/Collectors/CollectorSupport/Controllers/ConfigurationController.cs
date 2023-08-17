@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
-using Collectors.Model;
 using Collectors.Data;
+using DataShapes.Model;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,24 +14,24 @@ namespace Collectors.Controllers
     [ApiController]
     public class ConfigurationController : Controller
     {
-        private readonly TargetDataContext _context;
+        private readonly CollectorDataContext _context;
 
-        public ConfigurationController(TargetDataContext context)
+        public ConfigurationController(CollectorDataContext context)
         {
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<TargetConfiguration>>> GetTargets()
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<IEnumerable<CollectorDataContext>>> GetTargets()
         {
-            if(_context.Targets == null)
+            if(_context.Configs == null)
             {
                 return Problem("Internal data error");
             }
 
             try
             {
-                return Ok(_context.Targets.OrderBy(n => n.Name).ToList());
+                return Ok(_context.Configs.OrderBy(n => n.TargetName).ToList());
             }
             catch(Exception ex)
             {
@@ -39,13 +39,29 @@ namespace Collectors.Controllers
             }
         }
 
+        [HttpGet("Reset/{configid}")]
+        public async Task<ActionResult<string>> Reset(Guid id)
+        {
+            if(id == Guid.Empty)
+            {
+                return BadRequest("Invalid id");
+            }
 
-        [HttpGet("{targetidd}")]
-        public async Task<ActionResult<TargetConfiguration>> GetTargetConfig(string targetid)
+            var tconfig = _context.Configs.Where(i => i.EntityId == id).FirstOrDefault();
+            if (tconfig == null)
+            {
+                return Problem("Config not found");
+            }
+
+            return Ok(tconfig.Reset());
+        }
+
+        [HttpGet("GetSingle/{targetid}")]
+        public async Task<ActionResult<CollectorDataContext>> GetTargetConfig(string targetid)
         {
             try
             {
-                var val = await _context.FindAsync<TargetConfiguration>(targetid);
+                var val = await _context.FindAsync<CollectorDataContext>(targetid);
                 return Ok(val);
             }
             catch(Exception ex)
@@ -54,12 +70,12 @@ namespace Collectors.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddTarget(TargetConfiguration targetconfig)
+        [HttpPost("AddNewTarget/{targetconfig}")]
+        public async Task<IActionResult> AddTarget(CollectorConfig targetconfig)
         {
             try
             {
-                await _context.AddAsync<TargetConfiguration>(targetconfig);
+                await _context.AddAsync<CollectorConfig>(targetconfig);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -69,12 +85,12 @@ namespace Collectors.Controllers
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateTarget(TargetConfiguration targetconfig)
+        [HttpPut("UpdateTarget/{targetconfig}")]
+        public async Task<IActionResult> UpdateTarget(CollectorDataContext targetconfig)
         {
             try
             {
-                _context.Update<TargetConfiguration>(targetconfig);
+                _context.Update<CollectorDataContext>(targetconfig);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -84,12 +100,12 @@ namespace Collectors.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteTarget(TargetConfiguration targetconfig)
+        [HttpDelete("Delete/{targetconfig}")]
+        public async Task<IActionResult> DeleteTarget(CollectorDataContext targetconfig)
         {
             try
             {
-                _context.Remove<TargetConfiguration>(targetconfig);
+                _context.Remove<CollectorDataContext>(targetconfig);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -98,7 +114,6 @@ namespace Collectors.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
     }
 }
 

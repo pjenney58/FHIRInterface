@@ -7,7 +7,7 @@
   },
   "AllowedHosts": "*",
   "ConnectionStrings": {
-    "pgDocker": "Host=localhost;port=5432;Database=DataSources;User Id=palisaid;Password=password"
+    "default": "Host=localhost;port=5432;Database=CollectorConfigs;User Id=palisaid;Password=password"
   }
 }
 

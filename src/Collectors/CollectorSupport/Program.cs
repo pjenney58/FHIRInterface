@@ -2,7 +2,6 @@
 namespace Collectors;
 using Collectors.Data;
 using Microsoft.EntityFrameworkCore;
-using Npgsql.EntityFrameworkCore;
 
 public class Program
 {
@@ -10,8 +9,12 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddDbContext<TargetDataContext>(
-            options => options.UseNpgsql("ConnectionStrings:pgDocker"));
+        IConfiguration config = new ConfigurationBuilder()
+          .AddJsonFile("collectorsupportsettings.json")
+          .Build();   
+
+        builder.Services.AddDbContext<CollectorDataContext>(
+            options => options.UseNpgsql(config.GetConnectionString("default")));
 
         // Add services to the container.
         builder.Services.AddControllers();
@@ -29,9 +32,11 @@ public class Program
             app.UseSwaggerUI();
         }
 
-        app.UseHttpsRedirection();
+        // TODO: Turn on https redirect
+        //app.UseHttpsRedirection();
 
         app.UseAuthorization();
+        app.UseAuthentication();
 
 
         app.MapControllers();
