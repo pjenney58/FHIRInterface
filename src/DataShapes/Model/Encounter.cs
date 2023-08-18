@@ -17,6 +17,8 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace DataShapes.Model
 {
     public enum EncounterLocation
@@ -136,7 +138,7 @@ namespace DataShapes.Model
         public DisposableList<Code> Codes { get; set; } = new();
         public DisposableList<Patient> Patients { get; set; } = new();
         public DisposableList<Practitioner> Practitioners { get; set; } = new();
-        public DisposableList<Practitioner> ReferringPractitioners { get; set; } = new();
+        //public DisposableList<Practitioner> ReferringPractitioners { get; set; } = new();
         public DisposableList<Participant> Participants { get; set; } = new();
         public DisposableList<Location> Locations { get; set; } = new();
         public DisposableList<Diagnosis> Diagnoses { get; set; } = new();
@@ -153,7 +155,7 @@ namespace DataShapes.Model
                 Codes.Dispose();
                 Patients.Dispose();
                 Practitioners.Dispose();
-                ReferringPractitioners.Dispose();
+                //ReferringPractitioners.Dispose();
                 Locations.Dispose();
                 Diagnoses.Dispose();
                 Observations.Dispose();

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -96,7 +97,9 @@ namespace DataShapes.Model
         {
             //base.OnModelCreating(modelBuilder);
             //modelBuilder.Entity<Entity>().HasKey(pk => new { pk.EntityId, pk.TenantId });
-            //EntityTypeBuilder.Ignore("CustomAttributeData");
+
+            modelBuilder.Ignore<Type>();
+            modelBuilder.Ignore<CustomAttributeData>();
         }
     }
     #endregion

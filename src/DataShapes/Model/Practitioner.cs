@@ -18,6 +18,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 //using MongoDB.Bson.Serialization.Serializers;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataShapes.Model
 {
@@ -46,6 +47,8 @@ namespace DataShapes.Model
     [Serializable]
     public class Practitioner : Entity
     {
+        public bool IsRefering { get; set; }
+
         public Practitioner() { }
         
         /// <summary>
@@ -112,6 +115,7 @@ namespace DataShapes.Model
         /// <summary>
         /// Primary practitioner address extracted from address list
         /// </summary>
+        [NotMapped]
         public Address? PrimaryAddress
         {
             get => Addresses.FirstOrDefault(a => a.AddressType == AddressType.Primary);
@@ -120,6 +124,7 @@ namespace DataShapes.Model
         /// <summary>
         /// The primary phone number
         /// </summary>
+        [NotMapped]
         public Phone? PrimaryPhone
         {
             get => ContactMethods != null && ContactMethods.Count > 0
@@ -130,6 +135,7 @@ namespace DataShapes.Model
         /// <summary>
         /// A shortcut to the practioners DEA id
         /// </summary>
+        [NotMapped]
         public string? DEA
         {
             get => LicensesAndQualifications.FirstOrDefault(l => l.Key == "DEA").Value;

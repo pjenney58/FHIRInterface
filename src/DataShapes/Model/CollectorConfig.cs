@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataShapes.Model
 {
@@ -57,9 +58,18 @@ namespace DataShapes.Model
     public class CollectorConfig : Entity
     {
         public string? TargetName { get; set; }
+        public string? TargetUrl { get; set; }
         public Uri? TargetUri { get; set; }
         public string? TargetIp { get; set; }
         public string? TargetPort { get; set; }
+        public string? ConnectionString { get; set; }
+
+        public decimal TimerDurationMs { get; set; }
+        public decimal TimerDurationSec { get; set; }
+        public decimal TimerDurationMin { get; set; }
+        public decimal TimerDurstionHr { get; set; }
+
+        public Dictionary<string, string> HttpHeaders { get; set; }  = new();
 
         [NotMapped]
         public CancellationTokenSource? cancelTokenSrc { get; set; }
@@ -91,6 +101,10 @@ namespace DataShapes.Model
         public NetworkProtocol NetworkProtocolIn { get; set; }
         public TransportPrototcol TransportPrototcolIn { get; set; }
 
+        public string? username { get; set; }
+        public string? password { get; set; }
+        public string? apitoken { get; set; }
+
         public CollectorConfig()
         { }
 
@@ -110,17 +124,23 @@ namespace DataShapes.Model
         public async Task<string> RetryRequest()
         { throw new NotImplementedException(nameof(RetryRequest)); }
 
+        public async Task<string> Connect()
+        { throw new NotImplementedException(nameof(Connect)); }
+
         public async Task<string> Disconnect()
         { throw new NotImplementedException(nameof(Disconnect)); }
 
         //
         // A collector can manage multiple hosts just by changing the protocols and transport specifics.
         // Calling Reconfigure raises an event indicating that options have changed and itselfe needs to update
+        //
         public async Task<string> Reset()
         { throw new NotImplementedException(nameof(Reset)); }
 
         public async Task<string> UpdateLog(string log)
         { throw new NotImplementedException(nameof(UpdateLog)); }
+
+       
     }
 
     public enum LogRecordState

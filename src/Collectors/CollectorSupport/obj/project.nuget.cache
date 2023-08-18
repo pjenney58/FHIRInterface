@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "qEYaRRhiL9G3lR0RMxqVVb//DkwYzP28fvria0cDBATsHmk++YYc3aVrWQN//FWSuqy8/jEKtPipE1saTLQ28Q==",
+  "dgSpecHash": "BWi4J3Pk+W2lJTLi6820LDYkQzEwb3XG2jfqaz7fY7ibSqhf4l5+SIf2zTfzJCq1whGo4swc5Nf/FywQnM82ew==",
   "success": true,
   "projectFilePath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Collectors/CollectorSupport/CollectorSupport.csproj",
   "expectedPackageFiles": [
@@ -38,6 +38,8 @@
     "/Users/petejenney/.nuget/packages/npgsql/7.0.4/npgsql.7.0.4.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/npgsql.entityframeworkcore.postgresql/7.0.4/npgsql.entityframeworkcore.postgresql.7.0.4.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/npgsql.entityframeworkcore.postgresql.design/1.1.0/npgsql.entityframeworkcore.postgresql.design.1.1.0.nupkg.sha512",
+    "/Users/petejenney/.nuget/packages/restsharp/110.2.0/restsharp.110.2.0.nupkg.sha512",
+    "/Users/petejenney/.nuget/packages/restsharp.serializers.systemtextjson/106.15.0/restsharp.serializers.systemtextjson.106.15.0.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
@@ -106,7 +108,7 @@
     "/Users/petejenney/.nuget/packages/system.text.encoding/4.3.0/system.text.encoding.4.3.0.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/system.text.encoding.extensions/4.3.0/system.text.encoding.extensions.4.3.0.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/system.text.encodings.web/7.0.0/system.text.encodings.web.7.0.0.nupkg.sha512",
-    "/Users/petejenney/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512",
+    "/Users/petejenney/.nuget/packages/system.text.json/7.0.2/system.text.json.7.0.2.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/system.text.regularexpressions/4.3.0/system.text.regularexpressions.4.3.0.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/system.threading/4.3.0/system.threading.4.3.0.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/system.threading.tasks/4.3.0/system.threading.tasks.4.3.0.nupkg.sha512",
