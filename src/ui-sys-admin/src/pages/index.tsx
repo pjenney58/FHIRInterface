@@ -3,7 +3,7 @@ import Image from 'next/image'
 import style from 'styles/Home.module.css'
 import type { InferGetServerSidePropsType, GetServerSideProps, NextPageContext } from 'next';
 import { useSession, signIn, signOut } from 'next-auth/react';
-import { NextPageWithAuth } from './_app';
+import { NextPageWithAuthBypass } from './_app';
 
 export async function getServerSideProps(context: NextPageContext) {
   // Use this for translations 
@@ -34,7 +34,7 @@ const translations = {
   }
 }
 // TODO derive lang from browser and pass in as prop
-const Home: NextPageWithAuth = () => {
+const Home: NextPageWithAuthBypass = () => {
   const { data: session, status } = useSession();
   const lang = 'en';
   const text = translations[lang];
@@ -51,7 +51,7 @@ const Home: NextPageWithAuth = () => {
         {/* TODO Dynamic translations */}
         <h1 className={style.title}>{text.title}</h1>
         <div className="card" >
-          <Image src="/images/logo.jpg" alt="PPM Logo" width={250} height={75} />
+          <Image src="/images/logo.jpg" alt="PPM Logo" width={250} height={60} />
           <>
             {session && (
               <div>

@@ -225,7 +225,7 @@ _pkginfo.txt
 
 # Visual Studio cache files
 # files ending in .cache can be ignored
-*.cache
+.cache
 *.[Cc]ache
 *.editorconfig
 # but keep track of directories ending in .cache
@@ -364,6 +364,8 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
+# Apple
+.DS_Store
 
 # FRONT END STUFF
 

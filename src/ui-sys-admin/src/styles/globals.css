@@ -46,7 +46,7 @@ a {
 
 .button {
   padding: 0.5rem 1rem;
-  border-radius: var(--border-radius);
+  border-radius: 3px;
   background-color: var(--blue);
   border: none;
   font-weight: 700;
