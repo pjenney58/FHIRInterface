@@ -63,6 +63,7 @@ namespace DataShapes.Model
         public DbSet<Observation>? Observations { get; set; }
         public DbSet<Medication>? Medications { get; set; }
         public DbSet<Code>? Codes { get; set; }
+        public DbSet<CollectorConfig> Collectors {get; set; }
 
         internal IConfiguration? config;
         internal string? connectionString;

@@ -64,10 +64,11 @@ namespace DataShapes.Model
         public string? TargetPort { get; set; }
         public string? ConnectionString { get; set; }
 
-        public decimal TimerDurationMs { get; set; }
-        public decimal TimerDurationSec { get; set; }
-        public decimal TimerDurationMin { get; set; }
-        public decimal TimerDurstionHr { get; set; }
+        public decimal TimerDurationMilliseconds { get; set; }
+        public decimal TimerDurationSeconds { get; set; }
+        public decimal TimerDurationMinutes { get; set; }
+        public decimal TimerDurstionHours { get; set; }
+        public decimal TimerDurstionDays { get; set; }
 
         public Dictionary<string, string> HttpHeaders { get; set; }  = new();
 

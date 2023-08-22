@@ -3,7 +3,6 @@ using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Hl7Harmonizer.Adapters.Model;
 using RandomDataGenerator;
-using Settings;
 using System.Diagnostics;
 
 /*
