@@ -4,6 +4,7 @@ import style from 'styles/Home.module.css'
 import type { InferGetServerSidePropsType, GetServerSideProps, NextPageContext } from 'next';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { NextPageWithAuthBypass } from './_app';
+import Nav from 'components/Nav';
 
 export async function getServerSideProps(context: NextPageContext) {
   // Use this for translations 
@@ -48,6 +49,7 @@ const Home: NextPageWithAuthBypass = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
+        <Nav />
         {/* TODO Dynamic translations */}
         <h1 className={style.title}>{text.title}</h1>
         <div className="card" >

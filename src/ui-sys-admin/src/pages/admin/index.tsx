@@ -1,3 +1,4 @@
+import Nav from 'components/Nav';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
