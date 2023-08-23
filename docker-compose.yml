@@ -63,3 +63,10 @@ services:
       context: .
       dockerfile: src/Vectors/Dockerfile
 
+
+  collectorbase:
+    image: ${DOCKER_REGISTRY-}collectorbase
+    build:
+      context: .
+      dockerfile: src/Collectors/CollectorBase/Dockerfile
+

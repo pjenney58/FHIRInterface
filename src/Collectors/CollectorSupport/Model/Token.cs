@@ -22,10 +22,9 @@
  * SOFTWARE.
  */
 
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Reflection.PortableExecutable;
-using Amazon.Runtime.Internal;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
+using System.Xml.Serialization;
 
 namespace Hl7Harmonizer.Transport.Model
 {
@@ -137,8 +136,7 @@ namespace Hl7Harmonizer.Transport.Model
 
 
         private void RefreshCurrentTokenTimer(object state, object e)
-        {
-            
+        {           
             try
             {
                 PauseTimer();

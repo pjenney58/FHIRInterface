@@ -1,5 +1,5 @@
 ﻿/*
-* Software License - WorkingServer.cs
+* Software License - TCPServer.cs
 *
 *  Copyright (c) 2016 - 2022 by Sand Drift Software, LLC
 *
@@ -22,9 +22,11 @@
 * SOFTWARE.
 */
 
+
+
 namespace Hl7Harmonizer.Transport.Model
 {
-    internal class WorkingServer : IDisposable
+    internal class TCPServer : IDisposable
     {
         private readonly IBaseEventLogger logger = new BaseEventLogger("WorkingServer");
 
@@ -49,7 +51,7 @@ namespace Hl7Harmonizer.Transport.Model
         /// </summary>
         public ConnectionType ConnectionType { get; set; }
 
-        public WorkingServer(string port, bool secure)
+        public TCPServer(string port, bool secure)
         {
             IsSecure = secure;
         }
@@ -160,10 +162,10 @@ namespace Hl7Harmonizer.Transport.Model
 
         #region Stateful Listener
 
-        private readonly List<WorkingClient> tcpClientList = new List<WorkingClient>();
+        private readonly List<TCPClient> tcpClientList = new List<TCPClient>();
 
         // Checks if a socket has disconnected Adapted from -- http://stackoverflow.com/questions/722240/instantly-detect-client-disconnection-from-server-socket
-        private static bool IsDisconnected(WorkingClient workingClient)
+        private static bool IsDisconnected(TCPClient workingClient)
         {
             try
             {
@@ -181,7 +183,7 @@ namespace Hl7Harmonizer.Transport.Model
         private void CheckForDisconnects()
         {
             // Check the viewers first
-            foreach (WorkingClient workingClient in tcpClientList.ToArray())
+            foreach (TCPClient workingClient in tcpClientList.ToArray())
             {
                 if (IsDisconnected(workingClient))
                 {
@@ -195,7 +197,7 @@ namespace Hl7Harmonizer.Transport.Model
         }
 
         // cleans up resources for a TcpClient
-        private static void ReleaseClient(WorkingClient workingClient)
+        private static void ReleaseClient(TCPClient workingClient)
         {
             workingClient.TcpClient.GetStream().Close(); // Close network stream
             workingClient.TcpClient.Close();             // Close client
@@ -207,7 +209,7 @@ namespace Hl7Harmonizer.Transport.Model
 
         private void HandleNewConnection(bool isSecure = false)
         {
-            var newClient = new WorkingClient()
+            var newClient = new TCPClient()
             {
                 TcpClient = tcpListener.AcceptTcpClient(),
                 IsSecure = isSecure
@@ -232,7 +234,7 @@ namespace Hl7Harmonizer.Transport.Model
                 if (tcpClient.TcpClient.Available > 0 && !tcpClient.InUse)
                 {
                     //logger.ReportDebug($"{tcpClient.CanRead} and {tcpClient.ClearStream.DataAvailable} and {IsDisconnected(tcpClient)} and {tcpClient.InUse}");
-                    var data = tcpClient.ReadAsync();
+                    var data = tcpClient.Read();
                     //Task.Run(() => ProcessRecord(tcpClient));
                 }
             }
@@ -286,7 +288,7 @@ namespace Hl7Harmonizer.Transport.Model
             finally
             {
                 // Stop the server, and clean up any connected clients
-                foreach (WorkingClient tcpClient in tcpClientList)
+                foreach (TCPClient tcpClient in tcpClientList)
                 {
                     ReleaseClient(tcpClient);
                 }

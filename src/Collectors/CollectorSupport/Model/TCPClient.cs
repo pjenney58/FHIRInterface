@@ -24,9 +24,54 @@
 
 namespace Hl7Harmonizer.Transport.Model
 {
-    public class WorkingClient : IDisposable
+    public class TCPClient : IDisposable
     {
         private readonly IBaseEventLogger logger = new BaseEventLogger("WorkingClient");
+
+        private bool _isSecure;
+        public bool IsSecure
+        {
+            get => _isSecure;
+            set
+            {
+                if (tcpClient == null)
+                {
+                    throw new InvalidOperationException("Attempt to set security with null client");
+                }
+
+                _isSecure = value;
+                Stream = _isSecure ? new SslStream(tcpClient.GetStream()) : tcpClient.GetStream();
+                CanRead = Stream.CanRead;
+                CanWrite = Stream.CanWrite;
+                Stream.WriteTimeout = 10000;
+                Stream.ReadTimeout = 10000;
+            }
+        }
+
+        public bool CanRead { get; set; }
+        public bool CanWrite { get; set; }
+        public bool InUse { get; set; }
+
+        public EndPoint? RemoteEndPoint { get; set; }
+        public EndPoint? LocalEndPoint { get; set; }
+
+       
+        /// <summary>
+        /// Generic stream representing Celear or Secure connection
+        /// </summary>
+        public Stream? Stream;
+
+        private byte[] byteIoBuffer;
+        private int bytesRead;
+        private int bytesWritten;
+        private int bytesAvailable;
+        private bool dataAvailable;
+        private bool disposedValue;
+
+        /// <summary>
+        /// Connection Name
+        /// </summary>
+        public string? Name { get; set; }
 
         /// <summary>
         /// <c> WorkingClient </c> Abstraction for a Encrypted or Cleartext TcpClient. Instation Example:
@@ -37,7 +82,7 @@ namespace Hl7Harmonizer.Transport.Model
         /// <param name="address"> Actual address as URL or IPv4 or IPv6 </param>
         /// <param name="secure"> </param>
         /// <param name="name"> </param>
-        public WorkingClient(string? address, string? port, bool secure = false, string? name = null)
+        public TCPClient(string? address, string? port, bool secure = false, string? name = null)
         {
             if (string.IsNullOrEmpty(address) || string.IsNullOrEmpty(port))
             {
@@ -49,7 +94,7 @@ namespace Hl7Harmonizer.Transport.Model
                 //IPAddress ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
                 //IPEndPoint ipLocalEndPoint = new IPEndPoint(ipAddress, int.Parse(port));
 
-                tcpClient = new TcpClient(address, int.Parse(port));
+                var tcpClient = new TcpClient(address, int.Parse(port));
                 IsSecure = secure;
 
                 LocalEndPoint = tcpClient.Client.LocalEndPoint;
@@ -69,15 +114,11 @@ namespace Hl7Harmonizer.Transport.Model
             byteIoBuffer = new byte[4096];
         }
 
-        public WorkingClient()
+        public TCPClient()
         {
             byteIoBuffer = new byte[4096];
         }
 
-        /// <summary>
-        /// Connection Name
-        /// </summary>
-        public string? Name { get; set; }
 
         private TcpClient? tcpClient;
 
@@ -89,46 +130,6 @@ namespace Hl7Harmonizer.Transport.Model
             get => tcpClient;
             set => tcpClient = value ?? new TcpClient();
         }
-
-        private bool issecure;
-
-        public bool IsSecure
-        {
-            get => issecure;
-            set
-            {
-                if (tcpClient == null)
-                {
-                    throw new InvalidOperationException("Attempt to set security with null client");
-                }
-
-                issecure = value;
-                Stream = issecure ? new SslStream(tcpClient.GetStream()) : tcpClient.GetStream();
-                CanRead = Stream.CanRead;
-                CanWrite = Stream.CanWrite;
-                Stream.WriteTimeout = 10000;
-                Stream.ReadTimeout = 10000;
-            }
-        }
-
-        public bool CanRead { get; set; }
-        public bool CanWrite { get; set; }
-        public bool InUse { get; set; }
-
-        public EndPoint? RemoteEndPoint { get; set; }
-        public EndPoint? LocalEndPoint { get; set; }
-
-        /// <summary>
-        /// Generic stream representing Celear or Secure connection
-        /// </summary>
-        public Stream? Stream;
-
-        private byte[] byteIoBuffer;
-        private int bytesRead;
-        private int bytesWritten;
-        private int bytesAvailable;
-        private bool dataAvailable;
-        private bool disposedValue;
 
         private void SecureWriteCallback(IAsyncResult ar)
         {
@@ -214,7 +215,7 @@ namespace Hl7Harmonizer.Transport.Model
             }
         }
 
-        public string ReadAsync()
+        public string Read()
         {
             if (Stream == null)
             {
@@ -235,7 +236,7 @@ namespace Hl7Harmonizer.Transport.Model
             return string.Empty;
         }
 
-        public int WriteAsync(string data)
+        public int Write(string data)
         {
             if (Stream == null)
             {
