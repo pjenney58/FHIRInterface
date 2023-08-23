@@ -7,7 +7,7 @@ const navItems = [
   { name: 'Billing Management', path: '/admin/billing' },
   { name: 'Customer Management', path: '/admin/customers' },
   { name: 'Deployment Management', path: '/admin/deployments' },
-]
+];
 
 export default function Admin() {
   const { data: session, status } = useSession({ required: true });
@@ -15,7 +15,7 @@ export default function Admin() {
     <div>
       <h1>Loading...</h1>
     </div>
-  )
+  );
   return (
     <div>
       <h1>Admin</h1>
@@ -34,5 +34,5 @@ export default function Admin() {
         </nav>
       </section>
     </div>
-  )
+  );
 }

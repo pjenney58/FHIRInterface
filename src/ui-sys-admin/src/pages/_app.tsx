@@ -1,7 +1,7 @@
-import { SessionProvider, useSession } from "next-auth/react"
+import { SessionProvider, useSession } from 'next-auth/react';
 import 'styles/globals.css';
 import { NextPage } from 'next';
-import { Roboto } from "next/font/google";
+import { Roboto } from 'next/font/google';
 import type { AppProps } from 'next/app';
 
 // We can use the auth flag to conditionally require authentication
@@ -44,7 +44,7 @@ export default function App({
         )}
       </main>
     </SessionProvider>
-  )
+  );
 }
 
 function Auth({ children }: { children: React.ReactNode }) {
@@ -53,6 +53,6 @@ function Auth({ children }: { children: React.ReactNode }) {
     <div>
       <h1>Loading...</h1>
     </div>
-  )
+  );
   return children;
 }
