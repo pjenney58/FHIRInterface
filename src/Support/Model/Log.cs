@@ -1,4 +1,4 @@
-﻿namespace Authentication.Model
+﻿namespace Support.Model
 {
     public class Log
     {

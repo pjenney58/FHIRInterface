@@ -26,7 +26,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace Authentication.Model
+namespace Support.Model
 {
     public class AuthenticateRequest
     {

@@ -1,4 +1,4 @@
-﻿using Authentication.Model;
+﻿using Support.Model;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,7 +39,7 @@ namespace Authentication.Data
               .Build();
 
             connectionString = config.GetConnectionString("identity");
-        
+
             base.OnConfiguring(options);
         }
     }

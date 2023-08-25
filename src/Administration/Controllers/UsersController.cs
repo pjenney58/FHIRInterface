@@ -1,14 +1,16 @@
-﻿using Administration.Model;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Support.Model;
 
 namespace Administration.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
-	{
+    {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
@@ -23,7 +25,6 @@ namespace Administration.Controllers
             _configuration = configuration;
         }
 
-        [Authorize]
         [HttpPost]
         [Route("add")]
         public async Task<IActionResult> Register([FromBody] RegisterModel? model)
@@ -35,14 +36,16 @@ namespace Administration.Controllers
 
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
+            {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+            }
 
             ApplicationUser user = new()
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username,
-                TenantId = model.Tenant
+                TenantId = JwtTenantId.Get(Request)
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -60,7 +63,6 @@ namespace Administration.Controllers
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
 
-        [Authorize]
         [HttpPost]
         [Route("update")]
         public async Task<IActionResult> UpdateUser([FromBody] RegisterModel? model)
@@ -70,16 +72,19 @@ namespace Administration.Controllers
                 return BadRequest("Null parameter");
             }
 
-            var userExists = await _userManager.FindByNameAsync(model.Username);
+            var userExists = await _userManager.Users.FirstAsync(u => u.UserName == model.Username && u.TenantId == JwtTenantId.Get(Request));
+            //var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
+            {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+            }
 
             ApplicationUser user = new()
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username,
-                TenantId = model.Tenant
+                TenantId = JwtTenantId.Get(Request)
             };
 
             var result = await _userManager.UpdateAsync(user);
@@ -97,13 +102,12 @@ namespace Administration.Controllers
             return Ok(new Response { Status = "Success", Message = "User updated successfully!" });
         }
 
-
-        [Authorize]
         [HttpPost]
         [Route("logout/{username}")]
         public async Task<IActionResult> Revoke(string username)
         {
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.Users.FirstAsync(u => u.UserName == username && u.TenantId == JwtTenantId.Get(Request));
+            //var user = await _userManager.FindByNameAsync(username);
             if (user == null)
             {
                 return BadRequest("Invalid user name");
@@ -116,4 +120,3 @@ namespace Administration.Controllers
         }
     }
 }
-

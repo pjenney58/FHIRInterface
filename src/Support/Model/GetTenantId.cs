@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Primitives;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace Authentication.Model
+namespace Support.Model
 {
     public static class JwtTenantId
     {

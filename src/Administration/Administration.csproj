@@ -30,9 +30,7 @@
     <ProjectReference Include="..\DataShapes\DataShapes.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\Authentication\Authentication.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
+    <ProjectReference Include="..\Support\Support.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Model\" />

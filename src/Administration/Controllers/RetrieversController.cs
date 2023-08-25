@@ -8,11 +8,11 @@ namespace Administration.Controllers
     [Authorize]
     [Route("admin/[controller]")]
     [ApiController]
-    public class VendorBillingController : Controller
+    public class RetrieversController : Controller
     {
         internal readonly DataShapeContext? _context;
 
-        public VendorBillingController(DataShapeContext context)
+        public RetrieversController(DataShapeContext context)
         {
             _context = context;
         }

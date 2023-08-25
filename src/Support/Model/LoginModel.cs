@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Authentication.Model
+namespace Support.Model
 {
     public class LoginModel
-	{
+    {
         [Required(ErrorMessage = "User Name is required")]
         public string? Username { get; set; }
 

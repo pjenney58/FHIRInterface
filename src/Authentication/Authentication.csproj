@@ -42,5 +42,6 @@
     <ProjectReference Include="..\DataShapes\DataShapes.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\Support\Support.csproj" />
   </ItemGroup>
 </Project>

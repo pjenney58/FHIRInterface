@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-using Authentication.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +31,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Support.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace Authentication.Controllers
 {
@@ -64,7 +65,7 @@ namespace Authentication.Controllers
                 return BadRequest("Null parameter");
             }
 
-            var user = await _userManager.FindByNameAsync(model.Username);
+            var user = await _userManager.Users.FirstAsync(u => u.UserName == model.Username && u.TenantId == JwtTenantId.Get(Request));
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var userRoles = await _userManager.GetRolesAsync(user);
@@ -133,7 +134,7 @@ namespace Authentication.Controllers
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username,
-                TenantId = model.Tenant
+                TenantId = JwtTenantId.Get(Request)
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -277,12 +278,12 @@ namespace Authentication.Controllers
             });
         }
 
-       
         [HttpPost]
         [Route("revoke/{username}")]
         public async Task<IActionResult> Revoke(string username)
         {
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.Users.FirstAsync(u => u.UserName == username && u.TenantId == JwtTenantId.Get(Request));
+            //var user = await _userManager.FindByNameAsync(username);
             if (user == null)
             {
                 return BadRequest("Invalid user name");
@@ -298,7 +299,7 @@ namespace Authentication.Controllers
         [Route("revoke-all")]
         public async Task<IActionResult> RevokeAll()
         {
-            var users = _userManager.Users.ToList();
+            var users = await _userManager.Users.Where(t => t.TenantId == JwtTenantId.Get(Request)).ToListAsync();
             foreach (var user in users)
             {
                 user.RefreshToken = null;
@@ -364,8 +365,11 @@ namespace Authentication.Controllers
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+
             if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
                 throw new SecurityTokenException("Invalid token");
+            }
 
             return principal;
         }

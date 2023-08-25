@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Authentication.Model
+namespace Support.Model
 {
-	public class RegisterModel
-	{
+    public class RegisterModel
+    {
         [Required(ErrorMessage = "User Name is required")]
         public string? Username { get; set; }
 

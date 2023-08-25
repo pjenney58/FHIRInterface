@@ -1,6 +1,7 @@
+//using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Identity;
 
-namespace Administration.Model
+namespace Support.Model
 {
     public class ApplicationUser : IdentityUser
     {

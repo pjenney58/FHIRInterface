@@ -1,38 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using DataShapes.Model;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Administration.Model;
+using Microsoft.AspNetCore.Mvc;
+using Support.Model;
 
 namespace Administration.Controllers
 {
-    // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-     //[Authorize]
-    [Route("api/[controller]")]
+    [Authorize]
+    [Route("admin/[controller]")]
     [ApiController]
     public class CollectorsController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IConfiguration _configuration;
+        internal readonly DataShapeContext? _context;
 
-        public CollectorsController(
-            UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager,
-            IConfiguration configuration)
+        public CollectorsController(DataShapeContext context)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _configuration = configuration;
+            _context = context;
         }
 
-        public async Task<ActionResult> GetControllers()
+        [HttpGet]
+        public async Task<IActionResult> Get()
         {
-            return BadRequest();
+            var tid = JwtTenantId.Get(Request);
+            return BadRequest("Not Implemented");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post()
+        {
+            return BadRequest("Not Implemented");
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put()
+        {
+            return BadRequest("Not Implemented");
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete()
+        {
+            return BadRequest("Not Implemented");
         }
     }
 }
-
