@@ -1,5 +1,6 @@
 import { Roboto } from "next/font/google";
 import Nav from "./Nav"
+import { useSession } from "next-auth/react";
 
 // Next Fonts. Self hosts the font automatically instead of using Google Fonts
 const roboto = Roboto({
@@ -9,10 +10,10 @@ const roboto = Roboto({
 
 type Props = {
   children: React.ReactNode
-  session?: any
 }
 
-export default function Layout({ children, session }: Props) {
+export default function Layout({ children }: Props) {
+  const {data: session, status} = useSession()
   return (
     <div className={roboto.className} >
       {session && <Nav />}

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 
 const links = [
@@ -9,11 +10,13 @@ const links = [
 ];
 
 export default function Nav() {
+  const router = useRouter();
+  console.log(router.pathname);
   return (
-    <nav>
+    <nav className='main-nav'>
       <ul>
         {links.map(({ href, label }) => (
-          <li key={`${href}${label}`}>
+          <li key={`${href}${label}`} className={router.pathname === href ? 'isActive' : undefined}>
             <Link href={href}>{label}</Link>
           </li>
         ))}
