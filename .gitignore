@@ -371,7 +371,7 @@ FodyWeavers.xsd
 
 # next.js
 */**/.next/
-
+.env
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -3,6 +3,7 @@ import 'styles/globals.css';
 import { NextPage } from 'next';
 import { Roboto } from 'next/font/google';
 import type { AppProps } from 'next/app';
+import Layout from 'components/Layout';
 
 // We can use the auth flag to conditionally require authentication
 // Can be extended to include roles, etc by converting to an object
@@ -19,35 +20,30 @@ type MyAppProps = AppProps<any> & {
   Component: NextPageWithAuthBypass | NextPageWithAuthRequired
 }
 
-// Next Fonts. Self hosts the font automatically instead of using Google Fonts
-const roboto = Roboto({
-  subsets: ['latin'],
-  weight: ['400', '700']
-});
 
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: MyAppProps) {
-  const classNames = [roboto.className, 'main'].join(' ');
+  
   return (
     <SessionProvider session={session}>
-      <main className={classNames}>
+        <Layout session={session}>
         {/* If we don't care about a "landing page", we could wrap everything in the auth check */}
         {/* The first page would just be the generic signin from NextAuth */}
         {Component.bypassAuth ? (
           <Component {...pageProps} />
         ) : (
-          <Auth>
+          <AuthRequired>
             <Component {...pageProps} />
-          </Auth>
+          </AuthRequired>
         )}
-      </main>
+        </Layout>
     </SessionProvider>
   );
 }
 
-function Auth({ children }: { children: React.ReactNode }) {
+function AuthRequired({ children }: { children: React.ReactNode }) {
   const { status } = useSession({ required: true });
   if (status === 'loading') return (
     <div>

@@ -1,10 +1,12 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import style from 'styles/Home.module.css';
-import type { InferGetServerSidePropsType, GetServerSideProps, NextPageContext } from 'next';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import type { NextPageContext } from 'next';
+import { useSession, signIn } from 'next-auth/react';
 import { NextPageWithAuthBypass } from './_app';
 import Nav from 'components/Nav';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 export async function getServerSideProps(context: NextPageContext) {
   // Use this for translations 
@@ -39,6 +41,14 @@ const Home: NextPageWithAuthBypass = () => {
   const { data: session, status } = useSession();
   const lang = 'en';
   const text = translations[lang];
+  const router = useRouter();
+
+  useEffect(() => {
+    if(status === 'authenticated' && session)  {
+      router.push('/admin');
+    }
+  }, [status, session, router]);
+  if(status === 'loading') return (<div>Loading...</div>);
 
   return (
     <>
@@ -50,23 +60,20 @@ const Home: NextPageWithAuthBypass = () => {
       </Head>
       <div>
         {/* TODO Dynamic translations */}
+        {session && (
+        <div className="card">
+          <Nav />
+        </div>
+        )}
         <h1 className={style.title}>{text.title}</h1>
         <div className="card" >
           <Image src="/images/logo.jpg" alt="PPM Logo" width={250} height={60} />
-          <>
-            {session && (
-              <div>
-                <p>{text.signedInMessage} {session?.user?.email}</p>
-                <button className='button' onClick={() => signOut()}>Sign out</button>
-              </div>
-            )}
             {!session && (
               <div>
                 <p>{text.signedOutMessage}</p>
                 <button className='button' onClick={() => signIn()}>Sign in</button>
               </div>
             )}
-          </>
         </div>
       </div>
     </>
