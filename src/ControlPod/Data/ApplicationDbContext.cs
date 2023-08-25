@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using PalisaidPod.Models.Server;
+using ControlPod.Models.Server;
 
-namespace PalisaidPod.Data;
+namespace ControlPod.Data;
 
 // <summary>
 /// ApplicationDbContext - Supports Azure Identity Management in our PostgreSQL db </summary>

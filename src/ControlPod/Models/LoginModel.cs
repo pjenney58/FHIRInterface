@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace PalisaidPod.Models.Server
+namespace ControlPod.Models.Server
 {
     public class LoginModel
     {

@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\data\DataShapes\DataShapes.csproj">
+    <ProjectReference Include="..\DataShapes\DataShapes.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\Authentication\Authentication.csproj">

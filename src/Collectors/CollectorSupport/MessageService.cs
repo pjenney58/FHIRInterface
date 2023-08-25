@@ -10,11 +10,17 @@ namespace CollectorSupport
         public MessageService(IStringLocalizer<MessageService> localizer) =>
             _localizer = localizer;
 
-        public string? this[string key]
+        [return: NotNullIfNotNull(nameof(_localizer))]
+        public string getstring(string key)
+        {
+            LocalizedString localizedString = _localizer[key];
+            return localizedString;
+        }
+
+        public string this[string key]
         {
             get =>
-                _localizer[key] as LocalizedString;         
+                _localizer[key] as LocalizedString;
         }
     }
 }
-

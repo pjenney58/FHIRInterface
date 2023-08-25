@@ -39,11 +39,11 @@
     <Folder Include="Controllers\" />
     <Folder Include="Migrations\" />
     <Folder Include="DataContext\" />
-    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DataShapes\DataShapes.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\Transformers\HL7TransformationSupport\HL7TransformationSupport.csproj" />
   </ItemGroup>
 </Project>

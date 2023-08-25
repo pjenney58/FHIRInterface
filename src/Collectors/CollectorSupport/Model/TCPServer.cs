@@ -22,13 +22,15 @@
 * SOFTWARE.
 */
 
-
+using CollectorSupport;
 
 namespace Hl7Harmonizer.Transport.Model
 {
     internal class TCPServer : IDisposable
     {
         private readonly IBaseEventLogger logger = new BaseEventLogger("WorkingServer");
+
+        private MessageService _local;
 
         private TcpListener listener;
         public EndPoint RemoteEndPoint;
@@ -60,7 +62,7 @@ namespace Hl7Harmonizer.Transport.Model
 
         private void AcceptStream(IAsyncResult asyncResult)
         {
-            logger.ReportInfo("Accepting incoming client connection in AcceptStream.");
+            logger.ReportInfo(_local.getstring("AcceptingIncomingClient"));
 
             try
             {
@@ -71,7 +73,7 @@ namespace Hl7Harmonizer.Transport.Model
                     return;
                 }
 
-                var workingClient = new WorkingClient()
+                var workingClient = new TCPClient()
                 {
                     TcpClient = tcpListenerAs.EndAcceptTcpClient(asyncResult),
                     IsSecure = IsSecure
@@ -81,7 +83,7 @@ namespace Hl7Harmonizer.Transport.Model
                 while (workingClient.TcpClient.Available == 0 && waiting > 0)
                 {
                     Thread.Sleep(10);
-                    waiting = waiting - 10;
+                    waiting -= 10;
                 }
 
                 logger.ReportInfo($"Waited for {1000 - waiting}ms");
@@ -94,8 +96,8 @@ namespace Hl7Harmonizer.Transport.Model
 
                 if (workingClient.TcpClient.Available > 0)
                 {
-                    logger.ReportTrace("Starting ProcessRecord Task");
-                    var data = workingClient.ReadAsync();
+                    logger.ReportTrace(_local["StartProcessRecord"]);
+                    var data = workingClient.Read();
                     // Now do something with it
                 }
 

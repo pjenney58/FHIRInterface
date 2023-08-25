@@ -1,4 +1,4 @@
-﻿namespace PalisaidPod.Models.Server
+﻿namespace ControlPod.Models.Server
 {
     using Microsoft.AspNetCore.Identity;
 

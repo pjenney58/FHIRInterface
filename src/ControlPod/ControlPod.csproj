@@ -17,7 +17,7 @@
     <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'PalisaidPod' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'ControlPod' " />
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.10" />

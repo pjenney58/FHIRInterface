@@ -1,5 +1,5 @@
 
-namespace PalisaidPod
+namespace ControlPod
 {
     public class Program
     {

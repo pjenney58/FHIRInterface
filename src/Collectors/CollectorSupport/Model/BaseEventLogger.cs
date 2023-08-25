@@ -18,6 +18,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using System;
+using Hl7Harmonizer.Adapters.Model;
 using Hl7Harmonizer.Support.Interface;
 
 namespace Hl7Harmonizer.Support.Model

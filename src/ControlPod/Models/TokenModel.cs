@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PalisaidPod.Models.Server
+namespace ControlPod.Models.Server
 {
     public class TokenModel
     {

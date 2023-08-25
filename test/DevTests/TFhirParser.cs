@@ -4,6 +4,7 @@ using Hl7.Fhir.Serialization;
 using Hl7Harmonizer.Adapters.Model;
 using RandomDataGenerator;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 /*
 extern alias r5;
@@ -21,7 +22,9 @@ namespace DevTests
 {
     public class TFhirParser
     {
-        private readonly string sourcedir = "/Users/petejenney/Projects/SyntheaData";
+        private readonly string sourcedir = Environment.OSVersion.Platform == PlatformID.Win32NT
+            ? "C:\\SandDriftSoftware\\data\\SyntheaData"
+            : "/Users/petejenney/Projects/SyntheaData";
 
         public TFhirParser()
         {

@@ -47,7 +47,7 @@ namespace Hl7Harmonizer.Adapters.Model
             this.format = format;
             this.version = version;
             this.source = source;
-        }      
+        }
 
         private CodingSystem GetCodingSystem(string link)
         {
@@ -128,7 +128,6 @@ namespace Hl7Harmonizer.Adapters.Model
                 {
                     foreach (var code in rc.Coding)
                     {
-
                         var cd = new DataShapes.Model.Code()
                         {
                             CodingSystem = GetCodingSystem(code.System),
@@ -314,7 +313,7 @@ namespace Hl7Harmonizer.Adapters.Model
                     {
                         type = typeof(DataShapes.Model.Location),
                         Name = location.Location.Display,
-                        Id = Guid.Parse(location.Location.Reference.Substring(location.Location.Reference.IndexOf('|') + 1)),
+                        Id = Guid.Parse(location.Location.Reference.Substring(location.Location.Reference.IndexOf('|') + 1).Substring("urn:uuid:".Length)),
                     });
                 }
 
@@ -325,7 +324,7 @@ namespace Hl7Harmonizer.Adapters.Model
                 {
                     if (pair.Key.ToLower() == "reference")
                     {
-                        sp.Id = Guid.Parse(pair.Value.ToString().Substring(pair.Value.ToString().IndexOf('|') + 1));
+                        sp.Id = Guid.Parse(pair.Value.ToString().Substring(pair.Value.ToString().IndexOf('|') + 1).Substring("urn:uuid:".Length));
                     }
                     else if (pair.Key.ToLower() == "display")
                     {
@@ -354,7 +353,7 @@ namespace Hl7Harmonizer.Adapters.Model
         private Task<OEntity> ConvertMetaToR4Fhir()
         {
             throw new NotImplementedException();
-        }   
+        }
 
         private List<OEntity> OEntities = new();
 
