@@ -28,7 +28,7 @@ export default function App({
   
   return (
     <SessionProvider session={session}>
-        <Layout session={session}>
+        <Layout>
         {/* If we don't care about a "landing page", we could wrap everything in the auth check */}
         {/* The first page would just be the generic signin from NextAuth */}
         {Component.bypassAuth ? (
