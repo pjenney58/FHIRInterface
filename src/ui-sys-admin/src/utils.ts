@@ -43,7 +43,7 @@ function generateMockClinic(): Clinic {
             email: faker.internet.email()
         },
         billingInfo: {
-            paymentStatus: faker.helpers.arrayElement(['Paid', 'Due', 'Overdue']),
+            paymentStatus: faker.helpers.arrayElement(['Paid', 'Due', 'Overdue', 'Pending']),
             lastBillingDate: faker.date.recent().toISOString(),
             nextBillingDate: faker.date.soon().toISOString(),
             billingMethod: faker.helpers.arrayElement(['Credit Card', 'Bank Transfer', 'Check', 'ACH']),

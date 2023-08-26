@@ -21,7 +21,7 @@ export interface Contact {
 }
 
 export interface BillingInfo {
-  paymentStatus: 'Paid' | 'Due' | 'Overdue';
+  paymentStatus: 'Paid' | 'Due' | 'Overdue' | 'Pending';
   lastBillingDate: string;
   nextBillingDate: string;
   billingMethod: 'Credit Card' | 'Bank Transfer' | 'Check' | 'ACH';

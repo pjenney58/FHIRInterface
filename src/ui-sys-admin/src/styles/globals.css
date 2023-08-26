@@ -5,6 +5,11 @@
   --dark-blue: #0c8eeb;
   --text-primary: #111;
   --white: #fff;
+  --red: #d9534f;
+  --orange: #ffae00;
+  --yellow: #ffd700;
+  --green: #5cb85c;
+  --border-primary: #e5e5e5;
 
   --elevation_1: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
   --background-primary: var(--light-blue);
