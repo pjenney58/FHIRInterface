@@ -1,45 +1,5 @@
 import {faker} from '@faker-js/faker'
-
-export interface Address {
-    street1: string;
-    street2: string;
-    city: string;
-    state: string;
-    zip: string;
-}
-
-export interface Name {
-    given: string;
-    family: string;
-}
-
-export interface Contact {
-    name: Name;
-    phoneNumber: string;
-    email: string;
-}
-
-export interface BillingInfo {
-    paymentStatus: string;
-    lastBillingDate: string;
-    nextBillingDate: string;
-    billingMethod: string;
-    paymentMethod: string;
-}
-
-export interface Clinic {
-    id: string;
-    name: string;
-    phoneNumber: string;
-    addresses: Address[];
-    specialties: string[];
-    doctors: string[];
-    website: string;
-    rating: number;
-    mainContact: Contact;
-    billingInfo: BillingInfo;
-    associatedUsers: string[];
-}
+import { Clinic } from 'types';
 
 function generateRandomGuid(): string {
     return faker.string.uuid();
