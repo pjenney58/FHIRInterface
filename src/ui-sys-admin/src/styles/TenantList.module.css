@@ -1,7 +1,11 @@
+.container {
+  width: 100%;
+}
+
 .tenantList {
   display: flex;
   flex-direction: column;
-  padding: 6rem;
+  padding: 0 6rem;
   min-height: 100vh;
   max-width: 90%;
   margin: 0 auto;
@@ -37,14 +41,25 @@
 }
 
 .contactCard p {
-  margin-block-end: 0;
-  font-weight: bold;
+  margin-bottom: .25rem;
+}
+
+.contactLine {
+  display: flex;
+  justify-content: center;
+  margin-bottom: .5rem;
+}
+
+.contactLine p {
+
+  margin: 0 .5rem 0 0;
 }
 
 .paymentStatus {
   display: block;
   padding: 0.5rem;
   border-radius: 0.5rem;
+  text-align: center;
 }
 
 .paymentStatus.overdue {

@@ -2,6 +2,8 @@ import { TenantList } from 'components/TenantList';
 import { useEffect, useState } from 'react';
 import { Tenant } from 'types';
 import { getMockClinics } from 'utils';
+import style from 'styles/CustomersPage.module.css';
+
 
 export default function Customers() {
   const [tenants, setTenants] = useState<Tenant[]>([])
@@ -14,7 +16,7 @@ export default function Customers() {
   }, [])
 
   return (
-    <div>
+    <div className={style.container}>
       <h1>Customers</h1>
       {tenants && <TenantList tenants={tenants} />}
     </div>

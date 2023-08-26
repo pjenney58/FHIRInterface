@@ -13,10 +13,9 @@ type Props = {
 }
 
 export default function Layout({ children }: Props) {
-  const {data: session, status} = useSession()
   return (
     <div className={roboto.className} >
-      {session && <Nav />}
+      <Nav />
       <main className="main">
         {children}
       </main>

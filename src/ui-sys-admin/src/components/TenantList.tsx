@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BillingInfo, Tenant } from "types";
+import { MdSmartphone, MdOutlineEmail } from "react-icons/md";
 import style from 'styles/TenantList.module.css';
 
 type TenantListProps = {
@@ -27,8 +28,8 @@ function TenantListItem({tenant}: {tenant: Tenant}) {
           <p>Users: {tenant.associatedUsers.length}</p>
         </div>
         <div>
-          <Link href={`/admin/customers/${tenant.id}`}>View</Link>
           <PaymentStatus status={tenant.billingInfo.paymentStatus} />
+          <Link href={`/admin/customers/${tenant.id}`}>View Details</Link>
         </div>
       </div>
     </li>
@@ -43,9 +44,14 @@ function PaymentStatus({status}: {status: BillingInfo['paymentStatus']}) {
 function ContactCard({tenant}: {tenant: Tenant}) {
   return (
     <div className={style.contactCard} >
-      <h5>{tenant.mainContact.name.given} {tenant.mainContact.name.family}</h5>
-      <p>phone: {tenant.phoneNumber}</p>
-      <p>email: {tenant.mainContact.email}</p>
+      <h5>Primary Contact</h5>
+      <p>{tenant.mainContact.name.given} {tenant.mainContact.name.family}</p>
+      <div className={style.contactLine}>
+        <MdSmartphone /><p>{tenant.phoneNumber}</p>
+      </div>
+      <div className={style.contactLine}>
+        <MdOutlineEmail /><p>{tenant.mainContact.email}</p>
+      </div>
     </div>
   );
 }

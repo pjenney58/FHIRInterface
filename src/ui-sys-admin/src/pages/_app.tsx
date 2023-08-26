@@ -31,7 +31,6 @@ export default function App({
   
   return (
     <SessionProvider session={session}>
-        <Layout>
         {/* If we don't care about a "landing page", we could wrap everything in the auth check */}
         {/* The first page would just be the generic signin from NextAuth */}
         {Component.bypassAuth ? (
@@ -41,7 +40,6 @@ export default function App({
             <Component {...pageProps} />
           </AuthRequired>
         )}
-        </Layout>
     </SessionProvider>
   );
 }
@@ -55,5 +53,9 @@ function AuthRequired({ children }: { children: React.ReactNode }) {
       <h1>Loading...</h1>
     </div>
   );
-  return children;
+  return (
+    <Layout>
+      {children}
+    </Layout>
+  );
 }
