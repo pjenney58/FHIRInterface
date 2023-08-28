@@ -10,6 +10,7 @@ namespace Administration.Controllers
     [ApiController]
     public class CollectorsController : Controller
     {
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         internal readonly DataShapeContext? _context;
 
         public CollectorsController(DataShapeContext context)
@@ -41,5 +42,6 @@ namespace Administration.Controllers
         {
             return BadRequest("Not Implemented");
         }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 }

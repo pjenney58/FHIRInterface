@@ -38,13 +38,13 @@ namespace DataShapes.Model
         // TODO: Finish Set Code in DiagnosisCodes - Needs Lookup
         public void SetCode(CodingSystem codetype, string? code)
         {
-            /*
+            CodeType = codetype;
             switch (codetype)
             {
                 case CodingSystem.ICD10:
-                    var val = new ICD10(code);
-                    ShortDescription = val.ShortDescription;
-                    LongDescription = val.LongDescription;
+                    //var val = new ICD10(code);
+                    //ShortDescription = val.ShortDescription;
+                    //ßLongDescription = val.LongDescription;
                     break;
 
                 case CodingSystem.SNOMED:
@@ -55,7 +55,7 @@ namespace DataShapes.Model
                 default:
                     break;
             }
-            */
+            
         }
 
         

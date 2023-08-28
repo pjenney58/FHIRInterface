@@ -15,10 +15,16 @@ namespace Administration.Controllers
         public TenantsController(DataShapeContext context)
         {
             _context = context;
+            if (_context.Tenants is null)
+            {
+                throw new ArgumentNullException("Tenants");
+            }
         }
 
         [HttpGet]
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<ActionResult<IEnumerable<Tenant>>> GetTenants()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             try
             {
@@ -34,7 +40,7 @@ namespace Administration.Controllers
                 return Problem(ex.Message);
             }
         }
-
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         [HttpGet("{id}")]
         public async Task<ActionResult<Tenant>> GetTenant(Guid id)
         {
@@ -144,5 +150,6 @@ namespace Administration.Controllers
                 return Problem(ex.Message);
             }
         }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
     }
 }

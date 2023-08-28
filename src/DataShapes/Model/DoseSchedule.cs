@@ -73,7 +73,9 @@ namespace DataShapes.Model
         public string DoseQty
         {
             get => DoseDays != null && DoseDays.Count > 0
-                ? DoseDays.FirstOrDefault().DoseEvents.FirstOrDefault().MinmumCountOrDefault.ToString()
+                ? DoseDays.First()
+                    .DoseEvents.First()
+                    .MinmumCountOrDefault.ToString()
                 : "0";
         }
 
@@ -81,7 +83,9 @@ namespace DataShapes.Model
         public string TotalDailyDoseQty
         {
             get => DoseDays != null && DoseDays.Count > 0
-                ? DoseDays.FirstOrDefault().DoseEvents.Sum(q => q.MinmumCountOrDefault).ToString()
+                ? DoseDays.First()
+                    .DoseEvents
+                    .Sum(q => q.MinmumCountOrDefault).ToString()
                 : "0";
         }
 

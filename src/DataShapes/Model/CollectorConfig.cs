@@ -109,6 +109,8 @@ namespace DataShapes.Model
             : base(ownerId, tenantId)
         { }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+
         public async Task<string> GetData()
         { throw new NotImplementedException(nameof(GetData)); }
 
@@ -135,6 +137,9 @@ namespace DataShapes.Model
 
         public async Task<string> UpdateLog(string log)
         { throw new NotImplementedException(nameof(UpdateLog)); }
+
+        #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+
     }
 
     public enum LogRecordState

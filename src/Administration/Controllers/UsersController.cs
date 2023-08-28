@@ -29,7 +29,9 @@ namespace Administration.Controllers
         [Route("add")]
         public async Task<IActionResult> Register([FromBody] RegisterModel? model)
         {
-            if (model == null)
+            if (model == null ||
+                string.IsNullOrEmpty(model.Username) ||
+                string.IsNullOrEmpty(model.Password))
             {
                 return BadRequest("Null parameter");
             }
@@ -67,7 +69,9 @@ namespace Administration.Controllers
         [Route("update")]
         public async Task<IActionResult> UpdateUser([FromBody] RegisterModel? model)
         {
-            if (model == null)
+            if (model == null ||
+                string.IsNullOrEmpty(model.Username) ||
+                string.IsNullOrEmpty(model.Password))
             {
                 return BadRequest("Null parameter");
             }

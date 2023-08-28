@@ -11,25 +11,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Controllers\WeatherForecastController.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Model\" />
-    <None Remove="Interface\" />
-    <None Remove="Data\" />
-    <None Remove="Migrations\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\" />

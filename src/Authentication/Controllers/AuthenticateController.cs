@@ -58,9 +58,11 @@ namespace Authentication.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel? model)
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            if (model == null)
+            if (model == null ||
+                string.IsNullOrEmpty(model.Password) ||
+                string.IsNullOrEmpty(model.Username))
             {
                 return BadRequest("Null parameter");
             }
@@ -72,7 +74,7 @@ namespace Authentication.Controllers
 
                 var authClaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Name, model.Username),
                     new Claim(ClaimTypes.PrimarySid, user.TenantId.ToString()),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
@@ -116,7 +118,9 @@ namespace Authentication.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel? model)
         {
-            if (model == null)
+            if (model == null ||
+                string.IsNullOrEmpty(model.Password) ||
+                string.IsNullOrEmpty(model.Username))
             {
                 return BadRequest("Null parameter");
             }
@@ -156,12 +160,14 @@ namespace Authentication.Controllers
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminModel? model)
         {
-            if (model == null)
+            if (model == null ||
+                string.IsNullOrEmpty(model.Password) ||
+                string.IsNullOrEmpty(model.Username))
             {
                 return BadRequest("Null parameter");
             }
 
-            var userExists = await _userManager.FindByNameAsync(model?.Username);
+            var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
@@ -212,7 +218,7 @@ namespace Authentication.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("refresh-token")]
-        public async Task<IActionResult> RefreshToken(TokenModel? tokenModel)
+        public async Task<IActionResult> RefreshToken(TokenModel tokenModel)
         {
             if (tokenModel is null)
             {
@@ -244,7 +250,7 @@ namespace Authentication.Controllers
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByNameAsync(username ?? throw new ArgumentNullException("principal.Identity.Name"));
 
             if (user == null || user.RefreshToken != refreshToken)
             {
@@ -325,7 +331,7 @@ namespace Authentication.Controllers
 
         private JwtSecurityToken CreateToken(List<Claim> authClaims)
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"] ?? throw new ArgumentNullException("JWT:Secret")));
             if (!double.TryParse(_configuration["JWT:TokenValidityInSeconds"], out double tokenValidityInSeconds))
             {
                 tokenValidityInSeconds = 10;
@@ -359,7 +365,7 @@ namespace Authentication.Controllers
                 ValidateAudience = false,
                 ValidateIssuer = false,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"])),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"] ?? throw new ArgumentNullException("JWT:Secret"))),
                 ValidateLifetime = false
             };
 

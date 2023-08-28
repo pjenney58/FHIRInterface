@@ -20,7 +20,9 @@ namespace Administration.Controllers
         }
 
         [HttpGet]
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<IActionResult> Get()
+
         {
             var tid = JwtTenantId.Get(Request);
             return BadRequest("Not Implemented");
@@ -43,5 +45,6 @@ namespace Administration.Controllers
         {
             return BadRequest("Not Implemented");
         }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 }
