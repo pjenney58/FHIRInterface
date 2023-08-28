@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calendar", "src\Calendar\Ca
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reports", "src\Reports\Reports.csproj", "{AF105384-6709-4BFE-89BD-CBEEC6E6FCD3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlPod", "src\ControlPod\ControlPod.csproj", "{1F120F65-2BFE-4E3C-80DA-174438DE31ED}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{7DF53970-678F-4077-AC87-C93175309E34}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "test\UnitTests\UnitTests.csproj", "{423C632F-0164-4533-ADCB-0E5BA254301A}"
@@ -76,7 +74,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollectorsController", "src
 EndProject
 Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "Repository", "..\HealthCareDev\Harmonizer\src\Repository\Repository.csproj", "{A4828DDB-AB0E-4D5E-867F-5E8BCE1DB3E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Support", "src\Support\Support.csproj", "{9B1F66E8-0507-4B99-9738-3A94A773CF68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Support", "src\Support\Support.csproj", "{9B1F66E8-0507-4B99-9738-3A94A773CF68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -104,10 +102,6 @@ Global
 		{AF105384-6709-4BFE-89BD-CBEEC6E6FCD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF105384-6709-4BFE-89BD-CBEEC6E6FCD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF105384-6709-4BFE-89BD-CBEEC6E6FCD3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1F120F65-2BFE-4E3C-80DA-174438DE31ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F120F65-2BFE-4E3C-80DA-174438DE31ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F120F65-2BFE-4E3C-80DA-174438DE31ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F120F65-2BFE-4E3C-80DA-174438DE31ED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{423C632F-0164-4533-ADCB-0E5BA254301A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{423C632F-0164-4533-ADCB-0E5BA254301A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{423C632F-0164-4533-ADCB-0E5BA254301A}.Release|Any CPU.ActiveCfg = Release|Any CPU
