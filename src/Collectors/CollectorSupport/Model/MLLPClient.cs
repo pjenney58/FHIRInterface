@@ -2,6 +2,10 @@
 
 namespace CollectorSupport.Model
 {
+    /// <summary>
+    /// <c>MLLPClient</c>
+    /// Portable client for HL7-v2 collection
+    /// </summary>
     public class MLLPClient
     {
         private IBaseEventLogger logger = new BaseEventLogger("MLLPClient");

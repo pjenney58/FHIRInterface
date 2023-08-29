@@ -6,7 +6,7 @@
     <ProjectGuid>b34119c0-f7e1-4492-83b3-b5dddfa6edb5</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
-    <DockerServiceName>ControlPod</DockerServiceName>
+    <DockerServiceName>Palisaid</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose-debug.yml" />

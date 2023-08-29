@@ -422,15 +422,6 @@ FodyWeavers.xsd
 /src/Collectors/X12Collector/obj/X12Collector.csproj.nuget.dgspec.json
 /src/Collectors/X12Collector/obj/X12Collector.csproj.nuget.g.props
 /src/Collectors/X12Collector/obj/X12Collector.csproj.nuget.g.targets
-/src/ControlPod/obj/Debug/net7.0/ControlPod.AssemblyInfo.cs
-/src/ControlPod/obj/Debug/net7.0/ControlPod.assets.cache
-/src/ControlPod/obj/Debug/net7.0/ControlPod.csproj.AssemblyReference.cache
-/src/ControlPod/obj/Debug/net7.0/ControlPod.GeneratedMSBuildEditorConfig.editorconfig
-/src/ControlPod/obj/ControlPod.csproj.nuget.dgspec.json
-/src/ControlPod/obj/ControlPod.csproj.nuget.g.props
-/src/ControlPod/obj/ControlPod.csproj.nuget.g.targets
-/src/ControlPod/obj/project.assets.json
-/src/ControlPod/obj/project.nuget.cache
 /src/Data/obj/project.assets.json
 /src/Data/obj/project.nuget.cache
 /src/DataShapes/bin/Debug/net7.0/DataShapes.dll
