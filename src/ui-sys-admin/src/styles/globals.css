@@ -52,10 +52,12 @@ a {
   min-height: 100vh;
   max-width: 90%;
   margin: 0 auto;
+  background-color: var(--white);
 }
 
 .main-nav {
   box-shadow: var(--elevation_1);
+  margin-bottom: 2rem;
 }
 
 .main-nav ul {
@@ -90,9 +92,9 @@ a {
   background: var(--white);
   border-radius: var(--border-radius);
   box-shadow: var(--elevation_1);
-  padding: 3rem 1.5rem;
+  padding: 1rem 1.5rem;
   min-width: 300px;
-  text-align: center;
+  /* text-align: center; */
 }
 
 .button {

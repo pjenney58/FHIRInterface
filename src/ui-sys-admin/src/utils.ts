@@ -16,7 +16,7 @@ function generateRandomArrayOfGuids(): string[] {
     return guids;
 }
 
-function generateMockClinic(): Clinic {
+export function generateMockClinic(): Clinic {
     return {
         id: generateRandomGuid(),
         name: faker.company.name(),

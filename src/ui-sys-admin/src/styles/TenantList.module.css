@@ -1,7 +1,3 @@
-.container {
-  width: 100%;
-}
-
 .tenantList {
   display: flex;
   flex-direction: column;
@@ -20,62 +16,8 @@
   width: 100%;
   box-shadow: var(--elevation_1);
   background-color: var(--white);
-}
-
-.itemContent {
   display: flex;
   justify-content: space-between;
-}
-
-.contactCard {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  border: 1px solid var(--border-primary);
-  padding: 1rem;
-  border-radius: .5rem;
-}
-
-.contactCard h5 {
-  margin: 0;
-}
-
-.contactCard p {
-  margin-bottom: .25rem;
-}
-
-.contactLine {
-  display: flex;
-  justify-content: center;
-  margin-bottom: .5rem;
-}
-
-.contactLine p {
-
-  margin: 0 .5rem 0 0;
-}
-
-.paymentStatus {
-  display: block;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  text-align: center;
-}
-
-.paymentStatus.overdue {
-  background-color: var(--red);
-}
-
-.paymentStatus.paid {
-  background-color: var(--green);
-}
-
-.paymentStatus.pending {
-  background-color: var(--yellow);
-}
-
-.paymentStatus.due {
-  background-color: var(--blue);
 }
 
 .tenantListItem h4 {
