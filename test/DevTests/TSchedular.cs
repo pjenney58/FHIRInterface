@@ -1,12 +1,10 @@
-﻿using CollectorBase.Model;
-using DataShapes.Model;
-using RandomDataGenerator;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using CollectorBase.Model;
 
 
 namespace DevTests
 {
-	public class TSchedular
+    public class TSchedular
 	{
 		public TSchedular()
 		{

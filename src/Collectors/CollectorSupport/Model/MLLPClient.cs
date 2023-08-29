@@ -1,4 +1,5 @@
 ﻿using Hl7Harmonizer.Transport.Model;
+using CollectorSupport.Interface;
 
 namespace CollectorSupport.Model
 {
@@ -6,7 +7,7 @@ namespace CollectorSupport.Model
     /// <c>MLLPClient</c>
     /// Portable client for HL7-v2 collection
     /// </summary>
-    public class MLLPClient
+    public class MLLPClient //: IClient
     {
         private IBaseEventLogger logger = new BaseEventLogger("MLLPClient");
 
@@ -36,7 +37,7 @@ namespace CollectorSupport.Model
             }
         }
 
-        public List<string> Read()
+        public List<string> GetData<T>()
         {
             Messages.Clear();
             Messages.TrimExcess();
@@ -52,7 +53,7 @@ namespace CollectorSupport.Model
             return Messages;
         }
 
-        public int Write(string message)
+        public int PutData<T>(string message)
         {
             try
             {
@@ -65,7 +66,7 @@ namespace CollectorSupport.Model
             }
         }
 
-        public int Write(List<string> messages)
+        public int PutData<T>(List<string> messages)
         {
             StringBuilder strings = new StringBuilder();
             foreach (var message in messages)

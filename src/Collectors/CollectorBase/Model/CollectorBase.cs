@@ -10,13 +10,15 @@ namespace CollectorBase.Model
 		private DataShapeContext context;
 
 		public CollectorBase()
-		{
+        {
 			
 		}
 
-		public async Task RegisterCollector(CollectorConfig config)
-		{ }
-
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        public async Task RegisterCollector(CollectorConfig config)
+        {
+			this.config = config;
+		}
 
 		public async Task Start()
 		{ }
@@ -26,6 +28,7 @@ namespace CollectorBase.Model
 
 		public async Task PanicStop()
 		{ }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
 	}
 }

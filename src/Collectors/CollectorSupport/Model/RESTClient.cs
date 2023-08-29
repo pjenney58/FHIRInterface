@@ -1,8 +1,11 @@
-﻿namespace CollectorSupport.Model
+﻿using CollectorSupport.Interface;
+
+namespace CollectorSupport.Model
 {
-    public class RESTClient
+    public class RESTClient //: IClient
     {
         private MessageService _local;
+        public List<string> Messages { get; set; } = new();
 
         private IBaseEventLogger eventLogger = new BaseEventLogger("RESTClient");
         private RestClient? client { get; set; }
