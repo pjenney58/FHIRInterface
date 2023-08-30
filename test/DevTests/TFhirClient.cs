@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using CollectorSupport.Model;
+using Hl7.Fhir.Model;
+using Hl7.Fhir.Rest;
+using Hl7.Fhir.Serialization;
+using Task = System.Threading.Tasks.Task;
 
 // Public Test Servers:
 //		https://wiki.hl7.org/index.php?title=Publicly_Available_FHIR_Servers_for_testing
@@ -35,20 +39,33 @@ namespace DevTests
 		}
 
 		[Fact]
-		public  async Task Query()
+		public  async Task QueryForBob()
 		{
-            /*
-			 *  var q = new SearchParams()
-			 *	.Where("name:exact=ewout")
-             *  .OrderBy("birthdate", SortOrder.Descending)
-             *  .SummaryOnly().Include("Patient:organization")
-             *  .LimitTo(20);
+			try
+			{
+				var client = new FhirClient(hapiserver);
 
-			Bundle result = client.Search<Patient>(q);
+				var q = new SearchParams()
+						.Where("family:exact=Alexander")
+						.SummaryOnly().Include("Patient:organization")
+						.LimitTo(1);
 
-			/api/FHIR/R4/List?code={code}&identifier={identifier}
-			hostname/instance/api/FHIR/R4/List?identifier=urn:oid:1.2.840.114350.1.13.5325.1.7.2.698283|9192&code=patients
-			*/
+				Bundle? bundle = await client.SearchAsync<Patient>(q);
+                Assert.NotNull(bundle);
+
+                var patient = await client.ReadAsync<Patient>(bundle.Entry[0].FullUrl);
+                Assert.NotNull(patient);
+            }
+			catch(Exception ex)
+			{
+				Console.WriteLine(ex);
+			}
+          
+            //var stuff = 
+            //var name = parsedBundle.Entry.ByResourceType<HumanName>();
+
+            // /api/FHIR/R4/List?code={code}&identifier={identifier}
+            // hostname/instance/api/FHIR/R4/List?identifier=urn:oid:1.2.840.114350.1.13.5325.1.7.2.698283|9192&code=patients
         }
     }
 }
