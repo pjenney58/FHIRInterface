@@ -55,8 +55,7 @@ export function generateMockClinic(): Clinic {
 
 
 
-export function getMockClinics(): Clinic[] {
-  const numberOfClinics = 100;
+export function getMockClinics(numberOfClinics = 100): Clinic[] {
   const mockData: Clinic[] = [];
   
   for (let i = 0; i < numberOfClinics; i++) {
