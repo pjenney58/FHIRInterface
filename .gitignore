@@ -358,7 +358,9 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-
+*/**/.next/**/*
+next-env.d.ts
+.env
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /src/Calendar/obj/Debug/net7.0/Calendar.assets.cache
