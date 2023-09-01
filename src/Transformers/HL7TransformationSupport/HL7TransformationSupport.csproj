@@ -9,15 +9,28 @@
 		<None Remove="Model\" />
 		<None Remove="Factory\" />
 		<None Remove="Interface\" />
+		<None Remove="Model\R4\" />
+		<None Remove="Model\R5\" />
+		<None Remove="Model\R4B\" />
+		<None Remove="Model\STU3\" />
+		<None Remove="Model\DSTU2\" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\data\DataShapes\DataShapes.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <PackageReference Include="Hl7.Fhir.R4" Version="5.3.0" />
 	  <PackageReference Include="NLog" Version="5.2.3" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
+	  <PackageReference Include="Hl7.Fhir.R4" Version="5.3.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Remove="Model\ScheduleAdapter.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\DataShapes\DataShapes.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Model\R4\" />
+	  <Folder Include="Model\R5\" />
+	  <Folder Include="Model\R4B\" />
+	  <Folder Include="Model\STU3\" />
+	  <Folder Include="Model\DSTU2\" />
 	</ItemGroup>
 </Project>

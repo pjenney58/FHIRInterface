@@ -1,5 +1,4 @@
-﻿using Settings;
-
+﻿
 namespace DevTests
 {
     public class TDatabase
@@ -7,7 +6,7 @@ namespace DevTests
         [Fact]
         public void TestSqlSettingsDb()
         {
-            var settings = new SettingsDb();
+           
         }
     }
 }

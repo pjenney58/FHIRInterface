@@ -1,42 +1,69 @@
 ﻿
-namespace Collectors;
 using Collectors.Data;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using Npgsql.EntityFrameworkCore;
 
-public class Program
+namespace CollectorSupport
 {
-    public static void Main(string[] args)
+    public class Program
     {
-        var builder = WebApplication.CreateBuilder(args);
-
-        builder.Services.AddDbContext<TargetDataContext>(
-            options => options.UseNpgsql("ConnectionStrings:pgDocker"));
-
-        // Add services to the container.
-        builder.Services.AddControllers();
-
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-
-        var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
+        public static void Main(string[] args)
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            var builder = WebApplication.CreateBuilder(args);
+
+            IConfiguration config = new ConfigurationBuilder()
+              .AddJsonFile("collectorsupportsettings.json")
+              .Build();
+
+            builder.Services.AddDbContext<CollectorDataContext>(
+                options => options.UseNpgsql(config.GetConnectionString("default")));
+
+            builder.Services.AddLocalization(options =>
+            {
+                options.ResourcesPath = "Resources";
+            });
+
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                options.SetDefaultCulture("en-Us");
+                options.AddSupportedUICultures("en-US", "de-DE", "ja-JP");
+                options.FallBackToParentUICultures = true;
+
+                options
+                .RequestCultureProviders
+                .Remove((IRequestCultureProvider)typeof(AcceptLanguageHeaderRequestCultureProvider));
+            });
+
+            builder.Services.AddTransient<MessageService>();
+
+            // Add services to the container.
+            builder.Services.AddControllers();
+
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            // TODO: Turn on https redirect
+            //app.UseHttpsRedirection();
+
+            app.UseAuthorization();
+            app.UseAuthentication();
+
+            app.UseRequestLocalization();
+
+            app.MapControllers();
+
+            app.Run();
         }
-
-        app.UseHttpsRedirection();
-
-        app.UseAuthorization();
-
-
-        app.MapControllers();
-
-        app.Run();
     }
 }
 

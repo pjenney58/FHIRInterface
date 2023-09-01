@@ -8,6 +8,8 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["src/Administration/Administration.csproj", "src/Administration/"]
+COPY ["src/DataShapes/DataShapes.csproj", "src/DataShapes/"]
+COPY ["src/Support/Support.csproj", "src/Support/"]
 RUN dotnet restore "src/Administration/Administration.csproj"
 COPY . .
 WORKDIR "/src/src/Administration"

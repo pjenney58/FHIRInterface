@@ -17,8 +17,6 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using Microsoft.EntityFrameworkCore.Metadata;
-
 namespace Hl7Harmonizer.Adapters.Model
 {
     /// <summary>
@@ -62,7 +60,20 @@ namespace Hl7Harmonizer.Adapters.Model
                 // Observations contain a list of ObservationItems
                 if (OUT.Name == "ObservationItem")
                 {
-                    return new ObservationItemAdapter<IEntity, OEntity>(tenant, format, version, source);
+                    switch (version)
+                    {
+                        case Hl7Version.Dstu2:
+                            return new Dstu2.ObservationItemAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                        case Hl7Version.Stu3:
+                            return new Stu3.ObservationItemAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                        case Hl7Version.R4:
+                            return new R4.ObservationItemAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                        default:
+                            throw new ArgumentNullException("ObservationItem Handler");
+                    }
                 }
 
                 if (IN.FullName.ToLower().Contains("fhir"))
@@ -70,42 +81,167 @@ namespace Hl7Harmonizer.Adapters.Model
                     switch (IN.Name.ToLower())
                     {
                         case "address":
-                            return new AddressAdapter<IEntity, OEntity>(tenant, format, version, source);
+                            switch (version)
+                            {
+                                case Hl7Version.Dstu2:
+                                    return new Dstu2.AddressAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.Stu3:
+                                    return new Stu3.AddressAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.R4:
+                                    return new R4.AddressAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                default:
+                                    throw new ArgumentNullException("Address Handler");
+
+                            }
 
                         case "additionalinfo":
-                            return new AdditionalInfoAdapter<IEntity, OEntity>(tenant, format, version, source);
+                            switch (version)
+                            {
+                                case Hl7Version.Dstu2:
+                                    return new Dstu2.AdditionalInfoAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.Stu3:
+                                    return new Stu3.AdditionalInfoAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.R4:
+                                    return new R4.AdditionalInfoAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                default:
+                                    throw new ArgumentNullException("AdditionalInfo Handler");
+
+                            }
 
                         case "doseschedule":
-                            return new DoseScheduleAdapter<IEntity, OEntity>(tenant, format, version, source);
+                            switch (version)
+                            {
+                                case Hl7Version.Dstu2:
+                                    return new Dstu2.DoseScheduleAdapter<IEntity, OEntity>(tenant, format, version, source);
 
-                        // TODO: Need to be able to swap namespaces in code - current documentation for PackageReference/Alias does not work
+                                case Hl7Version.Stu3:
+                                    return new Stu3.DoseScheduleAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.R4:
+                                    return new R4.DoseScheduleAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                default:
+                                    throw new ArgumentNullException("DoseSchedule Handler");
+
+                            }
+
                         case "encounter":
                             switch (version)
                             {
+                                case Hl7Version.Dstu2:
+                                    return new Dstu2.EncounterAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.Stu3:
+                                    return new Stu3.EncounterAdapter<IEntity, OEntity>(tenant, format, version, source);
+
                                 case Hl7Version.R4:
-                                    return new EncounterR4Adapter<IEntity, OEntity>(tenant, format, version, source);
+                                    return new R4.EncounterAdapter<IEntity, OEntity>(tenant, format, version, source);
 
                                 default:
-                                    return new EncounterAdapter<IEntity, OEntity>(tenant, format, version, source);
+                                    throw new ArgumentNullException("Encounter Handler");
                             }
 
                         case "location":
-                            return new LocationAdapter<IEntity, OEntity>(version);
+                            switch (version)
+                            {
+                                case Hl7Version.Dstu2:
+                                    return new Dstu2.LocationAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.Stu3:
+                                    return new Stu3.LocationAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.R4:
+                                    return new R4.LocationAdapter<IEntity, OEntity>(version);
+
+                                default:
+                                    throw new ArgumentNullException("Location Handler");
+                            }
 
                         case "humanname":
-                            return new NameAdapter<IEntity, OEntity>(tenant, format, version, source);
+                            switch (version)
+                            {
+                                case Hl7Version.Dstu2:
+                                    return new Dstu2.NameAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.Stu3:
+                                    return new Stu3.NameAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.R4:
+                                    return new R4.NameAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                default:
+                                    throw new ArgumentNullException("Name Handler");
+                            }
 
                         case "observation":
-                            return new ObservationAdapter<IEntity, OEntity>(tenant, format, version, source);
+                            switch (version)
+                            {                                                 
+                                case Hl7Version.Dstu2:
+                                    return new Dstu2.ObservationAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.Stu3:
+                                    return new Stu3.ObservationAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.R4:
+                                    return new R4.ObservationAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                default:
+                                    throw new ArgumentNullException("Observation Handler");
+                            }
 
                         case "patient":
-                            return new PatientAdapter<IEntity, OEntity>(tenant, format, version, source);
+                            switch (version)
+                            {
+                                case Hl7Version.Dstu2:
+                                    return new Dstu2.PatientAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.Stu3:
+                                    return new Stu3.PatientAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.R4:
+                                    return new R4.PatientAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                default:
+                                    throw new ArgumentNullException("Patient Handler");
+                            }
 
                         case "practitioner":
-                            return new PractitionerAdapter<IEntity, OEntity>(tenant, format, version, source);
+                            switch (version)
+                            {
+                                case Hl7Version.Dstu2:
+                                    return new Dstu2.PractitionerAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.Stu3:
+                                    return new Stu3.PractitionerAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.R4:
+                                    return new R4.PractitionerAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                default:
+                                    throw new ArgumentNullException("Practitioner Handler");
+                            }
 
                         case "medicationrequest":
-                            return new PrescriptionAdapter<IEntity, OEntity>(tenant, format, version, source);
+                            switch (version)
+                            {
+                                case Hl7Version.Dstu2:
+                                    return new Dstu2.PrescriptionAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.Stu3:
+                                    return new Stu3.PrescriptionAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                case Hl7Version.R4:
+                                    return new R4.PrescriptionAdapter<IEntity, OEntity>(tenant, format, version, source);
+
+                                default:
+                                    throw new ArgumentNullException("Prescription Handler");
+                            }
 
                         // Hl7 v2 using NHapi
                         //case "schedule":
@@ -123,7 +259,7 @@ namespace Hl7Harmonizer.Adapters.Model
                     switch (OUT.Name.ToLower())
                     {
                         case "careevent":
-                            //return new ScheduleAdapter<IEntity, OEntity>(tenant, format, version, source);
+                        //return new ScheduleAdapter<IEntity, OEntity>(tenant, format, version, source);
 
                         default:
                             break;

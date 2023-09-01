@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Support.Model;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Npgsql.EntityFrameworkCore;
-using Authentication.Model;
 
 namespace Authentication.Data
 {
@@ -40,7 +39,7 @@ namespace Authentication.Data
               .Build();
 
             connectionString = config.GetConnectionString("identity");
-        
+
             base.OnConfiguring(options);
         }
     }

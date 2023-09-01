@@ -23,16 +23,14 @@ using DataShapes.Model;
 
 namespace Hl7Harmonizer.Adapters.Model
 {
-
-
     public class PrescriptionAdapter<IEntity, OEntity> : IAdapter<IEntity, OEntity>
         where OEntity : class, new()
         where IEntity : class, new()
     {
-
         private IEntity? payloadIN;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity> TaskDelegate();
 
         public Hl7Version version { get; set; }
@@ -83,7 +81,6 @@ namespace Hl7Harmonizer.Adapters.Model
                 throw new ArgumentNullException(nameof(meta));
             }
 
-
             if (fhir.Status != null && Enum.TryParse<PrescriptionStatus>(fhir.Status.Value.ToString(), out PrescriptionStatus _status))
             {
                 meta.Status = _status;
@@ -132,7 +129,7 @@ namespace Hl7Harmonizer.Adapters.Model
                 {
                     meta.Sig += $"{instruction?.PatientInstruction}\r";
 
-                    foreach (var time in instruction.Timing.Repeat.TimeOfDay)
+                    foreach (var time in instruction?.Timing.Repeat.TimeOfDay)
                     {
                         if (instruction.DoseAndRate != null)
                         {
@@ -171,14 +168,12 @@ namespace Hl7Harmonizer.Adapters.Model
                             Link = med?.Coding?.FirstOrDefault()?.System
                         };
 
-
-
                         // Medication lookup
-                        // https://rxnav.nlm.nih.gov/REST/rxcui?idtype=SNOMEDCT&id=261000 Returns NDC
-                        // list by labeler Call for individual NDC details
+                        // https://rxnav.nlm.nih.gov/REST/rxcui?idtype=SNOMEDCT&id=261000 Returns
+                        // NDC list by labeler Call for individual NDC details
                         // TODO: Hook up medication Retriever
 
-                        /* 
+                        /*
                         meta.Medication = await ndc.GetByRxcui(med.Coding.FirstOrDefault().Code);
 
                         if (meta.Medication != null)
@@ -191,38 +186,36 @@ namespace Hl7Harmonizer.Adapters.Model
                         }
                         */
 
-
-
-
-
                         // CourseOfTherapyType DetectedIssues DispenseRequest DoNotPerform
                         // DosageInstruction.DoseAndRate.Dose DoseInstruction.AdditionalInstruction
                         // DoseInstruction.AsNeeded (PRN) DosageInstruction.Type
-                        // DosageInstruction.MaxDosePerAdministration DosageInstruction.MaxDosePerLifetime
-                        // DosageInstruction.MaxDosePerPeriod DosageInstruction.Method
-                        // DosageInstruction.PatientInstruction DosageInstruction.Route
-                        // DosageInstruction.Sequence DosageInstruction.Site DosageInstruction.Text
-                        // DosageInstruction.Timing DosageInstruction.Timing.Repeat.DayOfWeek
-                        // DosageInstruction.Timing.Repeat.Duration DosageInstruction.Timing.Repeat.DurationMax
+                        // DosageInstruction.MaxDosePerAdministration
+                        // DosageInstruction.MaxDosePerLifetime DosageInstruction.MaxDosePerPeriod
+                        // DosageInstruction.Method DosageInstruction.PatientInstruction
+                        // DosageInstruction.Route DosageInstruction.Sequence DosageInstruction.Site
+                        // DosageInstruction.Text DosageInstruction.Timing
+                        // DosageInstruction.Timing.Repeat.DayOfWeek
+                        // DosageInstruction.Timing.Repeat.Duration
+                        // DosageInstruction.Timing.Repeat.DurationMax
                         // DosageInstruction.Timing.Repeat.DurationUnit
                         // DosageInstruction.Timing.Repeat.Frequency
-                        // DosageInstruction.Timing.Repeat.FrequencyMax DosageInstruction.Timing.Repeat.Offset
-                        // DosageInstruction.Timing.Repeat.Period DosageInstruction.Timing.Repeat.PeriodMax
-                        // DosageInstruction.Timing.Repeat.PeriodUnit DosageInstruction.Timing.Repeat.TimeOfDay
-                        // DosageInstruction.Timing.Repeat.When Encounter EventHistory ImplicitRules Insurance
-                        // ScripIntent Language Medication Medication.Coding Medication.Coding.Code
-                        // Medication.Coding.Display Medication.Coding.System Medication.Text Note Performer
-                        // PerformerType PriorPrescription Priority ReasonCode ReasonReference Recorder Reported
-                        // Requester Status StatusReason Subject Substitution SupportingInforrmation
-
+                        // DosageInstruction.Timing.Repeat.FrequencyMax
+                        // DosageInstruction.Timing.Repeat.Offset
+                        // DosageInstruction.Timing.Repeat.Period
+                        // DosageInstruction.Timing.Repeat.PeriodMax
+                        // DosageInstruction.Timing.Repeat.PeriodUnit
+                        // DosageInstruction.Timing.Repeat.TimeOfDay
+                        // DosageInstruction.Timing.Repeat.When Encounter EventHistory ImplicitRules
+                        // Insurance ScripIntent Language Medication Medication.Coding
+                        // Medication.Coding.Code Medication.Coding.Display Medication.Coding.System
+                        // Medication.Text Note Performer PerformerType PriorPrescription Priority
+                        // ReasonCode ReasonReference Recorder Reported Requester Status
+                        // StatusReason Subject Substitution SupportingInforrmation
                     }
                 }
-
-
             }
 
             return meta as OEntity;
-
         }
 
         private async Task<OEntity> ConvertR5FhirToMeta()

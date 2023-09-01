@@ -1,20 +1,17 @@
 ﻿using DataShapes.Model;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Administration
 {
-
     public class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddDbContext<DataShapeContext>(
-                options => options.UseNpgsql("ConnectionStrings:pgDocker"));
-
             builder.Services.AddControllers();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -32,11 +29,9 @@ namespace Administration
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.Run();
         }
     }
 }
-

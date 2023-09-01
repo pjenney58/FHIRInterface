@@ -1,35 +1,29 @@
-version: '3.4'
+version: '3.5'
 
 services:
-  palisaidpod:
-    image: ${DOCKER_REGISTRY-}palisaidpod
-    build:
-      context: .
-      dockerfile: src/PalisaidPod/Dockerfile
-
   authentication:
-    image: ${DOCKER_REGISTRY-}authentication
+    image: pjenney58/auth-api
     build:
       context: .
       dockerfile: src/Authentication/Dockerfile
 
 
   administration:
-    image: ${DOCKER_REGISTRY-}administration
+    image: pjenney58/admin-api
     build:
       context: .
       dockerfile: src/Administration/Dockerfile
 
 
   calendar:
-    image: ${DOCKER_REGISTRY-}calendar
+    image: ${DOCKER_REGISTRY-}calendar-api
     build:
       context: .
       dockerfile: src/Calendar/Dockerfile
 
 
   codes:
-    image: ${DOCKER_REGISTRY-}codes
+    image: ${DOCKER_REGISTRY-}codes-api
     build:
       context: .
       dockerfile: src/Codes/Dockerfile
@@ -40,14 +34,6 @@ services:
     build:
       context: .
       dockerfile: src/Collectors/Dockerfile
-
-
-  data:
-    image: ${DOCKER_REGISTRY-}data
-    build:
-      context: .
-      dockerfile: src/Data/Dockerfile
-
 
   populationhealth:
     image: ${DOCKER_REGISTRY-}populationhealth
@@ -68,4 +54,24 @@ services:
     build:
       context: .
       dockerfile: src/Vectors/Dockerfile
+
+  collectorscontroller:
+    image: ${DOCKER_REGISTRY-}collectorscontroller
+    build:
+      context: .
+      dockerfile: src/Collectors/CollectorsController/Dockerfile
+
+
+  hl7collector:
+    image: ${DOCKER_REGISTRY-}hl7collector
+    build:
+      context: .
+      dockerfile: src/Collectors/Hl7Collector/Dockerfile
+
+
+  x12collector:
+    image: ${DOCKER_REGISTRY-}x12collector
+    build:
+      context: .
+      dockerfile: src/Collectors/X12Collector/Dockerfile
 

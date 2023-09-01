@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="nHapi.Core" Version="2.6.0.2" />
+    <PackageReference Include="NHapiTools" Version="2.0.4" />
+  </ItemGroup>
 </Project>

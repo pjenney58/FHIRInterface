@@ -22,11 +22,6 @@
  * SOFTWARE.
  */
 
-using System;
-using Hl7.Fhir.Model;
-using DataShapes.Model;
-using Hl7Harmonizer.Adapters.Interface;
-
 namespace Hl7Harmonizer.Adapters.Model
 {
     public class AdapterTemplate<IEntity, OEntity> : IAdapter<IEntity, OEntity>

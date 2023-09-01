@@ -1,13 +1,13 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Authentication.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-using Authentication.Model;
 using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+
+using Support.Model;
 
 namespace Authentication
 {
@@ -16,12 +16,19 @@ namespace Authentication
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            /*
+            var settingPath  = Path.GetFullPath(Path.Combine(@"../../appsettings.json")); // get absolute path
+
+            var config = new ConfigurationBuilder()
+                    .SetBasePath(builder.Environment.ContentRootPath)
+                    .AddJsonFile(settingPath);
+            */
+
             ConfigurationManager configuration = builder.Configuration;
 
             var connection = builder.Configuration.GetConnectionString("identity")
                             ?? throw new InvalidOperationException("Connection string 'identity' not found.");
-
-            
 
             // Add services to the container.
             builder.Services.AddDbContext<IdentityDataContext>(
@@ -53,7 +60,7 @@ namespace Authentication
 
                    ValidAudience = configuration["JWT:ValidAudience"],
                    ValidIssuer = configuration["JWT:ValidIssuer"],
-                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"] ?? throw new ArgumentNullException("JWT:Secret")))
                };
            });
 
@@ -92,10 +99,11 @@ namespace Authentication
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            // TODO: Turn on HTTPS redirection
+            //app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            app.UseAuthentication();
 
             app.MapControllers();
 
@@ -103,4 +111,3 @@ namespace Authentication
         }
     }
 }
-

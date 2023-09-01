@@ -33,5 +33,6 @@ namespace Hl7Harmonizer.Adapters.Model
         public static readonly string IgnorePartition = "FcEX4CTgIVMPgq+C9m";
 
         public static readonly Guid Transform = new Guid("{317BC01A-3253-4094-BACC-A1E1A5F8594C}");
+        public static readonly Guid Root = new Guid("{10000000-0000-0000-0000-000000000000}");
     }
 }

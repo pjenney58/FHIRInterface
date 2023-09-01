@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-using Authentication.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -32,9 +31,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Support.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace Authentication.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticateController : ControllerBase
@@ -53,23 +55,26 @@ namespace Authentication.Controllers
             _configuration = configuration;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel? model)
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            if (model == null)
+            if (model == null ||
+                string.IsNullOrEmpty(model.Password) ||
+                string.IsNullOrEmpty(model.Username))
             {
                 return BadRequest("Null parameter");
             }
 
-            var user = await _userManager.FindByNameAsync(model.Username);
+            var user = await _userManager.Users.FirstAsync(u => u.UserName == model.Username && u.TenantId == JwtTenantId.Get(Request));
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var userRoles = await _userManager.GetRolesAsync(user);
 
                 var authClaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Name, model.Username),
                     new Claim(ClaimTypes.PrimarySid, user.TenantId.ToString()),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
@@ -105,6 +110,7 @@ namespace Authentication.Controllers
                     validTo = token.ValidTo
                 });
             }
+
             return Unauthorized();
         }
 
@@ -112,21 +118,27 @@ namespace Authentication.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel? model)
         {
-            if (model == null)
+            if (model == null ||
+                string.IsNullOrEmpty(model.Password) ||
+                string.IsNullOrEmpty(model.Username))
             {
                 return BadRequest("Null parameter");
             }
 
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
+            {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+            }
 
             ApplicationUser user = new()
             {
+                PhoneNumber = model.Phone,
+                TwoFactorEnabled = model.Use2Factor,
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username,
-                TenantId = model.Tenant
+                TenantId = JwtTenantId.Get(Request)
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -137,6 +149,7 @@ namespace Authentication.Controllers
                 {
                     errors += $"{error.Code}\n{error.Description}\n";
                 }
+
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = errors });
             }
 
@@ -147,7 +160,9 @@ namespace Authentication.Controllers
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminModel? model)
         {
-            if (model == null)
+            if (model == null ||
+                string.IsNullOrEmpty(model.Password) ||
+                string.IsNullOrEmpty(model.Username))
             {
                 return BadRequest("Null parameter");
             }
@@ -200,9 +215,10 @@ namespace Authentication.Controllers
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("refresh-token")]
-        public async Task<IActionResult> RefreshToken(TokenModel? tokenModel)
+        public async Task<IActionResult> RefreshToken(TokenModel tokenModel)
         {
             if (tokenModel is null)
             {
@@ -219,8 +235,6 @@ namespace Authentication.Controllers
                 return BadRequest("Invalid refresh token");
             }
 
-            //var id = JwtTenantId.Get(Request).ToString();
-
             string? accessToken = tokenModel.AccessToken;
             string? refreshToken = tokenModel.RefreshToken;
 
@@ -236,7 +250,7 @@ namespace Authentication.Controllers
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByNameAsync(username ?? throw new ArgumentNullException("principal.Identity.Name"));
 
             if (user == null || user.RefreshToken != refreshToken)
             {
@@ -270,12 +284,12 @@ namespace Authentication.Controllers
             });
         }
 
-        [Authorize]
         [HttpPost]
         [Route("revoke/{username}")]
         public async Task<IActionResult> Revoke(string username)
         {
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.Users.FirstAsync(u => u.UserName == username && u.TenantId == JwtTenantId.Get(Request));
+            //var user = await _userManager.FindByNameAsync(username);
             if (user == null)
             {
                 return BadRequest("Invalid user name");
@@ -287,12 +301,11 @@ namespace Authentication.Controllers
             return NoContent();
         }
 
-        [Authorize]
         [HttpPost]
         [Route("revoke-all")]
         public async Task<IActionResult> RevokeAll()
         {
-            var users = _userManager.Users.ToList();
+            var users = await _userManager.Users.Where(t => t.TenantId == JwtTenantId.Get(Request)).ToListAsync();
             foreach (var user in users)
             {
                 user.RefreshToken = null;
@@ -302,9 +315,23 @@ namespace Authentication.Controllers
             return NoContent();
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("validata")]
+        public async Task<ActionResult<bool>> ValidateUser(string username, string token)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return BadRequest("Invalid user name");
+            }
+
+            return false;
+        }
+
         private JwtSecurityToken CreateToken(List<Claim> authClaims)
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"] ?? throw new ArgumentNullException("JWT:Secret")));
             if (!double.TryParse(_configuration["JWT:TokenValidityInSeconds"], out double tokenValidityInSeconds))
             {
                 tokenValidityInSeconds = 10;
@@ -338,14 +365,17 @@ namespace Authentication.Controllers
                 ValidateAudience = false,
                 ValidateIssuer = false,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"])),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"] ?? throw new ArgumentNullException("JWT:Secret"))),
                 ValidateLifetime = false
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+
             if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
                 throw new SecurityTokenException("Invalid token");
+            }
 
             return principal;
         }

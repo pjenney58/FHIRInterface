@@ -4,32 +4,22 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerComposeProjectPath>../../docker-compose.dcproj</DockerComposeProjectPath>
-    <UserSecretsId>640db657-60fa-4d36-a412-57f38e2250c3</UserSecretsId>
+    <UserSecretsId>9ad1397f-8498-49b3-9f12-ea1c1c995e50</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Controllers\WeatherForecastController.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Model\" />
-    <None Remove="Interface\" />
-    <None Remove="Data\" />
-    <None Remove="Migrations\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\" />
@@ -39,8 +29,9 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\data\DataShapes\DataShapes.csproj">
-      <GlobalPropertiesToRemove />
+    <ProjectReference Include="..\DataShapes\DataShapes.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\Support\Support.csproj" />
   </ItemGroup>
 </Project>

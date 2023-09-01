@@ -21,6 +21,7 @@ using Hl7.Fhir.Model;
 using DataShapes.Model;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
+
 namespace Hl7Harmonizer.Adapters.Model
 {
     public class EncounterAdapter<IEntity, OEntity> : IAdapter<IEntity, OEntity>
