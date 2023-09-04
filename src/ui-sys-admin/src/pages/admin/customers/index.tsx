@@ -7,7 +7,8 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, ValueFormatterParams, ValueGetterParams } from 'ag-grid-community';
+import { MdOutlinePageview } from 'react-icons/md';
 
 interface ColDefCustomer extends Customer {
   viewDetails?: string;
@@ -15,12 +16,21 @@ interface ColDefCustomer extends Customer {
 
 type ColDefExtended = ColDef<ColDefCustomer>;
 
+function getFullName(params: ValueGetterParams<ColDefCustomer>) {
+  console.log('params', params);
+  if (!params?.data?.mainContact) {
+    return '';
+  }
+  return `${params.data.mainContact.name.given} ${params.data.mainContact.name.family}`;
+}
 
 const initColumnDefs: ColDefExtended[] = [
   { field: 'name', headerName: 'Name', width: 200, filter: true },
+  { field: 'mainContact', headerName: 'Main Contact', width: 200, valueGetter: getFullName, filter: true },
   { field: 'phoneNumber', headerName: 'Phone Number', width: 200, filter: true },
+  { field: 'mainContact.email', headerName: 'Email', width: 200, filter: true },
   { field: 'billingInfo.paymentStatus', headerName: 'Payment Status', width: 200 },
-  { field: 'viewDetails', headerName: 'View Details', width: 200, cellRenderer: ViewDetailsButton },
+  { field: 'viewDetails', headerName: '', width: 200, cellRenderer: ViewDetailsButton },
 ]
 
 export default function Customers() {
@@ -38,7 +48,7 @@ export default function Customers() {
     const data = getMockClinics(2013);
 
     setRowData(data);
-  }, [])
+  }, []);
 
   return (
     <div className={style.container}>
@@ -59,7 +69,7 @@ export default function Customers() {
 function ViewDetailsButton(params: { data: ColDefCustomer }) {
   return (
     <Link href={`/admin/customers/${params.data.id}`}>
-      <button className='button'>View Details</button>
+      <button className='button'><MdOutlinePageview /></button>
     </Link>
   );
 }
