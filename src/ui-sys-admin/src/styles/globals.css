@@ -100,9 +100,14 @@ a {
 .button {
   padding: 0.5rem 1rem;
   border-radius: 3px;
-  background-color: var(--blue);
+  background-color: var(--white);
   border: none;
   font-weight: 700;
+}
+
+.button.primary {
+  background-color: var(--blue);
+  color: var(--white);
 }
 
 .button:hover {

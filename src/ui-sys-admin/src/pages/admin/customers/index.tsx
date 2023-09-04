@@ -12,6 +12,7 @@ import { MdOutlinePageview } from 'react-icons/md';
 
 interface ColDefCustomer extends Customer {
   viewDetails?: string;
+  edit?: string;
 }
 
 type ColDefExtended = ColDef<ColDefCustomer>;
@@ -30,8 +31,8 @@ const initColumnDefs: ColDefExtended[] = [
   { field: 'phoneNumber', headerName: 'Phone Number', width: 200, filter: true },
   { field: 'mainContact.email', headerName: 'Email', width: 200, filter: true },
   { field: 'billingInfo.paymentStatus', headerName: 'Payment Status', width: 200 },
-  { field: 'viewDetails', headerName: '', width: 200, cellRenderer: ViewDetailsButton },
-]
+  { field: 'viewDetails', headerName: '', width: 200, cellRenderer: ViewDetailsButton }
+];
 
 export default function Customers() {
   const [columnDefs, setColumnDefs] = useState<ColDefExtended[]>(initColumnDefs);
@@ -68,8 +69,13 @@ export default function Customers() {
 
 function ViewDetailsButton(params: { data: ColDefCustomer }) {
   return (
-    <Link href={`/admin/customers/${params.data.id}`}>
-      <button className='button'><MdOutlinePageview /></button>
-    </Link>
+    <>
+      <Link href={`/admin/customers/${params.data.id}`}>
+        <button className='button' >View</button>
+      </Link>
+      <Link href={`/admin/customers/${params.data.id}/edit`}>
+        <button className='button' >Edit</button>
+      </Link>
+    </>
   );
 }
