@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { BillingInfo, Tenant } from "types";
+import { BillingInfo, Customer } from "types";
 import { MdSmartphone, MdOutlineEmail } from "react-icons/md";
 import style from 'styles/TenantList.module.css';
 
 type TenantListProps = {
-  tenants: Tenant[];
+  tenants: Customer[];
 };
 
 export function TenantList({ tenants }: TenantListProps) {
@@ -18,7 +18,7 @@ export function TenantList({ tenants }: TenantListProps) {
   );
 }
 
-function TenantListItem({ tenant }: { tenant: Tenant }) {
+function TenantListItem({ tenant }: { tenant: Customer }) {
   return (
     <Link href={`/admin/customers/${tenant.id}`}>
       <li className={style.tenantListItem}>

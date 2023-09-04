@@ -1,6 +1,5 @@
-import { TenantList } from 'components/TenantList';
 import { useEffect, useMemo, useState } from 'react';
-import { Tenant } from 'types';
+import { Customer } from 'types';
 import { getMockClinics } from 'utils';
 import style from 'styles/CustomersPage.module.css';
 import { AgGridReact } from 'ag-grid-react';
@@ -10,14 +9,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ColDef } from 'ag-grid-community';
 
-interface ColDefTenant extends Tenant {
+interface ColDefCustomer extends Customer {
   viewDetails?: string;
 }
 
-type CustomColDef = ColDef<ColDefTenant>;
+type ColDefExtended = ColDef<ColDefCustomer>;
 
 
-const initColumnDefs: CustomColDef[] = [
+const initColumnDefs: ColDefExtended[] = [
   { field: 'name', headerName: 'Name', width: 200, filter: true },
   { field: 'phoneNumber', headerName: 'Phone Number', width: 200, filter: true },
   { field: 'billingInfo.paymentStatus', headerName: 'Payment Status', width: 200 },
@@ -25,12 +24,12 @@ const initColumnDefs: CustomColDef[] = [
 ]
 
 export default function Customers() {
-  const [columnDefs, setColumnDefs] = useState<CustomColDef[]>(initColumnDefs);
-  const [rowData, setRowData] = useState<ColDefTenant[]>([]);
+  const [columnDefs, setColumnDefs] = useState<ColDefExtended[]>(initColumnDefs);
+  const [rowData, setRowData] = useState<ColDefCustomer[]>([]);
   const router = useRouter();
 
   const getRowId = useMemo(() => {
-    return (params: { data: ColDefTenant }) => params.data.id;
+    return (params: { data: ColDefCustomer }) => params.data.id;
   }, []);
 
 
@@ -45,7 +44,7 @@ export default function Customers() {
     <div className={style.container}>
       <h1>Customers</h1>
       <div className="ag-theme-alpine" style={{ width: '100%', height: 500 }} >
-        <AgGridReact<ColDefTenant>
+        <AgGridReact<ColDefCustomer>
           columnDefs={columnDefs}
           rowData={rowData}
           getRowId={getRowId}
@@ -57,7 +56,7 @@ export default function Customers() {
   )
 }
 
-function ViewDetailsButton(params: { data: ColDefTenant }) {
+function ViewDetailsButton(params: { data: ColDefCustomer }) {
   return (
     <Link href={`/admin/customers/${params.data.id}`}>
       <button className='button'>View Details</button>

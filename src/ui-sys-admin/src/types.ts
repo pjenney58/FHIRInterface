@@ -1,5 +1,5 @@
 
-export type Tenant = Clinic
+export type Customer = Clinic
 
 export interface Address {
   street1: string;

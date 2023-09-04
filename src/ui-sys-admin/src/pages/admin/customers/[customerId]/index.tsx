@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { BillingInfo, Tenant } from "types";
+import { BillingInfo, Customer } from "types";
 import { generateMockClinic } from "utils";
 import { PaymentStatusIcon } from "components/PaymentStatusIcon";
 import { MdSmartphone, MdOutlineEmail } from "react-icons/md";
@@ -9,7 +9,7 @@ import style from 'styles/TenantDisplayPage.module.css';
 export default function CustomerDisplayPage() {
   const router = useRouter();
   const { customerId } = router.query;
-  const [tenant, setTenant] = useState<Tenant | null>(null);
+  const [tenant, setTenant] = useState<Customer | null>(null);
 
   useEffect(() => {
     // TODO real data fetching
@@ -37,7 +37,7 @@ export default function CustomerDisplayPage() {
   )
 }
 
-function ContactCard({ tenant }: { tenant: Tenant }) {
+function ContactCard({ tenant }: { tenant: Customer }) {
   return (
     <div className="card" >
       <h5>Primary Contact</h5>
