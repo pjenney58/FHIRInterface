@@ -41,3 +41,26 @@ export interface Clinic {
   billingInfo: BillingInfo;
   associatedUsers: string[];
 }
+
+
+export interface User {
+  id: string;
+  name: {
+    given: string;
+    family: string;
+  };
+  email: string;
+  username: string;
+  birthdate: string;
+  address: Address;
+  phoneNumber: string;
+  associatedCustomers: string[];
+}
+
+export interface Address {
+  street1: string;
+  street2: string;
+  city: string;
+  state: string;
+  zip: string;
+}

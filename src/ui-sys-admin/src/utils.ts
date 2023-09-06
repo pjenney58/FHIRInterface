@@ -1,12 +1,12 @@
-import {faker} from '@faker-js/faker'
-import { Clinic } from 'types';
+import { faker } from '@faker-js/faker'
+import { Address, Clinic, User } from 'types';
 
 function generateRandomGuid(): string {
     return faker.string.uuid();
 }
 
-function generateRandomArrayOfGuids(): string[] {
-    const numUsers = faker.number.int({ min: 2, max: 10 });
+function generateRandomArrayOfGuids(min: number, max: number): string[] {
+    const numUsers = faker.number.int({ min, max });
     const guids: string[] = [];
 
     for (let i = 0; i < numUsers; i++) {
@@ -14,6 +14,16 @@ function generateRandomArrayOfGuids(): string[] {
     }
 
     return guids;
+}
+
+function generateRandomAddress() {
+    return {
+        street1: faker.location.streetAddress(),
+        street2: faker.location.secondaryAddress(),
+        city: faker.location.city(),
+        state: faker.location.state(),
+        zip: faker.location.zipCode()
+    }
 }
 
 export function generateMockClinic(): Clinic {
@@ -36,8 +46,8 @@ export function generateMockClinic(): Clinic {
         rating: faker.number.float({ min: 3, max: 5, precision: 0.1 }),
         mainContact: {
             name: {
-              given: faker.person.firstName(),
-              family: faker.person.lastName()
+                given: faker.person.firstName(),
+                family: faker.person.lastName()
             },
             phoneNumber: faker.phone.number('###-###-####'),
             email: faker.internet.email()
@@ -49,18 +59,51 @@ export function generateMockClinic(): Clinic {
             billingMethod: faker.helpers.arrayElement(['Credit Card', 'Bank Transfer', 'Check', 'ACH']),
             paymentMethod: faker.finance.creditCardNumber()
         },
-        associatedUsers: generateRandomArrayOfGuids()
+        associatedUsers: generateRandomArrayOfGuids(2, 10)
     };
 }
 
-
-
 export function getMockClinics(numberOfClinics = 100): Clinic[] {
-  const mockData: Clinic[] = [];
-  
-  for (let i = 0; i < numberOfClinics; i++) {
-    mockData.push(generateMockClinic());
-  }
-  // console.log(JSON.stringify(mockData, null, 2));
+    const mockData: Clinic[] = [];
+
+    for (let i = 0; i < numberOfClinics; i++) {
+        mockData.push(generateMockClinic());
+    }
+    // console.log(JSON.stringify(mockData, null, 2));
     return mockData;
+}
+
+// 
+
+export function generateRandomUser(): User {
+    const name = {
+        given: faker.person.firstName(),
+        family: faker.person.lastName()
+    }
+    const email = faker.internet.email();
+    const username = faker.internet.userName();
+    const birthdate = faker.date.birthdate().toISOString();
+    const address: Address = generateRandomAddress();
+    const phoneNumber = faker.phone.number('###-###-####');
+    const associatedCustomers = generateRandomArrayOfGuids(1, 3);
+
+    return {
+        id: generateRandomGuid(),
+        name,
+        email,
+        username,
+        birthdate,
+        address,
+        phoneNumber,
+        associatedCustomers
+    };
+}
+
+export function getMockUsers(numberOfUsers = 100): User[] {
+
+    const mockUserData: User[] = [];
+    for (let i = 0; i < numberOfUsers; i++) {
+        mockUserData.push(generateRandomUser());
+    }
+    return mockUserData;
 }
