@@ -7,12 +7,12 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ColDef, ValueFormatterParams, ValueGetterParams } from 'ag-grid-community';
-import { MdOutlinePageview } from 'react-icons/md';
+import { ColDef, ValueGetterParams } from 'ag-grid-community';
 
 interface ColDefCustomer extends Customer {
   viewDetails?: string;
   edit?: string;
+  delete?: string
 }
 
 type ColDefExtended = ColDef<ColDefCustomer>;
@@ -25,19 +25,21 @@ function getFullName(params: ValueGetterParams<ColDefCustomer>) {
   return `${params.data.mainContact.name.given} ${params.data.mainContact.name.family}`;
 }
 
-const initColumnDefs: ColDefExtended[] = [
-  { field: 'name', headerName: 'Name', width: 200, filter: true },
-  { field: 'mainContact', headerName: 'Main Contact', width: 200, valueGetter: getFullName, filter: true },
-  { field: 'phoneNumber', headerName: 'Phone Number', width: 200, filter: true },
-  { field: 'mainContact.email', headerName: 'Email', width: 200, filter: true },
-  { field: 'billingInfo.paymentStatus', headerName: 'Payment Status', width: 200 },
-  { field: 'viewDetails', headerName: '', width: 200, cellRenderer: ViewDetailsButton }
-];
+
 
 export default function Customers() {
+  const initColumnDefs: ColDefExtended[] = [
+    { field: 'name', headerName: 'Name', filter: true },
+    { field: 'mainContact', headerName: 'Main Contact', valueGetter: getFullName, filter: true },
+    { field: 'phoneNumber', headerName: 'Phone Number', filter: true },
+    { field: 'mainContact.email', headerName: 'Email', filter: true },
+    { field: 'billingInfo.paymentStatus', headerName: 'Payment Status', width: 200 },
+    { field: 'viewDetails', headerName: '', cellRenderer: ViewDetailsButton },
+    { field: 'delete', headerName: '', cellRenderer: DeleteButton }
+  ];
   const [columnDefs, setColumnDefs] = useState<ColDefExtended[]>(initColumnDefs);
   const [rowData, setRowData] = useState<ColDefCustomer[]>([]);
-  const router = useRouter();
+
 
   const getRowId = useMemo(() => {
     return (params: { data: ColDefCustomer }) => params.data.id;
@@ -67,6 +69,9 @@ export default function Customers() {
   )
 }
 
+// todo move both to separate file
+
+
 function ViewDetailsButton(params: { data: ColDefCustomer }) {
   return (
     <>
@@ -76,6 +81,21 @@ function ViewDetailsButton(params: { data: ColDefCustomer }) {
       <Link href={`/admin/customers/${params.data.id}/edit`}>
         <button className='button' >Edit</button>
       </Link>
+    </>
+  );
+}
+
+function DeleteButton(params: { data: ColDefCustomer }) {
+  // TODO pass in a callback to handle delete
+  // TODO add a confirmation dialog
+  function handleDelete() {
+    alert('Do you want to delete this customer?');
+    console.log('delete', params.data.id);
+  }
+
+  return (
+    <>
+      <button className='button' onClick={handleDelete}>Delete</button>
     </>
   );
 }
