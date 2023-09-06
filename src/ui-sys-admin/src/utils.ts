@@ -86,6 +86,8 @@ export function generateRandomUser(): User {
     const address: Address = generateRandomAddress();
     const phoneNumber = faker.phone.number('###-###-####');
     const associatedCustomers = generateRandomArrayOfGuids(1, 3);
+    const customer = faker.company.name();
+    const roles = faker.helpers.arrayElements(['Admin', 'User', 'SuperUser'], 1);
 
     return {
         id: generateRandomGuid(),
@@ -95,7 +97,9 @@ export function generateRandomUser(): User {
         birthdate,
         address,
         phoneNumber,
-        associatedCustomers
+        associatedCustomers,
+        customer,
+        roles
     };
 }
 

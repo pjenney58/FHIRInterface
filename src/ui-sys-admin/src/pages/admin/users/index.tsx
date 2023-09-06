@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Customer, User } from 'types';
-import { getMockClinics, getMockUsers } from 'utils';
+import { User } from 'types';
+import { getMockUsers } from 'utils';
 import style from 'styles/CustomersPage.module.css';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
+import 'ag-grid-community/styles/ag-theme-material.css';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { ColDef, ValueGetterParams } from 'ag-grid-community';
 
 interface ColDefUser extends User {
@@ -25,10 +24,12 @@ function getFullName(params: ValueGetterParams<ColDefUser>) {
 }
 
 const initColumnDefs: ColDefExtended[] = [
-  { field: 'name', headerName: 'Name', valueGetter: getFullName, width: 200, filter: true },
-  { field: 'phoneNumber', headerName: 'Phone Number', width: 200, filter: true },
-  { field: 'email', headerName: 'Email', width: 200, filter: true },
-  { field: 'viewDetails', headerName: '', width: 200, cellRenderer: ViewDetailsButton }
+  { field: 'name', headerName: 'Name', valueGetter: getFullName, filter: true, sortable: true },
+  { field: 'phoneNumber', headerName: 'Phone Number', filter: true },
+  { field: 'email', headerName: 'Email', filter: true, sortable: true },
+  { field: 'customer', headerName: 'Customer', filter: true, sortable: true },
+  { field: 'roles', headerName: 'Role', filter: true, sortable: true },
+  { field: 'viewDetails', headerName: '', cellRenderer: ViewDetailsButton }
 ];
 
 export default function Customers() {
@@ -50,7 +51,7 @@ export default function Customers() {
   return (
     <div className={style.container}>
       <h1>Users</h1>
-      <div className="ag-theme-alpine" style={{ width: '100%', height: 500 }} >
+      <div className="ag-theme-material" style={{ height: 500 }} >
         <AgGridReact<ColDefUser>
           columnDefs={columnDefs}
           rowData={rowData}

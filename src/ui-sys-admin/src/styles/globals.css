@@ -63,6 +63,7 @@ a {
 .main-nav ul {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   width: 100%;
   margin: 0 1rem 0 auto;
   padding: 1rem;

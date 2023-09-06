@@ -54,7 +54,9 @@ export interface User {
   birthdate: string;
   address: Address;
   phoneNumber: string;
-  associatedCustomers: string[];
+  associatedCustomers: string[]
+  customer: string;
+  roles: string[];
 }
 
 export interface Address {
