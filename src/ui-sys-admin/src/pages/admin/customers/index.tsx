@@ -50,7 +50,7 @@ export default function Customers() {
 
   useEffect(() => {
     // TODO real data fetching
-    const data = getMockClinics(2013);
+    const data = getMockClinics(157);
 
     setRowData(data);
   }, []);

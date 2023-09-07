@@ -46,7 +46,7 @@ export default function UsersListPage() {
 
   useEffect(() => {
     // TODO real data fetching
-    const data = getMockUsers(145);
+    const data = getMockUsers(2365);
 
     setRowData(data);
   }, []);
