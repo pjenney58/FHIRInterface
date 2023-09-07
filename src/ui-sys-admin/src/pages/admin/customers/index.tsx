@@ -37,7 +37,7 @@ export default function Customers() {
     { field: 'mainContact.email', headerName: 'Email', filter: true, resizable: true },
     { field: 'billingInfo.paymentStatus', headerName: 'Payment Status', filter: true, sortable: true },
     // TODO DELETE HANDLER
-    { field: 'controls', headerName: '', cellRenderer: ControlButtons, cellRendererParams: { handleDelete: () => alert('delete'), path: 'customers' }, width: 300 }
+    { field: 'controls', headerName: '', cellRenderer: ControlButtons, cellRendererParams: { handleDelete: (id: string) => alert(id), path: 'customers' }, width: 300 }
   ];
   const [columnDefs, setColumnDefs] = useState<ColDefExtended[]>(initColumnDefs);
   const [rowData, setRowData] = useState<ColDefCustomer[]>([]);

@@ -31,7 +31,7 @@ const initColumnDefs: ColDefExtended[] = [
   { field: 'customer', headerName: 'Customer', filter: true, sortable: true },
   { field: 'roles', headerName: 'Role', filter: true, sortable: true },
   // TODO DELETE HANDLER
-  { field: 'controls', headerName: '', cellRenderer: ControlButtons, cellRendererParams: { handleDelete: () => alert('delete') }, width: 300 }
+  { field: 'controls', headerName: '', cellRenderer: ControlButtons, cellRendererParams: { handleDelete: (id: string) => alert(id) }, width: 300 }
 ];
 
 export default function UsersListPage() {

@@ -7,7 +7,7 @@ import style from 'styles/Buttons.module.css';
 export interface ControlButtonsProps {
     // Better way to do this with generics? Using generics makes id possibly undefined
     data: ColDefCustomer | ColDefUser;
-    handleDelete: () => void;
+    handleDelete: (id: string) => void;
 }
 
 export function ControlButtons(params: ControlButtonsProps) {
@@ -21,7 +21,7 @@ export function ControlButtons(params: ControlButtonsProps) {
             <Link href={`${baseURL}/${params.data.id}/edit`}>
                 <button className='button' >Edit</button>
             </Link>
-            <button className={`${style.delete} button`} onClick={() => params.handleDelete()}>Delete</button>
+            <button className={`${style.delete} button`} onClick={() => params.handleDelete(params.data.id)}>Delete</button>
         </div>
     );
 }
