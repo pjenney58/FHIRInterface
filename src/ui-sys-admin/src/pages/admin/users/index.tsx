@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { use, useEffect, useMemo, useState } from 'react';
 import { User } from 'types';
 import { getMockUsers } from 'utils';
 import style from 'styles/CustomersPage.module.css';
@@ -7,10 +7,11 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css';
 import Link from 'next/link';
 import { ColDef, ValueGetterParams } from 'ag-grid-community';
+import { ControlButtons } from 'components/Buttons';
+import { usePrefersReducedMotion } from 'hooks';
 
-interface ColDefUser extends User {
-  viewDetails?: string;
-  edit?: string;
+export interface ColDefUser extends User {
+  controls?: string;
 }
 
 type ColDefExtended = ColDef<ColDefUser>;
@@ -29,10 +30,12 @@ const initColumnDefs: ColDefExtended[] = [
   { field: 'email', headerName: 'Email', filter: true, sortable: true },
   { field: 'customer', headerName: 'Customer', filter: true, sortable: true },
   { field: 'roles', headerName: 'Role', filter: true, sortable: true },
-  { field: 'viewDetails', headerName: '', cellRenderer: ViewDetailsButton }
+  // TODO DELETE HANDLER
+  { field: 'controls', headerName: '', cellRenderer: ControlButtons, cellRendererParams: { handleDelete: () => alert('delete') }, width: 300 }
 ];
 
-export default function Customers() {
+export default function UsersListPage() {
+  const prefersReducedMotion = usePrefersReducedMotion();
   const [columnDefs, setColumnDefs] = useState<ColDefExtended[]>(initColumnDefs);
   const [rowData, setRowData] = useState<ColDefUser[]>([]);
 
@@ -51,28 +54,15 @@ export default function Customers() {
   return (
     <div className={style.container}>
       <h1>Users</h1>
-      <div className="ag-theme-material" style={{ height: 500 }} >
+      <div className="ag-theme-material ag-grid-wrapper">
         <AgGridReact<ColDefUser>
           columnDefs={columnDefs}
           rowData={rowData}
           getRowId={getRowId}
-          animateRows={true}
+          animateRows={prefersReducedMotion}
           pagination={true}
         />
       </div>
     </div>
   )
-}
-
-function ViewDetailsButton(params: { data: ColDefUser }) {
-  return (
-    <>
-      <Link href={`/admin/users/${params.data.id}`}>
-        <button className='button' >View</button>
-      </Link>
-      <Link href={`/admin/users/${params.data.id}/edit`}>
-        <button className='button' >Edit</button>
-      </Link>
-    </>
-  );
 }

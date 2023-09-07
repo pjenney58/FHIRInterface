@@ -114,3 +114,10 @@ a {
 .button:hover {
   cursor: pointer;
 }
+
+.ag-grid-wrapper {
+  width: 90%;
+  height: 500px;
+  margin: 0 auto;
+  box-shadow: var(--elevation_1);
+}

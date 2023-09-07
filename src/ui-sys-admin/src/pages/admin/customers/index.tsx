@@ -1,24 +1,23 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Customer } from 'types';
-import { getMockClinics } from 'utils';
-import style from 'styles/CustomersPage.module.css';
 import { AgGridReact } from 'ag-grid-react';
+import { ColDef, ValueGetterParams } from 'ag-grid-community';
+import { usePrefersReducedMotion } from 'hooks';
+import { ControlButtons } from 'components/Buttons';
+import { Customer } from 'types';
+
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { ColDef, ValueGetterParams } from 'ag-grid-community';
+import style from 'styles/CustomersPage.module.css';
 
-interface ColDefCustomer extends Customer {
-  viewDetails?: string;
-  edit?: string;
-  delete?: string
+import { getMockClinics } from 'utils';
+
+export interface ColDefCustomer extends Customer {
+  controls?: string;
 }
 
 type ColDefExtended = ColDef<ColDefCustomer>;
 
 function getFullName(params: ValueGetterParams<ColDefCustomer>) {
-  console.log('params', params);
   if (!params?.data?.mainContact) {
     return '';
   }
@@ -28,14 +27,17 @@ function getFullName(params: ValueGetterParams<ColDefCustomer>) {
 
 
 export default function Customers() {
+  // This seems to just default to off. Better for accessibility, but if this is true why use a hook?
+  // could just turn animation off permanently. 
+  const prefersReducedMotion = usePrefersReducedMotion();
   const initColumnDefs: ColDefExtended[] = [
     { field: 'name', headerName: 'Name', filter: true },
     { field: 'mainContact', headerName: 'Main Contact', valueGetter: getFullName, filter: true },
     { field: 'phoneNumber', headerName: 'Phone Number', filter: true },
-    { field: 'mainContact.email', headerName: 'Email', filter: true },
-    { field: 'billingInfo.paymentStatus', headerName: 'Payment Status', width: 200 },
-    { field: 'viewDetails', headerName: '', cellRenderer: ViewDetailsButton },
-    { field: 'delete', headerName: '', cellRenderer: DeleteButton }
+    { field: 'mainContact.email', headerName: 'Email', filter: true, resizable: true },
+    { field: 'billingInfo.paymentStatus', headerName: 'Payment Status', filter: true, sortable: true },
+    // TODO DELETE HANDLER
+    { field: 'controls', headerName: '', cellRenderer: ControlButtons, cellRendererParams: { handleDelete: () => alert('delete'), path: 'customers' }, width: 300 }
   ];
   const [columnDefs, setColumnDefs] = useState<ColDefExtended[]>(initColumnDefs);
   const [rowData, setRowData] = useState<ColDefCustomer[]>([]);
@@ -56,12 +58,13 @@ export default function Customers() {
   return (
     <div className={style.container}>
       <h1>Customers</h1>
-      <div className="ag-theme-alpine" style={{ width: '100%', height: 500 }} >
+      <div className="ag-theme-alpine ag-grid-wrapper" >
         <AgGridReact<ColDefCustomer>
           columnDefs={columnDefs}
+          colResizeDefault={'shift'}
           rowData={rowData}
           getRowId={getRowId}
-          animateRows={true}
+          animateRows={prefersReducedMotion}
           pagination={true}
         />
       </div>
@@ -69,33 +72,5 @@ export default function Customers() {
   )
 }
 
-// todo move both to separate file
-
-
-function ViewDetailsButton(params: { data: ColDefCustomer }) {
-  return (
-    <>
-      <Link href={`/admin/customers/${params.data.id}`}>
-        <button className='button' >View</button>
-      </Link>
-      <Link href={`/admin/customers/${params.data.id}/edit`}>
-        <button className='button' >Edit</button>
-      </Link>
-    </>
-  );
-}
-
-function DeleteButton(params: { data: ColDefCustomer }) {
-  // TODO pass in a callback to handle delete
-  // TODO add a confirmation dialog
-  function handleDelete() {
-    alert('Do you want to delete this customer?');
-    console.log('delete', params.data.id);
-  }
-
-  return (
-    <>
-      <button className='button' onClick={handleDelete}>Delete</button>
-    </>
-  );
-}
+// Could abstract this to not repeat on Users and Billing.
+// Generic doesn't have ID, gotta pass hrefs, at that point is it even worth it in the name of DRY?
