@@ -95,7 +95,6 @@ a {
   box-shadow: var(--elevation_1);
   padding: 1rem 1.5rem;
   min-width: 300px;
-  /* text-align: center; */
 }
 
 .button {
