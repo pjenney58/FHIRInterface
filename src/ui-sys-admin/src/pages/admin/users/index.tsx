@@ -1,14 +1,15 @@
-import { use, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { User } from 'types';
 import { getMockUsers } from 'utils';
-import style from 'styles/CustomersPage.module.css';
 import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-material.css';
-import Link from 'next/link';
 import { ColDef, ValueGetterParams } from 'ag-grid-community';
 import { ControlButtons } from 'components/Buttons';
 import { usePrefersReducedMotion } from 'hooks';
+
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-material.css';
+import style from 'styles/UsersPage.module.css';
+import Link from 'next/link';
 
 export interface ColDefUser extends User {
   controls?: string;
@@ -36,7 +37,7 @@ const initColumnDefs: ColDefExtended[] = [
 
 export default function UsersListPage() {
   const prefersReducedMotion = usePrefersReducedMotion();
-  const [columnDefs, setColumnDefs] = useState<ColDefExtended[]>(initColumnDefs);
+  const [columnDefs] = useState<ColDefExtended[]>(initColumnDefs);
   const [rowData, setRowData] = useState<ColDefUser[]>([]);
 
   const getRowId = useMemo(() => {
@@ -53,8 +54,15 @@ export default function UsersListPage() {
 
   return (
     <div className={style.container}>
-      <h1>Users</h1>
-      <div className="ag-theme-material ag-grid-wrapper">
+      <section className={style.topWrapper}>
+        <h1>Users</h1>
+        <div>
+          <Link href='/admin/users/create'>
+            <button className="button primary">Add User</button>
+          </Link>
+        </div>
+      </section>
+      <section className="ag-theme-material ag-grid-wrapper">
         <AgGridReact<ColDefUser>
           columnDefs={columnDefs}
           rowData={rowData}
@@ -62,7 +70,7 @@ export default function UsersListPage() {
           animateRows={prefersReducedMotion}
           pagination={true}
         />
-      </div>
+      </section>
     </div>
   )
 }
