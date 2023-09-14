@@ -1,15 +1,7 @@
 import Head from 'next/head';
 import style from 'styles/CreateUserPage.module.css';
-
-
-// Array of all 50 states two letter abbreviations
-const statesList = [
-    'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
-    'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
-    'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
-    'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
-    'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
-];
+import Select from 'react-select';
+import { stateSelectArray } from 'utils';
 
 export default function CreateUserPage() {
     return (
@@ -61,11 +53,7 @@ export default function CreateUserPage() {
                         <div className='city-state-container' >
                             <div className="input-wrapper">
                                 <label htmlFor="state">State</label>
-                                <select id="state" name="state">
-                                    {statesList.map((state) => (
-                                        <option key={state} value={state}>{state}</option>
-                                    ))}
-                                </select>
+                                <Select options={stateSelectArray} id="state" name="state" />
                             </div>
                             <div className="input-wrapper">
                                 <label htmlFor="zip">Zip</label>
@@ -75,7 +63,7 @@ export default function CreateUserPage() {
                     </fieldset>
                     <div className={style.formButtons}>
                         <button className="button danger">Cancel</button>
-                        <button className="button primary">Save</button>
+                        <button type='submit' className="button primary">Save</button>
                     </div>
                 </form>
             </div>
