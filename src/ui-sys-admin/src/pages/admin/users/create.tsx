@@ -21,6 +21,44 @@ type UserInputs = {
 }
 type InputField = { label: string, name: keyof UserInputs, type: HTMLInputTypeAttribute, required: boolean }
 
+
+export default function CreateUserPage() {
+    const { register, handleSubmit, watch, formState: { errors } } = useForm<UserInputs>();
+    const onSubmit = (data: UserInputs) => console.log(data);
+    console.log(watch('firstName'));
+    return (
+        <>
+            <Head>
+                <title>Create User</title>
+            </Head>
+            <div>
+                <h1>Create User</h1>
+                <form onSubmit={handleSubmit(onSubmit)} >
+                    {inputGroups.map((group, index) => {
+                        return (
+                            <fieldset className="card" key={index + group.groupName}>
+                                <legend>{group.groupName}</legend>
+                                {group.fields.map((field, index) => {
+                                    return (
+                                        <div className="input-wrapper" key={index}>
+                                            <label htmlFor={field.name}>{field.label}</label>
+                                            <input {...register(field.name)} type={field.type} required={field.required} />
+                                        </div>
+                                    )
+                                })}
+                            </fieldset>
+                        )
+                    })}
+                    <div className={style.formButtons}>
+                        <button className="button danger">Cancel</button>
+                        <button type='submit' className="button primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </>
+    )
+}
+
 const inputGroups: { groupName: string, fields: InputField[] }[] = [
     {
         groupName: 'Contact Information',
@@ -101,41 +139,3 @@ const inputGroups: { groupName: string, fields: InputField[] }[] = [
 
 
 ]
-
-
-export default function CreateUserPage() {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm<UserInputs>();
-    const onSubmit = (data: UserInputs) => console.log(data);
-    console.log(watch('firstName'));
-    return (
-        <>
-            <Head>
-                <title>Create User</title>
-            </Head>
-            <div>
-                <h1>Create User</h1>
-                <form onSubmit={handleSubmit(onSubmit)} >
-                    {inputGroups.map((group, index) => {
-                        return (
-                            <fieldset className="card" key={index + group.groupName}>
-                                <legend>{group.groupName}</legend>
-                                {group.fields.map((field, index) => {
-                                    return (
-                                        <div className="input-wrapper" key={index}>
-                                            <label htmlFor={field.name}>{field.label}</label>
-                                            <input {...register(field.name)} type={field.type} required={field.required} />
-                                        </div>
-                                    )
-                                })}
-                            </fieldset>
-                        )
-                    })}
-                    <div className={style.formButtons}>
-                        <button className="button danger">Cancel</button>
-                        <button type='submit' className="button primary">Save</button>
-                    </div>
-                </form>
-            </div>
-        </>
-    )
-}
