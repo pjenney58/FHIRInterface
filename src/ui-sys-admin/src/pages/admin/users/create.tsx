@@ -2,8 +2,111 @@ import Head from 'next/head';
 import style from 'styles/CreateUserPage.module.css';
 import Select from 'react-select';
 import { stateSelectArray } from 'utils';
+import { useForm } from 'react-hook-form';
+import { InputType } from 'zlib';
+import { HTMLInputTypeAttribute } from 'react';
+
+type UserInputs = {
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    street1: string;
+    street2: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+}
+type InputField = { label: string, name: keyof UserInputs, type: HTMLInputTypeAttribute, required: boolean }
+
+const inputGroups: { groupName: string, fields: InputField[] }[] = [
+    {
+        groupName: 'Contact Information',
+        fields: [
+            {
+                label: 'First Name',
+                name: 'firstName',
+                type: 'text',
+                required: true
+            },
+            {
+                label: 'Middle Name',
+                name: 'middleName',
+                type: 'text',
+                required: false
+            },
+            {
+                label: 'Last Name',
+                name: 'lastName',
+                type: 'text',
+                required: true
+            },
+            {
+                label: 'Email',
+                name: 'email',
+                type: 'email',
+                required: true
+            },
+            {
+                label: 'Phone Number',
+                name: 'phoneNumber',
+                type: 'tel',
+                required: true
+            }
+        ]
+    },
+    {
+        groupName: 'Address',
+        fields: [
+            {
+                label: 'Street 1',
+                name: 'street1',
+                type: 'text',
+                required: true
+            },
+            {
+                label: 'Street 2',
+                name: 'street2',
+                type: 'text',
+                required: false
+            },
+            {
+                label: 'City',
+                name: 'city',
+                type: 'text',
+                required: true
+            },
+            {
+                label: 'State',
+                name: 'state',
+                type: 'text',
+                required: true
+            },
+            {
+                label: 'Zip',
+                name: 'zip',
+                type: 'text',
+                required: true
+            },
+            {
+                label: 'Country',
+                name: 'country',
+                type: 'text',
+                required: true
+            }
+        ]
+    }
+
+
+]
+
 
 export default function CreateUserPage() {
+    const { register, handleSubmit, watch, formState: { errors } } = useForm<UserInputs>();
+    const onSubmit = (data: UserInputs) => console.log(data);
+    console.log(watch('firstName'));
     return (
         <>
             <Head>
@@ -11,56 +114,22 @@ export default function CreateUserPage() {
             </Head>
             <div>
                 <h1>Create User</h1>
-                <form>
-                    <fieldset className="card">
-                        <legend>Contact Information</legend>
-                        <div className="input-wrapper">
-                            <label htmlFor="firstName">First Name</label>
-                            <input type="text" id="firstName" name="firstName" />
-                        </div>
-                        {/* middle name input */}
-                        <div className="input-wrapper">
-                            <label htmlFor="middleName">Middle Name</label>
-                            <input type="text" id="middleName" name="middleName" />
-                        </div>
-                        <div className="input-wrapper">
-                            <label htmlFor="lastName">Last Name</label>
-                            <input type="text" id="lastName" name="lastName" />
-                        </div>
-                        <div className="input-wrapper">
-                            <label htmlFor="email">Email</label>
-                            <input type="email" id="email" name="email" />
-                        </div>
-                        <div className="input-wrapper">
-                            <label htmlFor="phoneNumber">Phone Number</label>
-                            <input type="tel" id="phoneNumber" name="phoneNumber" />
-                        </div>
-                    </fieldset>
-                    <fieldset className="card">
-                        <legend>Address</legend>
-                        <div className="input-wrapper">
-                            <label htmlFor="street1">Street 1</label>
-                            <input type="text" id="street1" name="street1" />
-                        </div>
-                        <div className="input-wrapper">
-                            <label htmlFor="street2">Street 2</label>
-                            <input type="text" id="street2" name="street2" />
-                        </div>
-                        <div className="input-wrapper">
-                            <label htmlFor="city">City</label>
-                            <input type="text" id="city" name="city" />
-                        </div>
-                        <div className='city-state-container' >
-                            <div className="input-wrapper">
-                                <label htmlFor="state">State</label>
-                                <Select options={stateSelectArray} id="state" name="state" />
-                            </div>
-                            <div className="input-wrapper">
-                                <label htmlFor="zip">Zip</label>
-                                <input type="text" id="zip" name="zip" />
-                            </div>
-                        </div>
-                    </fieldset>
+                <form onSubmit={handleSubmit(onSubmit)} >
+                    {inputGroups.map((group, index) => {
+                        return (
+                            <fieldset className="card" key={index + group.groupName}>
+                                <legend>{group.groupName}</legend>
+                                {group.fields.map((field, index) => {
+                                    return (
+                                        <div className="input-wrapper" key={index}>
+                                            <label htmlFor={field.name}>{field.label}</label>
+                                            <input {...register(field.name)} type={field.type} required={field.required} />
+                                        </div>
+                                    )
+                                })}
+                            </fieldset>
+                        )
+                    })}
                     <div className={style.formButtons}>
                         <button className="button danger">Cancel</button>
                         <button type='submit' className="button primary">Save</button>
