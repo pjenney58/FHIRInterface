@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import style from 'styles/CreateUserPage.module.css';
 import Select from 'react-select';
-import { Control, Controller, UseFormRegister, useForm } from 'react-hook-form';
+import { Controller, UseFormRegister, useForm } from 'react-hook-form';
 import { HTMLInputTypeAttribute } from 'react';
 import { stateSelectArray } from 'utils';
 
@@ -28,6 +28,8 @@ interface InputField {
 
 interface InputProps extends InputField {
     register: UseFormRegister<UserInputs>
+    // control: Control<UserInputs> -- this is the type that react-hook-form wants, but it doesn't work with react-select.
+    // "any" works, but it does bug me. Maybe this will be revisited later.
     control: any
 }
 
@@ -66,7 +68,7 @@ function CustomInput(props: InputProps) {
     return (
         <div className="input-wrapper">
             <label htmlFor={name}>{label}</label>
-            {Component ? <Component {...props} /> : <input {...register(name)} type={type} required={required} />}
+            {Component ? <Component {...props} /> : <input {...register(name, { required })} />}
         </div>
     )
 }
@@ -82,7 +84,8 @@ function StateSelect({ control, name }: InputProps) {
                     {...field}
                     options={stateSelectArray}
                 />
-            )}
+            )
+            }
         />
 
     )
