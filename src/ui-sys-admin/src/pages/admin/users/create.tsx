@@ -1,10 +1,9 @@
 import Head from 'next/head';
 import style from 'styles/CreateUserPage.module.css';
 import Select from 'react-select';
-import { stateSelectArray } from 'utils';
-import { useForm } from 'react-hook-form';
-import { InputType } from 'zlib';
+import { Control, Controller, UseFormRegister, useForm } from 'react-hook-form';
 import { HTMLInputTypeAttribute } from 'react';
+import { stateSelectArray } from 'utils';
 
 type UserInputs = {
     firstName: string;
@@ -19,13 +18,23 @@ type UserInputs = {
     zip: string;
     country: string;
 }
-type InputField = { label: string, name: keyof UserInputs, type: HTMLInputTypeAttribute, required: boolean }
+interface InputField {
+    label: string
+    name: keyof UserInputs
+    type: HTMLInputTypeAttribute
+    required: boolean
+    component?: any
+}
 
+interface InputProps extends InputField {
+    register: UseFormRegister<UserInputs>
+    control: any
+}
 
+// Are all the hoops worth it to not be handwriting HTML? Maybe, if I'm not the one in here because of a bug.
 export default function CreateUserPage() {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm<UserInputs>();
+    const { register, control, handleSubmit, watch, formState: { errors } } = useForm<UserInputs>();
     const onSubmit = (data: UserInputs) => console.log(data);
-    console.log(watch('firstName'));
     return (
         <>
             <Head>
@@ -38,14 +47,7 @@ export default function CreateUserPage() {
                         return (
                             <fieldset className="card" key={index + group.groupName}>
                                 <legend>{group.groupName}</legend>
-                                {group.fields.map((field, index) => {
-                                    return (
-                                        <div className="input-wrapper" key={index}>
-                                            <label htmlFor={field.name}>{field.label}</label>
-                                            <input {...register(field.name)} type={field.type} required={field.required} />
-                                        </div>
-                                    )
-                                })}
+                                {group.fields.map((field, index) => <CustomInput key={index + field.label} {...field} register={register} control={control} />)}
                             </fieldset>
                         )
                     })}
@@ -58,6 +60,34 @@ export default function CreateUserPage() {
         </>
     )
 }
+
+function CustomInput(props: InputProps) {
+    const { label, name, type, required, register, component: Component } = props;
+    return (
+        <div className="input-wrapper">
+            <label htmlFor={name}>{label}</label>
+            {Component ? <Component {...props} /> : <input {...register(name)} type={type} required={required} />}
+        </div>
+    )
+}
+
+function StateSelect({ control, name }: InputProps) {
+    return (
+
+        <Controller
+            name={name}
+            control={control}
+            render={({ field }) => (
+                <Select
+                    {...field}
+                    options={stateSelectArray}
+                />
+            )}
+        />
+
+    )
+}
+
 
 const inputGroups: { groupName: string, fields: InputField[] }[] = [
     {
@@ -120,7 +150,8 @@ const inputGroups: { groupName: string, fields: InputField[] }[] = [
                 label: 'State',
                 name: 'state',
                 type: 'text',
-                required: true
+                required: true,
+                component: StateSelect
             },
             {
                 label: 'Zip',
