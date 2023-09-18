@@ -33,6 +33,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Support.Model;
 using Microsoft.EntityFrameworkCore;
+using DataShapes.Model;
 
 namespace Authentication.Controllers
 {
@@ -67,49 +68,55 @@ namespace Authentication.Controllers
                 return BadRequest("Null parameter");
             }
 
-            var user = await _userManager.Users.FirstAsync(u => u.UserName == model.Username && u.TenantId == JwtTenantId.Get(Request));
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            try
             {
-                var userRoles = await _userManager.GetRolesAsync(user);
+                var user = await _userManager.Users.FirstAsync(u => u.UserName == model.Username);               
 
-                var authClaims = new List<Claim>
+                if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
                 {
-                    new Claim(ClaimTypes.Name, model.Username),
-                    new Claim(ClaimTypes.PrimarySid, user.TenantId.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
+                    var userRoles = await _userManager.GetRolesAsync(user);
 
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                }
-
-                var token = CreateToken(authClaims);
-                var refreshToken = GenerateRefreshToken();
-
-                int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
-
-                user.RefreshToken = refreshToken;
-                user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
-
-                var result = await _userManager.UpdateAsync(user);
-
-                if (!result.Succeeded)
-                {
-                    Debug.WriteLine($"Failed while updating user");
-                    foreach (var error in result.Errors)
+                    var authClaims = new List<Claim>
                     {
-                        Debug.WriteLine(error.Description);
-                    }
-                }
+                        new Claim(ClaimTypes.Name, model.Username),
+                        new Claim(ClaimTypes.PrimarySid, user.TenantId.ToString()),
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    };
 
-                return Ok(new
-                {
-                    accesstoken = new JwtSecurityTokenHandler().WriteToken(token),
-                    refreshtoken = refreshToken,
-                    validTo = token.ValidTo
-                });
+                    foreach (var userRole in userRoles)
+                    {
+                        authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                    }
+
+                    var token = CreateToken(authClaims);
+                    var refreshToken = GenerateRefreshToken();
+
+                    int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
+
+                    user.RefreshToken = refreshToken;
+                    user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
+
+                    var result = await _userManager.UpdateAsync(user);
+
+                    if (!result.Succeeded)
+                    {
+                        Debug.WriteLine($"Failed while updating user");
+                        foreach (var error in result.Errors)
+                        {
+                            Debug.WriteLine(error.Description);
+                        }
+                    }
+
+                    return Ok(new
+                    {
+                        accesstoken = new JwtSecurityTokenHandler().WriteToken(token),
+                        refreshtoken = refreshToken,
+                        validTo = token.ValidTo
+                    });
+                }
             }
+            catch (InvalidDataException)
+            { }
 
             return Unauthorized();
         }
@@ -156,6 +163,7 @@ namespace Authentication.Controllers
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminModel? model)
