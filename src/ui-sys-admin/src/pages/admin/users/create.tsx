@@ -1,37 +1,8 @@
 import Head from 'next/head';
 import style from 'styles/CreateUserPage.module.css';
-import Select from 'react-select';
-import { Controller, UseFormRegister, useForm } from 'react-hook-form';
-import { HTMLInputTypeAttribute } from 'react';
-import { stateSelectArray } from 'utils';
-
-type UserInputs = {
-    firstName: string;
-    middleName: string;
-    lastName: string;
-    email: string;
-    phoneNumber: string;
-    street1: string;
-    street2: string;
-    city: string;
-    state: string;
-    zip: string;
-    country: string;
-}
-interface InputField {
-    label: string
-    name: keyof UserInputs
-    type: HTMLInputTypeAttribute
-    required: boolean
-    component?: any
-}
-
-interface InputProps extends InputField {
-    register: UseFormRegister<UserInputs>
-    // control: Control<UserInputs> -- this is the type that react-hook-form wants, but it doesn't work with react-select.
-    // "any" works, but it does bug me. Maybe this will be revisited later.
-    control: any
-}
+import { useForm } from 'react-hook-form';
+import { UserInputs, InputField } from 'types';
+import { StandardInput, StateSelect } from 'components/Inputs';
 
 // Are all the hoops worth it to not be handwriting HTML? Maybe, if I'm not the one in here because of a bug.
 export default function CreateUserPage() {
@@ -49,7 +20,7 @@ export default function CreateUserPage() {
                         return (
                             <fieldset className="card" key={index + group.groupName}>
                                 <legend>{group.groupName}</legend>
-                                {group.fields.map((field, index) => <CustomInput key={index + field.label} {...field} register={register} control={control} />)}
+                                {group.fields.map((field, index) => <StandardInput key={index + field.label} {...field} register={register} control={control} />)}
                             </fieldset>
                         )
                     })}
@@ -62,35 +33,6 @@ export default function CreateUserPage() {
         </>
     )
 }
-
-function CustomInput(props: InputProps) {
-    const { label, name, type, required, register, component: Component } = props;
-    return (
-        <div className="input-wrapper">
-            <label htmlFor={name}>{label}</label>
-            {Component ? <Component {...props} /> : <input {...register(name, { required })} />}
-        </div>
-    )
-}
-
-function StateSelect({ control, name }: InputProps) {
-    return (
-
-        <Controller
-            name={name}
-            control={control}
-            render={({ field }) => (
-                <Select
-                    {...field}
-                    options={stateSelectArray}
-                />
-            )
-            }
-        />
-
-    )
-}
-
 
 const inputGroups: { groupName: string, fields: InputField[] }[] = [
     {

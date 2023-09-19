@@ -1,3 +1,5 @@
+import { HTMLInputTypeAttribute } from "react";
+import { UseFormRegister } from "react-hook-form";
 
 export type Customer = Clinic
 
@@ -65,4 +67,32 @@ export interface Address {
   city: string;
   state: string;
   zip: string;
+}
+
+export type UserInputs = {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  street1: string;
+  street2: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+}
+export interface InputField {
+  label: string
+  name: keyof UserInputs
+  type: HTMLInputTypeAttribute
+  required: boolean
+  component?: any
+}
+
+export interface InputProps extends InputField {
+  register: UseFormRegister<UserInputs>
+  // control: Control<UserInputs> -- this is the type that react-hook-form wants, but it doesn't work with react-select.
+  // "any" works, but it does bug me. Maybe this will be revisited later.
+  control: any
 }

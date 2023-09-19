@@ -132,30 +132,3 @@ form {
   gap: 1rem;
   grid-template-columns: repeat(2, 1fr);
 }
-
-.input-wrapper {
-  display: flex;
-  flex-direction: column;
-  margin: 1rem 0;
-  padding: 0 1rem;
-}
-
-.input-wrapper>label {
-  margin-bottom: 0.5rem;
-}
-
-.input-wrapper>input {
-  background-color: none;
-  display: block;
-  width: 100%;
-  padding: 0.6rem .8rem;
-  font-size: 1.1rem;
-  border: none;
-  box-shadow: inset 0 0 0 1px var(--border-primary);
-  border-radius: var(--border-radius-sm);
-}
-
-.input-wrapper>input:focus {
-  outline: none;
-  box-shadow: inset 0 0 0 1px var(--blue);
-}
