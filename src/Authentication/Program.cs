@@ -62,7 +62,20 @@ namespace Authentication
                    ValidIssuer = configuration["JWT:ValidIssuer"],
                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"] ?? throw new ArgumentNullException("JWT:Secret")))
                };
-           });
+            });
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("PalisaidRootAdministrator", policy => policy.RequireClaim("PalisaidRootAdministrator"));
+                options.AddPolicy("PalisaidTenantAdministrator", policy => policy.RequireClaim("PalisaidTenantAdministrator"));
+                options.AddPolicy("PalisaidUser", policy => policy.RequireClaim("PalisaidUser"));
+
+                options.AddPolicy("TenantRootAdministrator", policy => policy.RequireClaim("TenantRootAdministrator"));
+                options.AddPolicy("TenantGroupAdministrator", policy => policy.RequireClaim("TenantGroupAdministrator"));
+                options.AddPolicy("TenantGroupMember", policy => policy.RequireClaim("TenantGroupMember"));
+                options.AddPolicy("TenantUser", policy => policy.RequireClaim("TenantUser"));
+            });
+
 
             builder.Services.AddSwaggerGen(c =>
             {
@@ -74,15 +87,15 @@ namespace Authentication
                     Description = "JWT Authorization header using the Bearer scheme."
                 });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
                 {
-                    new OpenApiSecurityScheme
                     {
-                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearerAuth" }
-                    },
-                    new string[] {}
-                }
-            });
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearerAuth" }
+                        },
+                        new string[] {}
+                    }
+                });
             });
 
             builder.Services.AddControllers();

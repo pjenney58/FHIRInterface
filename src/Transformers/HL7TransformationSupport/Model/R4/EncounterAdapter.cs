@@ -313,7 +313,7 @@ namespace Hl7Harmonizer.Adapters.Model.R4
                     {
                         type = typeof(DataShapes.Model.Location),
                         Name = location.Location.Display,
-                        Id = Guid.Parse(location.Location.Reference.Substring(location.Location.Reference.IndexOf('|') + 1).Substring("urn:uuid:".Length)),
+                        //Id = Guid.Parse(location.Location.Reference.Substring(location.Location.Reference.IndexOf('|') + 1)),
                     });
                 }
 
@@ -324,7 +324,8 @@ namespace Hl7Harmonizer.Adapters.Model.R4
                 {
                     if (pair.Key.ToLower() == "reference")
                     {
-                        sp.Id = Guid.Parse(pair.Value.ToString().Substring(pair.Value.ToString().IndexOf('|') + 1).Substring("urn:uuid:".Length));
+                        var val = pair.Value.ToString();
+                        sp.Id = Guid.Parse(val.Substring(val.IndexOf('|') + 1));
                     }
                     else if (pair.Key.ToLower() == "display")
                     {

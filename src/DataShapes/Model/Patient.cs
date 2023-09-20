@@ -39,9 +39,9 @@ namespace DataShapes.Model
         public PersonName? Name { get; set; } = new();
         public Gender Gender { get; set; }
         public DisposableList<SpokenLanguage> Languages { get; set; } = new();
-        public DateTimeOffset BirthDate { get; set; }
+        public DateTimeOffset BirthDate { get; set; } = DateTimeOffset.Now;
         public bool IsDeceased { get; set; }
-        public DateTimeOffset DeceasedDate { get; set; }
+        public DateTimeOffset DeceasedDate { get; set; } = DateTimeOffset.Now;
         public byte[]? Photo { get; set; }
         public string? NursingStation { get; set; }
         public string? Floor { get; set; }
@@ -49,8 +49,8 @@ namespace DataShapes.Model
         public string? Bed { get; set; }
 
         public PatientCare? PatientCare { get; set; }
-        public DateTimeOffset AdmissionDate { get; set; }
-        public DateTimeOffset DischargeDate { get; set; }
+        public DateTimeOffset AdmissionDate { get; set; } = DateTimeOffset.Now;
+        public DateTimeOffset DischargeDate { get; set; } = DateTimeOffset.Now;
 
         public DisposableList<Observation>? Observations { get; set; } = new();
         public DisposableList<Diagnosis>? Diagnoses { get; set; } = new();
@@ -73,7 +73,9 @@ namespace DataShapes.Model
         [NotMapped]
         public SpokenLanguage? PrimaryLanguage
         {
-            get => Languages?.FirstOrDefault(l => l.Use == SpokenLanguageUse.Primary);
+            get => Languages != null &&  Languages.Count  > 0
+                ? Languages?.FirstOrDefault(l => l.Use == SpokenLanguageUse.Primary)
+                : new SpokenLanguage(this.OwnerId, this.TenantId);
         }
 
         /// <summary>
@@ -82,7 +84,9 @@ namespace DataShapes.Model
         [NotMapped]
         public Location? PrimaryFacility
         {
-            get => Locations?.FirstOrDefault(l => l.LocationType == LocationType.NursingHome);
+            get => Locations != null && Locations.Count > 0
+                ? Locations?.FirstOrDefault(l => l.LocationType == LocationType.NursingHome)
+                : new Location(this.OwnerId, this.TenantId);
         }
 
         /// <summary>
@@ -91,19 +95,25 @@ namespace DataShapes.Model
         [NotMapped]
         public Location? Pharmacy
         {
-            get => Locations?.FirstOrDefault(l => l.LocationType == LocationType.RetailPharmacy);
+            get => Locations != null && Locations.Count > 0
+                ? Locations?.FirstOrDefault(l => l.LocationType == LocationType.RetailPharmacy)
+                : new Location(this.OwnerId, this.TenantId);
         }
 
         [NotMapped]
         public Practitioner? PrimaryPractitioner
         {
-            get => Practitioners?.FirstOrDefault(p => p.Relationship == PractitionerRelationship.Primary)?.Practitioner;
+            get => Practitioners != null && Practitioners.Count > 0
+                ? Practitioners?.FirstOrDefault(p => p.Relationship == PractitionerRelationship.Primary)?.Practitioner
+                : new Practitioner(this.OwnerId, this.TenantId);
         }
 
         [NotMapped]
         public Practitioner? AlternatePractitioner
         {
-            get => Practitioners?.FirstOrDefault(p => p.Relationship == PractitionerRelationship.Secondary)?.Practitioner;
+            get => Practitioners != null && Practitioners.Count > 0
+                ? Practitioners?.FirstOrDefault(p => p.Relationship == PractitionerRelationship.Secondary)?.Practitioner
+                : new Practitioner(this.OwnerId, this.TenantId);
         }
 
         /// <summary>
@@ -112,7 +122,9 @@ namespace DataShapes.Model
         [NotMapped]
         public Address? PrimaryAddress
         {
-            get => Addresses?.FirstOrDefault(a => a.AddressType == AddressType.Primary);
+            get => Addresses != null && Addresses.Count > 0
+                    ? Addresses?.FirstOrDefault(a => a.AddressType == AddressType.Primary)
+                    : new Address(this.OwnerId, this.TenantId);
         }
 
         /// <summary>

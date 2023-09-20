@@ -92,6 +92,9 @@ namespace DataShapes.Model
                .Build();
 
             optionsBuilder.UseNpgsql(config.GetConnectionString("default"));
+
+            // TODO: Unravel the stupid PostgreSQL => DateTimeOffset issue
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

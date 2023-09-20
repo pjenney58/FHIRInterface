@@ -22,6 +22,7 @@ namespace Administration.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "PalisaidTenantAdministrator")]
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<ActionResult<IEnumerable<Tenant>>> GetTenants()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
@@ -42,6 +43,7 @@ namespace Administration.Controllers
         }
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
         [HttpGet("{id}")]
+        [Authorize(Policy = "PalisaidTenantAdministrator")]
         public async Task<ActionResult<Tenant>> GetTenant(Guid id)
         {
             try
@@ -60,6 +62,7 @@ namespace Administration.Controllers
         }
 
         [HttpGet("{name}")]
+        [Authorize(Policy = "PalisaidTenantAdministrator")]
         public async Task<ActionResult<Tenant>> CreateNewEmptyTenant(string name)
         {
             if (_context == null)
@@ -89,6 +92,7 @@ namespace Administration.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "PalisaidTenantAdministrator")]
         public async Task<ActionResult<Tenant>> AddTenant(Tenant tenant)
         {
             try
@@ -110,6 +114,7 @@ namespace Administration.Controllers
         }
 
         [HttpPut]
+        [Authorize(Policy = "PalisaidTenantAdministrator")]
         public async Task<ActionResult<Tenant>> UpdateTenant(Tenant tenant)
         {
             try
@@ -131,6 +136,7 @@ namespace Administration.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Policy = "PalisaidTenantAdministrator")]
         public async Task<ActionResult<Tenant>> DeleteTenant(Tenant tenant)
         {
             try
