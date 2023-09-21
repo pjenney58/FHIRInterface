@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import style from 'styles/CreateEntityPages.module.css';
 import { useForm } from 'react-hook-form';
-import { UserInputs, InputField, CustomerInputs } from 'types';
+import { InputField, CustomerInputs } from 'types';
 import { StandardInput, StateSelect } from 'components/Inputs';
 
 // Are all the hoops worth it to not be handwriting HTML? Maybe, if I'm not the one in here because of a bug.

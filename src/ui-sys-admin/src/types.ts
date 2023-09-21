@@ -3,14 +3,6 @@ import { FieldValues, UseFormRegister } from "react-hook-form";
 
 export type Customer = Clinic
 
-export interface Address {
-  street1: string;
-  street2: string;
-  city: string;
-  state: string;
-  zip: string;
-}
-
 export interface Name {
   given: string;
   family: string;
@@ -67,8 +59,9 @@ export interface Address {
   city: string;
   state: string;
   zip: string;
+  country: string;
 }
-
+// TODO Better sync UserInputs and User, Address etc
 export type UserInputs = {
   firstName: string;
   middleName: string;
@@ -105,6 +98,6 @@ export interface InputField<T extends FieldValues> {
 export interface InputProps<T extends FieldValues> extends InputField<T> {
   register: UseFormRegister<T>
   // control: Control<UserInputs> -- this is the type that react-hook-form wants, but it doesn't work with react-select.
-  // "any" works, but it does bug me. Maybe this will be revisited later.
+  // "any" works, but it bugs me. Maybe this will be revisited later.
   control: any
 }
