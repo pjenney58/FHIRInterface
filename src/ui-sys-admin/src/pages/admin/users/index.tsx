@@ -8,7 +8,7 @@ import { usePrefersReducedMotion } from 'hooks';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css';
-import style from 'styles/UsersPage.module.css';
+import style from 'styles/EntityPages.module.css';
 import Link from 'next/link';
 
 export interface ColDefUser extends User {

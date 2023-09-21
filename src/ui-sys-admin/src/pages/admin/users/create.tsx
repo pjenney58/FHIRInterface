@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import style from 'styles/CreateUserPage.module.css';
+import style from 'styles/CreateEntityPages.module.css';
 import { useForm } from 'react-hook-form';
 import { UserInputs, InputField } from 'types';
 import { StandardInput, StateSelect } from 'components/Inputs';
@@ -15,7 +15,7 @@ export default function CreateUserPage() {
             </Head>
             <div>
                 <h1>Create User</h1>
-                <form onSubmit={handleSubmit(onSubmit)} >
+                <form className={style.form} onSubmit={handleSubmit(onSubmit)} >
                     {inputGroups.map((group, index) => {
                         return (
                             <fieldset className="card" key={index + group.groupName}>
@@ -34,7 +34,7 @@ export default function CreateUserPage() {
     )
 }
 
-const inputGroups: { groupName: string, fields: InputField[] }[] = [
+const inputGroups: { groupName: string, fields: InputField<UserInputs>[] }[] = [
     {
         groupName: 'Contact Information',
         fields: [

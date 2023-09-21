@@ -1,51 +1,97 @@
-export default function CreateTenant() {
+import Head from 'next/head';
+import style from 'styles/CreateEntityPages.module.css';
+import { useForm } from 'react-hook-form';
+import { UserInputs, InputField, CustomerInputs } from 'types';
+import { StandardInput, StateSelect } from 'components/Inputs';
+
+// Are all the hoops worth it to not be handwriting HTML? Maybe, if I'm not the one in here because of a bug.
+export default function CreateCustomerPage() {
+  const { register, control, handleSubmit, watch, formState: { errors } } = useForm<CustomerInputs>();
+  const onSubmit = (data: CustomerInputs) => console.log(data);
   return (
-    <div>
-      <h1>Create Tenant</h1>
-      <ul>
-        <li>Form</li>
-        <li>Save</li>
-        <li>Cancel</li>
-        <li>Validation</li>
-      </ul>
+    <>
+      <Head>
+        <title>Create Customer</title>
+      </Head>
       <div>
-        {/* form with name, address, contact info, billing */}
-        <form>
-          <div>
-            <label htmlFor="name">Name</label>
-            <input type="text" id="name" name="name" />
-          </div>
-          <div>
-            <label htmlFor="address">Address</label>
-            <input type="text" id="address" name="address" />
-          </div>
-          <div>
-            <label htmlFor="city">City</label>
-            <input type="text" id="city" name="city" />
-          </div>
-          <div>
-            <label htmlFor="state">State</label>
-            <input type="text" id="state" name="state" />
-          </div>
-          <div>
-            <label htmlFor="zip">Zip</label>
-            <input type="text" id="zip" name="zip" />
-          </div>
-          <div>
-            <label htmlFor="country">Country</label>
-            <input type="text" id="country" name="country" />
-          </div>
-          <div>
-            <label htmlFor="phone">Phone</label>
-            <input type="text" id="phone" name="phone" />
-          </div>
-          <div>
-            <label htmlFor="email">Email</label>
-            <input type="text" id="email" name="email" />
+        <h1>Create Customer</h1>
+        <form className={style.form} onSubmit={handleSubmit(onSubmit)} >
+          {inputGroups.map((group, index) => {
+            return (
+              <fieldset className="card" key={index + group.groupName}>
+                <legend>{group.groupName}</legend>
+                {group.fields.map((field, index) => <StandardInput key={index + field.label} {...field} register={register} control={control} />)}
+              </fieldset>
+            )
+          })}
+          <div className={style.formButtons}>
+            <button className="button danger">Cancel</button>
+            <button type='submit' className="button primary">Save</button>
           </div>
         </form>
       </div>
-
-    </div>
+    </>
   )
 }
+
+const inputGroups: { groupName: string, fields: InputField<CustomerInputs>[] }[] = [
+  {
+    groupName: 'Customer Information',
+    fields: [
+      {
+        name: 'name',
+        type: 'text',
+        required: true,
+        label: 'Name'
+      },
+      {
+        name: 'phoneNumber',
+        type: 'tel',
+        required: true,
+        label: 'Phone Number'
+      }
+    ]
+  },
+  {
+    groupName: 'Address',
+    fields: [
+      {
+        label: 'Street 1',
+        name: 'street1',
+        type: 'text',
+        required: true
+      },
+      {
+        label: 'Street 2',
+        name: 'street2',
+        type: 'text',
+        required: false
+      },
+      {
+        label: 'City',
+        name: 'city',
+        type: 'text',
+        required: true
+      },
+      {
+        label: 'State',
+        name: 'state',
+        type: 'text',
+        required: true,
+        component: StateSelect
+      },
+      {
+        label: 'Zip',
+        name: 'zip',
+        type: 'text',
+        required: true
+      },
+      {
+        label: 'Country',
+        name: 'country',
+        type: 'text',
+        required: true
+      }
+    ]
+  }
+]

@@ -7,9 +7,10 @@ import { Customer } from 'types';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import style from 'styles/CustomersPage.module.css';
+import style from 'styles/EntityPages.module.css';
 
 import { getMockClinics } from 'utils';
+import Link from 'next/link';
 
 export interface ColDefCustomer extends Customer {
   controls?: string;
@@ -57,8 +58,15 @@ export default function Customers() {
 
   return (
     <div className={style.container}>
-      <h1>Customers</h1>
-      <div className="ag-theme-alpine ag-grid-wrapper" >
+      <section className={style.topWrapper}>
+        <h1>Customers</h1>
+        <div>
+          <Link href='/admin/customers/create'>
+            <button className="button primary">Add Customer</button>
+          </Link>
+        </div>
+      </section>
+      <section className="ag-theme-alpine ag-grid-wrapper" >
         <AgGridReact<ColDefCustomer>
           columnDefs={columnDefs}
           colResizeDefault={'shift'}
@@ -67,7 +75,7 @@ export default function Customers() {
           animateRows={prefersReducedMotion}
           pagination={true}
         />
-      </div>
+      </section>
     </div>
   )
 }
