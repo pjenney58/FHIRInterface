@@ -1,6 +1,10 @@
 import { HTMLInputTypeAttribute } from "react";
 import { FieldValues, UseFormRegister } from "react-hook-form";
 
+
+// NOTE These are all still in flux and may be changed. Some are wonky just because I'm generating fake data and haven't landed on names yet.
+// Need to work with Pete to concretly define entities and their relationships.
+// Like this one below. Customer/Clinic mostly because I was generating fake Clinic data and didn't want to change it.
 export type Customer = Clinic
 
 export interface Name {
@@ -19,6 +23,7 @@ export interface BillingInfo {
   lastBillingDate: string;
   nextBillingDate: string;
   billingMethod: 'Credit Card' | 'Bank Transfer' | 'Check' | 'ACH';
+  // redundant of billing? More likely some sub fields, but I'm guessing we don't want to actually handle financial data.
   paymentMethod: string;
 }
 
