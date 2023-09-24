@@ -2,7 +2,6 @@
   "version": 3,
   "targets": {
     "net7.0": {
-<<<<<<< HEAD
       "Microsoft.AspNetCore.Authentication/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -306,9 +305,6 @@
         }
       },
       "Microsoft.AspNetCore.OpenApi/7.0.11": {
-=======
-      "Microsoft.AspNetCore.OpenApi/7.0.10": {
->>>>>>> 7537d4c (Normalized project source tree)
         "type": "package",
         "dependencies": {
           "Microsoft.OpenApi": "1.4.3"
@@ -327,7 +323,6 @@
           "Microsoft.AspNetCore.App"
         ]
       },
-<<<<<<< HEAD
       "Microsoft.AspNetCore.WebUtilities/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -433,8 +428,6 @@
           }
         }
       },
-=======
->>>>>>> 7537d4c (Normalized project source tree)
       "Microsoft.Extensions.ApiDescription.Server/6.0.5": {
         "type": "package",
         "build": {
@@ -446,7 +439,6 @@
           "buildMultiTargeting/Microsoft.Extensions.ApiDescription.Server.targets": {}
         }
       },
-<<<<<<< HEAD
       "Microsoft.Extensions.Caching.Abstractions/7.0.0": {
         "type": "package",
         "dependencies": {
@@ -941,8 +933,6 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-=======
->>>>>>> 7537d4c (Normalized project source tree)
       "Microsoft.OpenApi/1.4.3": {
         "type": "package",
         "compile": {
@@ -956,7 +946,6 @@
           }
         }
       },
-<<<<<<< HEAD
       "Microsoft.Win32.Primitives/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -1268,8 +1257,6 @@
           }
         }
       },
-=======
->>>>>>> 7537d4c (Normalized project source tree)
       "Swashbuckle.AspNetCore/6.5.0": {
         "type": "package",
         "dependencies": {
@@ -1332,7 +1319,6 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
-<<<<<<< HEAD
       },
       "System.AppContext/4.3.0": {
         "type": "package",
@@ -2530,13 +2516,10 @@
         "runtime": {
           "bin/placeholder/Support.dll": {}
         }
-=======
->>>>>>> 7537d4c (Normalized project source tree)
       }
     }
   },
   "libraries": {
-<<<<<<< HEAD
     "Microsoft.AspNetCore.Authentication/2.2.0": {
       "sha512": "b0R9X7L6zMqNsssKDvhYHuNi5x0s4DyHTeXybIAyGaitKiW1Q5aAGKdV2codHPiePv9yHfC9hAMyScXQ/xXhPw==",
       "type": "package",
@@ -2778,12 +2761,6 @@
       "sha512": "+3PUTx950QiUzw9CriQfCpfv11cJ0uMzQrDS3BwkEDlRduAh/2+1mxDy2S8wS1j3zyQpjbtQU0fFeWTU8j0Ljg==",
       "type": "package",
       "path": "microsoft.aspnetcore.openapi/7.0.11",
-=======
-    "Microsoft.AspNetCore.OpenApi/7.0.10": {
-      "sha512": "p5LiYt1mFJdS70zyHoydahohko2pLIoXiXwANRZGYYyTXcYNQpNUOt+At+lUgGgRwta28sUKVhy2W/93j0qwhA==",
-      "type": "package",
-      "path": "microsoft.aspnetcore.openapi/7.0.10",
->>>>>>> 7537d4c (Normalized project source tree)
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2791,7 +2768,6 @@
         "THIRD-PARTY-NOTICES.TXT",
         "lib/net7.0/Microsoft.AspNetCore.OpenApi.dll",
         "lib/net7.0/Microsoft.AspNetCore.OpenApi.xml",
-<<<<<<< HEAD
         "microsoft.aspnetcore.openapi.7.0.11.nupkg.sha512",
         "microsoft.aspnetcore.openapi.nuspec"
       ]
@@ -2949,12 +2925,6 @@
         "microsoft.entityframeworkcore.relational.design.nuspec"
       ]
     },
-=======
-        "microsoft.aspnetcore.openapi.7.0.10.nupkg.sha512",
-        "microsoft.aspnetcore.openapi.nuspec"
-      ]
-    },
->>>>>>> 7537d4c (Normalized project source tree)
     "Microsoft.Extensions.ApiDescription.Server/6.0.5": {
       "sha512": "Ckb5EDBUNJdFWyajfXzUIMRkhf52fHZOQuuZg/oiu8y7zDCVwD0iHhew6MnThjHmevanpxL3f5ci2TtHQEN6bw==",
       "type": "package",
@@ -3186,7 +3156,6 @@
         "tools/netcoreapp2.1/System.Diagnostics.DiagnosticSource.dll"
       ]
     },
-<<<<<<< HEAD
     "Microsoft.Extensions.Caching.Abstractions/7.0.0": {
       "sha512": "IeimUd0TNbhB4ded3AbgBLQv2SnsiVugDyGV1MvspQFVlA07nDC7Zul7kcwH5jWN3JiTcp/ySE83AIJo8yfKjg==",
       "type": "package",
@@ -3862,8 +3831,6 @@
         "runtime.json"
       ]
     },
-=======
->>>>>>> 7537d4c (Normalized project source tree)
     "Microsoft.OpenApi/1.4.3": {
       "sha512": "rURwggB+QZYcSVbDr7HSdhw/FELvMlriW10OeOzjPT7pstefMo7IThhtNtDudxbXhW+lj0NfX72Ka5EDsG8x6w==",
       "type": "package",
@@ -3878,7 +3845,6 @@
         "microsoft.openapi.nuspec"
       ]
     },
-<<<<<<< HEAD
     "Microsoft.Win32.Primitives/4.3.0": {
       "sha512": "9ZQKCWxH7Ijp9BfahvL2Zyf1cJIk8XYLF6Yjzr2yi0b2cOut/HQ31qf1ThHAgCc3WiZMdnWcfJCgN82/0UunxA==",
       "type": "package",
@@ -4249,8 +4215,6 @@
         "runtimes/ubuntu.16.10-x64/native/System.Security.Cryptography.Native.OpenSsl.so"
       ]
     },
-=======
->>>>>>> 7537d4c (Normalized project source tree)
     "Swashbuckle.AspNetCore/6.5.0": {
       "sha512": "FK05XokgjgwlCI6wCT+D4/abtQkL1X1/B9Oas6uIwHFmYrIO9WUD5aLC9IzMs9GnHfUXOtXZ2S43gN1mhs5+aA==",
       "type": "package",
@@ -4340,7 +4304,6 @@
         "swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512",
         "swashbuckle.aspnetcore.swaggerui.nuspec"
       ]
-<<<<<<< HEAD
     },
     "System.AppContext/4.3.0": {
       "sha512": "fKC+rmaLfeIzUhagxY17Q9siv/sPrjjKcfNg1Ic8IlQkZLipo8ljcaZQu4VtI4Jqbzjc2VTjzGLF6WmsRXAEgA==",
@@ -7645,19 +7608,13 @@
       "type": "project",
       "path": "../Support/Support.csproj",
       "msbuildProject": "../Support/Support.csproj"
-=======
->>>>>>> 7537d4c (Normalized project source tree)
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-<<<<<<< HEAD
       "DataShapes >= 1.0.0",
       "Microsoft.AspNetCore.OpenApi >= 7.0.11",
       "Support >= 1.0.0",
-=======
-      "Microsoft.AspNetCore.OpenApi >= 7.0.10",
->>>>>>> 7537d4c (Normalized project source tree)
       "Swashbuckle.AspNetCore >= 6.5.0"
     ]
   },
@@ -7687,7 +7644,6 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-<<<<<<< HEAD
           "projectReferences": {
             "/Users/petejenney/Projects/Palisaid-Practice-Management/src/DataShapes/DataShapes.csproj": {
               "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/DataShapes/DataShapes.csproj"
@@ -7696,9 +7652,6 @@
               "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Support/Support.csproj"
             }
           }
-=======
-          "projectReferences": {}
->>>>>>> 7537d4c (Normalized project source tree)
         }
       },
       "warningProperties": {
@@ -7713,11 +7666,7 @@
         "dependencies": {
           "Microsoft.AspNetCore.OpenApi": {
             "target": "Package",
-<<<<<<< HEAD
             "version": "[7.0.11, )"
-=======
-            "version": "[7.0.10, )"
->>>>>>> 7537d4c (Normalized project source tree)
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",

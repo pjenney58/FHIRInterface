@@ -1,10 +1,6 @@
 {
   "version": 2,
-<<<<<<< HEAD
   "dgSpecHash": "y1Td9Wowaq/L9mEZr+u3vjg43bBso22Naf3cNrL1yPZKwKP3MD0Q054dBTXMgQ0RGNHLq+uxwK59I0uE3Y810g==",
-=======
-  "dgSpecHash": "VVwfRU9WnfSoFMoCsoz5vWNlvo0tp/n539kiVuwi6h+bFNvqg+DPEeCRpGzd+SQ/cs/BEfK9t55tEJWOB+wTqQ==",
->>>>>>> 7537d4c (Normalized project source tree)
   "success": true,
   "projectFilePath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Collectors/Fhir2Collector/Fhir2Collector.csproj",
   "expectedPackageFiles": [
@@ -82,5 +78,12 @@
     "/Users/petejenney/.nuget/packages/system.threading.tasks/4.3.0/system.threading.tasks.4.3.0.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/system.valuetuple/4.5.0/system.valuetuple.4.5.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file /Users/petejenney/Projects/Palisaid-Practice-Management/src/Collectors/Fhir2Collector/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }
