@@ -7667,11 +7667,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Data/Primary.csproj",
+      "projectUniqueName": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/PrimaryControllers/Primary.csproj",
       "projectName": "Primary",
-      "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Data/Primary.csproj",
+      "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/PrimaryControllers/Primary.csproj",
       "packagesPath": "/Users/petejenney/.nuget/packages/",
-      "outputPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Data/obj/",
+      "outputPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/PrimaryControllers/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/petejenney/.nuget/NuGet/NuGet.Config"

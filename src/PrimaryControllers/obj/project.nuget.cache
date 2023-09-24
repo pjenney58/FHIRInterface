@@ -150,7 +150,7 @@
 =======
   "dgSpecHash": "qDaCU6xvaRyg8aYIx9GkQfWs5buZNSudNcfx1SkUhOhn4xZdSFQHmT8Vs9otOt4e+Iuv5IWkcLSz4B6veDNTqQ==",
   "success": true,
-  "projectFilePath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Data/Primary.csproj",
+  "projectFilePath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/PrimaryControllers/Primary.csproj",
   "expectedPackageFiles": [
     "/Users/petejenney/.nuget/packages/microsoft.aspnetcore.openapi/7.0.10/microsoft.aspnetcore.openapi.7.0.10.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
