@@ -8,8 +8,11 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["src/PrimaryControllers/Primary.csproj", "src/PrimaryControllers/"]
+<<<<<<< HEAD
 COPY ["src/DataShapes/DataShapes.csproj", "src/DataShapes/"]
 COPY ["src/Support/Support.csproj", "src/Support/"]
+=======
+>>>>>>> 7537d4c (Normalized project source tree)
 RUN dotnet restore "src/PrimaryControllers/Primary.csproj"
 COPY . .
 WORKDIR "/src/src/PrimaryControllers"

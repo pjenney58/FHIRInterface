@@ -27,6 +27,7 @@
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
+<<<<<<< HEAD
             "projectReferences": {
               "/Users/petejenney/Projects/Palisaid-Practice-Management/src/DataShapes/DataShapes.csproj": {
                 "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/DataShapes/DataShapes.csproj"
@@ -35,6 +36,9 @@
                 "projectPath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Support/Support.csproj"
               }
             }
+=======
+            "projectReferences": {}
+>>>>>>> 7537d4c (Normalized project source tree)
           }
         },
         "warningProperties": {
@@ -49,7 +53,11 @@
           "dependencies": {
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
+<<<<<<< HEAD
               "version": "[7.0.11, )"
+=======
+              "version": "[7.0.10, )"
+>>>>>>> 7537d4c (Normalized project source tree)
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -78,6 +86,7 @@
           "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.308/RuntimeIdentifierGraph.json"
         }
       }
+<<<<<<< HEAD
     },
     "/Users/petejenney/Projects/Palisaid-Practice-Management/src/DataShapes/DataShapes.csproj": {
       "version": "1.0.0",
@@ -232,6 +241,8 @@
           "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.308/RuntimeIdentifierGraph.json"
         }
       }
+=======
+>>>>>>> 7537d4c (Normalized project source tree)
     }
   }
 }

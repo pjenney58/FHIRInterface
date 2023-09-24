@@ -1,5 +1,6 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "HB1e80xsW7w6giDFkqYFZPO971Y9H3ZgrlmZeG0lqPtSMUl8JW3UdNHHzGmyXAokBJpbTV0j37BDBUJmIt1X2A==",
   "success": true,
   "projectFilePath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Data/Primary.csproj",
@@ -146,6 +147,19 @@
     "/Users/petejenney/.nuget/packages/system.threading.timer/4.3.0/system.threading.timer.4.3.0.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/system.xml.readerwriter/4.3.0/system.xml.readerwriter.4.3.0.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/system.xml.xdocument/4.3.0/system.xml.xdocument.4.3.0.nupkg.sha512"
+=======
+  "dgSpecHash": "qDaCU6xvaRyg8aYIx9GkQfWs5buZNSudNcfx1SkUhOhn4xZdSFQHmT8Vs9otOt4e+Iuv5IWkcLSz4B6veDNTqQ==",
+  "success": true,
+  "projectFilePath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Data/Primary.csproj",
+  "expectedPackageFiles": [
+    "/Users/petejenney/.nuget/packages/microsoft.aspnetcore.openapi/7.0.10/microsoft.aspnetcore.openapi.7.0.10.nupkg.sha512",
+    "/Users/petejenney/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "/Users/petejenney/.nuget/packages/microsoft.openapi/1.4.3/microsoft.openapi.1.4.3.nupkg.sha512",
+    "/Users/petejenney/.nuget/packages/swashbuckle.aspnetcore/6.5.0/swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "/Users/petejenney/.nuget/packages/swashbuckle.aspnetcore.swagger/6.5.0/swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
+    "/Users/petejenney/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.5.0/swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
+    "/Users/petejenney/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.5.0/swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512"
+>>>>>>> 7537d4c (Normalized project source tree)
   ],
   "logs": []
 }

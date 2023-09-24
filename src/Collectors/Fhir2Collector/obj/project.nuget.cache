@@ -1,6 +1,10 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "y1Td9Wowaq/L9mEZr+u3vjg43bBso22Naf3cNrL1yPZKwKP3MD0Q054dBTXMgQ0RGNHLq+uxwK59I0uE3Y810g==",
+=======
+  "dgSpecHash": "VVwfRU9WnfSoFMoCsoz5vWNlvo0tp/n539kiVuwi6h+bFNvqg+DPEeCRpGzd+SQ/cs/BEfK9t55tEJWOB+wTqQ==",
+>>>>>>> 7537d4c (Normalized project source tree)
   "success": true,
   "projectFilePath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Collectors/Fhir2Collector/Fhir2Collector.csproj",
   "expectedPackageFiles": [
