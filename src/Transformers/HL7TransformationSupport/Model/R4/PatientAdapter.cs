@@ -71,14 +71,15 @@ namespace Hl7Harmonizer.Adapters.Model.R4
 
         private async Task<OEntity> ConvertR4FhirToMeta()
         {
-            var fhir = payloadIN as Hl7.Fhir.Model.Patient;
+            var fhir = payloadIN as Hl7.Fhir.Model.Patient ?? throw new ArgumentNullException("fhir");
             var meta = new DataShapes.Model.Patient()
             {
                 TenantId = tenant == Guid.Empty ? Constants.Transform : tenant,
                 EntityId = Guid.Parse(fhir.Id),
                 CreateDate = DateTimeOffset.Now,
                 LastUpdate = DateTimeOffset.Now,
-                PrimaryPatientIdString = fhir.Id
+                PrimaryPatientIdString = fhir.Id,
+                Version = 1
             };
 
             var nameconverter = AdapterFactory<Hl7.Fhir.Model.HumanName, DataShapes.Model.PersonName>.GetAdapter(tenant, version);
@@ -115,6 +116,10 @@ namespace Hl7Harmonizer.Adapters.Model.R4
                 {
                     var idset = new DataShapes.Model.Identifier()
                     {
+                        EntityId = Guid.NewGuid(),
+                        Version = 1,
+                        CreateDate = DateTimeOffset.Now,
+                        LastUpdate = DateTimeOffset.Now,
                         IdType = id.Type?.Text,
                         IdValue = id.Value,
                         IdUse = id.Use?.ToString(),

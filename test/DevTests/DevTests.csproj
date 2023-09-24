@@ -11,8 +11,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
-    <PackageReference Include="xunit" Version="2.5.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.0">
+    <PackageReference Include="xunit" Version="2.5.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -29,5 +29,15 @@
     <ProjectReference Include="..\..\src\Transformers\HL7TransformationSupport\HL7TransformationSupport.csproj" />
     <ProjectReference Include="..\..\src\Collectors\CollectorBase\CollectorBase.csproj" />
     <ProjectReference Include="..\..\src\Collectors\CollectorSupport\CollectorSupport.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="appdataconfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="appdataconfig.json" Condition="'$(ExcludeConfigFilesFromBuildOutput)'!='true'">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 </Project>

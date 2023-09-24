@@ -26,10 +26,14 @@ namespace DevTests
             ? "C:\\SandDriftSoftware\\data\\SyntheaData"
             : "/Users/petejenney/Projects/SyntheaData";
 
+        private DataShapeContext _context;
+        private Guid _tenantId = Guid.NewGuid();
         public TFhirParser()
         {
             //GetRandomMetaPatient();
             //GetRandomMetaPractitioner();
+
+            _context = new DataShapeContext();
 
             lastDate = DateTime.Now.AddDays(-31);
         }
@@ -211,7 +215,7 @@ namespace DevTests
 
                             foreach (var prescription in prescriptions)
                             {
-                                var fhirConverter = AdapterFactory<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>.GetAdapter(Guid.NewGuid(), version);
+                                var fhirConverter = AdapterFactory<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>.GetAdapter(_tenantId, version);
                                 Assert.NotNull(fhirConverter);
 
                                 var metaPrescription = await fhirConverter.Convert(prescription);
@@ -261,7 +265,7 @@ namespace DevTests
 
                             foreach (var prescription in prescriptions)
                             {
-                                var fhirConverter = AdapterFactory<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>.GetAdapter(Guid.NewGuid(), version);
+                                var fhirConverter = AdapterFactory<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>.GetAdapter(_tenantId, version);
                                 Assert.NotNull(fhirConverter);
 
                                 var metaPrescription = await fhirConverter.Convert(prescription);
@@ -311,7 +315,7 @@ namespace DevTests
 
                             foreach (var location in locations)
                             {
-                                var fhirConverter = AdapterFactory<Hl7.Fhir.Model.Location, DataShapes.Model.Location>.GetAdapter(Guid.NewGuid(), version);
+                                var fhirConverter = AdapterFactory<Hl7.Fhir.Model.Location, DataShapes.Model.Location>.GetAdapter(_tenantId, version);
                                 Assert.NotNull(fhirConverter);
 
                                 var metaLocation = await fhirConverter.Convert(location);
@@ -376,11 +380,23 @@ namespace DevTests
                             {
                                 if (patient != null)
                                 {
-                                    var fhirConverter = AdapterFactory<Hl7.Fhir.Model.Patient, DataShapes.Model.Patient>.GetAdapter(Guid.NewGuid(), version);
+                                    var fhirConverter = AdapterFactory<Hl7.Fhir.Model.Patient, DataShapes.Model.Patient>.GetAdapter(_tenantId, version);
                                     Assert.NotNull(fhirConverter);
 
                                     var metaPatient = await fhirConverter.Convert(patient);
                                     Assert.NotNull(metaPatient);
+
+                                    try
+                                    {
+                                        metaPatient.TenantId = _tenantId;
+                                        metaPatient.OwnerId = _tenantId;
+                                        await _context.AddAsync(metaPatient);
+                                        await _context.SaveChangesAsync();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Debug.WriteLine(ex);
+                                    }
 
                                     Debug.WriteLine($"processing patient: {metaPatient.Name.FirstName} {metaPatient.Name.FamilyName}");
 
@@ -398,11 +414,23 @@ namespace DevTests
                                             var id = encounter.Subject.Reference.Substring("urn:uuid:".Length);
                                             if (id != null && id == patient.Id)
                                             {
-                                                var fhirEncounterConverter = AdapterFactory<Hl7.Fhir.Model.Encounter, DataShapes.Model.Encounter>.GetAdapter(Guid.NewGuid(), version);
+                                                var fhirEncounterConverter = AdapterFactory<Hl7.Fhir.Model.Encounter, DataShapes.Model.Encounter>.GetAdapter(_tenantId, version);
                                                 Assert.NotNull(fhirEncounterConverter);
 
                                                 var metaEncounter = await fhirEncounterConverter.Convert(encounter);
                                                 Assert.NotNull(metaEncounter);
+
+                                                try
+                                                {
+                                                    metaEncounter.TenantId = _tenantId;
+                                                    metaEncounter.OwnerId = _tenantId;
+                                                    await _context.AddAsync(metaEncounter);
+                                                    await _context.SaveChangesAsync();
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    Debug.WriteLine(ex);
+                                                }
 
                                                 encounterList.Add(metaEncounter);
 
@@ -411,6 +439,7 @@ namespace DevTests
                                         }
                                     }
 
+                                    /*
                                     var allergies = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.AllergyIntolerance>();
                                     Assert.NotNull(allergies);
 
@@ -422,7 +451,7 @@ namespace DevTests
 
                                     foreach (var device in devices)
                                     {
-                                        var fhirEncounterConverter = AdapterFactory<Hl7.Fhir.Model.Device, DataShapes.Model.Device>.GetAdapter(Guid.NewGuid(), version);
+                                        var fhirEncounterConverter = AdapterFactory<Hl7.Fhir.Model.Device, DataShapes.Model.Device>.GetAdapter(_tenantId, version);
                                         Assert.NotNull(fhirEncounterConverter);
 
                                         var metaEncounter = await fhirEncounterConverter.Convert(device);
@@ -436,13 +465,13 @@ namespace DevTests
 
                                     var tests = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.TestReport>();
                                     Assert.NotNull(tests);
-
+                                    */
                                     var scrips = parsedBundle.Entry.ByResourceType<MedicationRequest>();
                                     Assert.NotNull(scrips);
 
                                     foreach (var scrip in scrips)
                                     {
-                                        var fhirScripConverter = AdapterFactory<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>.GetAdapter(Guid.NewGuid(), version);
+                                        var fhirScripConverter = AdapterFactory<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>.GetAdapter(_tenantId, version);
                                         Assert.NotNull(fhirScripConverter);
 
                                         var metaScrip = await fhirScripConverter.Convert(scrip);
@@ -457,6 +486,18 @@ namespace DevTests
                                         else
                                         {
                                             Debug.WriteLine($"Missing med for scrip {metaScrip.Code}");
+                                        }
+
+                                        try
+                                        {
+                                            metaScrip.TenantId = _tenantId;
+                                            metaScrip.OwnerId = _tenantId;
+                                            await _context.AddAsync(metaScrip);
+                                            await _context.SaveChangesAsync();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Debug.WriteLine(ex);
                                         }
 
                                         //scripRepo.CreateRecord(metaScrip);
@@ -538,7 +579,7 @@ namespace DevTests
 
                                 if (observation != null)
                                 {
-                                    var fhirConverter = AdapterFactory<Hl7.Fhir.Model.Observation, DataShapes.Model.Observation>.GetAdapter(Guid.NewGuid(), Hl7Version.R4);
+                                    var fhirConverter = AdapterFactory<Hl7.Fhir.Model.Observation, DataShapes.Model.Observation>.GetAdapter(_tenantId, Hl7Version.R4);
                                     var metaObservation = await fhirConverter.Convert(observation);
 
                                     if (observations.PatientId == Guid.Empty)
@@ -548,7 +589,7 @@ namespace DevTests
                                         //observations.CreateDate = metaObservation.CreateDate;
                                     }
 
-                                    var item = AdapterFactory<Hl7.Fhir.Model.Observation, DataShapes.Model.ObservationItem>.GetAdapter(Guid.NewGuid(), Hl7Version.R4);
+                                    var item = AdapterFactory<Hl7.Fhir.Model.Observation, DataShapes.Model.ObservationItem>.GetAdapter(_tenantId, Hl7Version.R4);
                                     observations.Items.Add(await item.Convert(observation));
                                 }
                             }
@@ -595,7 +636,7 @@ namespace DevTests
                                     Debug.WriteLine(name);
                                 }
 
-                                var aa = AdapterFactory<Hl7.Fhir.Model.Address, DataShapes.Model.Address>.GetAdapter(Guid.NewGuid(), Hl7Version.R4);
+                                var aa = AdapterFactory<Hl7.Fhir.Model.Address, DataShapes.Model.Address>.GetAdapter(_tenantId, Hl7Version.R4);
 
                                 if (p.Address != null && p.Address.FirstOrDefault() != null)
                                 {

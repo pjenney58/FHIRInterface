@@ -6,15 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Primary.Controllers
+namespace Administration.Controllers
 {
-    public class PatientsController : Controller
+    public class AuthController : Controller
     {
-        // GET: /<controller>/
-        public IActionResult Index()
-        {
-            return View();
-        }
+        // LOGIN
+        // LOGOUT
+        // REGISTER USER (ADMIN | USER)
+        // CHANGE PERMISSIONS
+        //  - 
+        // 
+
     }
 }
 

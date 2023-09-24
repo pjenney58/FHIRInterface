@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "NVcGudM7++51lbwcd3SNeVLn2RYUu05Mq6i2KXSbZPYR6gP7TRyPfRbByOEfx581NeHvedKTzj6FFyFe7ZK+xw==",
+  "dgSpecHash": "y1Td9Wowaq/L9mEZr+u3vjg43bBso22Naf3cNrL1yPZKwKP3MD0Q054dBTXMgQ0RGNHLq+uxwK59I0uE3Y810g==",
   "success": true,
   "projectFilePath": "/Users/petejenney/Projects/Palisaid-Practice-Management/src/Collectors/Fhir2Collector/Fhir2Collector.csproj",
   "expectedPackageFiles": [
@@ -10,7 +10,7 @@
     "/Users/petejenney/.nuget/packages/hl7.fhir.dstu2.serialization/1.9.1.1/hl7.fhir.dstu2.serialization.1.9.1.1.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/hl7.fhir.dstu2.support/1.9.1.1/hl7.fhir.dstu2.support.1.9.1.1.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/hl7.fhir.dstu2.support.poco/1.9.1.1/hl7.fhir.dstu2.support.poco.1.9.1.1.nupkg.sha512",
-    "/Users/petejenney/.nuget/packages/microsoft.aspnetcore.openapi/7.0.10/microsoft.aspnetcore.openapi.7.0.10.nupkg.sha512",
+    "/Users/petejenney/.nuget/packages/microsoft.aspnetcore.openapi/7.0.11/microsoft.aspnetcore.openapi.7.0.11.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/microsoft.netcore.platforms/1.1.0/microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "/Users/petejenney/.nuget/packages/microsoft.netcore.targets/1.1.0/microsoft.netcore.targets.1.1.0.nupkg.sha512",

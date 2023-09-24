@@ -5,7 +5,13 @@ namespace DataShapes.Model
 {
 	public abstract class Entity : IDisposable
 	{
-		public Entity() { }
+		public Entity()
+		{
+            EntityId = Guid.NewGuid();
+            CreateDate = DateTimeOffset.Now;
+            Version = 1;
+            IsActive = true;
+        }
 
 		public Entity(Guid OwnerId, Guid TenantId)
 		{
@@ -23,12 +29,12 @@ namespace DataShapes.Model
 
 		#region key
 		[Key]
-        public Guid EntityId { get; set; }	
-		public Guid OwnerId { get; set; }
-		public Guid TenantId { get; set; }
+		public Guid EntityId { get; set; } = Guid.Empty;
+		public Guid OwnerId { get; set; } = Guid.Empty;
+        public Guid TenantId { get; set; } = Guid.Empty;
         #endregion key
 
-		public long Version { get; set; }
+        public long Version { get; set; }
 
         public DateTimeOffset CreateDate { get; set; }
 		public DateTimeOffset LastUpdate { get; set; }
