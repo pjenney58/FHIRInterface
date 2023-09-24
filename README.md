@@ -64,3 +64,13 @@ Deployment is orchestrated by Kubernetes which manages pods for:
 # API Editing in OpenAPI 3
 * https://editor.swagger.io/#/
 * https://editor-next.swagger.io
+
+# Good To Know
+  How to fix git when .git ignore is ignored and filtered items are included
+
+  git rm -r --cached .
+  
+  git add .
+  
+  git commit -m "fixed untracked files" 
+  
