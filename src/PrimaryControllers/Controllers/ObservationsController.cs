@@ -3,18 +3,20 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Support.Model;
 
-namespace Administration.Controllers
+// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace Primary.Controllers
 {
-    [Authorize]
-    [Route("admin/[controller]")]
+    //[Authorize]
+    [Route("api/[controller]")]
     [ApiController]
-    public class PractitionersController : Controller
+    public class ObservationsController : Controller
     {
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         internal readonly DataShapeContext? _context;
-        internal readonly ILogger _logger;
+        internal readonly ILogger<Observation> _logger;
 
-        public PractitionersController(DataShapeContext context, ILogger logger)
+        public ObservationsController(DataShapeContext context, ILogger<Observation> logger)
         {
             _context = context;
             _logger = logger;
@@ -24,6 +26,8 @@ namespace Administration.Controllers
         public async Task<IActionResult> Get()
         {
             var tid = JwtTenantId.Get(Request);
+            var docs = _context.Practitioners.ToList();
+
             return BadRequest("Not Implemented");
         }
 
@@ -47,3 +51,5 @@ namespace Administration.Controllers
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 }
+
+

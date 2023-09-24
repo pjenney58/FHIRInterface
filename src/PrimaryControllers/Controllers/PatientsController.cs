@@ -3,18 +3,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Support.Model;
 
-namespace Administration.Controllers
+namespace Primary.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PatientsController : Controller
     {
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         internal readonly DataShapeContext? _context;
-        internal readonly ILogger _logger;
-
-        public PatientsController(DataShapeContext context, ILogger logger)
+        internal readonly ILogger<Patient> _logger;        
+      
+        public PatientsController(DataShapeContext context, ILogger<Patient> logger)
         {
             _context = context;
             _logger = logger;
@@ -26,6 +26,14 @@ namespace Administration.Controllers
             try
             {
                 var tid = JwtTenantId.Get(Request);
+#if DEBUG
+                if(tid == default)
+                {
+                    tid = Guid.Empty;
+                    return Ok(await Task.Run(() => _context.Patients.ToList()));
+                }
+#endif
+
                 return Ok(await Task.Run(() => _context.Patients.Where(t => t.TenantId == tid).ToList()));
             }
             catch(Exception ex)

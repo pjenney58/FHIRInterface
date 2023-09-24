@@ -75,3 +75,10 @@ services:
       context: .
       dockerfile: src/Collectors/X12Collector/Dockerfile
 
+
+  primary:
+    image: ${DOCKER_REGISTRY-}primary
+    build:
+      context: .
+      dockerfile: src/Data/Dockerfile
+

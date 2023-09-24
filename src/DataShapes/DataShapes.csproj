@@ -5,14 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Model\" />
-    <None Remove="Interface\" />
-    <None Remove="Data\" />
-    <None Remove="appsettings.json" />
-    <None Remove="appsettings.Development.json" />
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\" />
     <Folder Include="Interface\" />

@@ -10,6 +10,8 @@ namespace Administration
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            //builder.Logging.ClearProviders();
+            //builder.Logging.AddConsole();
 
             ConfigurationManager configuration = builder.Configuration;
 
