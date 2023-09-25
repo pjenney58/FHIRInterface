@@ -77,8 +77,8 @@ services:
 
 
   primary:
-    image: ${DOCKER_REGISTRY-}primary
+    image: ${DOCKER_REGISTRY-}primary-consumer-api
     build:
       context: .
-      dockerfile: src/Data/Dockerfile
+      dockerfile: src/PrimaryControllers/Dockerfile
 

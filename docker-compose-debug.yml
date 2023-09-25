@@ -1,4 +1,4 @@
-version: '3.5'
+version: '3.8'
 
 services:
   Authentication:
@@ -6,3 +6,42 @@ services:
     build:
       context: .
       dockerfile: src/Authentication/DebugDockerfile
+    depends_on:
+      - postgres
+    networks:
+      - backend-network
+      
+  PrimaryConsumerApi:
+    image: ${DOCKER_REGISTRY-}primary-consumer-api
+    restart: always
+    ports: 
+      - "5001:80"
+    build:
+      context: .
+      dockerfile: src/PrimaryControllers/DebugDockerfile
+    depends_on:
+      - postgres
+    networks:
+      - backend-network
+
+  postgres:
+    image: pjenney58/palisaiddb:latest
+    restart: always
+    ports:
+      - 5432:5432
+    deploy:
+      endpoint_mode: vip
+      labels:
+        com.example.description: "This label will appear on the web service"
+    volumes:
+      - data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: pgpassword
+    networks:
+      - backend-network
+    
+networks:
+  backend-network:
+
+volumes:
+  data:
