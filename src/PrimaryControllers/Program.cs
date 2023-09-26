@@ -1,4 +1,6 @@
 ﻿
+using System.Diagnostics;
+using System.Net;
 using DataShapes.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,12 +18,20 @@ public class Program
         // Add services to the container.
         ConfigurationManager configuration = builder.Configuration;
 
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (IPAddress ip in host.AddressList)
+        {
+            Debug.WriteLine(ip.ToString());
+        }
+        
         var connection = builder.Configuration.GetConnectionString("default")
                         ?? throw new InvalidOperationException("Connection string 'default' not found.");
 
         // Add services to the container.
         builder.Services.AddDbContext<DataShapeContext>(
             options => options.UseNpgsql(connection));
+
+        Debug.WriteLine($"Connection to postgres using {connection} appears to have worked");
 
         builder.Services.AddControllers();
 

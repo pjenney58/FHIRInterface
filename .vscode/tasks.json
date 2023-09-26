@@ -10,12 +10,12 @@
             "dockerBuild": {
                 "tag": "palisaidpracticemanagement:dev",
                 "target": "base",
-                "dockerfile": "${workspaceFolder}/src/Administration/Dockerfile",
+                "dockerfile": "${workspaceFolder}/src/PrimaryControllers/DebugDockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/src/Administration/Administration.csproj"
+                "appProject": "${workspaceFolder}/src/PrimaryControllers/Priimary.csproj"
             }
         },
         {
@@ -26,7 +26,7 @@
             ],
             "dockerBuild": {
                 "tag": "palisaidpracticemanagement:latest",
-                "dockerfile": "${workspaceFolder}/src/Administration/Dockerfile",
+                "dockerfile": "${workspaceFolder}/src/PrimaryControllers/Dockerfile",
                 "context": "${workspaceFolder}",
                 "platform": {
                     "os": "linux",
@@ -35,7 +35,7 @@
                 "pull": true
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/src/Administration/Administration.csproj"
+                "appProject": "${workspaceFolder}/src/PrimaryControllers/Primary.csproj"
             }
         },
         {
@@ -46,7 +46,7 @@
             ],
             "dockerRun": {},
             "netCore": {
-                "appProject": "${workspaceFolder}/src/Administration/Administration.csproj",
+                "appProject": "${workspaceFolder}/src/PrimaryControllers/Primary.csproj",
                 "enableDebugging": true
             }
         },
@@ -58,7 +58,7 @@
             ],
             "dockerRun": {},
             "netCore": {
-                "appProject": "${workspaceFolder}/src/Administration/Administration.csproj"
+                "appProject": "${workspaceFolder}/src/PrimaryControllers/Primary.csproj"
             }
         }
     ]

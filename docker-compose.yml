@@ -1,84 +1,50 @@
-version: '3.5'
+version: '3.8'
 
 services:
-  authentication:
-    image: pjenney58/auth-api
+  Authentication:
+    image: ${DOCKER_REGISTRY-}authentication-api
+    ports:
+      - "5002:80"
     build:
       context: .
       dockerfile: src/Authentication/Dockerfile
-
-
-  administration:
-    image: pjenney58/admin-api
-    build:
-      context: .
-      dockerfile: src/Administration/Dockerfile
-
-
-  calendar:
-    image: ${DOCKER_REGISTRY-}calendar-api
-    build:
-      context: .
-      dockerfile: src/Calendar/Dockerfile
-
-
-  codes:
-    image: ${DOCKER_REGISTRY-}codes-api
-    build:
-      context: .
-      dockerfile: src/Codes/Dockerfile
-
-
-  collectors:
-    image: ${DOCKER_REGISTRY-}collectors
-    build:
-      context: .
-      dockerfile: src/Collectors/Dockerfile
-
-  populationhealth:
-    image: ${DOCKER_REGISTRY-}populationhealth
-    build:
-      context: .
-      dockerfile: src/PopulationHealth/Dockerfile
-
-
-  reports:
-    image: ${DOCKER_REGISTRY-}reports
-    build:
-      context: .
-      dockerfile: src/Reports/Dockerfile
-
-
-  vectors:
-    image: ${DOCKER_REGISTRY-}vectors
-    build:
-      context: .
-      dockerfile: src/Vectors/Dockerfile
-
-  collectorscontroller:
-    image: ${DOCKER_REGISTRY-}collectorscontroller
-    build:
-      context: .
-      dockerfile: src/Collectors/CollectorsController/Dockerfile
-
-
-  hl7collector:
-    image: ${DOCKER_REGISTRY-}hl7collector
-    build:
-      context: .
-      dockerfile: src/Collectors/Hl7Collector/Dockerfile
-
-
-  x12collector:
-    image: ${DOCKER_REGISTRY-}x12collector
-    build:
-      context: .
-      dockerfile: src/Collectors/X12Collector/Dockerfile
-
-
-  primary:
+    depends_on:
+      - postgres
+    networks:
+      - backend-network
+      
+  PrimaryConsumerApi:
     image: ${DOCKER_REGISTRY-}primary-consumer-api
+    restart: always
+    ports: 
+      - "5001:80"
     build:
       context: .
       dockerfile: src/PrimaryControllers/Dockerfile
+    depends_on:
+      - postgres
+    networks:
+      - backend-network
 
+  postgres:
+    image: pjenney58/palisaiddb:latest
+    restart: always
+    ports:
+      - 5432:5432
+    deploy:
+      endpoint_mode: vip
+      labels:
+        com.example.description: "This label will appear on the service"
+    volumes:
+      - data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: pgpassword
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge
+
+volumes:
+  data:

@@ -3,6 +3,8 @@ version: '3.8'
 services:
   Authentication:
     image: ${DOCKER_REGISTRY-}authentication-api
+    ports:
+      - "5002:80"
     build:
       context: .
       dockerfile: src/Authentication/DebugDockerfile
@@ -32,16 +34,17 @@ services:
     deploy:
       endpoint_mode: vip
       labels:
-        com.example.description: "This label will appear on the web service"
+        com.example.description: "This label will appear on the service"
     volumes:
       - data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: pgpassword
     networks:
       - backend-network
-    
+
 networks:
   backend-network:
+    driver: bridge
 
 volumes:
   data:
