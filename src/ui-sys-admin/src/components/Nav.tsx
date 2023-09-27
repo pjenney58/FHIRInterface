@@ -1,5 +1,7 @@
+import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import style from 'styles/Nav.module.css';
 
 
 const links = [
@@ -11,6 +13,7 @@ const links = [
 
 export default function Nav() {
   const router = useRouter();
+
   console.log(router.pathname);
   return (
     <nav className='main-nav'>
@@ -20,6 +23,9 @@ export default function Nav() {
             <Link href={href}>{label}</Link>
           </li>
         ))}
+        <li>
+          <a onClick={() => signOut()} >Log Out</a>
+        </li>
       </ul>
     </nav>
   );

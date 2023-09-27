@@ -4,8 +4,6 @@ import { FieldValues, UseFormRegister } from "react-hook-form";
 
 // NOTE These are all still in flux and may be changed. Some are wonky just because I'm generating fake data and haven't landed on names yet.
 // Need to work with Pete to concretly define entities and their relationships.
-// Like this one below. Customer/Clinic mostly because I was generating fake Clinic data and didn't want to change it.
-export type Customer = Clinic
 
 export interface Name {
   given: string;
@@ -27,7 +25,7 @@ export interface BillingInfo {
   paymentMethod: 'Credit Card' | 'Bank Transfer' | 'Check' | 'ACH' | 'Other';
 }
 
-export interface Clinic {
+export interface Customer {
   id: string;
   name: string;
   phoneNumber: string;

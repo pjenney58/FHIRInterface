@@ -28,18 +28,18 @@ export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: MyAppProps) {
-  
+
   return (
     <SessionProvider session={session}>
-        {/* If we don't care about a "landing page", we could wrap everything in the auth check */}
-        {/* The first page would just be the generic signin from NextAuth */}
-        {Component.bypassAuth ? (
+      {/* If we don't care about a "landing page", we could wrap everything in the auth check */}
+      {/* The first page would just be the generic signin from NextAuth */}
+      {Component.bypassAuth ? (
+        <Component {...pageProps} />
+      ) : (
+        <AuthRequired>
           <Component {...pageProps} />
-        ) : (
-          <AuthRequired>
-            <Component {...pageProps} />
-          </AuthRequired>
-        )}
+        </AuthRequired>
+      )}
     </SessionProvider>
   );
 }
@@ -47,7 +47,7 @@ export default function App({
 function AuthRequired({ children }: { children: React.ReactNode }) {
   // TODO This is just here for easier dev work. Remove to test auth
   const required = (ENVIRONMENT === 'production');
-  const { status } = useSession({ required });
+  const { status } = useSession({ required: true });
   if (status === 'loading') return (
     <div>
       <h1>Loading...</h1>
