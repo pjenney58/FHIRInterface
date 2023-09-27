@@ -22,9 +22,9 @@ export interface BillingInfo {
   paymentStatus: 'Paid' | 'Due' | 'Overdue' | 'Pending';
   lastBillingDate: string;
   nextBillingDate: string;
-  billingMethod: 'Credit Card' | 'Bank Transfer' | 'Check' | 'ACH';
+  billingMethod: 'Email' | 'Mail' | 'Print' | 'Other';
   // redundant of billing? More likely some sub fields, but I'm guessing we don't want to actually handle financial data.
-  paymentMethod: string;
+  paymentMethod: 'Credit Card' | 'Bank Transfer' | 'Check' | 'ACH' | 'Other';
 }
 
 export interface Clinic {
