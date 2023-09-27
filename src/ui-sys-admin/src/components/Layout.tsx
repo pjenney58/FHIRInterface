@@ -1,6 +1,5 @@
 import { Roboto } from "next/font/google";
 import Nav from "./Nav"
-import { useSession } from "next-auth/react";
 
 // Next Fonts. Self hosts the font automatically instead of using Google Fonts
 const roboto = Roboto({

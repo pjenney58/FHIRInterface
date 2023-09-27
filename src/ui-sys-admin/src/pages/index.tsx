@@ -4,7 +4,6 @@ import style from 'styles/Home.module.css';
 import type { NextPageContext } from 'next';
 import { useSession, signIn } from 'next-auth/react';
 import { NextPageWithAuthBypass } from './_app';
-import Nav from 'components/Nav';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
@@ -44,11 +43,11 @@ const Home: NextPageWithAuthBypass = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if(status === 'authenticated' && session)  {
+    if (status === 'authenticated' && session) {
       router.push('/admin');
     }
   }, [status, session, router]);
-  if(status === 'loading') return (<div>Loading...</div>);
+  if (status === 'loading') return (<div>Loading...</div>);
 
   return (
     <>
@@ -58,23 +57,14 @@ const Home: NextPageWithAuthBypass = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
-        {/* TODO Dynamic translations */}
-        {session && (
-        <div className="card">
-          <Nav />
-        </div>
-        )}
-        <h1 className={style.title}>{text.title}</h1>
-        <div className="card" >
-          <Image src="/images/logo.jpg" alt="PPM Logo" width={250} height={60} />
-            {!session && (
-              <div>
-                <p>{text.signedOutMessage}</p>
-                <button className='button' onClick={() => signIn()}>Sign in</button>
-              </div>
-            )}
-        </div>
+      <div className={style.main} >
+        <h1>{text.title}</h1>
+        <section className={style.card}>
+          <div>
+            <Image src="/images/logo.jpg" alt="PPM Logo" width={250} height={60} />
+          </div>
+          {!session && <button className='button primary' onClick={() => signIn()}>Sign in</button>}
+        </section>
       </div>
     </>
   );
