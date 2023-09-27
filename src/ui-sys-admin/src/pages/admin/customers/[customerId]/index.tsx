@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { BillingInfo, Customer } from "types";
+import { Customer } from "types";
 import { generateMockClinic } from "utils";
 import { PaymentStatusIcon } from "components/PaymentStatusIcon";
 import { MdSmartphone, MdOutlineEmail } from "react-icons/md";
@@ -29,7 +29,7 @@ export default function CustomerDisplayPage() {
         </div>
         <div className="card">
           <h4>Billing Info</h4>
-          <p>Payment Method: {tenant.billingInfo.billingMethod}</p>
+          <p>Billing Method: {tenant.billingInfo.billingMethod}</p>
           <p>Status: <PaymentStatusIcon status={tenant.billingInfo.paymentStatus} /></p>
         </div>
       </div>
