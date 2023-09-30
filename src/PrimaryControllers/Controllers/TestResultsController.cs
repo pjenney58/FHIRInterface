@@ -13,7 +13,7 @@ namespace Primary.Controllers
     public class TestResultsController : Controller
     {
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        internal readonly DataShapeContext? _context;
+        internal readonly DataShapeContext _context;
         internal readonly ILogger<Patient> _logger;
 
         public TestResultsController(DataShapeContext context, ILogger<Patient> logger)

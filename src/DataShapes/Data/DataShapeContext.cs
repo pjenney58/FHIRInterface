@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +7,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DataShapes.Model
 {
+    public static class AppIn
+    {
+        public static bool Docker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_DOCKER_CONTAINER") == "true";
+
+        public static bool Windows => OperatingSystem.IsWindows();
+
+    }
+
     #region service helper
     public static class IServiceCollectionExtension
     {
@@ -16,7 +25,7 @@ namespace DataShapes.Model
                .Build();
 
             service.AddDbContext<DataShapeContext>(options =>
-                options.UseNpgsql(config.GetConnectionString("default")));
+                options.UseNpgsql(config.GetConnectionString(AppIn.Docker ? "docker" : "default")));
 
             return service;
         }
@@ -42,7 +51,7 @@ namespace DataShapes.Model
                .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<DataShapeContext>();
-            optionsBuilder.UseNpgsql(config.GetConnectionString("default"));
+            optionsBuilder.UseNpgsql(config.GetConnectionString(AppIn.Docker ? "docker" :"default"));
 
             return new DataShapeContext(optionsBuilder.Options);
         }
@@ -64,6 +73,8 @@ namespace DataShapes.Model
         public DbSet<Medication>? Medications { get; set; }
         public DbSet<Code>? Codes { get; set; }
         public DbSet<CollectorConfig> Collectors {get; set; }
+        public DbSet<TestResult> TestResults { get; set; }
+        public DbSet<TestResultValue> TestResultValuess { get; set; }
 
         internal IConfiguration? config;
         internal string? connectionString;
@@ -74,7 +85,7 @@ namespace DataShapes.Model
                .AddJsonFile("appdataconfig.json")
                .Build();
 
-            connectionString = config.GetConnectionString("default");
+            connectionString = config.GetConnectionString(AppIn.Docker ? "docker" : "default");
         }
 
         public DataShapeContext(DbContextOptions<DataShapeContext> options)
@@ -91,7 +102,7 @@ namespace DataShapes.Model
                .AddJsonFile("appdataconfig.json")
                .Build();
 
-            optionsBuilder.UseNpgsql(config.GetConnectionString("default"));
+            optionsBuilder.UseNpgsql(config.GetConnectionString(AppIn.Docker ? "docker" : "default"));
 
             // TODO: Unravel the stupid PostgreSQL => DateTimeOffset issue
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

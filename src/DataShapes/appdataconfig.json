@@ -7,8 +7,11 @@
   },
   "AllowedHosts": "*",
   "ConnectionStrings": {
-    "default": "Host=postgres;port=5432;Database=Palisaid;User Id=palisaid;Password=password",
-    "identity": "Host=postgres;port=5432;Database=Identity;User Id=palisaid;Password=password"
+    "docker": "Host=postgres;port=5432;Database=Palisaid;User Id=palisaid;Password=password",
+    "default": "Host=localhost;port=5432;Database=Palisaid;User Id=palisaid;Password=password",
+    "identity": "Host=postgres;port=5432;Database=Identity;User Id=palisaid;Password=password",
+    "dockerIdentity": "Host=localhost;port=5432;Database=Palisaid;User Id=palisaid;Password=password",
+    "migrating": "Host=localhost;port=5432;Database=Palisaid;User Id=palisaid;Password=password"
   }
 }
 

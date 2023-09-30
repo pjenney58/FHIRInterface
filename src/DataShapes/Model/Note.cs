@@ -22,7 +22,11 @@ public enum NoteType
     NotClasified,
     Prescription,
     Treatment,
-    General
+    General,
+    Opthamology,
+    Immunization,
+    Neropothy,
+    Podiatry
 }
 
 namespace DataShapes.Model

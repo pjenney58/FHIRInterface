@@ -7,7 +7,7 @@ using Support.Model;
 
 namespace Primary.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ObservationsController : Controller

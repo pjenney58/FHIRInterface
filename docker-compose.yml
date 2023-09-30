@@ -1,20 +1,10 @@
 version: '3.8'
 
 services:
-  Authentication:
-    image: ${DOCKER_REGISTRY-}authentication-api
-    ports:
-      - "5002:80"
-    build:
-      context: .
-      dockerfile: src/Authentication/Dockerfile
-    depends_on:
-      - postgres
-    networks:
-      - backend-network
-      
   PrimaryConsumerApi:
     image: ${DOCKER_REGISTRY-}primary-consumer-api
+    environment:
+    - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
     restart: always
     ports: 
       - "5001:80"
