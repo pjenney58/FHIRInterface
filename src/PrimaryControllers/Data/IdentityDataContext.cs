@@ -1,6 +1,8 @@
 ﻿using Support.Model;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
+using System.Reflection.Metadata;
 
 namespace Authentication.Data
 {
@@ -27,6 +29,8 @@ namespace Authentication.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //builder.Entity<IdentityDataContext>().HasData();
+
             base.OnModelCreating(builder);
         }
 

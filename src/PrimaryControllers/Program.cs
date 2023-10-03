@@ -25,7 +25,7 @@ public class Program
         // Add services to the container.
         ConfigurationManager configuration = builder.Configuration;
 
-        Console.WriteLine($"Running InDocker: {AppRunningIn.Docker}");
+        //Console.WriteLine($"Running InDocker: {AppRunningIn.Docker}");
 
         var dataconnection = builder.Configuration.GetConnectionString(AppRunningIn.Docker ? "containerdefault" : "default")
                         ?? throw new InvalidOperationException("Connection string 'default' not found.");
@@ -33,8 +33,8 @@ public class Program
         var idconnection = builder.Configuration.GetConnectionString(AppRunningIn.Docker ? "containeridentity" : "identity")
                         ?? throw new InvalidOperationException("Connection string 'identity' not found.");
 
-        Console.WriteLine($"dataconnection = {dataconnection}");
-        Console.WriteLine($"idconnection = {idconnection}");
+        //Console.WriteLine($"dataconnection = {dataconnection}");
+        //Console.WriteLine($"idconnection = {idconnection}");
 
         // Add services to the container.
         builder.Services.AddDbContext<DataShapeContext>(options => 
@@ -53,12 +53,14 @@ public class Program
         {
             options.AddPolicy("PalisaidRootAdministrator", policy => policy.RequireClaim("PalisaidRootAdministrator"));
             options.AddPolicy("PalisaidTenantAdministrator", policy => policy.RequireClaim("PalisaidTenantAdministrator"));
-            options.AddPolicy("PalisaidUser", policy => policy.RequireClaim("PalisaidUser"));
+            options.AddPolicy("PalisaidUser", policy => policy.RequireClaim("PalisaidUser"));       
 
             options.AddPolicy("TenantRootAdministrator", policy => policy.RequireClaim("TenantRootAdministrator"));
             options.AddPolicy("TenantGroupAdministrator", policy => policy.RequireClaim("TenantGroupAdministrator"));
             options.AddPolicy("TenantGroupMember", policy => policy.RequireClaim("TenantGroupMember"));
             options.AddPolicy("TenantUser", policy => policy.RequireClaim("TenantUser"));
+
+            options.AddPolicy("Everyone", policy => policy.RequireClaim("Everyone"));
         });
 
         // Adding Token management
@@ -125,8 +127,6 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
-        
-
 
         app.MapControllers();
 

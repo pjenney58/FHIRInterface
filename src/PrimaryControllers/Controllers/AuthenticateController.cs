@@ -34,7 +34,14 @@ using System.Text;
 using Support.Model;
 using Microsoft.EntityFrameworkCore;
 using DataShapes.Model;
+using System.ComponentModel.DataAnnotations;
 
+/*
+    if (User.IsInRole("Administrators"))
+    {
+        // ...
+    }
+ */
 namespace Primary.Controllers
 {
     [Authorize]
@@ -70,7 +77,7 @@ namespace Primary.Controllers
 
             try
             {
-                var user = await _userManager.Users.FirstAsync(u => u.UserName == model.Username);               
+                var user = await _userManager.Users.FirstAsync(u => u.UserName == model.Username);
 
                 if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
                 {
@@ -122,8 +129,22 @@ namespace Primary.Controllers
         }
 
         [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel? model)
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
+        public async Task<IActionResult> CreateRole([Required] string name)
+        {
+            if (ModelState.IsValid)
+            {
+                IdentityResult result = await _roleManager.CreateAsync(new IdentityRole(name));
+                return Ok();
+            }
+
+            return Problem();
+        }
+
+        [HttpPost]
+        [Route("register-user")]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
+        public async Task<IActionResult> RegisterUser([FromBody] RegisterModel? model)
         {
             if (model == null ||
                 string.IsNullOrEmpty(model.Password) ||
@@ -148,6 +169,80 @@ namespace Primary.Controllers
                 TenantId = JwtTenantId.Get(Request)
             };
 
+            if (!await _roleManager.RoleExistsAsync("TenantUser"))
+            {
+                await _roleManager.CreateAsync(new IdentityRole("TenantUser"));
+            }
+
+            if (await _roleManager.RoleExistsAsync("TenantUser"))
+            {
+                await _userManager.AddToRoleAsync(user, "TenantUser");
+            }
+
+            if (await _roleManager.RoleExistsAsync("Everyone"))
+            {
+                await _userManager.AddToRoleAsync(user, "Everyone");
+            }
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+            {
+                string errors = string.Empty;
+                foreach (var error in result.Errors)
+                {
+                    errors += $"{error.Code}\n{error.Description}\n";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = errors });
+            }
+
+            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+        }
+
+        // Register Palisaid/Principal Users
+        [HttpPost]
+        [Route("principal-user")]
+        [Authorize(Roles = "PalisaidRootAdministrator")]
+        public async Task<IActionResult> RegistePrincipal([FromBody] RegisterModel? model)
+        {
+            if (model == null ||
+                string.IsNullOrEmpty(model.Password) ||
+                string.IsNullOrEmpty(model.Username))
+            {
+                return BadRequest("Null parameter");
+            }
+
+            var userExists = await _userManager.FindByNameAsync(model.Username);
+            if (userExists != null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+            }
+
+            ApplicationUser user = new()
+            {
+                PhoneNumber = model.Phone,
+                TwoFactorEnabled = model.Use2Factor,
+                Email = model.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = model.Username,
+                TenantId = JwtTenantId.Get(Request)
+            };
+
+            if (!await _roleManager.RoleExistsAsync("PalisaidUser"))
+            {
+                await _roleManager.CreateAsync(new IdentityRole("PalisaidUser"));
+            }
+
+            if (await _roleManager.RoleExistsAsync("PalisaidUser"))
+            {
+                await _userManager.AddToRoleAsync(user, "PalisaidUser");
+            }
+
+            if (await _roleManager.RoleExistsAsync("Everyone"))
+            {
+                await _userManager.AddToRoleAsync(user, "Everyone");
+            }
+
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
@@ -165,7 +260,89 @@ namespace Primary.Controllers
 
         [AllowAnonymous]
         [HttpPost]
+        [Route("register-principal-admin")]
+        //[Authorize(Roles = "PalisaidRootAdministrator")]
+        public async Task<IActionResult> RegisterPrincipalAdmin([FromBody] RegisterAdminModel? model)
+        {
+            if (model == null ||
+                string.IsNullOrEmpty(model.Password) ||
+                string.IsNullOrEmpty(model.Username))
+            {
+                return BadRequest("Null parameter");
+            }
+
+            var userExists = await _userManager.FindByNameAsync(model.Username);
+            if (userExists != null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+            }
+
+            ApplicationUser user = new()
+            {
+                Email = model.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = model.Username,
+                TenantId = Guid.Empty
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+            {
+                string errors = string.Empty;
+                foreach (var error in result.Errors)
+                {
+                    errors += $"{error.Code}\n{error.Description}\n";
+                }
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = errors });
+            }
+
+            if (!await _roleManager.RoleExistsAsync("PalisaidRootAdministrator"))
+            {
+                await _roleManager.CreateAsync(new IdentityRole("PalisaidRootAdministrator"));
+            }
+
+            if (!await _roleManager.RoleExistsAsync("PalisaidTenantAdministrator"))
+            {
+                await _roleManager.CreateAsync(new IdentityRole("PalisaidTenantAdministrator"));
+            }
+
+            if (!await _roleManager.RoleExistsAsync("PalisaidUser"))
+            {
+                await _roleManager.CreateAsync(new IdentityRole("PalisaidUser"));
+            }
+
+            if (await _roleManager.RoleExistsAsync("PalisaidRootAdministrator"))
+            {
+                await _userManager.AddToRoleAsync(user, "PalisaidRootAdministrator");
+            }
+
+            if (await _roleManager.RoleExistsAsync("PalisaidRootAdministrator"))
+            {
+                await _userManager.AddToRoleAsync(user, "PalisaidRootAdministrator");
+            }
+
+            if (await _roleManager.RoleExistsAsync("PalisaidTenantAdministrator"))
+            {
+                await _userManager.AddToRoleAsync(user, "PalisaidTenantAdministrator");
+            }
+
+            if (await _roleManager.RoleExistsAsync("PalisaidUser"))
+            {
+                await _userManager.AddToRoleAsync(user, "PalisaidUser");
+            }
+
+            if (await _roleManager.RoleExistsAsync("Everyone"))
+            {
+                await _userManager.AddToRoleAsync(user, "Everyone");
+            }
+
+            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
         [Route("register-admin")]
+        [Authorize(Roles = "PalisaidRootAdministrator")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminModel? model)
         {
             if (model == null ||
@@ -200,24 +377,29 @@ namespace Primary.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = errors });
             }
 
-            if (!await _roleManager.RoleExistsAsync(UserRoles.Admin))
+            if (!await _roleManager.RoleExistsAsync("TenantRootAdministrator"))
             {
-                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
+                await _roleManager.CreateAsync(new IdentityRole("TenantRootAdministrator"));
             }
 
-            if (!await _roleManager.RoleExistsAsync(UserRoles.User))
+            if (!await _roleManager.RoleExistsAsync("TenantUser"))
             {
-                await _roleManager.CreateAsync(new IdentityRole(UserRoles.User));
+                await _roleManager.CreateAsync(new IdentityRole("TenantUser"));
             }
 
-            if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
+            if (await _roleManager.RoleExistsAsync("TenantRootAdministrator"))
             {
-                await _userManager.AddToRoleAsync(user, UserRoles.Admin);
+                await _userManager.AddToRoleAsync(user, "TenantRootAdministrator");
             }
 
-            if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
+            if (await _roleManager.RoleExistsAsync("TenantUser"))
             {
-                await _userManager.AddToRoleAsync(user, UserRoles.User);
+                await _userManager.AddToRoleAsync(user, "TenantUser");
+            }
+
+            if (await _roleManager.RoleExistsAsync("Everyone"))
+            {
+                await _userManager.AddToRoleAsync(user, "Everyone");
             }
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
@@ -337,7 +519,7 @@ namespace Primary.Controllers
             return false;
         }
 
-        private JwtSecurityToken CreateToken(List<Claim> authClaims)
+        internal JwtSecurityToken CreateToken(List<Claim> authClaims)
         {
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"] ?? throw new ArgumentNullException("JWT:Secret")));
             if (!double.TryParse(_configuration["JWT:TokenValidityInSeconds"], out double tokenValidityInSeconds))
@@ -358,7 +540,7 @@ namespace Primary.Controllers
             return token;
         }
 
-        private static string GenerateRefreshToken()
+        internal static string GenerateRefreshToken()
         {
             var randomNumber = new byte[64];
             using var rng = RandomNumberGenerator.Create();
@@ -366,7 +548,7 @@ namespace Primary.Controllers
             return Convert.ToBase64String(randomNumber);
         }
 
-        private ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token)
+        internal ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token)
         {
             var tokenValidationParameters = new TokenValidationParameters
             {
@@ -387,5 +569,7 @@ namespace Primary.Controllers
 
             return principal;
         }
+
+
     }
 }

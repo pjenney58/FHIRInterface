@@ -7,7 +7,7 @@ using Support.Model;
 
 namespace Primary.Controllers
 {  
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EncountersController : Controller
@@ -32,18 +32,21 @@ namespace Primary.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles="PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Post()
         {
             return BadRequest("Not Implemented");
         }
 
         [HttpPut]
+        [Authorize(Roles="PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Put()
         {
             return BadRequest("Not Implemented");
         }
 
         [HttpDelete]
+        [Authorize(Roles="PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Delete()
         {
             return BadRequest("Not Implemented");
