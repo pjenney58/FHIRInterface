@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)
+
+If you're building this project, you'll need to rename `.env.local.example` to `.env.local` and populate that secret. Any string can do, but for actual prod, you'll want some good stuff.
 
 ## Getting Started
 

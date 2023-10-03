@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { Address, Clinic, User } from 'types';
+import { Address, Customer, User } from 'types';
 
 function generateRandomGuid(): string {
     return faker.string.uuid();
@@ -22,23 +22,18 @@ function generateRandomAddress() {
         street2: faker.location.secondaryAddress(),
         city: faker.location.city(),
         state: faker.location.state(),
+        country: faker.location.country(),
         zip: faker.location.zipCode()
     }
 }
 
-export function generateMockClinic(): Clinic {
+export function generateMockClinic(): Customer {
     return {
         id: generateRandomGuid(),
         name: faker.company.name(),
         phoneNumber: faker.phone.number('###-###-####'),
         addresses: [
-            {
-                street1: faker.location.streetAddress(),
-                street2: faker.location.secondaryAddress(),
-                city: faker.location.city(),
-                state: faker.location.state(),
-                zip: faker.location.zipCode()
-            }
+            generateRandomAddress()
         ],
         specialties: faker.word.words(2).split(' '),
         doctors: [faker.person.fullName(), faker.person.fullName()],
@@ -56,20 +51,19 @@ export function generateMockClinic(): Clinic {
             paymentStatus: faker.helpers.arrayElement(['Paid', 'Due', 'Overdue', 'Pending']),
             lastBillingDate: faker.date.recent().toISOString(),
             nextBillingDate: faker.date.soon().toISOString(),
-            billingMethod: faker.helpers.arrayElement(['Credit Card', 'Bank Transfer', 'Check', 'ACH']),
-            paymentMethod: faker.finance.creditCardNumber()
+            billingMethod: faker.helpers.arrayElement(['Email', 'Mail', 'Print', 'Other']),
+            paymentMethod: faker.helpers.arrayElement(['Credit Card', 'Bank Transfer', 'Check', 'ACH', 'Other'])
         },
         associatedUsers: generateRandomArrayOfGuids(2, 10)
     };
 }
 
-export function getMockClinics(numberOfClinics = 100): Clinic[] {
-    const mockData: Clinic[] = [];
+export function getMockClinics(numberOfClinics = 100): Customer[] {
+    const mockData: Customer[] = [];
 
     for (let i = 0; i < numberOfClinics; i++) {
         mockData.push(generateMockClinic());
     }
-    // console.log(JSON.stringify(mockData, null, 2));
     return mockData;
 }
 
@@ -113,7 +107,7 @@ export function getMockUsers(numberOfUsers = 100): User[] {
 }
 
 
-export const stateSelectArray = [
+export const USStateSelectOptions = [
     { value: "Alabama", label: "AL" },
     { value: "Alaska", label: "AK" },
     { value: "Arizona", label: "AZ" },

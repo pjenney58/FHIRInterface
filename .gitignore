@@ -225,9 +225,7 @@ _pkginfo.txt
 
 # Visual Studio cache files
 # files ending in .cache can be ignored
-.cache
 *.[Cc]ache
-*.editorconfig
 # but keep track of directories ending in .cache
 !?*.[Cc]ache/
 
@@ -360,22 +358,11 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+*/**/.next/**/*
+next-env.d.ts
+.env
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-
-
-# Apple
-.DS_Store
-
-# FRONT END STUFF
-
-# next.js
-*/**/.next/
-.env
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
 /src/Calendar/obj/Debug/net7.0/Calendar.assets.cache
 /src/Calendar/obj/Debug/net7.0/Calendar.GeneratedMSBuildEditorConfig.editorconfig
 /src/Calendar/obj/Debug/net7.0/Calendar.csproj.AssemblyReference.cache
@@ -499,4 +486,3 @@ next-env.d.ts
 /test/UnitTests/obj/UnitTests.csproj.nuget.dgspec.json
 /test/UnitTests/obj/UnitTests.csproj.nuget.g.props
 /test/UnitTests/obj/UnitTests.csproj.nuget.g.targets
-

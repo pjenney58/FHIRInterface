@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import style from 'styles/CreateEntityPages.module.css';
 import { useForm } from 'react-hook-form';
-import { UserInputs, InputField } from 'types';
+import { UserInputs, InputProps } from 'types';
 import { StandardInput, StateSelect } from 'components/Inputs';
 
 // Are all the hoops worth it to not be handwriting HTML? Maybe, if I'm not the one in here because of a bug.
@@ -34,7 +34,7 @@ export default function CreateUserPage() {
     )
 }
 
-const inputGroups: { groupName: string, fields: InputField<UserInputs>[] }[] = [
+const inputGroups: { groupName: string, fields: InputProps<UserInputs>[] }[] = [
     {
         groupName: 'Contact Information',
         fields: [

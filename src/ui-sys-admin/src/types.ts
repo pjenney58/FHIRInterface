@@ -1,7 +1,7 @@
 import { HTMLInputTypeAttribute } from "react";
-import { FieldValues, UseFormRegister } from "react-hook-form";
+import { UseFormRegister, Path, RegisterOptions, Control } from "react-hook-form";
 
-
+export type FieldValues = Record<string, any>
 // NOTE These are all still in flux and may be changed. Some are wonky just because I'm generating fake data and haven't landed on names yet.
 // Need to work with Pete to concretly define entities and their relationships.
 
@@ -89,18 +89,25 @@ export type CustomerInputs = {
   zip: string;
   country: string;
 }
-export interface InputField<T extends FieldValues> {
+export interface InputProps<T> {
   label: string
   name: keyof T
   // The type for HTMLInputTypeAttribute has (string & {}) which kinda ruins the type safety. 
+  // type: Omit<HTMLInputTypeAttribute, (string & {})>
   type: HTMLInputTypeAttribute
   required: boolean
   component?: any
 }
 
-export interface InputProps<T extends FieldValues> extends InputField<T> {
-  register: UseFormRegister<T>
-  // control: Control<UserInputs> -- this is the type that react-hook-form wants, but it doesn't work with react-select.
-  // "any" works, but it bugs me. Maybe this will be revisited later.
-  control: any
+export interface FormInputGroup<T> {
+  groupName: string,
+  fields: InputProps<T>[]
 }
+
+export type FormInputProps<TFormValues extends FieldValues> = {
+  name: Path<TFormValues>
+  register: UseFormRegister<TFormValues>,
+  rules?: RegisterOptions,
+  control?: Control<TFormValues>,
+
+} & Omit<InputProps<TFormValues>, 'name'>

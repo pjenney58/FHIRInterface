@@ -26,6 +26,7 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
-    "@faker-js/faker": "^8.0.2"
+    "@faker-js/faker": "^8.0.2",
+    "@types/react-select": "^5.0.1"
   }
 }
