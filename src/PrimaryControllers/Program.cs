@@ -10,6 +10,7 @@ using Support.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System;
 
 namespace Data;
 
@@ -37,11 +38,11 @@ public class Program
         //Console.WriteLine($"idconnection = {idconnection}");
 
         // Add services to the container.
-        builder.Services.AddDbContext<DataShapeContext>(options => 
+        builder.Services.AddDbContext<DataShapeContext>(options =>
             options.UseNpgsql(dataconnection));
 
         // Add security
-        builder.Services.AddDbContext<IdentityDataContext>(options => 
+        builder.Services.AddDbContext<IdentityDataContext>(options =>
             options.UseNpgsql(idconnection));
 
         // For Identity
@@ -51,13 +52,13 @@ public class Program
 
         builder.Services.AddAuthorization(options =>
         {
+            options.AddPolicy("PalisaidOwner", policy => policy.RequireClaim("PalisaidOwner"));
             options.AddPolicy("PalisaidRootAdministrator", policy => policy.RequireClaim("PalisaidRootAdministrator"));
             options.AddPolicy("PalisaidTenantAdministrator", policy => policy.RequireClaim("PalisaidTenantAdministrator"));
-            options.AddPolicy("PalisaidUser", policy => policy.RequireClaim("PalisaidUser"));       
-
+            options.AddPolicy("PalisaidUser", policy => policy.RequireClaim("PalisaidUser"));
             options.AddPolicy("TenantRootAdministrator", policy => policy.RequireClaim("TenantRootAdministrator"));
             options.AddPolicy("TenantGroupAdministrator", policy => policy.RequireClaim("TenantGroupAdministrator"));
-            options.AddPolicy("TenantGroupMember", policy => policy.RequireClaim("TenantGroupMember"));
+            options.AddPolicy("TenantUserAdministrator", policy => policy.RequireClaim("TenantUserAdministrator"));
             options.AddPolicy("TenantUser", policy => policy.RequireClaim("TenantUser"));
 
             options.AddPolicy("Everyone", policy => policy.RequireClaim("Everyone"));
@@ -117,6 +118,14 @@ public class Program
 
         var app = builder.Build();
 
+        // Seed the db if it's not setup yet
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+            SeedRoles.Initialize(services);
+            SeedUsers.Initialize(services);
+        }
+
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
@@ -131,6 +140,94 @@ public class Program
         app.MapControllers();
 
         app.Run();
+    }
+
+    public static class SeedUsers
+    {
+        public static void Initialize(IServiceProvider serviceProvider)
+        {
+            using (UserManager<ApplicationUser> _userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>())
+            {
+                
+                // Create root user
+                var user = new RegisterAdminModel()
+                {
+                    Username = "root",
+                    Password = "!Password0",
+                    Email = "root@palisaid.com",
+                    Phone = "603.264.3961"
+                };
+
+                // TODO: ALTER TABLE AspNetUserRoles DROP CONSTRAINT FK_AspNetUserRoles_AspNetRoles_UserId;
+                // Manually deleting it works fine and user/role can be saved
+                
+               
+                if (!_userManager.Users.Any(r => r.UserName == user.Username))
+                    {
+                        var newuser = new ApplicationUser
+                        {
+                            UserName = user.Username,
+                            Email = user.Username,
+                            PhoneNumber = user.Phone,
+                            TwoFactorEnabled = false,
+                            SecurityStamp = Guid.NewGuid().ToString(),
+                            TenantId = Guid.Empty
+                        };
+
+                        Task.Run(async () => await _userManager.AddToRolesAsync(newuser,
+                            new string[]
+                            {
+                            "PalisaidOwner",
+                            "PalisaidRootAdministrator",
+                            "PalisaidTenantAdministrator",
+                            "PalisaidUser",
+                            "Everyone"
+                            }
+                            )).Wait();
+
+                        Task.Run(async () => await _userManager.CreateAsync(newuser, user.Password)).Wait();
+                    }
+            }
+        }
+    }
+
+    public static class SeedRoles
+    {
+        public static void Initialize(IServiceProvider serviceProvider)
+        {
+            using (var context = new IdentityDataContext(serviceProvider.GetRequiredService<DbContextOptions<IdentityDataContext>>()))
+            {
+                string[] roles = new string[]
+                {
+                    "PalisaidOwner",
+                    "PalisaidRootAdministrator",
+                    "PalisaidTenantAdministrator",
+                    "PalisaidUser",
+                    "TenantOwner",
+                    "TenantRootAdministrator",
+                    "TenantGroupAdministrator",
+                    "TenantUserAdministrator",
+                    "TenantUser",
+                    "Everyone"
+                };
+
+                var newrolelist = new List<IdentityRole>();
+                foreach (string role in roles)
+                {
+                    if (!context.Roles.Any(r => r.Name == role))
+                    {
+                        newrolelist.Add(new IdentityRole()
+                        {
+                            Name = role,
+                            NormalizedName = role.ToUpper(),
+                            ConcurrencyStamp = Guid.NewGuid().ToString()
+                        });
+                    }
+                }
+                context.Roles.AddRange(newrolelist);
+                context.SaveChanges();
+            }
+        }
     }
 }
 
