@@ -32,21 +32,21 @@ namespace Primary.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
+        //[Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Post()
         {
             return BadRequest("Not Implemented");
         }
 
         [HttpPut]
-        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
+        //[Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Put()
         {
             return BadRequest("Not Implemented");
         }
 
         [HttpDelete]
-        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
+        //[Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Delete()
         {
             return BadRequest("Not Implemented");

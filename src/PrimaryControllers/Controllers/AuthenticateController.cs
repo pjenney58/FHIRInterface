@@ -22,26 +22,26 @@
  * SOFTWARE.
  */
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+/*
+ * JWT Implementation drawn from --
+ *      https://www.c-sharpcorner.com/article/authentication-and-authorization-in-asp-net-core-web-api-with-json-web-tokens/
+ *      
+ *  It's not too bad ...    
+ */
+
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Support.Model;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DataShapes.Model;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.IdentityModel.Tokens;
+using Support.Model;
 
-/*
-    if (User.IsInRole("Administrators"))
-    {
-        // ...
-    }
- */
 namespace Primary.Controllers
 {
     [Authorize]
@@ -66,26 +66,27 @@ namespace Primary.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
-            if (model == null ||
-                string.IsNullOrEmpty(model.Password) ||
-                string.IsNullOrEmpty(model.Username))
+         
+            if (login == null ||
+                string.IsNullOrEmpty(login.Password) ||
+                string.IsNullOrEmpty(login.Username))
             {
                 return BadRequest("Null parameter");
             }
 
             try
             {
-                var user = await _userManager.Users.FirstAsync(u => u.UserName == model.Username);
+                var user = await _userManager.Users.FirstAsync(u => u.UserName == login.Username);
 
-                if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+                if (user != null && await _userManager.CheckPasswordAsync(user, login.Password))
                 {
                     var userRoles = await _userManager.GetRolesAsync(user);
 
                     var authClaims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, model.Username),
+                        new Claim(ClaimTypes.Name, login.Username),
                         new Claim(ClaimTypes.PrimarySid, user.TenantId.ToString()),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     };
@@ -128,18 +129,7 @@ namespace Primary.Controllers
             return Unauthorized();
         }
 
-        [HttpPost]
-        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
-        public async Task<IActionResult> CreateRole([Required] string name)
-        {
-            if (ModelState.IsValid)
-            {
-                IdentityResult result = await _roleManager.CreateAsync(new IdentityRole(name));
-                return Ok();
-            }
-
-            return Problem();
-        }
+        
 
         [HttpPost]
         [Route("register-user")]
@@ -177,11 +167,6 @@ namespace Primary.Controllers
             if (await _roleManager.RoleExistsAsync("TenantUser"))
             {
                 await _userManager.AddToRoleAsync(user, "TenantUser");
-            }
-
-            if (await _roleManager.RoleExistsAsync("Everyone"))
-            {
-                await _userManager.AddToRoleAsync(user, "Everyone");
             }
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -261,7 +246,7 @@ namespace Primary.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("register-principal-admin")]
-        //[Authorize(Roles = "PalisaidRootAdministrator")]
+        //[Authorize(Roles = "PalisaidOwner")]
         public async Task<IActionResult> RegisterPrincipalAdmin([FromBody] RegisterAdminModel? model)
         {
             if (model == null ||
@@ -342,7 +327,7 @@ namespace Primary.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("register-admin")]
-        [Authorize(Roles = "PalisaidRootAdministrator")]
+        //[Authorize(Roles = "PalisaidRootAdministrator")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminModel? model)
         {
             if (model == null ||
@@ -404,6 +389,41 @@ namespace Primary.Controllers
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
+
+#region RoleManagement
+        [HttpPost]
+        [Route("role/{role}")]
+        public async Task<IActionResult> AddRole(string role)
+        {
+            if (ModelState.IsValid)
+            {
+                IdentityResult result = await _roleManager.CreateAsync(new IdentityRole(role));
+                return Ok();
+            }
+
+            return Problem("ModelState INVALID");
+        }
+
+        [HttpDelete]
+        [Route("role/{role}")]
+        public async Task<IActionResult> DeleteRole(string role)
+        { return BadRequest("Not Implemented"); }
+
+        [HttpPut]
+        [Route("role/{id,role}")]
+        public async Task<IActionResult> AddUserRole(Guid id, string role)
+        { return BadRequest("Not Implemented"); }
+
+        [HttpDelete]
+        [Route("role/{id,role}")]
+        public async Task<IActionResult> DeleteUserRole(Guid id, string role)
+        { return BadRequest("Not Implemented"); }
+
+        [HttpGet]
+        [Route("role/{id}")]
+        public async Task<IActionResult> GetUserRoles(Guid uid)
+        { return BadRequest("Not Implemented"); }
+ #endregion
 
         [AllowAnonymous]
         [HttpPost]
@@ -569,7 +589,6 @@ namespace Primary.Controllers
 
             return principal;
         }
-
 
     }
 }

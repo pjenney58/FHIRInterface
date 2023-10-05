@@ -14,8 +14,8 @@ namespace Primary.Controllers
     {
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         internal readonly DataShapeContext _context;
-        internal readonly ILogger<Patient> _logger;
-
+        internal readonly ILogger<Patient> _logger;        
+      
         public PatientsController(DataShapeContext context, ILogger<Patient> logger)
         {
             _context = context;
@@ -23,31 +23,34 @@ namespace Primary.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Everyone")]
         public async Task<IActionResult> GetAll()
         {
-            if (_context != null && _context.Patients != null)
+            if(_context != null && _context.Patients != null)
             {
                 List<Patient> list;
 
                 try
                 {
                     var tid = JwtTenantId.Get(Request);
-
-                    //if(User.Claims.Where(p => p.))
-
-                    if (tid == Guid.Empty && User != null)
+                
+                    if(tid == Guid.Empty && User != null)
                     {
-                        list = await Task.Run(() => _context.Patients.ToList());
-                        return Ok(list.Select(l => new { l?.EntityId, l?.Name?.FamilyName, l?.Name?.FirstName }));
+                       if(((System.Security.Claims.ClaimsIdentity)User.Identity).HasClaim("role", "PalisaidRootAdministrator") ||
+                          ((System.Security.Claims.ClaimsIdentity)User.Identity).HasClaim("role", "PalisaidTenantAdministrator"))
+                        {
+                            list = await Task.Run(() => _context.Patients.ToList());         
+                            return Ok(list.Select(l => new { l?.EntityId, l?.Name?.FamilyName, l?.Name?.FirstName }));
+                        }
+
+                        return BadRequest();
                     }
                     else
                     {
-                        list = await Task.Run(() => _context.Patients.Where(t => t.TenantId == tid).ToList());
-                        return Ok(list.Select(l => new { l?.EntityId, l?.Name?.FamilyName, l?.Name?.FirstName }));
+                            list = await Task.Run(() => _context.Patients.Where(t => t.TenantId == tid).ToList());         
+                            return Ok(list.Select(l => new { l?.EntityId, l?.Name?.FamilyName, l?.Name?.FirstName }));
                     }
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
                     _logger.LogError(ex.Message);
                     return Problem(ex.Message);
@@ -58,17 +61,16 @@ namespace Primary.Controllers
         }
 
         [HttpGet("{patientid}")]
-        [Authorize(Roles = "Everyone")]
         public async Task<IActionResult> GetById(string id)
         {
-            if (_context != null && _context.Patients != null)
+            if(_context != null && _context.Patients != null)
             {
                 try
-                {
+                {              
                     var tid = JwtTenantId.Get(Request);
-                    if (tid == Guid.Empty)
+                    if(tid == Guid.Empty)
                     {
-                        return Ok(await Task.Run(() => _context.Patients.Where(i => i.PrimaryPatientIdString == id)));
+                       return Ok(await Task.Run(() => _context.Patients.Where(i => i.PrimaryPatientIdString == id)));
                     }
 
                     return Ok(await Task.Run(() => _context.Patients.Where(i => i.PrimaryPatientIdString == id && i.TenantId == tid)));
@@ -84,7 +86,6 @@ namespace Primary.Controllers
         }
 
         [HttpGet("{patientname}")]
-        [Authorize(Roles = "Everyone")]
         public async Task<IActionResult> GetByName(string name)
         {
             var tid = JwtTenantId.Get(Request);
@@ -92,7 +93,6 @@ namespace Primary.Controllers
         }
 
         [HttpGet("notes/{patientid}")]
-        [Authorize(Roles = "Everyone")]
         public async Task<IActionResult> GetNotes(string id)
         {
             var tid = JwtTenantId.Get(Request);
@@ -100,7 +100,6 @@ namespace Primary.Controllers
         }
 
         [HttpGet("allergies/{patientid}")]
-        [Authorize(Roles = "Everyone")]
         public async Task<IActionResult> GetAllergies(string id)
         {
             var tid = JwtTenantId.Get(Request);
@@ -108,7 +107,6 @@ namespace Primary.Controllers
         }
 
         [HttpGet("obeservations/{patientid}")]
-        [Authorize(Roles = "Everyone")]
         public async Task<IActionResult> GetObservations(string id)
         {
             var tid = JwtTenantId.Get(Request);
@@ -116,7 +114,6 @@ namespace Primary.Controllers
         }
 
         [HttpGet("encounters/{patientid}")]
-        [Authorize(Roles = "Everyone")]
         public async Task<IActionResult> GetEncounters(string id)
         {
             var tid = JwtTenantId.Get(Request);
@@ -124,22 +121,21 @@ namespace Primary.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
-        [Authorize(Roles = "Everyone")]
+        [Authorize(Roles="PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Post()
         {
             return BadRequest("Not Implemented");
         }
 
         [HttpPut]
-        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
+        [Authorize(Roles="PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Put()
         {
             return BadRequest("Not Implemented");
         }
 
         [HttpDelete]
-        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
+        [Authorize(Roles="PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Delete()
         {
             return BadRequest("Not Implemented");

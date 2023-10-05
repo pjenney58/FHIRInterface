@@ -1,7 +1,4 @@
-﻿
-using System.Diagnostics;
-using System.Net;
-using DataShapes.Model;
+﻿using DataShapes.Model;
 using Authentication.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +7,6 @@ using Support.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using System;
 
 namespace Data;
 
@@ -64,6 +60,7 @@ public class Program
             options.AddPolicy("Everyone", policy => policy.RequireClaim("Everyone"));
         });
 
+
         // Adding Token management
         builder.Services.AddAuthentication(options =>
         {
@@ -88,6 +85,22 @@ public class Program
                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"] ?? throw new ArgumentNullException("JWT:Secret")))
            };
        });
+
+        /*
+       .AddCookie()
+       .AddOpenIdConnect(options =>
+       {
+           options.SignInScheme = "Cookies";
+           options.Authority = "-your-identity-provider-";
+           options.RequireHttpsMetadata = true;
+           options.ClientId = "-your-clientid-";
+           options.ClientSecret = "-your-client-secret-from-user-secrets-or-keyvault";
+           options.ResponseType = "code";
+           options.UsePkce = true;
+           options.Scope.Add("profile");
+           options.SaveTokens = true;
+       });
+        */
 
         builder.Services.AddSwaggerGen(c =>
         {

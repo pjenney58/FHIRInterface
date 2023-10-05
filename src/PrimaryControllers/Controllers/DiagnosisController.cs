@@ -23,6 +23,7 @@ namespace Primary.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Everyone")]
         public async Task<IActionResult> Get()
         {
             var tid = JwtTenantId.Get(Request);
