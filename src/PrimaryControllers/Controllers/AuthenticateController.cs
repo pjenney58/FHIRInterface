@@ -68,7 +68,7 @@ namespace Primary.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
-         
+
             if (login == null ||
                 string.IsNullOrEmpty(login.Password) ||
                 string.IsNullOrEmpty(login.Username))
@@ -128,8 +128,6 @@ namespace Primary.Controllers
 
             return Unauthorized();
         }
-
-        
 
         [HttpPost]
         [Route("register-user")]
@@ -246,7 +244,7 @@ namespace Primary.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("register-principal-admin")]
-        //[Authorize(Roles = "PalisaidOwner")]
+        [Authorize(Roles = "PalisaidOwner")]
         public async Task<IActionResult> RegisterPrincipalAdmin([FromBody] RegisterAdminModel? model)
         {
             if (model == null ||
@@ -390,7 +388,19 @@ namespace Primary.Controllers
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
 
-#region RoleManagement
+        #region RoleManagement
+        [HttpGet]
+        [Route("role")]
+           public IActionResult GetRoles()
+        {
+            if (ModelState.IsValid)
+            {
+                return Ok( _roleManager.Roles);
+            }
+
+            return Problem("ModelState INVALID");
+        }
+
         [HttpPost]
         [Route("role/{role}")]
         public async Task<IActionResult> AddRole(string role)
@@ -407,23 +417,64 @@ namespace Primary.Controllers
         [HttpDelete]
         [Route("role/{role}")]
         public async Task<IActionResult> DeleteRole(string role)
-        { return BadRequest("Not Implemented"); }
+        {
+            if (ModelState.IsValid)
+            {
+                IdentityResult result = await _roleManager.DeleteAsync(new IdentityRole(role));
+                return Ok();
+            }
+
+            return Problem("ModelState INVALID");
+        }
 
         [HttpPut]
         [Route("role/{id,role}")]
         public async Task<IActionResult> AddUserRole(Guid id, string role)
-        { return BadRequest("Not Implemented"); }
+        {
+            if (ModelState.IsValid)
+            {
+                var _user = await _userManager.FindByIdAsync(id.ToString());
+                if (_user != null)
+                {
+                    await _userManager.AddToRoleAsync(_user, role);
+                    return Ok();
+                }
+            }
+            return Problem("ModelState INVALID");
+        }
 
         [HttpDelete]
         [Route("role/{id,role}")]
         public async Task<IActionResult> DeleteUserRole(Guid id, string role)
-        { return BadRequest("Not Implemented"); }
+        {
+            if (ModelState.IsValid)
+            {
+                var _user = await _userManager.FindByIdAsync(id.ToString());
+                if (_user != null)
+                {
+                    await _userManager.RemoveFromRoleAsync(_user, role);
+                    return Ok();
+                }
+            }
+           
+            return Problem("ModelState INVALID");
+        }
 
         [HttpGet]
         [Route("role/{id}")]
-        public async Task<IActionResult> GetUserRoles(Guid uid)
-        { return BadRequest("Not Implemented"); }
- #endregion
+        public async Task<IActionResult> GetUserRoles(Guid id)
+        {
+            if (ModelState.IsValid)
+            {
+                var _user = await _userManager.FindByIdAsync(id.ToString());
+                if (_user != null)
+                {
+                    return Ok(await _userManager.GetRolesAsync(_user));                    
+                }
+            }
+            return Problem("ModelState INVALID");
+        }
+        #endregion
 
         [AllowAnonymous]
         [HttpPost]
