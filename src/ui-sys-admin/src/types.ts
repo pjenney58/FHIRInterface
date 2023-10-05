@@ -1,7 +1,5 @@
-import { HTMLInputTypeAttribute } from "react";
-import { UseFormRegister, Path, RegisterOptions, Control } from "react-hook-form";
+import { UseFormRegister, Path, RegisterOptions, Control, FieldValues } from "react-hook-form";
 
-export type FieldValues = Record<string, any>
 // NOTE These are all still in flux and may be changed. Some are wonky just because I'm generating fake data and haven't landed on names yet.
 // Need to work with Pete to concretly define entities and their relationships.
 
@@ -89,14 +87,20 @@ export type CustomerInputs = {
   zip: string;
   country: string;
 }
-export interface InputProps<T> {
+
+
+export type InputCommonProps<T> = {
   label: string
   name: keyof T
-  // The type for HTMLInputTypeAttribute has (string & {}) which kinda ruins the type safety. 
-  // type: Omit<HTMLInputTypeAttribute, (string & {})>
-  type: HTMLInputTypeAttribute
   required: boolean
-  component?: any
+}
+
+export type InputProps<T> = InputCommonProps<T> & {
+  type: 'text' | 'email' | 'tel'
+  component?: never
+} | InputCommonProps<T> & {
+  type?: never
+  component: React.ComponentType<any>
 }
 
 export interface FormInputGroup<T> {

@@ -94,7 +94,6 @@ const inputGroups: { groupName: string, fields: InputProps<UserInputs>[] }[] = [
             {
                 label: 'State',
                 name: 'state',
-                type: 'text',
                 required: true,
                 component: StateSelect
             },

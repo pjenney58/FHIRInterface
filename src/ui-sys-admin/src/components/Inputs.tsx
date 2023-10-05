@@ -1,6 +1,6 @@
 import Select from "react-select";
-import { Controller } from "react-hook-form";
-import { FieldValues, FormInputProps } from "types";
+import { Controller, FieldValues } from "react-hook-form";
+import { FormInputProps } from "types";
 import { USStateSelectOptions } from "utils";
 
 import style from 'styles/Inputs.module.css'

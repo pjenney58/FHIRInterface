@@ -76,7 +76,6 @@ const inputGroups: FormInputGroup<CustomerInputs>[] = [
       {
         label: 'State',
         name: 'state',
-        type: 'text',
         required: true,
         component: StateSelect
       },
