@@ -25,16 +25,18 @@
 /*
  * JWT Implementation drawn from --
  *      https://www.c-sharpcorner.com/article/authentication-and-authorization-in-asp-net-core-web-api-with-json-web-tokens/
- *      
- *  It's not too bad ...    
+ *
+ *  It's not too bad ...
  */
 
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using DataShapes.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -52,15 +54,18 @@ namespace Primary.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthenticateController> _logger;
 
         public AuthenticateController(
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ILogger<AuthenticateController> logger)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _logger = logger;
         }
 
         [AllowAnonymous]
@@ -68,7 +73,6 @@ namespace Primary.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
-
             if (login == null ||
                 string.IsNullOrEmpty(login.Password) ||
                 string.IsNullOrEmpty(login.Username))
@@ -115,6 +119,8 @@ namespace Primary.Controllers
                         }
                     }
 
+                    _logger.LogInformation($"User {user.Id} logged in.");
+
                     return Ok(new
                     {
                         accesstoken = new JwtSecurityTokenHandler().WriteToken(token),
@@ -126,7 +132,30 @@ namespace Primary.Controllers
             catch (InvalidDataException)
             { }
 
+            _logger.LogInformation($"Login failure {login.Username}.");
+
             return Unauthorized();
+        }
+
+        [HttpGet]
+        [Route("users")]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
+        public async Task<IActionResult> GetUsers()
+        {
+            if (ModelState.IsValid)
+            {
+                DisposableList<ApplicationUser> users = new();
+
+                var result = await _userManager.GetUsersForClaimAsync(new Claim(ClaimTypes.Role, "PalisaidUser"));
+                users.AddRange(result);
+
+                result = await _userManager.GetUsersForClaimAsync(new Claim(ClaimTypes.Role, "TenantUser"));
+                users.AddRange(result);
+
+                return Ok(users);
+            }
+
+            return Problem();
         }
 
         [HttpPost]
@@ -157,14 +186,14 @@ namespace Primary.Controllers
                 TenantId = JwtTenantId.Get(Request)
             };
 
-            if (!await _roleManager.RoleExistsAsync("TenantUser"))
-            {
-                await _roleManager.CreateAsync(new IdentityRole("TenantUser"));
-            }
-
             if (await _roleManager.RoleExistsAsync("TenantUser"))
             {
                 await _userManager.AddToRoleAsync(user, "TenantUser");
+            }
+
+            if (await _roleManager.RoleExistsAsync("Everyone"))
+            {
+                await _userManager.AddToRoleAsync(user, "Everyone");
             }
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -179,7 +208,7 @@ namespace Primary.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = errors });
             }
 
-            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+            return Ok(new Response { Status = "Success", Message = $"User {model.Username} created!" });
         }
 
         // Register Palisaid/Principal Users
@@ -211,11 +240,6 @@ namespace Primary.Controllers
                 TenantId = JwtTenantId.Get(Request)
             };
 
-            if (!await _roleManager.RoleExistsAsync("PalisaidUser"))
-            {
-                await _roleManager.CreateAsync(new IdentityRole("PalisaidUser"));
-            }
-
             if (await _roleManager.RoleExistsAsync("PalisaidUser"))
             {
                 await _userManager.AddToRoleAsync(user, "PalisaidUser");
@@ -238,7 +262,7 @@ namespace Primary.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = errors });
             }
 
-            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+            return Ok(new Response { Status = "Success", Message = $"User {model.Username} created!" });
         }
 
         [AllowAnonymous]
@@ -325,7 +349,6 @@ namespace Primary.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("register-admin")]
-        //[Authorize(Roles = "PalisaidRootAdministrator")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminModel? model)
         {
             if (model == null ||
@@ -389,13 +412,14 @@ namespace Primary.Controllers
         }
 
         #region RoleManagement
+
         [HttpGet]
         [Route("role")]
-           public IActionResult GetRoles()
+        public IActionResult GetRoles()
         {
             if (ModelState.IsValid)
             {
-                return Ok( _roleManager.Roles);
+                return Ok(_roleManager.Roles);
             }
 
             return Problem("ModelState INVALID");
@@ -456,7 +480,7 @@ namespace Primary.Controllers
                     return Ok();
                 }
             }
-           
+
             return Problem("ModelState INVALID");
         }
 
@@ -469,12 +493,13 @@ namespace Primary.Controllers
                 var _user = await _userManager.FindByIdAsync(id.ToString());
                 if (_user != null)
                 {
-                    return Ok(await _userManager.GetRolesAsync(_user));                    
+                    return Ok(await _userManager.GetRolesAsync(_user));
                 }
             }
             return Problem("ModelState INVALID");
         }
-        #endregion
+
+        #endregion RoleManagement
 
         [AllowAnonymous]
         [HttpPost]
@@ -640,6 +665,5 @@ namespace Primary.Controllers
 
             return principal;
         }
-
     }
 }
