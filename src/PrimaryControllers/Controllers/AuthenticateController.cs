@@ -183,7 +183,7 @@ namespace Primary.Controllers
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username,
-                TenantId = JwtTenantId.Get(Request)
+                TenantId = model.Tenant
             };
 
             if (await _roleManager.RoleExistsAsync("TenantUser"))
