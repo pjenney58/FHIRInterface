@@ -61,6 +61,10 @@ Deployment is orchestrated by Kubernetes which manages pods for:
 * API Publishing
 * Frontend/User Interface
 
+# Code Best Practices
+## Medium
+https://levelup.gitconnected.com/12-bad-practices-to-avoid-in-asp-net-core-api-controllers-3ba52a10954e
+
 # API Editing in OpenAPI 3
 * https://editor.swagger.io/#/
 * https://editor-next.swagger.io
