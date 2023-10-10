@@ -73,6 +73,11 @@ namespace Primary.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
             if (login == null ||
                 string.IsNullOrEmpty(login.Password) ||
                 string.IsNullOrEmpty(login.Username))
@@ -139,30 +144,35 @@ namespace Primary.Controllers
 
         [HttpGet]
         [Route("users")]
-        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator, PalisaidOwner")]
         public async Task<IActionResult> GetUsers()
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                DisposableList<ApplicationUser> users = new();
-
-                var result = await _userManager.GetUsersForClaimAsync(new Claim(ClaimTypes.Role, "PalisaidUser"));
-                users.AddRange(result);
-
-                result = await _userManager.GetUsersForClaimAsync(new Claim(ClaimTypes.Role, "TenantUser"));
-                users.AddRange(result);
-
-                return Ok(users);
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
             }
 
-            return Problem();
+            DisposableList<ApplicationUser> users = new();
+
+            var result = await _userManager.GetUsersForClaimAsync(new Claim(ClaimTypes.Role, "PalisaidUser"));
+            users.AddRange(result);
+
+            result = await _userManager.GetUsersForClaimAsync(new Claim(ClaimTypes.Role, "TenantUser"));
+            users.AddRange(result);
+
+            return Ok(users);
         }
 
         [HttpPost]
         [Route("register-user")]
-        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator, PalisaidOwner")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterModel? model)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
             if (model == null ||
                 string.IsNullOrEmpty(model.Password) ||
                 string.IsNullOrEmpty(model.Username))
@@ -208,15 +218,20 @@ namespace Primary.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = errors });
             }
 
-            return Ok(new Response { Status = "Success", Message = $"User {model.Username} created!" });
+            return Ok(StatusCodes.Status201Created);
         }
 
         // Register Palisaid/Principal Users
         [HttpPost]
         [Route("principal-user")]
-        [Authorize(Roles = "PalisaidRootAdministrator")]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidOwner")]
         public async Task<IActionResult> RegistePrincipal([FromBody] RegisterModel? model)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
             if (model == null ||
                 string.IsNullOrEmpty(model.Password) ||
                 string.IsNullOrEmpty(model.Username))
@@ -271,6 +286,11 @@ namespace Primary.Controllers
         [Authorize(Roles = "PalisaidOwner")]
         public async Task<IActionResult> RegisterPrincipalAdmin([FromBody] RegisterAdminModel? model)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
             if (model == null ||
                 string.IsNullOrEmpty(model.Password) ||
                 string.IsNullOrEmpty(model.Username))
@@ -300,6 +320,7 @@ namespace Primary.Controllers
                 {
                     errors += $"{error.Code}\n{error.Description}\n";
                 }
+
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = errors });
             }
 
@@ -349,8 +370,14 @@ namespace Primary.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("register-admin")]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidOwner")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminModel? model)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
             if (model == null ||
                 string.IsNullOrEmpty(model.Password) ||
                 string.IsNullOrEmpty(model.Username))
@@ -415,6 +442,7 @@ namespace Primary.Controllers
 
         [HttpGet]
         [Route("role")]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator, PalisaidOwner")]
         public IActionResult GetRoles()
         {
             if (ModelState.IsValid)
@@ -422,40 +450,48 @@ namespace Primary.Controllers
                 return Ok(_roleManager.Roles);
             }
 
-            return Problem("ModelState INVALID");
+            return StatusCode(StatusCodes.Status400BadRequest, ModelState);
         }
 
         [HttpPost]
         [Route("role/{role}")]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator, PalisaidOwner")]
         public async Task<IActionResult> AddRole(string role)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                IdentityResult result = await _roleManager.CreateAsync(new IdentityRole(role));
-                return Ok();
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
             }
 
-            return Problem("ModelState INVALID");
+            IdentityResult result = await _roleManager.CreateAsync(new IdentityRole(role));
+            return Ok();
         }
 
         [HttpDelete]
         [Route("role/{role}")]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator, PalisaidOwner")]
         public async Task<IActionResult> DeleteRole(string role)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                IdentityResult result = await _roleManager.DeleteAsync(new IdentityRole(role));
-                return Ok();
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
             }
 
-            return Problem("ModelState INVALID");
+            IdentityResult result = await _roleManager.DeleteAsync(new IdentityRole(role));
+            return Ok();
         }
 
         [HttpPut]
         [Route("role/{id,role}")]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator, PalisaidOwner")]
         public async Task<IActionResult> AddUserRole(Guid id, string role)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
+            try
             {
                 var _user = await _userManager.FindByIdAsync(id.ToString());
                 if (_user != null)
@@ -463,15 +499,28 @@ namespace Primary.Controllers
                     await _userManager.AddToRoleAsync(_user, role);
                     return Ok();
                 }
+
+                _logger.LogInformation("null _user object return");
             }
-            return Problem("ModelState INVALID");
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex.Message);
+            }
+
+            return BadRequest();
         }
 
         [HttpDelete]
         [Route("role/{id,role}")]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator, PalisaidOwner")]
         public async Task<IActionResult> DeleteUserRole(Guid id, string role)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
+            try
             {
                 var _user = await _userManager.FindByIdAsync(id.ToString());
                 if (_user != null)
@@ -480,15 +529,25 @@ namespace Primary.Controllers
                     return Ok();
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
 
-            return Problem("ModelState INVALID");
+            return StatusCode(StatusCodes.Status400BadRequest, ModelState);
         }
 
         [HttpGet]
         [Route("role/{id}")]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator, PalisaidOwner")]
         public async Task<IActionResult> GetUserRoles(Guid id)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
+            try
             {
                 var _user = await _userManager.FindByIdAsync(id.ToString());
                 if (_user != null)
@@ -496,7 +555,12 @@ namespace Primary.Controllers
                     return Ok(await _userManager.GetRolesAsync(_user));
                 }
             }
-            return Problem("ModelState INVALID");
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return StatusCode(StatusCodes.Status400BadRequest, ModelState);
         }
 
         #endregion RoleManagement
@@ -506,68 +570,67 @@ namespace Primary.Controllers
         [Route("refresh-token")]
         public async Task<IActionResult> RefreshToken(TokenModel tokenModel)
         {
-            if (tokenModel is null)
+            if (tokenModel is null || tokenModel.AccessToken is null || tokenModel.RefreshToken is null)
             {
-                return BadRequest("Invalid client request");
+                return BadRequest("tokenmodel");
             }
 
-            if (tokenModel.AccessToken is null)
+            try
             {
-                return BadRequest("Invalid token");
-            }
+                string? accessToken = tokenModel.AccessToken;
+                string? refreshToken = tokenModel.RefreshToken;
 
-            if (tokenModel.RefreshToken is null)
-            {
-                return BadRequest("Invalid refresh token");
-            }
-
-            string? accessToken = tokenModel.AccessToken;
-            string? refreshToken = tokenModel.RefreshToken;
-
-            var principal = GetPrincipalFromExpiredToken(accessToken);
-            if (principal == null)
-            {
-                return BadRequest("Invalid access token or refresh token");
-            }
+                var principal = GetPrincipalFromExpiredToken(accessToken);
+                if (principal == null)
+                {
+                    return BadRequest("Invalid access token or refresh token");
+                }
 
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-            string username = principal.Identity.Name;
+                string username = principal.Identity.Name;
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
-            var user = await _userManager.FindByNameAsync(username ?? throw new ArgumentNullException("principal.Identity.Name"));
+                var user = await _userManager.FindByNameAsync(username ?? throw new ArgumentNullException("principal.Identity.Name"));
 
-            if (user == null || user.RefreshToken != refreshToken)
-            {
-                return BadRequest("Invalid access token or refresh token");
-            }
-
-            var token = CreateToken(principal.Claims.ToList());
-            var newRefreshToken = GenerateRefreshToken();
-
-            user.RefreshToken = newRefreshToken;
-            user.RefreshTokenExpiryTime = token.ValidFrom;
-
-            Debug.WriteLine($"New refresh token is: {newRefreshToken}");
-
-            var result = await _userManager.UpdateAsync(user);
-
-            if (!result.Succeeded)
-            {
-                Debug.WriteLine($"Failed while updating user");
-                foreach (var error in result.Errors)
+                if (user == null || user.RefreshToken != refreshToken)
                 {
-                    Debug.WriteLine(error.Description);
+                    return BadRequest("Invalid access token or refresh token");
                 }
+
+                var token = CreateToken(principal.Claims.ToList());
+                var newRefreshToken = GenerateRefreshToken();
+
+                user.RefreshToken = newRefreshToken;
+                user.RefreshTokenExpiryTime = token.ValidFrom;
+
+                Debug.WriteLine($"New refresh token is: {newRefreshToken}");
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    Debug.WriteLine($"Failed while updating user");
+                    foreach (var error in result.Errors)
+                    {
+                        Debug.WriteLine(error.Description);
+                    }
+                }
+
+                return Ok(new
+                {
+                    accesstoken = new JwtSecurityTokenHandler().WriteToken(token),
+                    refreshtoken = newRefreshToken,
+                    validTo = token.ValidTo
+                });
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
             }
 
-            return Ok(new
-            {
-                accesstoken = new JwtSecurityTokenHandler().WriteToken(token),
-                refreshtoken = newRefreshToken,
-                validTo = token.ValidTo
-            });
+            return BadRequest();
         }
 
         [HttpPost]

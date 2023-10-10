@@ -25,6 +25,11 @@ namespace Primary.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
             if(_context != null && _context.Patients != null)
             {
                 List<Patient> list;
@@ -35,11 +40,14 @@ namespace Primary.Controllers
                 
                     if(tid == Guid.Empty && User != null)
                     {
-                       if(((System.Security.Claims.ClaimsIdentity)User.Identity).HasClaim("role", "PalisaidRootAdministrator") ||
-                          ((System.Security.Claims.ClaimsIdentity)User.Identity).HasClaim("role", "PalisaidTenantAdministrator"))
+                        if (User.Identity != null)
                         {
-                            list = await Task.Run(() => _context.Patients.ToList());         
-                            return Ok(list.Select(l => new { l?.EntityId, l?.Name?.FamilyName, l?.Name?.FirstName }));
+                            if (((System.Security.Claims.ClaimsIdentity)User.Identity).HasClaim("role", "PalisaidRootAdministrator") ||
+                               ((System.Security.Claims.ClaimsIdentity)User.Identity).HasClaim("role", "PalisaidTenantAdministrator"))
+                            {
+                                list = await Task.Run(() => _context.Patients.ToList());
+                                return Ok(list.Select(l => new { l?.EntityId, l?.Name?.FamilyName, l?.Name?.FirstName }));
+                            }
                         }
 
                         return BadRequest();
@@ -63,6 +71,11 @@ namespace Primary.Controllers
         [HttpGet("{patientid}")]
         public async Task<IActionResult> GetById(string id)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
             if(_context != null && _context.Patients != null)
             {
                 try
@@ -88,6 +101,11 @@ namespace Primary.Controllers
         [HttpGet("{patientname}")]
         public async Task<IActionResult> GetByName(string name)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
             var tid = JwtTenantId.Get(Request);
             return BadRequest("Not Implemented");
         }
@@ -95,6 +113,11 @@ namespace Primary.Controllers
         [HttpGet("notes/{patientid}")]
         public async Task<IActionResult> GetNotes(string id)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
             var tid = JwtTenantId.Get(Request);
             return BadRequest("Not Implemented");
         }
@@ -102,6 +125,11 @@ namespace Primary.Controllers
         [HttpGet("allergies/{patientid}")]
         public async Task<IActionResult> GetAllergies(string id)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
             var tid = JwtTenantId.Get(Request);
             return BadRequest("Not Implemented");
         }
@@ -109,6 +137,11 @@ namespace Primary.Controllers
         [HttpGet("obeservations/{patientid}")]
         public async Task<IActionResult> GetObservations(string id)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
             var tid = JwtTenantId.Get(Request);
             return BadRequest("Not Implemented");
         }
@@ -116,6 +149,11 @@ namespace Primary.Controllers
         [HttpGet("encounters/{patientid}")]
         public async Task<IActionResult> GetEncounters(string id)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
             var tid = JwtTenantId.Get(Request);
             return BadRequest("Not Implemented");
         }
@@ -124,6 +162,11 @@ namespace Primary.Controllers
         [Authorize(Roles="PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Post()
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
             return BadRequest("Not Implemented");
         }
 
@@ -131,6 +174,11 @@ namespace Primary.Controllers
         [Authorize(Roles="PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Put()
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
             return BadRequest("Not Implemented");
         }
 
@@ -138,6 +186,11 @@ namespace Primary.Controllers
         [Authorize(Roles="PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Delete()
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+            
             return BadRequest("Not Implemented");
         }
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
