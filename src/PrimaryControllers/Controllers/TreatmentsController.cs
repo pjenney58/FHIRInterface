@@ -7,7 +7,7 @@ using Support.Model;
 
 namespace Primary.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TreatmentsController : Controller
@@ -22,31 +22,86 @@ namespace Primary.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+       [HttpGet]
+        [Authorize(Roles = "Everyone")]
         public async Task<IActionResult> Get()
         {
-            var tid = JwtTenantId.Get(Request);
-            var docs = _context.Practitioners.ToList();
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
 
-            return BadRequest("Not Implemented");
+            var tid = JwtTenantId.Get(Request);
+
+            try
+            {
+                return BadRequest("Not Implemented");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex.Message);
+                return BadRequest("Error");
+            }
         }
 
         [HttpPost]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Post()
         {
-            return BadRequest("Not Implemented");
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
+            try
+            {
+                return BadRequest("Not Implemented");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex.Message);
+                return BadRequest("Error");
+            }
         }
 
         [HttpPut]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Put()
         {
-            return BadRequest("Not Implemented");
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
+            try
+            {
+                return BadRequest("Not Implemented");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex.Message);
+                return BadRequest("Error");
+            }
         }
 
         [HttpDelete]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Delete()
         {
-            return BadRequest("Not Implemented");
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
+            try
+            {
+                return BadRequest("Not Implemented");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex.Message);
+                return BadRequest("Error");
+            }
         }
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }

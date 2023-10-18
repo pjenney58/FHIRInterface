@@ -5,6 +5,8 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+ENV DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
+
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["src/Codes/Codes.csproj", "src/Codes/"]

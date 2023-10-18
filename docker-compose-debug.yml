@@ -1,19 +1,11 @@
 version: '3.8'
 
-services:
-  Authentication:
-    image: ${DOCKER_REGISTRY-}authentication-api
-    ports:
-      - "5002:80"
-    build:
-      context: .
-      dockerfile: src/Authentication/DebugDockerfile
-    depends_on:
-      - postgres
-    networks:
-      - backend-network
-      
+services:      
   PrimaryConsumerApi:
+    container_name: api-palisaid-consumer
+    environment:
+    - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
+    
     image: ${DOCKER_REGISTRY-}primary-consumer-api
     restart: always
     ports: 
@@ -28,6 +20,7 @@ services:
 
   postgres:
     image: pjenney58/palisaiddb:latest
+    container_name: db-postgres-all
     restart: always
     ports:
       - 5432:5432

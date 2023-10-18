@@ -84,3 +84,4 @@ https://levelup.gitconnected.com/12-bad-practices-to-avoid-in-asp-net-core-api-c
   
   git commit -m "fixed untracked files" 
   
+Go to your Mint Mobile App in the new phone> Login your Account > Go to Account > Find the "Order Replacement Sim" > Change device > Continue to checkout > Fill up the information > You will receive the replacement eSIM via email > Scan the QR code to activate your eSIM on your device.

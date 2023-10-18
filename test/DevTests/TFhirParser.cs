@@ -424,8 +424,11 @@ namespace DevTests
                                                 {
                                                     metaEncounter.TenantId = _tenantId;
                                                     metaEncounter.OwnerId = _tenantId;
-                                                    await _context.AddAsync(metaEncounter);
-                                                    await _context.SaveChangesAsync();
+                                                    if (!_context.Encounters.Contains(metaEncounter))
+                                                    {
+                                                        await _context.AddAsync(metaEncounter);
+                                                        await _context.SaveChangesAsync();
+                                                    }
                                                 }
                                                 catch (Exception ex)
                                                 {
@@ -492,8 +495,11 @@ namespace DevTests
                                         {
                                             metaScrip.TenantId = _tenantId;
                                             metaScrip.OwnerId = _tenantId;
-                                            await _context.AddAsync(metaScrip);
-                                            await _context.SaveChangesAsync();
+                                            if (!_context.Prescriptions.Contains(metaScrip))
+                                            {
+                                                await _context.AddAsync(metaScrip);
+                                                await _context.SaveChangesAsync();
+                                            }
                                         }
                                         catch (Exception ex)
                                         {

@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTests", "test\In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevTests", "test\DevTests\DevTests.csproj", "{1AE08B7F-7D86-4A6F-94B7-71D485F23DE8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vectors", "src\Vectors\Vectors.csproj", "{53BB11D1-D1C5-4821-B16D-211F50531FFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lists", "src\Vectors\Lists.csproj", "{53BB11D1-D1C5-4821-B16D-211F50531FFC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Administration", "src\Administration\Administration.csproj", "{0851325A-6DBE-4679-B884-EF64024F656A}"
 EndProject

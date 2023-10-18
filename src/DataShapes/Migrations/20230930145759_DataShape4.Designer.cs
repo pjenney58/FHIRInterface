@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DataShapes.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataShapes.Migrations
 {
     [DbContext(typeof(DataShapeContext))]
-    partial class DataShapeContextModelSnapshot : ModelSnapshot
+    [Migration("20230930145759_DataShape4")]
+    partial class DataShape4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
