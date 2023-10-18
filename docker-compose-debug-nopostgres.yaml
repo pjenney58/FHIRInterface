@@ -1,12 +1,6 @@
 version: '3.8'
 
 services:
-  Authentication:
-    image: ${DOCKER_REGISTRY-}authentication-api
-    build:
-      context: .
-      dockerfile: src/Authentication/DebugDockerfile
-
   PrimaryConsumerApi:
     image: ${DOCKER_REGISTRY-}primary-consumer-api
     restart: always

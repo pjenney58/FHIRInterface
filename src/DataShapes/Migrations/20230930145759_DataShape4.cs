@@ -95,6 +95,10 @@ namespace DataShapes.Migrations
                 column: "TestResultEntityId",
                 principalTable: "TestResults",
                 principalColumn: "EntityId");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                table: "AspNetUserRoles");
         }
 
         /// <inheritdoc />
