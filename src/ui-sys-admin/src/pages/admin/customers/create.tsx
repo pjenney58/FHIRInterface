@@ -53,41 +53,41 @@ const inputGroups: FormInputGroup<CustomerInputs>[] = [
     ]
   },
   {
-    groupName: 'Address',
+    groupName: 'Main Address',
     fields: [
       {
         label: 'Street 1',
-        name: 'street1',
+        name: 'mainAddress.street1',
         type: 'text',
         required: true
       },
       {
         label: 'Street 2',
-        name: 'street2',
+        name: 'mainAddress.street2',
         type: 'text',
         required: false
       },
       {
         label: 'City',
-        name: 'city',
+        name: 'mainAddress.city',
         type: 'text',
         required: true
       },
       {
         label: 'State',
-        name: 'state',
+        name: 'mainAddress.state',
         required: true,
         component: StateSelect
       },
       {
         label: 'Zip',
-        name: 'zip',
+        name: 'mainAddress.zip',
         type: 'text',
         required: true
       },
       {
         label: 'Country',
-        name: 'country',
+        name: 'mainAddress.country',
         type: 'text',
         required: true
       }

@@ -19,7 +19,6 @@ export interface BillingInfo {
   lastBillingDate: string;
   nextBillingDate: string;
   billingMethod: 'Email' | 'Mail' | 'Print' | 'Other';
-  // redundant of billing? More likely some sub fields, but I'm guessing we don't want to actually handle financial data.
   paymentMethod: 'Credit Card' | 'Bank Transfer' | 'Check' | 'ACH' | 'Other';
 }
 
@@ -80,18 +79,13 @@ export type UserInputs = {
 export type CustomerInputs = {
   name: string;
   phoneNumber: string;
-  street1: string;
-  street2: string;
-  city: string;
-  state: string;
-  zip: string;
-  country: string;
+  mainAddress: Address;
 }
 
 
 export type InputCommonProps<T> = {
   label: string
-  name: keyof T
+  name: Path<T>
   required: boolean
 }
 
