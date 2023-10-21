@@ -5,6 +5,7 @@ using Hl7Harmonizer.Adapters.Model;
 using RandomDataGenerator;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Npgsql;
 
 /*
 extern alias r5;
@@ -392,6 +393,11 @@ namespace DevTests
                                         metaPatient.OwnerId = _tenantId;
                                         await _context.AddAsync(metaPatient);
                                         await _context.SaveChangesAsync();
+                                    }
+                                    catch(NpgsqlException nx)
+                                    {
+                                        var t = nx.GetType();
+                                        continue;
                                     }
                                     catch (Exception ex)
                                     {
