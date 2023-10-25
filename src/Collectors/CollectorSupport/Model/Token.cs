@@ -25,6 +25,7 @@
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 using System.Xml.Serialization;
+using Hl7Harmonizer.Adapters.Interface;
 
 namespace Hl7Harmonizer.Transport.Model
 {

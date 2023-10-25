@@ -1,5 +1,10 @@
-﻿namespace Hl7Harmonizer.Adapters.Model.Dstu2
+﻿
+
+using DataShapes.Model;
+
+namespace Hl7Harmonizer.Adapters.Model.Dstu2
 {
+    /*
     internal class AbstractHandler
     {
         private IHandler _nextHandler;
@@ -27,4 +32,5 @@
             }
         }
     }
+    */
 }

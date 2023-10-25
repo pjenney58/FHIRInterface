@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+using DataShapes.Model;
+
 namespace Hl7Harmonizer.Adapters.Model
 {
     public class AdapterTemplate<IEntity, OEntity> : IAdapter<IEntity, OEntity>

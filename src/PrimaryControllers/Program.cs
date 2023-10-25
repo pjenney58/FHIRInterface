@@ -56,7 +56,6 @@ public class Program
             options.AddPolicy("TenantGroupAdministrator", policy => policy.RequireClaim("TenantGroupAdministrator"));
             options.AddPolicy("TenantUserAdministrator", policy => policy.RequireClaim("TenantUserAdministrator"));
             options.AddPolicy("TenantUser", policy => policy.RequireClaim("TenantUser"));
-
             options.AddPolicy("Everyone", policy => policy.RequireClaim("Everyone"));
         });
 

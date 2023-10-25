@@ -26,9 +26,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\DataShapes\DataShapes.csproj" />
-    <ProjectReference Include="..\..\src\Transformers\HL7TransformationSupport\HL7TransformationSupport.csproj" />
-    <ProjectReference Include="..\..\src\Collectors\CollectorBase\CollectorBase.csproj" />
     <ProjectReference Include="..\..\src\Collectors\CollectorSupport\CollectorSupport.csproj" />
+    <ProjectReference Include="..\..\src\Collectors\Collector\Collector.csproj" />
+    <ProjectReference Include="..\..\src\Transformers\HL7FhirTransformer\HL7FhirTransformer.csproj" />
+    <ProjectReference Include="..\..\src\Transformers\HL7TransformationSupport\HL7TransformationSupport.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="appdataconfig.json" />

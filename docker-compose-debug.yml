@@ -21,16 +21,20 @@ services:
     restart: always
     ports:
       - 5432:5432
+
     deploy:
       endpoint_mode: vip
       labels:
         com.example.description: "This label will appear on the service"
+
     volumes:
       - data:/var/lib/postgresql/data
       - ~/.postgres-data:/mnt/postgres-data
       - ~/.postgres-data:/root/.gnupg
+
     environment:
       POSTGRES_PASSWORD: pgpassword
+
     networks:
       - backend-network
   

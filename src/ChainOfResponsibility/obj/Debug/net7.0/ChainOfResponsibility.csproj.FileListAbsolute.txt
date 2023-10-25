@@ -1,0 +1,5 @@
+/Users/petejenney/Projects/Palisaid-Practice-Management/src/ChainOfResponsibility/obj/Debug/net7.0/ChainOfResponsibility.csproj.AssemblyReference.cache
+/Users/petejenney/Projects/Palisaid-Practice-Management/src/ChainOfResponsibility/obj/Debug/net7.0/ChainOfResponsibility.GeneratedMSBuildEditorConfig.editorconfig
+/Users/petejenney/Projects/Palisaid-Practice-Management/src/ChainOfResponsibility/obj/Debug/net7.0/ChainOfResponsibility.AssemblyInfoInputs.cache
+/Users/petejenney/Projects/Palisaid-Practice-Management/src/ChainOfResponsibility/obj/Debug/net7.0/ChainOfResponsibility.AssemblyInfo.cs
+/Users/petejenney/Projects/Palisaid-Practice-Management/src/ChainOfResponsibility/obj/Debug/net7.0/ChainOfResponsibility.csproj.CoreCompileInputs.cache

@@ -22,6 +22,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 //extern alias stu3;
 //extern alias dstu2;
 
+using DataShapes.Model;
 using Hl7.Fhir.Model;
 
 //using R5 = r5::Hl7.Fhir.Model;

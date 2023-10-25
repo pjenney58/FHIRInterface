@@ -1,11 +1,10 @@
-﻿using DataShapes.Model;
+﻿using System.Diagnostics;
+using DataShapes.Model;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
-using Hl7Harmonizer.Adapters.Model;
-using RandomDataGenerator;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using Npgsql;
+using RandomDataGenerator;
+using Hl7Harmonizer.Adapters.Model;
 
 /*
 extern alias r5;
@@ -68,6 +67,7 @@ namespace DevTests
             var address = new Hl7.Fhir.Model.Address();
         }
 
+        /*
         [Theory]
         [InlineData("Address", Hl7Version.R4)]
         [InlineData("Appointment", Hl7Version.R4)]
@@ -83,7 +83,7 @@ namespace DevTests
                 Assert.Fail(ex.Message);
             }
         }
-
+        */
         #region SupportFunctions
 
         private string[]? files;

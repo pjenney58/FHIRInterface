@@ -18,6 +18,8 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 
+using DataShapes.Model;
+
 namespace Hl7Harmonizer.Adapters.Model.Dstu2
 {
     public class AdditionalInfoAdapter<IEntity, OEntity> : IAdapter<IEntity, OEntity>
