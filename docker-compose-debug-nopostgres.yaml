@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  PrimaryConsumerApi:
+    image: ${DOCKER_REGISTRY-}primary-consumer-api
+    restart: always
+    ports: 
+      - "5001:80"
+    build:
+      context: .
+      dockerfile: src/PrimaryControllers/DebugDockerfile
+              
+volumes:
+  data:
+
+# petejenney@bert data % docker network connect bridge palisaid-practice-management-PrimaryConsumerApi-1
+# petejenney@bert data % docker network disconnect palisaid-practice-management_default palisaid-practice-management-PrimaryConsumerApi-1

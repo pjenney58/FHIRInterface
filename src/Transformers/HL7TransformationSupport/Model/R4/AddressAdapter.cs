@@ -201,8 +201,8 @@ namespace Hl7Harmonizer.Adapters.Model.R4
             Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
 
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Address => DataShapes.Model..Address", Hl7Version.R4), ConvertR4FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model..Address => Hl7.Fhir.Model.Address", Hl7Version.R4), ConvertMetaToR4Fhir }            
+                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Address => DataShapes.Model.Address", Hl7Version.R4), ConvertR4FhirToMeta },
+                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Address => Hl7.Fhir.Model.Address", Hl7Version.R4), ConvertMetaToR4Fhir }            
             };
 
             payloadIN = payload;

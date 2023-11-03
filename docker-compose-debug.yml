@@ -1,8 +1,43 @@
-version: '3.5'
+version: '3.8'
 
-services:
-  Authentication:
-    image: ${DOCKER_REGISTRY-}authentication-api
+services:      
+  PrimaryConsumerApi:
+    container_name: api-palisaid-consumer
+    environment:
+    - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
+    
+    image: ${DOCKER_REGISTRY-}primary-consumer-api
+    restart: always
+    ports: 
+      - "5001:80"
     build:
       context: .
-      dockerfile: src/Authentication/DebugDockerfile
+      dockerfile: src/PrimaryControllers/DebugDockerfile
+    depends_on:
+      - postgres
+    networks:
+      - backend-network
+
+  postgres:
+    image: pjenney58/palisaiddb:latest
+    container_name: db-postgres-all
+    restart: always
+    ports:
+      - 5432:5432
+    deploy:
+      endpoint_mode: vip
+      labels:
+        com.example.description: "This label will appear on the service"
+    volumes:
+      - data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: pgpassword
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge
+
+volumes:
+  data:

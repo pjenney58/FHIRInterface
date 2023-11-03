@@ -23,7 +23,8 @@ namespace Support.Model
                 }
             }
 
-            throw new InvalidDataException("JwtToken Incomplete");
+            return default;
+            //throw new InvalidDataException("JwtToken Incomplete");
         }
     }
 }

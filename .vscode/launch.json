@@ -2,17 +2,26 @@
     "version": "0.2.0",
     "configurations": [             
         {
+            "name": "Docker .NET Attach (Preview)",
+            "type": "docker",
+            "request": "attach",
+            "platform": "netCore",
+            "sourceFileMap": {
+                "/src": "${workspaceFolder}"
+            }
+        },
+        {
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"
         },
         {
-            "name": "Docker .NET Launch",
+            "name": "Docker .NET Launch PrimaryControllers",
             "type": "docker",
             "request": "launch",
             "preLaunchTask": "docker-run: debug",
             "netCore": {
-                "appProject": "${workspaceFolder}/src/Administration/Administration.csproj"
+                "appProject": "${workspaceFolder}/src/PrimaryControllers/Primary.csproj"
             }
         }
     ]

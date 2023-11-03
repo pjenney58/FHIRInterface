@@ -18,7 +18,7 @@ namespace DataShapes.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "hstore");
@@ -1144,6 +1144,9 @@ namespace DataShapes.Migrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("TestResultEntityId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Text")
                         .HasColumnType("text");
 
@@ -1153,6 +1156,8 @@ namespace DataShapes.Migrations
                     b.HasKey("EntityId");
 
                     b.HasIndex("DiagnosisEntityId");
+
+                    b.HasIndex("TestResultEntityId");
 
                     b.ToTable("Note");
                 });
@@ -1484,7 +1489,7 @@ namespace DataShapes.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("HipaaChangeDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("HipaaDataTransmitAuthentication")
                         .HasColumnType("boolean");
@@ -2101,6 +2106,111 @@ namespace DataShapes.Migrations
                     b.ToTable("Tenants");
                 });
 
+            modelBuilder.Entity("DataShapes.Model.TestResult", b =>
+                {
+                    b.Property<Guid>("EntityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreateDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("EndDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset>("LastUpdate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RequestedByPractionerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("RunDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("StartDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TestEncounterId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TestLocationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("TestType")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("TestedPatientId")
+                        .HasColumnType("uuid");
+
+                    b.Property<long>("Version")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("EntityId");
+
+                    b.ToTable("TestResults");
+                });
+
+            modelBuilder.Entity("DataShapes.Model.TestResultValue", b =>
+                {
+                    b.Property<Guid>("EntityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreateDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset>("LastUpdate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("TestResultEntityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("TestType")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Unit")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("numeric");
+
+                    b.Property<long>("Version")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("EntityId");
+
+                    b.HasIndex("TestResultEntityId");
+
+                    b.ToTable("TestResultValuess");
+                });
+
             modelBuilder.Entity("DataShapes.Model.Treatment", b =>
                 {
                     b.Property<Guid>("EntityId")
@@ -2499,6 +2609,10 @@ namespace DataShapes.Migrations
                     b.HasOne("DataShapes.Model.Diagnosis", null)
                         .WithMany("Notes")
                         .HasForeignKey("DiagnosisEntityId");
+
+                    b.HasOne("DataShapes.Model.TestResult", null)
+                        .WithMany("TestNotes")
+                        .HasForeignKey("TestResultEntityId");
                 });
 
             modelBuilder.Entity("DataShapes.Model.Observation", b =>
@@ -2696,6 +2810,13 @@ namespace DataShapes.Migrations
                         .HasForeignKey("PatientEntityId");
                 });
 
+            modelBuilder.Entity("DataShapes.Model.TestResultValue", b =>
+                {
+                    b.HasOne("DataShapes.Model.TestResult", null)
+                        .WithMany("Items")
+                        .HasForeignKey("TestResultEntityId");
+                });
+
             modelBuilder.Entity("DataShapes.Model.Treatment", b =>
                 {
                     b.HasOne("DataShapes.Model.Diagnosis", "Diagnosis")
@@ -2865,6 +2986,13 @@ namespace DataShapes.Migrations
                     b.Navigation("Contacts");
 
                     b.Navigation("PaymentMethods");
+                });
+
+            modelBuilder.Entity("DataShapes.Model.TestResult", b =>
+                {
+                    b.Navigation("Items");
+
+                    b.Navigation("TestNotes");
                 });
 
             modelBuilder.Entity("DataShapes.Model.Treatment", b =>
