@@ -1,0 +1,22 @@
+.paymentStatus {
+    display: block;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    text-align: left;
+  }
+  
+  .paymentStatus.overdue {
+    background-color: var(--red);
+  }
+  
+  .paymentStatus.paid {
+    background-color: var(--green);
+  }
+  
+  .paymentStatus.pending {
+    background-color: var(--yellow);
+  }
+  
+  .paymentStatus.due {
+    background-color: var(--blue);
+  }
