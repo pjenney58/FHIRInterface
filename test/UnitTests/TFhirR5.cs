@@ -1,9 +1,9 @@
 ﻿namespace UnitTests
 {
-    public class R2UnitTest
+    public class R5UnitTest
     {
         [Fact]
-        public void Test1()
+        public void R5Test1()
         {
         }
     }

@@ -1,10 +1,10 @@
-﻿namespace UnitTests;
-
-public class UnitTest1
+﻿namespace UnitTests
 {
-    [Fact]
-    public void Test1()
+    public class R3UnitTest
     {
-
+        [Fact]
+        public void R3Test1()
+        {
+        }
     }
 }

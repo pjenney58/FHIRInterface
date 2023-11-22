@@ -16,8 +16,8 @@
 		<None Remove="Model\DSTU2\" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="NLog" Version="5.2.5" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />
+	  <PackageReference Include="NLog" Version="5.2.6" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
 	  <PackageReference Include="Hl7.Fhir.R4" Version="5.4.0" />
 	</ItemGroup>
 	<ItemGroup>

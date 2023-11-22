@@ -1,8 +1,9 @@
-﻿namespace UnitTests;
-
-public class TFhirR4
+﻿namespace UnitTests
 {
-    [Fact]
-    public void Test1()
-    { }
+    public class R4UnitTests
+    {
+        [Fact]
+        public void Test1()
+        { }
+    }
 }

@@ -1,23 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Model\" />
-    <None Remove="Interface\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-    <Folder Include="Interface\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Support\Support.csproj" />
-    <ProjectReference Include="..\DataShapes\DataShapes.csproj" />
-    <ProjectReference Include="..\CollectorFactory\CollectorFactory.csproj" />
-    <ProjectReference Include="..\Collectors\Collector\Collector.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Support\Support.csproj" />
+		<ProjectReference Include="..\DataShapes\DataShapes.csproj" />
+		<ProjectReference Include="..\CollectorFactory\CollectorFactory.csproj" />
+		<ProjectReference Include="..\Collectors\Collector\Collector.csproj" />
+	</ItemGroup>
 </Project>
