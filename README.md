@@ -61,6 +61,10 @@ Deployment is orchestrated by Kubernetes which manages pods for:
 * API Publishing
 * Frontend/User Interface
 
+# Code Best Practices
+## Medium
+https://levelup.gitconnected.com/12-bad-practices-to-avoid-in-asp-net-core-api-controllers-3ba52a10954e
+
 # API Editing in OpenAPI 3
 * https://editor.swagger.io/#/
 * https://editor-next.swagger.io
@@ -69,8 +73,15 @@ Deployment is orchestrated by Kubernetes which manages pods for:
   How to fix git when .git ignore is ignored and filtered items are included
 
   git rm -r --cached .
-  
   git add .
+  
+  How to repair a confused solution/ projects
+
+  Open Nuget Package Manager
+    Update-Package -reinstall
+  
+  
   
   git commit -m "fixed untracked files" 
   
+Go to your Mint Mobile App in the new phone> Login your Account > Go to Account > Find the "Order Replacement Sim" > Change device > Continue to checkout > Fill up the information > You will receive the replacement eSIM via email > Scan the QR code to activate your eSIM on your device.
