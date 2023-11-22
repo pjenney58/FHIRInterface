@@ -6,8 +6,7 @@ namespace Collector.Model
 	public class Fhir4Collector : ICollector
 	{
 		public Fhir4Collector()
-		{
-		}
+        { }
 
         public Task Configure()
         {

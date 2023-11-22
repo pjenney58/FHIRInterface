@@ -1,10 +1,18 @@
 ﻿using System;
 using Collector.Interface;
+using Confluent.Kafka;
 
 namespace Collector.Model
 {
 	public class Fhir5Collector : ICollector
 	{
+        ConsumerConfig kconfig = new()
+        {
+            GroupId = "Collectors",
+            BootstrapServers = "localhost:9002",
+            AutoOffsetReset = AutoOffsetReset.Earliest
+        };
+
 		public Fhir5Collector()
 		{
 		}
