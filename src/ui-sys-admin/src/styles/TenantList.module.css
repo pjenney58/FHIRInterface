@@ -1,0 +1,26 @@
+.tenantList {
+  display: flex;
+  flex-direction: column;
+  padding: 0 6rem;
+  min-height: 100vh;
+  max-width: 90%;
+  margin: 0 auto;
+  list-style: none;
+}
+
+.tenantListItem {
+  border: 1px solid var(--border-primary);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  box-shadow: var(--elevation_1);
+  background-color: var(--white);
+  display: flex;
+  justify-content: space-between;
+}
+
+.tenantListItem h4 {
+  margin-bottom: 0.5rem;
+  margin-top: 0;
+}

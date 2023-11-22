@@ -1,0 +1,30 @@
+.inputWrapper {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+    padding: 0 1rem;
+}
+
+.inputWrapper>label {
+    margin-bottom: 0.5rem;
+}
+
+.inputWrapper>input {
+    background-color: none;
+    display: block;
+    width: 100%;
+    padding: 0.6rem .8rem;
+    font-size: 1.1rem;
+    border: none;
+    box-shadow: inset 0 0 0 1px var(--border-primary);
+    border-radius: var(--border-radius-sm);
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.inputWrapper>input:focus {
+    /* Both is overkill, but is just the inset good enough for a11y? */
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+    /* box-shadow: inset 0 0 0 1px var(--blue); */
+}
