@@ -70,17 +70,16 @@ https://levelup.gitconnected.com/12-bad-practices-to-avoid-in-asp-net-core-api-c
 * https://editor-next.swagger.io
 
 # Good To Know
-  How to fix git when .git ignore is ignored and filtered items are included
+## How to fix git when .git ignore is ignored and filtered items are included
 
   git rm -r --cached .
   
   git add .
   
-  How to repair a confused solution/ projects
+  git commit -m "fixed untracked files" 
+  
+## How to repair a confused solution/ projects
 
   Open Nuget Package Manager
   
     Update-Package -reinstall
-  
-  git commit -m "fixed untracked files" 
-  
