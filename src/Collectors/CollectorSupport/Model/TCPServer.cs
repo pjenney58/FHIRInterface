@@ -23,6 +23,7 @@
 */
 
 using CollectorSupport;
+using Hl7Harmonizer.Adapters.Interface;
 
 namespace Hl7Harmonizer.Transport.Model
 {

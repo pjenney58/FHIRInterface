@@ -40,9 +40,9 @@ namespace Primary.Controllers
                 
                     if(tid == Guid.Empty && User != null)
                     {
-                        if (User.Identity != null)
+                        if (User.Identity != null) 
                         {
-                            if (((System.Security.Claims.ClaimsIdentity)User.Identity).HasClaim("role", "PalisaidRootAdministrator") ||
+                            if (((System.Security.Claims.ClaimsIdentity)User.Identity).HasClaim("role","PalisaidRootAdministrator") ||
                                ((System.Security.Claims.ClaimsIdentity)User.Identity).HasClaim("role", "PalisaidTenantAdministrator"))
                             {
                                 list = await Task.Run(() => _context.Patients.ToList());

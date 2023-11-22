@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -10,9 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
-    <PackageReference Include="xunit" Version="2.5.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.1">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.6.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -20,15 +20,16 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Hl7.Fhir.R4" Version="5.3.0" />
+    <PackageReference Include="Hl7.Fhir.R4" Version="5.4.0" />
     <PackageReference Include="Bogus" Version="34.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\DataShapes\DataShapes.csproj" />
-    <ProjectReference Include="..\..\src\Transformers\HL7TransformationSupport\HL7TransformationSupport.csproj" />
-    <ProjectReference Include="..\..\src\Collectors\CollectorBase\CollectorBase.csproj" />
     <ProjectReference Include="..\..\src\Collectors\CollectorSupport\CollectorSupport.csproj" />
+    <ProjectReference Include="..\..\src\Collectors\Collector\Collector.csproj" />
+    <ProjectReference Include="..\..\src\Transformers\HL7FhirTransformer\HL7FhirTransformer.csproj" />
+    <ProjectReference Include="..\..\src\Transformers\HL7TransformationSupport\HL7TransformationSupport.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="appdataconfig.json" />

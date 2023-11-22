@@ -1,5 +1,6 @@
 ﻿namespace Hl7Harmonizer.Adapters.Model.Stu3
 {
+    /*
     internal class AbstractHandler
     {
         private IHandler _nextHandler;
@@ -26,5 +27,5 @@
                 return null;
             }
         }
-    }
+    }*/
 }

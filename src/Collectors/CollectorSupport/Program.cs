@@ -34,6 +34,7 @@ namespace CollectorSupport
                 .Remove((IRequestCultureProvider)typeof(AcceptLanguageHeaderRequestCultureProvider));
             });
 
+            
             builder.Services.AddTransient<MessageService>();
 
             // Add services to the container.

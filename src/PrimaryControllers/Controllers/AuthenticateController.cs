@@ -1,7 +1,7 @@
 ﻿/*
- * Software License - CareEventsController.cs
+ * Software License - AuthenticateController.cs
  *
- *  Copyright (c) 2022-Present by Sand Drift Software, LLC
+ *  Copyright (c) 2022-Present by Palisaid, LLC
  *
  * Permission is hereby granted, in consideration of a license fee or agreement,
    * to any person obtaining a copy of this software and associated documentation

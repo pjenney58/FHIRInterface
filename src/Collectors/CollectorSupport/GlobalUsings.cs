@@ -8,7 +8,6 @@ global using System.Text.Json;
 
 global using DataShapes.Model;
 
-global using Hl7Harmonizer.Support.Interface;
 global using Hl7Harmonizer.Support.Model;
 
 global using RestSharp;

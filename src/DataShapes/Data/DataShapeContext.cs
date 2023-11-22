@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DataShapes.Model
 {
@@ -106,6 +108,27 @@ namespace DataShapes.Model
 
             // TODO: Unravel the stupid PostgreSQL => DateTimeOffset issue
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+            //  Ensure the palisaid role exists. It gets reset wvery time there's a dccker image
+            using (var _connection= new Npgsql.NpgsqlConnection("root"))
+            {
+                _connection.Open();
+
+                using (var _command = new NpgsqlCommand())
+                {
+                    _command.CommandText =
+                            $@"do $$
+                            begin
+                                IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'palisaid') then
+                                    CREATE ROLE palisaid LOGIN PASSWORD 'password' SUPERUSER INHERIT CREATEDB CREATEROLE REPLICATION;
+                                end if;
+                            end
+                            $$language plpgsql";
+                    
+                    _command.ExecuteNonQuery(); ;
+                }
+            
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

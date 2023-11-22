@@ -20,14 +20,15 @@ namespace DataShapes.Model
     {
         HL7v2,
         HL7v3,
-        HL7_Fhirv4,
-        HL7_Fhirv4b,
-        HL7_Fhirv5,
-        HL7_FhirvStu2,
-        HL7_FhirvStu3,
+        Fhirv4,
+        Fhirv4b,
+        Fhirv5,
+        FhirvStu2,
+        FhirvStu3,
         CDA,
         CCDA,
         DICOM,
+        X12,
         Unknown
     };
 
@@ -64,6 +65,8 @@ namespace DataShapes.Model
         public Uri? TargetUri { get; set; }
         public string? TargetIp { get; set; }
         public string? TargetPort { get; set; }
+
+        // Database?
         public string? ConnectionString { get; set; }
 
         public decimal TimerDurationMilliseconds { get; set; }
@@ -156,7 +159,6 @@ namespace DataShapes.Model
     {
         [Key]
         public Guid EntityId { get; set; }
-
         public DateTimeOffset Timestamp { get; set; }
         public LogRecordState State { get; set; }
         public string? TargetName { get; set; }

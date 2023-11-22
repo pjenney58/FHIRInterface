@@ -1,4 +1,5 @@
 ﻿using CollectorSupport.Interface;
+using Hl7Harmonizer.Adapters.Interface;
 
 namespace CollectorSupport.Model
 {

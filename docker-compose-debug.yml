@@ -13,8 +13,7 @@ services:
     build:
       context: .
       dockerfile: src/PrimaryControllers/DebugDockerfile
-    depends_on:
-      - postgres
+    
     networks:
       - backend-network
 
@@ -24,14 +23,34 @@ services:
     restart: always
     ports:
       - 5432:5432
+
     deploy:
       endpoint_mode: vip
       labels:
         com.example.description: "This label will appear on the service"
+
     volumes:
       - data:/var/lib/postgresql/data
+      - ~/.postgres-data:/mnt/postgres-data
+      - ~/.postgres-data:/root/.gnupg
+
     environment:
       POSTGRES_PASSWORD: pgpassword
+
+    networks:
+      - backend-network
+  
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pete.jenney@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    ports:
+      - "5050:80"
     networks:
       - backend-network
 
