@@ -21,7 +21,7 @@ using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 
-namespace Hl7Harmonizer.Adapters.Model
+namespace Support.Model
 {
     public class MailAlert
     {

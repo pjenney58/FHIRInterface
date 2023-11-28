@@ -1,2 +1,2 @@
-﻿global using Hl7Harmonizer.Adapters.Interface;
+﻿global using Support.Interface;
 global using DataShapes.Model;

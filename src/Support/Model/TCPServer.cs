@@ -22,16 +22,18 @@
 * SOFTWARE.
 */
 
-using CollectorSupport;
-using Hl7Harmonizer.Adapters.Interface;
+using Support.Interface;
+using System.Net;
+using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 
-namespace Hl7Harmonizer.Transport.Model
+namespace Support.Model
 {
     internal class TCPServer : IDisposable
     {
         private readonly IBaseEventLogger logger = new BaseEventLogger("WorkingServer");
 
-        private MessageService _local;
+        //private MessageService _local;
 
         private TcpListener listener;
         public EndPoint RemoteEndPoint;
@@ -52,7 +54,8 @@ namespace Hl7Harmonizer.Transport.Model
         /// <summary>
         /// Statefull or Stateless
         /// </summary>
-        public ConnectionType ConnectionType { get; set; }
+
+        //public ConnectionType ConnectionType { get; set; }
 
         public TCPServer(string port, bool secure)
         {
@@ -63,7 +66,7 @@ namespace Hl7Harmonizer.Transport.Model
 
         private void AcceptStream(IAsyncResult asyncResult)
         {
-            logger.ReportInfo(_local.getstring("AcceptingIncomingClient"));
+            logger.ReportInfo("AcceptingIncomingClient");
 
             try
             {
@@ -97,7 +100,7 @@ namespace Hl7Harmonizer.Transport.Model
 
                 if (workingClient.TcpClient.Available > 0)
                 {
-                    logger.ReportTrace(_local["StartProcessRecord"]);
+                    logger.ReportTrace("StartProcessRecord");
                     var data = workingClient.Read();
                     // Now do something with it
                 }

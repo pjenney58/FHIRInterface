@@ -30,6 +30,8 @@
     <ProjectReference Include="..\..\src\Collectors\Collector\Collector.csproj" />
     <ProjectReference Include="..\..\src\Transformers\HL7FhirTransformer\HL7FhirTransformer.csproj" />
     <ProjectReference Include="..\..\src\Transformers\HL7TransformationSupport\HL7TransformationSupport.csproj" />
+    <ProjectReference Include="..\..\src\Transporters\MLLPTransporter\MLLPTransporter.csproj" />
+    <ProjectReference Include="..\..\src\Transporters\Transporter\Transporter.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="appdataconfig.json" />

@@ -22,15 +22,17 @@
 * SOFTWARE.
 */
 
-using CollectorSupport;
-using Hl7Harmonizer.Adapters.Interface;
+using Support.Interface;
+using System.Net;
+using System.Net.Security;
+using System.Net.Sockets;
+using System.Text;
 
-namespace Hl7Harmonizer.Transport.Model
+namespace Support.Model
 {
     public class TCPClient : IDisposable
     {
         private readonly IBaseEventLogger logger = new BaseEventLogger("WorkingClient");
-        private MessageService _local;
         private const int buflen = 4096;
         private bool _isSecure;
 
@@ -41,11 +43,15 @@ namespace Hl7Harmonizer.Transport.Model
             {
                 if (tcpClient == null)
                 {
-                    throw new InvalidOperationException(_local["NullClientSecurity"]);
+                    throw new InvalidOperationException("NullClientSecurity");
                 }
 
                 _isSecure = value;
-                Stream = _isSecure ? new SslStream(tcpClient.GetStream()) : tcpClient.GetStream();
+
+                Stream = _isSecure
+                    ? new SslStream(tcpClient.GetStream())
+                    : tcpClient.GetStream();
+
                 CanRead = Stream.CanRead;
                 CanWrite = Stream.CanWrite;
                 Stream.WriteTimeout = 10000;
@@ -106,7 +112,7 @@ namespace Hl7Harmonizer.Transport.Model
             }
             catch (Exception ex)
             {
-                logger.ReportError($"{_local["FailedClientCreate"]} {ex.Message}");
+                logger.ReportError($"FailedClientCreate {ex.Message}");
                 throw;
             }
 
@@ -141,7 +147,7 @@ namespace Hl7Harmonizer.Transport.Model
                 throw new ArgumentNullException(nameof(ar));
             }
 
-            logger.ReportTrace(_local["WritingSecureStream"]);
+            logger.ReportTrace("WritingSecureStream");
 
             SslStream? stream = ar.AsyncState as SslStream;
 
@@ -158,7 +164,7 @@ namespace Hl7Harmonizer.Transport.Model
 
         private void SecureReadCallback(IAsyncResult ar)
         {
-            logger.ReportTrace(_local["ReadingSecureStream"]);
+            logger.ReportTrace("ReadingSecureStream");
 
             SslStream? stream = ar.AsyncState as SslStream;
 
@@ -182,7 +188,7 @@ namespace Hl7Harmonizer.Transport.Model
 
         private void ClearWriteCallback(IAsyncResult ar)
         {
-            logger.ReportTrace(_local["WritingClearStream"]);
+            logger.ReportTrace("WritingClearStream");
 
             NetworkStream? stream = ar.AsyncState as NetworkStream;
 
@@ -198,7 +204,7 @@ namespace Hl7Harmonizer.Transport.Model
 
         private void ClearReadCallback(IAsyncResult ar)
         {
-            logger.ReportTrace(_local["ReadingClearStream"]);
+            logger.ReportTrace("ReadingClearStream");
             dataAvailable = false;
 
             NetworkStream? stream = ar.AsyncState as NetworkStream;
@@ -222,7 +228,7 @@ namespace Hl7Harmonizer.Transport.Model
         {
             if (Stream == null)
             {
-                throw new InvalidOperationException(_local["IoStreamNull"]);
+                throw new InvalidOperationException("IoStreamNull");
             }
 
             lock (byteIoBuffer)
@@ -243,12 +249,12 @@ namespace Hl7Harmonizer.Transport.Model
         {
             if (Stream == null)
             {
-                throw new InvalidOperationException(_local["IoStreamNull"]);
+                throw new InvalidOperationException("IoStreamNull");
             }
 
             if (string.IsNullOrEmpty(data))
             {
-                throw new ArgumentNullException(_local["DataArgNull"]);
+                throw new ArgumentNullException("DataArgNull");
             }
 
             lock (byteIoBuffer)
@@ -279,7 +285,6 @@ namespace Hl7Harmonizer.Transport.Model
 
         public void Dispose()
         {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }

@@ -44,6 +44,6 @@
     <ProjectReference Include="..\..\DataShapes\DataShapes.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Transformers\HL7TransformationSupport\HL7TransformationSupport.csproj" />
+    <ProjectReference Include="..\..\Support\Support.csproj" />
   </ItemGroup>
 </Project>

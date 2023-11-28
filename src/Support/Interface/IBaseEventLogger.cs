@@ -17,7 +17,7 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-namespace Hl7Harmonizer.Adapters.Interface
+namespace Support.Interface
 {
     public interface IBaseEventLogger
     {

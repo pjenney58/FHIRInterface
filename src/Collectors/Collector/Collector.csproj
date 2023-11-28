@@ -28,5 +28,6 @@
     <ProjectReference Include="..\..\DataShapes\DataShapes.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\Transporters\Transporter\Transporter.csproj" />
   </ItemGroup>
 </Project>

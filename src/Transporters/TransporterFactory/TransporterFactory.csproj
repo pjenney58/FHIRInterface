@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MLLPTransporter\MLLPTransporter.csproj" />
+    <ProjectReference Include="..\RESTTransporter\RESTTransporter.csproj" />
+    <ProjectReference Include="..\TCPIPTransporter\TCPIPTransporter.csproj" />
+    <ProjectReference Include="..\Transporter\Transporter.csproj" />
+  </ItemGroup>
+
+</Project>
