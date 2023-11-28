@@ -1,6 +1,8 @@
-﻿using Support.Interface;
+﻿using Confluent.Kafka;
+using Support.Interface;
 using Support.Model;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 
 namespace Transporter.Model
 {
@@ -20,6 +22,43 @@ namespace Transporter.Model
 
         public MllpClient()
         { }
+
+        private async Task WaitForCommand()
+        {
+            bool cancelled = false;
+            CancellationToken cancellationToken = new CancellationToken();
+
+            using (var consumer = new ConsumerBuilder<Null, string>(kcconfig).Build())
+            {
+                // Wait for a call to action, the collector will send a message to poll
+                consumer.Subscribe("schedular");
+
+                while (!cancelled)
+                {
+                    var consumeResult = consumer.Consume(cancellationToken);
+
+                    switch (consumeResult.Message.Value.ToLower())
+                    {
+                        case "poll":
+                            using (var producer = new ProducerBuilder<string, string>(kpconfig).Build())
+                            {
+                                foreach (var message in Read())
+                                {
+                                    await producer.ProduceAsync("hl7records", new Message<string, string> { Key = GetHash(message), Value = message });
+                                }
+                            }
+                            break;
+
+                        case "shutdown":
+                            Environment.Exit(0);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
 
         private TCPClient InternalConnect()
         {
@@ -93,6 +132,11 @@ namespace Transporter.Model
             }
 
             return Task.CompletedTask;
+        }
+
+        public override void Dispose()
+        {
+            client.Dispose();
         }
     }
 }

@@ -28,6 +28,7 @@ namespace DevTests
 
         private DataShapeContext _context;
         private Guid _tenantId = Guid.NewGuid();
+
         public TFhirParser()
         {
             //GetRandomMetaPatient();
@@ -84,6 +85,7 @@ namespace DevTests
             }
         }
         */
+
         #region SupportFunctions
 
         private string[]? files;
@@ -394,7 +396,7 @@ namespace DevTests
                                         await _context.AddAsync(metaPatient);
                                         await _context.SaveChangesAsync();
                                     }
-                                    catch(NpgsqlException nx)
+                                    catch (NpgsqlException nx)
                                     {
                                         var t = nx.GetType();
                                         continue;

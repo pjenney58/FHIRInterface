@@ -16,9 +16,9 @@
 		<None Remove="Model\DSTU2\" />
 	</ItemGroup>
 	<ItemGroup>
+	  <PackageReference Include="Hl7.Fhir.R4" Version="4.3.0" />
 	  <PackageReference Include="NLog" Version="5.2.6" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
-	  <PackageReference Include="Hl7.Fhir.R4" Version="5.4.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Remove="Model\ScheduleAdapter.cs" />

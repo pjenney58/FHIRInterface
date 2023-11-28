@@ -1,16 +1,8 @@
-﻿using Transporter.Model;
-using Transporter.Interface;
-using System.Net.Sockets;
-using Support.Model;
-
-namespace Transporter.Model
+﻿namespace Transporter.Model
 {
-    public class TransporterFactory
+    public static class TransporterFactory
     {
-        public TransporterFactory()
-        { }
-
-        public Transporter CreateTransporter(string transporterType)
+        public static Transporter CreateTransporter(string transporterType)
         {
             switch (transporterType.ToLower())
             {

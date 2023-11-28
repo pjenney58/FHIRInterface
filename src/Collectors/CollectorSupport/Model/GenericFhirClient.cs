@@ -7,14 +7,14 @@ using Task = System.Threading.Tasks.Task;
 
 namespace CollectorSupport.Model
 {
-	public class GenericFhirClient //: IClient
-	{
-        BaseFhirClient client;
-        Uri target;
+    public class GenericFhirClient //: IClient
+    {
+        private BaseFhirClient client;
+        private Uri target;
 
         public GenericFhirClient()
-		{
-		}
+        {
+        }
 
         public List<string> Messages
         {
@@ -31,7 +31,7 @@ namespace CollectorSupport.Model
                 Timeout = 0,
                 PreferredFormat = ResourceFormat.Json,
                 VerifyFhirVersion = true,
-                ReturnPreference = ReturnPreference.Minimal
+                //ReturnPreference = ReturnPreference.Minimal
             };
 
             try
@@ -39,7 +39,7 @@ namespace CollectorSupport.Model
                 //client = new FhirClient(target.OriginalString, settings).WithStrictSerializer();
                 client = new FhirClient(target.OriginalString);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
@@ -69,4 +69,3 @@ namespace CollectorSupport.Model
         }
     }
 }
-

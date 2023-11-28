@@ -20,7 +20,6 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 using DataShapes.Model;
 using Hl7.Fhir.Model;
 
-
 namespace Hl7Harmonizer.Adapters.Model.Stu3
 {
     public class EncounterAdapter<IEntity, OEntity> : IAdapter<IEntity, OEntity>
@@ -138,7 +137,6 @@ namespace Hl7Harmonizer.Adapters.Model.Stu3
                 {
                     foreach (var code in rc.Coding)
                     {
-
                         var cd = new DataShapes.Model.Code()
                         {
                             CodingSystem = GetCodingSystem(code.System),

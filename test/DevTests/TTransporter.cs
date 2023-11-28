@@ -1,23 +1,28 @@
 ﻿using System.Net;
 using Transporter.Model;
-using Transporter.MLLP.Model;
 using Transporter.Interface;
 
-namespace DevTests
+namespace DevTests.Transporter
 {
-    internal class TTransporter
+    public class TTransporter
     {
         public TTransporter()
         {
         }
 
+        [Fact]
         public async Task Connect()
         {
             try
             {
-                ITransporter mllptransporter = new MllpClient();
-
+                global::Transporter.Model.Transporter mllptransporter = TransporterFactory.CreateTransporter("mllp");
                 Assert.NotNull(mllptransporter);
+
+                global::Transporter.Model.Transporter tcptransporter = TransporterFactory.CreateTransporter("tcpip");
+                Assert.NotNull(tcptransporter);
+
+                global::Transporter.Model.Transporter resttransporter = TransporterFactory.CreateTransporter("rest");
+                Assert.NotNull(resttransporter);
             }
             catch (Exception ex)
             {
