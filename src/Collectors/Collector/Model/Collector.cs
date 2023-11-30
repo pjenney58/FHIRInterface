@@ -24,16 +24,15 @@ namespace Collectors.CollectorBase.Model
             TenantId = tenantid;
         }
 
-        // Reporting Header Dada
-        public string Name { get; set; } = "CollectorBase";
-
-        public string Version { get; set; } = "0.0.1";
-        public string Description { get; set; } = "CollectorBase is a collector that collects data from a source.";
-        public string Author { get; set; } = "The Palisaid Backend Team";
-        public string Url { get; set; } = "localhost";
-        public Guid TenantId { get; set; }
-        public string? TenantName { get; set; } = "Palisaid";
-        public string? TenantDescription { get; set; } = "Palisaid is a health information exchange.";
+		// Reporting Header Data
+		public string Name { get; set; } = "CollectorBase";
+		public string Version { get; set; } = "0.0.1";
+		public string Description { get; set; } = "CollectorBase is a collector that collects data from a source.";
+		public string Author { get; set; } = "The Palisaid Backend Team";
+		public string Url { get; set; } ="localhost";
+		public Guid TenantId { get; set; }
+		public string? TenantName { get; set; }	= "Palisaid";
+		public string? TenantDescription { get; set; } = "Palisaid is a health information exchange.";
 
         private Scheduler? scheduler;
         private CollectorConfig? config;
