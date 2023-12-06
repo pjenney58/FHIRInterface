@@ -29,7 +29,6 @@
     <ProjectReference Include="..\..\Support\Support.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\CollectorsController\CollectorsController.csproj" />
     <ProjectReference Include="..\Collector\Collector.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>

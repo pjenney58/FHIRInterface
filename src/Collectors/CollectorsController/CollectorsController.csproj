@@ -31,5 +31,6 @@
     <ProjectReference Include="..\..\Support\Support.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\CollectorFactory\CollectorFactory.csproj" />
   </ItemGroup>
 </Project>

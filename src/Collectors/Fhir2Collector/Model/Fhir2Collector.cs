@@ -1,8 +1,7 @@
 ﻿using System;
-using Collector.Interface;
-using Collectors.CollectorBase.Model;
+using Collectors.Interface;
 
-namespace Collector.Model
+namespace Collectors.Model
 {
 	public class Fhir2Collector : ICollector
     {
@@ -41,6 +40,16 @@ namespace Collector.Model
         }
 
         Task<string> ICollector.Retrieve()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Panic()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Persist()
         {
             throw new NotImplementedException();
         }

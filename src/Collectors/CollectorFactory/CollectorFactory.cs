@@ -1,24 +1,35 @@
-﻿using DataShapes.Model;
-using Microsoft.Extensions.Logging;
+﻿
+using Collectors.Interface;
+using Collectors.Model;
 
-namespace Collector.CollectorFactory
+namespace Collectors.CollectorFactory
 {
-    public class CollectorFactory
+    public static class CollectorFactory 
     {
-        internal readonly ILogger _logger;
-        internal readonly DataShapeContext? _context;
-
-        public CollectorFactory(ILogger logger, DataShapeContext context)
+        public static ICollector Create(string collectorType)
         {
-            _logger = logger;
-            _context = context;
-        }
+            switch (collectorType)
+            {
+                case "Fhir2":
+                    return new Fhir2Collector();
 
-        public async Task<T> Get<T>(T type)
-        {
-            _logger.LogInformation($"Created new type ");
-            throw new NotImplementedException();
+                case "Fhir3":
+                    return new Fhir3Collector();
+
+                case "Fhir4":
+                    return new Fhir4Collector();
+
+                case "Fhir4b":
+                    return new Fhir4bCollector();
+
+                case "Fhir5":
+                    return new Fhir5Collector();
+
+                default:
+                    return default;
+            }
         }
+        
     }
 }
 

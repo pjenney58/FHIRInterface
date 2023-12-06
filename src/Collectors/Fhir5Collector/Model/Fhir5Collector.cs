@@ -1,7 +1,8 @@
-﻿using System;
-using Collector.Interface;
+﻿
 
-namespace Collector.Model
+using Collectors.Interface;
+
+namespace Collectors.Model
 {
     public class Fhir5Collector : ICollector
     {
@@ -30,6 +31,16 @@ namespace Collector.Model
         }
 
         public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Panic()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Persist()
         {
             throw new NotImplementedException();
         }

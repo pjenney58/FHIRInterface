@@ -1,16 +1,17 @@
-﻿using Confluent.Kafka;
+using Confluent.Kafka;
 using Support.Interface;
 using Support.Model;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using Hl7.Fhir.Rest;
-using Hl7.Fhir; 
+using Hl7.Fhir.Model;
+using Task = System.Threading.Tasks.Task;
 
 namespace Transporter.Model
 {
-    public class Fhir2Client : Transporter
+    public class Fhir4Client : Transporter
     {
-        private IBaseEventLogger logger = new BaseEventLogger(nameof(Fhir2Client));
+        private IBaseEventLogger logger = new BaseEventLogger(nameof(Fhir4Client));
         private FhirClient client;
 
         public bool secure { get; set; }
@@ -22,7 +23,7 @@ namespace Transporter.Model
         public byte[] ApiKey { get; set; }
         public X509Certificate2 Certificate { get; set; }
 
-        public Fhir2Client()
+        public Fhir4Client()
         { }
 
         private async Task WaitForCommand()
@@ -33,7 +34,7 @@ namespace Transporter.Model
             using (var consumer = new ConsumerBuilder<Null, string>(kcconfig).Build())
             {
                 // Wait for a call to action, the collector will send a message to poll
-                consumer.Subscribe("fhir2schedular");
+                consumer.Subscribe("schedular");
 
                 while (!cancelled)
                 {
@@ -41,19 +42,16 @@ namespace Transporter.Model
 
                     switch (consumeResult.Message.Value.ToLower())
                     {
-                        // Collect all records
                         case "poll":
                             using (var producer = new ProducerBuilder<string, string>(kpconfig).Build())
                             {
                                 foreach (var message in Read())
                                 {
-                                    await producer.ProduceAsync("fhir2records", new Message<string, string> { Key = GetHash(message), Value = message });
+                                    await producer.ProduceAsync("fhir4records", new Message<string, string> { Key = GetHash(message), Value = message });
                                 }
                             }
                             break;
 
-
-                        // Shutdown the transporter
                         case "shutdown":
                             Environment.Exit(0);
                             break;
@@ -63,11 +61,13 @@ namespace Transporter.Model
                     }
                 }
             }
+        
+            return; //Task.CompletedTask;
         }
 
         private FhirClient InternalConnect()
         {
-           try
+            try
             {
                 if (secure)
                 {
@@ -117,34 +117,24 @@ namespace Transporter.Model
         /// Return IEnumerable<string> of messages if the message contains '\xB' and '\x1C', else just return the message.
         /// </summary>
         /// <returns>IEnumerable[string]</returns>
-        public override IEnumerable<string> Read()
+        public override IEnumerable<string> Read(string bundleid)
         {
             using (var client = InternalConnect())
             {
-                var message = client.Read();
+                var message = client.Read<Bundle>(bundleid).ToJson();
 
-                if (message.Contains('\x1C') && message.Contains('\xB'))
-                {
-                    var messages = message.Split('\xB', StringSplitOptions.RemoveEmptyEntries);
-
-                    foreach (var msg in messages)
-                    {
-                        yield return msg.Remove(msg.IndexOf('\x1C'));
-                    }
-                }
+                //if (message.Contains('\x1C') && message.Contains('\xB'))
+                //{
+                //    var messages = message.Split('\xB', StringSplitOptions.RemoveEmptyEntries);
+                //
+                //    foreach (var msg in messages)
+                //    {
+                //        yield return msg.Remove(msg.IndexOf('\x1C'));
+                //    }
+                //}
 
                 yield return message;
             }
-        }
-
-        public override Task Write(string message)
-        {
-            using (var client = InternalConnect())
-            {
-                client.Write($"\xB{message}\x1C\x0D");
-            }
-
-            return Task.CompletedTask;
         }
 
         public override void Dispose()

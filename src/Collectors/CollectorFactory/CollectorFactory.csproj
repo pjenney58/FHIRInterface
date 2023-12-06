@@ -10,5 +10,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CollectorSupport\CollectorSupport.csproj" />
+    <ProjectReference Include="..\Collector\Collector.csproj" />
+    <ProjectReference Include="..\Fhir4Collector\Fhir4Collector.csproj" />
+    <ProjectReference Include="..\Fhir4bCollector\Fhir4bCollector.csproj" />
+    <ProjectReference Include="..\Fhir2Collector\Fhir2Collector.csproj" />
+    <ProjectReference Include="..\Fhir3Collector\Fhir3Collector.csproj" />
+    <ProjectReference Include="..\Fhir5Collector\Fhir5Collector.csproj" />
   </ItemGroup>
 </Project>

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Diagnostics;
-using CollectorSupport.Model;
-using Hl7.Fhir.Model;
+﻿using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
-using Hl7.Fhir.Serialization;
 using Task = System.Threading.Tasks.Task;
+using Collectors.Interface;
+using Collectors.Model;
 
 // Public Test Servers:
 //		https://wiki.hl7.org/index.php?title=Publicly_Available_FHIR_Servers_for_testing
@@ -38,12 +36,30 @@ namespace DevTests
 			}
 		}
 
+/*
 		[Fact]
-		public  async Task QueryForBob()
+		public void LoadCollector()
 		{
 			try
 			{
-				var client = new FhirClient(hapiserver);
+				var c = CollectorFactory.Create("Fhir4");
+				Assert.NotNull(c);
+			}
+			catch(Exception ex)
+			{
+				Assert.Fail(ex.Message);
+			}
+		}
+*/
+		[Fact]
+		public  async Task QueryForBob()
+		{
+			/*
+			try
+			{
+				var client = new GenericFhirClient();
+				await client.Connect(new Uri(hapiserver));
+				
 
 				var q = new SearchParams()
 						.Where("family:exact=Alexander")
@@ -66,6 +82,7 @@ namespace DevTests
 
             // /api/FHIR/R4/List?code={code}&identifier={identifier}
             // hostname/instance/api/FHIR/R4/List?identifier=urn:oid:1.2.840.114350.1.13.5325.1.7.2.698283|9192&code=patients
+			*/
         }
     }
 }

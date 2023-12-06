@@ -1,11 +1,11 @@
 ﻿using System;
-using CollectorSupport.Interface;
+using Collectors.Interface;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 
 using Task = System.Threading.Tasks.Task;
 
-namespace CollectorSupport.Model
+namespace Collectors.Model
 {
     public class GenericFhirClient //: IClient
     {

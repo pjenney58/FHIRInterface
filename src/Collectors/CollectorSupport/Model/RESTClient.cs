@@ -1,8 +1,6 @@
-﻿using CollectorSupport.Interface;
-using Support.Interface;
-using Support.Model;
+﻿using Collectors.Messaging;
 
-namespace CollectorSupport.Model
+namespace Collectors.Model
 {
     public class RESTClient //: IClient
     {
