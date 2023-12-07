@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  PrimaryConsumerApi:
+    image: ${DOCKER_REGISTRY-}primary-consumer-api
+    environment:
+    - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
+    restart: always
+    ports: 
+      - "5001:80"
+    build:
+      context: .
+      dockerfile: src/PrimaryControllers/Dockerfile
+    depends_on:
+      - postgres
+    networks:
+      - backend-network
+
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    ports:
+      - 5432:5432
+    deploy:
+      endpoint_mode: vip
+      labels:
+        com.example.description: "This label will appear on the service"
+    volumes:
+      - data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    environment:
+      POSTGRES_PASSWORD: pgpassword
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge
+
+volumes:
+  data:

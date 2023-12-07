@@ -30,11 +30,13 @@ services:
         com.example.description: "This label will appear on the service"
 
     volumes:
-      - data:/var/lib/postgresql/data
-      - ~/.postgres-data:/mnt/postgres-data
-      - ~/.postgres-data:/root/.gnupg
+      - palisaid-baseline:/var/lib/postgresql/data
+#      - ~/.postgres-data:/mnt/postgres-data
+#      - ~/.postgres-data:/root/.gnupg
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pgpassword
 
     networks:
