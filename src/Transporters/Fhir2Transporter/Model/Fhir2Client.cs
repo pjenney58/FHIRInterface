@@ -6,7 +6,7 @@ using System.Threading;
 using Hl7.Fhir.Rest;
 using Hl7.Fhir; 
 
-namespace Transporter.Model
+namespace Transporters.Model
 {
     public class Fhir2Client : Transporter
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Transporter.Interface
+namespace Transporters.Interface
 {
     public interface ITransporter
     {

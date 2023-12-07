@@ -1,12 +1,16 @@
-﻿using System;
+﻿
 using Collectors.Interface;
+using Transporters.Model;
 
 namespace Collectors.Model
 {
 	public class HL7v2Collector : ICollector
 	{
+        private readonly MllpClient client;
+
 		public HL7v2Collector()
 		{
+            client = new MllpClient();     
 		}
 
         public Task Configure()

@@ -1,4 +1,4 @@
-﻿namespace Transporter.Model
+﻿namespace Transporters.Model
 {
     public static class TransporterFactory
     {

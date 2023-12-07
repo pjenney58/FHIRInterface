@@ -29,5 +29,6 @@
     <ProjectReference Include="..\Collector\Collector.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\Transporters\MLLPTransporter\MLLPTransporter.csproj" />
   </ItemGroup>
 </Project>

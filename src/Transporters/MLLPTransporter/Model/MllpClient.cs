@@ -4,7 +4,7 @@ using Support.Model;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
-namespace Transporter.Model
+namespace Transporters.Model
 {
     public class MllpClient : Transporter
     {
