@@ -3,9 +3,9 @@ using Collectors.Interface;
 
 namespace Collectors.Model
 {
-	public class X12Collector : ICollector
+	public class HL7v3Collector : ICollector
 	{
-		public X12Collector()
+		public HL7v3Collector()
 		{
 		}
 

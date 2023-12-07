@@ -116,6 +116,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectorTests", "test\Coll
 EndProject
 Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "ChainOfResponsibility", "src\ChainOfResponsibility\ChainOfResponsibility.csproj", "{AAC4947C-46CE-4CC1-8F11-31FB4AF1D0E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hl7v3Collector", "src\Collectors\Hl7v3Collector\Hl7v3Collector.csproj", "{550CF44A-EFA6-4CE8-A22E-648F5C8EE2C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hl7CDACollector", "src\Collectors\Hl7c-CDACollector\Hl7CDACollector.csproj", "{E2D600BD-3618-4A23-A37E-ECE7595A6BF4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -302,6 +306,14 @@ Global
 		{AAC4947C-46CE-4CC1-8F11-31FB4AF1D0E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAC4947C-46CE-4CC1-8F11-31FB4AF1D0E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAC4947C-46CE-4CC1-8F11-31FB4AF1D0E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{550CF44A-EFA6-4CE8-A22E-648F5C8EE2C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{550CF44A-EFA6-4CE8-A22E-648F5C8EE2C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{550CF44A-EFA6-4CE8-A22E-648F5C8EE2C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{550CF44A-EFA6-4CE8-A22E-648F5C8EE2C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2D600BD-3618-4A23-A37E-ECE7595A6BF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2D600BD-3618-4A23-A37E-ECE7595A6BF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2D600BD-3618-4A23-A37E-ECE7595A6BF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2D600BD-3618-4A23-A37E-ECE7595A6BF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -353,6 +365,8 @@ Global
 		{43A75477-B2E6-4FD4-817D-A543E12C9006} = {7CDCC06A-CE4E-46FA-9EC1-6BA9E242CA10}
 		{F7748B16-BB79-4220-8B7D-65D1C98E593C} = {7DF53970-678F-4077-AC87-C93175309E34}
 		{AAC4947C-46CE-4CC1-8F11-31FB4AF1D0E4} = {DB65A5CC-65E7-4BAC-9311-72EA71B32011}
+		{550CF44A-EFA6-4CE8-A22E-648F5C8EE2C0} = {7CDCC06A-CE4E-46FA-9EC1-6BA9E242CA10}
+		{E2D600BD-3618-4A23-A37E-ECE7595A6BF4} = {7CDCC06A-CE4E-46FA-9EC1-6BA9E242CA10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EAF7E0B8-93D7-418C-BF95-D02B4EFAD949}
