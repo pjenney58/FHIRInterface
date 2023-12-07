@@ -1,6 +1,6 @@
 ﻿using DataShapes.Model;
 using Microsoft.AspNetCore.Identity;
-using Collector.Interface;
+using Collectors.Interface;
 
 namespace ChainOfResponsibility.Interface
 {

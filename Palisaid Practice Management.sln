@@ -68,8 +68,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollectorsController", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Support", "src\Support\Support.csproj", "{9B1F66E8-0507-4B99-9738-3A94A773CF68}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICD", "src\Retrievers\ICD\ICD.csproj", "{DC0BB02F-E582-47DA-93DA-EA42525A2781}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fhir2Collector", "src\Collectors\Fhir2Collector\Fhir2Collector.csproj", "{D6D76A4A-D5D2-46D2-876B-B817EA8FECD1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fhir3Collector", "src\Collectors\Fhir3Collector\Fhir3Collector.csproj", "{E2563263-73E1-4A21-9C80-1EC0658CD3E7}"
@@ -98,13 +96,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCPIPTransporter", "src\Tra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RESTTransporter", "src\Transporters\RESTTransporter\RESTTransporter.csproj", "{042D7A46-2EA8-4E3F-9250-A7BE8148D308}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fhir2Transporter", "src\Transporters\Fhir2Transporter\Fhir2Transporter.csproj", "{0A5F93B6-29FD-4D41-A829-E868E8382349}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fhir2Transporter", "src\Transporters\Fhir2Transporter\Fhir2Transporter.csproj", "{0A5F93B6-29FD-4D41-A829-E868E8382349}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fhir3Transporter", "src\Transporters\Fhir3Transporter\Fhir3Transporter.csproj", "{DDC5752B-F2C3-47F3-AC01-9242FEC56AA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fhir3Transporter", "src\Transporters\Fhir3Transporter\Fhir3Transporter.csproj", "{DDC5752B-F2C3-47F3-AC01-9242FEC56AA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fhir4Transporter", "src\Transporters\Fhir4Transporter\Fhir4Transporter.csproj", "{D0C8CEC9-A14B-411F-AC87-894D934D97C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fhir4Transporter", "src\Transporters\Fhir4Transporter\Fhir4Transporter.csproj", "{D0C8CEC9-A14B-411F-AC87-894D934D97C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fhir5Transporter", "src\Transporters\Fhir5Transporter\Fhir5Transporter.csproj", "{75DCAA48-CA19-4CBC-B5D3-871A3BA2DC74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fhir5Transporter", "src\Transporters\Fhir5Transporter\Fhir5Transporter.csproj", "{75DCAA48-CA19-4CBC-B5D3-871A3BA2DC74}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fhir4bTransporter", "src\Transporters\Fhir4bTransporter\Fhir4bTransporter.csproj", "{959C3EC4-4A0A-4BC4-B485-131E39948D5B}"
 EndProject
@@ -112,13 +110,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollectorFactory", "src\Col
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controllers", "Controllers", "{DB65A5CC-65E7-4BAC-9311-72EA71B32011}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectorTests", "test\CollectorTests\CollectorTests\CollectorTests.csproj", "{F7748B16-BB79-4220-8B7D-65D1C98E593C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollectorTests", "test\CollectorTests\CollectorTests\CollectorTests.csproj", "{F7748B16-BB79-4220-8B7D-65D1C98E593C}"
 EndProject
-Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "ChainOfResponsibility", "src\ChainOfResponsibility\ChainOfResponsibility.csproj", "{AAC4947C-46CE-4CC1-8F11-31FB4AF1D0E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainOfResponsibility", "src\ChainOfResponsibility\ChainOfResponsibility.csproj", "{AAC4947C-46CE-4CC1-8F11-31FB4AF1D0E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hl7v3Collector", "src\Collectors\Hl7v3Collector\Hl7v3Collector.csproj", "{550CF44A-EFA6-4CE8-A22E-648F5C8EE2C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hl7v3Collector", "src\Collectors\Hl7v3Collector\Hl7v3Collector.csproj", "{550CF44A-EFA6-4CE8-A22E-648F5C8EE2C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hl7CDACollector", "src\Collectors\Hl7c-CDACollector\Hl7CDACollector.csproj", "{E2D600BD-3618-4A23-A37E-ECE7595A6BF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hl7CDACollector", "src\Collectors\Hl7c-CDACollector\Hl7CDACollector.csproj", "{E2D600BD-3618-4A23-A37E-ECE7595A6BF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICD", "src\Retrievers\ICD\ICD.csproj", "{92353F55-A4E6-4A28-AE98-6363C1CDA9FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -218,10 +218,6 @@ Global
 		{9B1F66E8-0507-4B99-9738-3A94A773CF68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B1F66E8-0507-4B99-9738-3A94A773CF68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B1F66E8-0507-4B99-9738-3A94A773CF68}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DC0BB02F-E582-47DA-93DA-EA42525A2781}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DC0BB02F-E582-47DA-93DA-EA42525A2781}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DC0BB02F-E582-47DA-93DA-EA42525A2781}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DC0BB02F-E582-47DA-93DA-EA42525A2781}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D6D76A4A-D5D2-46D2-876B-B817EA8FECD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D6D76A4A-D5D2-46D2-876B-B817EA8FECD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6D76A4A-D5D2-46D2-876B-B817EA8FECD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -314,6 +310,10 @@ Global
 		{E2D600BD-3618-4A23-A37E-ECE7595A6BF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2D600BD-3618-4A23-A37E-ECE7595A6BF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2D600BD-3618-4A23-A37E-ECE7595A6BF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92353F55-A4E6-4A28-AE98-6363C1CDA9FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92353F55-A4E6-4A28-AE98-6363C1CDA9FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92353F55-A4E6-4A28-AE98-6363C1CDA9FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92353F55-A4E6-4A28-AE98-6363C1CDA9FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -342,7 +342,6 @@ Global
 		{7E3EC7E2-3E25-45A9-AD72-AE07867C49A1} = {F379EC93-DF8B-481E-9385-E6326B59425A}
 		{8F1507E3-11D7-4EA8-87EE-BC6361FF9F0C} = {F379EC93-DF8B-481E-9385-E6326B59425A}
 		{A99AE01B-B1B8-4EF2-98EB-87F482FC024E} = {7CDCC06A-CE4E-46FA-9EC1-6BA9E242CA10}
-		{DC0BB02F-E582-47DA-93DA-EA42525A2781} = {C03741A2-205B-4EFD-95C0-3B32BEA88BC2}
 		{D6D76A4A-D5D2-46D2-876B-B817EA8FECD1} = {7CDCC06A-CE4E-46FA-9EC1-6BA9E242CA10}
 		{E2563263-73E1-4A21-9C80-1EC0658CD3E7} = {7CDCC06A-CE4E-46FA-9EC1-6BA9E242CA10}
 		{A7C6150F-274F-4EFB-96AF-3F613F718BE0} = {7CDCC06A-CE4E-46FA-9EC1-6BA9E242CA10}
@@ -367,6 +366,7 @@ Global
 		{AAC4947C-46CE-4CC1-8F11-31FB4AF1D0E4} = {DB65A5CC-65E7-4BAC-9311-72EA71B32011}
 		{550CF44A-EFA6-4CE8-A22E-648F5C8EE2C0} = {7CDCC06A-CE4E-46FA-9EC1-6BA9E242CA10}
 		{E2D600BD-3618-4A23-A37E-ECE7595A6BF4} = {7CDCC06A-CE4E-46FA-9EC1-6BA9E242CA10}
+		{92353F55-A4E6-4A28-AE98-6363C1CDA9FC} = {C03741A2-205B-4EFD-95C0-3B32BEA88BC2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EAF7E0B8-93D7-418C-BF95-D02B4EFAD949}

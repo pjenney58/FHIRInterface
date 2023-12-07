@@ -4,7 +4,8 @@ using Support.Model;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using Hl7.Fhir.Rest;
-using Hl7.Fhir; 
+using Hl7.Fhir;
+using Hl7.Fhir.Model;
 
 namespace Transporters.Model
 {
@@ -74,15 +75,7 @@ namespace Transporters.Model
                     // register certificate
                 }
 
-                var settings = new FhirClientSettings
-                {
-                    Timeout = 0,
-                    PreferredFormat = ResourceFormat.Json,
-                    VerifyFhirVersion = true,
-                    ReturnPreference = ReturnPreference.Minimal
-                };
-
-                client = new FhirClient(new Uri(address), settings);
+                client = new FhirClient(new Uri(address), true);
             }
             catch (Exception ex)
             {
@@ -117,33 +110,17 @@ namespace Transporters.Model
         /// Return IEnumerable<string> of messages if the message contains '\xB' and '\x1C', else just return the message.
         /// </summary>
         /// <returns>IEnumerable[string]</returns>
-        public override IEnumerable<string> Read()
+        public Resource Read(Uri id)
         {
-            using (var client = InternalConnect())
-            {
-                var message = client.Read();
-
-                if (message.Contains('\x1C') && message.Contains('\xB'))
-                {
-                    var messages = message.Split('\xB', StringSplitOptions.RemoveEmptyEntries);
-
-                    foreach (var msg in messages)
-                    {
-                        yield return msg.Remove(msg.IndexOf('\x1C'));
-                    }
-                }
-
-                yield return message;
-            }
+            var client = InternalConnect();
+           return client.Read<Resource>(id);                      
         }
 
         public override Task Write(string message)
         {
-            using (var client = InternalConnect())
-            {
-                client.Write($"\xB{message}\x1C\x0D");
-            }
-
+            client = InternalConnect();
+            client.Update(message);
+           
             return Task.CompletedTask;
         }
 
