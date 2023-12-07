@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Localization;
 
-namespace CollectorSupport
+namespace Collectors.Messaging
 {
     public sealed class MessageService
     {

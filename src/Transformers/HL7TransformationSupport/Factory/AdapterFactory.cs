@@ -18,6 +18,8 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using DataShapes.Model;
+using Hl7Harmonizer.Adapters.Interface;
+using Support.Model;
 
 namespace Hl7Harmonizer.Adapters.Model
 {
@@ -96,7 +98,6 @@ namespace Hl7Harmonizer.Adapters.Model
 
                                 default:
                                     throw new ArgumentNullException("Address Handler");
-
                             }
 
                         case "additionalinfo":
@@ -113,7 +114,6 @@ namespace Hl7Harmonizer.Adapters.Model
 
                                 default:
                                     throw new ArgumentNullException("AdditionalInfo Handler");
-
                             }
 
                         case "doseschedule":
@@ -130,7 +130,6 @@ namespace Hl7Harmonizer.Adapters.Model
 
                                 default:
                                     throw new ArgumentNullException("DoseSchedule Handler");
-
                             }
 
                         case "encounter":
@@ -183,7 +182,7 @@ namespace Hl7Harmonizer.Adapters.Model
 
                         case "observation":
                             switch (version)
-                            {                                                 
+                            {
                                 case Hl7Version.Dstu2:
                                     return new Dstu2.ObservationAdapter<IEntity, OEntity>(tenant, format, version, source);
 

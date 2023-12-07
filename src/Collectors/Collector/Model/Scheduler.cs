@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Timers;
 
-namespace Collectors.CollectorBase.Model
+namespace Collectors.Model
 {
 	public class Scheduler : IDisposable
 	{

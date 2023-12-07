@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using Collectors.CollectorBase.Model;
+using Collectors.Model;
 
 
 namespace DevTests

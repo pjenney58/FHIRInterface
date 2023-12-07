@@ -1,4 +1,4 @@
-﻿namespace CollectorSupport.Interface
+﻿namespace Collectors.Interface
 {
     public interface IClient
     {

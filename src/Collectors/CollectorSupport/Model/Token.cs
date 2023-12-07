@@ -25,9 +25,9 @@
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 using System.Xml.Serialization;
-using Hl7Harmonizer.Adapters.Interface;
+using Support.Interface;
 
-namespace Hl7Harmonizer.Transport.Model
+namespace Collectors.Model
 {
     [Serializable]
     public class Token : IDisposable

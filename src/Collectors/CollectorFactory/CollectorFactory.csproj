@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CollectorSupport\CollectorSupport.csproj" />
+    <ProjectReference Include="..\Collector\Collector.csproj" />
+    <ProjectReference Include="..\Fhir4Collector\Fhir4Collector.csproj" />
+    <ProjectReference Include="..\Fhir4bCollector\Fhir4bCollector.csproj" />
+    <ProjectReference Include="..\Fhir2Collector\Fhir2Collector.csproj" />
+    <ProjectReference Include="..\Fhir3Collector\Fhir3Collector.csproj" />
+    <ProjectReference Include="..\Fhir5Collector\Fhir5Collector.csproj" />
+    <ProjectReference Include="..\X12Collector\X12Collector.csproj" />
+    <ProjectReference Include="..\Hl7v3Collector\Hl7v3Collector.csproj" />
+    <ProjectReference Include="..\Hl7v2Collector\Hl7v2Collector.csproj" />
+    <ProjectReference Include="..\Hl7c-CDACollector\Hl7CDACollector.csproj" />
+  </ItemGroup>
+</Project>

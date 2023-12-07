@@ -1,7 +1,6 @@
-﻿using CollectorSupport.Interface;
-using Hl7Harmonizer.Adapters.Interface;
+﻿using Collectors.Messaging;
 
-namespace CollectorSupport.Model
+namespace Collectors.Model
 {
     public class RESTClient //: IClient
     {

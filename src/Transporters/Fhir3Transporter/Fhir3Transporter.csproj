@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Transporter\Transporter.csproj" />
+    <ProjectReference Include="..\..\Support\Support.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hl7.Fhir.STU3" Version="5.4.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

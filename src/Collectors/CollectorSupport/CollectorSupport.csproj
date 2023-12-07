@@ -11,6 +11,7 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
+    <PackageReference Include="Hl7.Fhir.R4" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
@@ -44,6 +45,6 @@
     <ProjectReference Include="..\..\DataShapes\DataShapes.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Transformers\HL7TransformationSupport\HL7TransformationSupport.csproj" />
+    <ProjectReference Include="..\..\Support\Support.csproj" />
   </ItemGroup>
 </Project>

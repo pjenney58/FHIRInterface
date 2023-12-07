@@ -1,5 +1,5 @@
 ﻿
-namespace CollectorBase
+namespace Collectors
 {
 
     public class Program

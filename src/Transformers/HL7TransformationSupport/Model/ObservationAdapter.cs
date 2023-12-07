@@ -29,6 +29,7 @@ namespace Hl7Harmonizer.Adapters.Model
         private OEntity? payloadOUT;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity> TaskDelegate();
 
         public Hl7Version version { get; set; }

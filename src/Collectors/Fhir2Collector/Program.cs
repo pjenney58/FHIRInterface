@@ -1,5 +1,5 @@
 ﻿
-namespace Fhir2Collector;
+namespace Collectors.Model;
 
 public class Program
 {

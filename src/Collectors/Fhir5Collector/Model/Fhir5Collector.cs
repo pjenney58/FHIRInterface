@@ -1,21 +1,14 @@
-﻿using System;
-using Collector.Interface;
-using Confluent.Kafka;
+﻿
 
-namespace Collector.Model
+using Collectors.Interface;
+
+namespace Collectors.Model
 {
-	public class Fhir5Collector : ICollector
-	{
-        ConsumerConfig kconfig = new()
+    public class Fhir5Collector : ICollector
+    {
+        public Fhir5Collector()
         {
-            GroupId = "Collectors",
-            BootstrapServers = "localhost:9002",
-            AutoOffsetReset = AutoOffsetReset.Earliest
-        };
-
-		public Fhir5Collector()
-		{
-		}
+        }
 
         public Task Configure()
         {
@@ -42,10 +35,19 @@ namespace Collector.Model
             throw new NotImplementedException();
         }
 
+        public Task Panic()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Persist()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<string> Retrieve()
         {
             throw new NotImplementedException();
         }
     }
 }
-

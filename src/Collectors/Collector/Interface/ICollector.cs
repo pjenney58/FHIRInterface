@@ -1,12 +1,16 @@
 ﻿using System;
-namespace Collector.Interface
+using System.Threading.Tasks;
+
+namespace Collectors.Interface
 {
-	public interface ICollector : IDisposable
+	public interface ICollector
 	{
 		Task Connect();
 		Task Deploy();
 		Task Configure();
+		Task Panic();
 		Task<string> Retrieve();
+		Task Persist();
 		Task Destroy();
 	}
 }

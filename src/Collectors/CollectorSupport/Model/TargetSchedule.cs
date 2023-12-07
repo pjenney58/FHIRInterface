@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 
-namespace CollectorSupport.Model
+namespace Collectors.Model
 {
     public class TargetSchedule
     {

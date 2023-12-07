@@ -1,7 +1,7 @@
 ﻿using System;
-using Collector.Interface;
+using Collectors.Interface;
 
-namespace Collector.Model
+namespace Collectors.Model
 {
 	public class X12Collector : ICollector
 	{
@@ -30,6 +30,16 @@ namespace Collector.Model
         }
 
         public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Panic()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Persist()
         {
             throw new NotImplementedException();
         }
