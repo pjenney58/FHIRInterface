@@ -1,4 +1,4 @@
--- create a table
+-- fix the palisaid user on refresh
 do
 $$
 BEGIN
