@@ -1,37 +1,15 @@
 ﻿using DataShapes.Model;
 using Confluent.Kafka;
 using Collectors.Interface;
+using Transporters.Interface;
+using TransformerFactory.Interface;
+
 
 namespace Collectors.Model
 {
     public abstract class Collector<T> : ICollector,  IDisposable
     {
-        // Message consumer, commands from controller
-        private ConsumerConfig kcconfig = new()
-        {
-            GroupId = "Collectors",
-            BootstrapServers = "palisaid:9002",
-            AutoOffsetReset = AutoOffsetReset.Earliest
-        };
-        private IConsumer<string, string> consumer;
-
-        // Message producer, data to controller
-        private ProducerConfig kpconfig = new()
-        {
-            BootstrapServers = "palisaid:9002"
-        };
-        private IProducer<string, string> producer;
-
-        public Collector(Guid tenantid)
-        {
-            TenantId = tenantid.ToString();
-
-            consumer = new ConsumerBuilder<string, string>(kcconfig).Build();
-            consumer.Subscribe("CollectorControl");
-
-            producer = new ProducerBuilder<string, string>(kpconfig).Build();
-        }
-
+#region strings
         private string Name = "Name";
         private string Version = "Version";
         private string Description = "Description";
@@ -52,12 +30,55 @@ namespace Collectors.Model
             { "TenantName", "Value" },
             { "TenantDescription", "Value" }
         };
+#endregion strings
 
-        private CollectorConfig? config;
-        private DataShapeContext? context;
+        protected IConfiguration? config;
+        protected CollectorConfig? collectorconfig;
 
+        protected ITransporter transporter;
+        protected ITransformer<OEntity,IEntity> transformer;
+
+        protected void GetApplicationConfig(string configname)
+        {
+            config = new ConfigurationBuilder()
+              .AddJsonFile(configname)
+              .Build();
+        }
+
+#region MQSetup
+        // Message consumer, commands from controller
+        protected ConsumerConfig kcconfig = new()
+        {
+            GroupId = "Collectors",
+            BootstrapServers = "palisaid:9002",
+            AutoOffsetReset = AutoOffsetReset.Earliest
+        };
+
+        protected IConsumer<string, string> consumer;
+
+        // Message producer, data to controller
+        protected ProducerConfig kpconfig = new()
+        {
+            BootstrapServers = "palisaid:9002"
+        };
+        protected IProducer<string, string> producer;
+#endregion MQSetup
+
+        public Collector(Guid tenantid)
+        {
+            GetApplicationConfig("collectorsettings.json");
+
+            TenantId = tenantid.ToString();
+
+            consumer = new ConsumerBuilder<string, string>(kcconfig).Build();
+            consumer.Subscribe("CollectorControl");
+
+            producer = new ProducerBuilder<string, string>(kpconfig).Build();
+        }
+
+        
         // Configure the system on input fron the controller
-        private async Task WaitForCommand()
+        protected virtual async Task WaitForCommand()
         {
             bool cancelled = false;
             CancellationToken cancellationToken = new CancellationToken();
@@ -103,7 +124,7 @@ namespace Collectors.Model
                             break;
 
                         case "shutdown":
-                            Environment.Exit(0);
+                            await Task.Run(() => Environment.Exit(0));
                             break;
 
                         default:
@@ -114,50 +135,59 @@ namespace Collectors.Model
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public async Task RegisterCollector(CollectorConfig config)
+
+        public virtual async Task RegisterCollector(CollectorConfig collectorconfig)
         {
-            this.config = config;
+            this.collectorconfig = collectorconfig;
+            throw new NotImplementedException(nameof(RegisterCollector));
         }
 
-        public async Task Start()
+        public virtual async Task Start()
         {
             // Launch Transporter - Create the proper transporter based on the config
             // Launch Scheduler   - Create the proper scheduler based on the config
             // Launch Transformer - Create the proper transformer based on the config
+            throw new NotImplementedException(nameof(Start));
         }
 
-        public async Task ShutDown()
-        { }
-
-        public async Task Panic()
-        { }
-
-        public async Task Persist()
-        { }
-
-        public Task Connect()
-        {
-            throw new NotImplementedException();
+        public virtual async Task ShutDown()
+        { 
+            throw new NotImplementedException(nameof(ShutDown));
         }
 
-        public Task Deploy()
-        {
-            throw new NotImplementedException();
+        public virtual async Task Panic()
+        { 
+            throw new NotImplementedException(nameof(Panic));
         }
 
-        public Task Configure()
-        {
-            throw new NotImplementedException();
+        public virtual async Task Persist()
+        { 
+            throw new NotImplementedException(nameof(Persist));
         }
 
-        public Task<string> Retrieve()
+        public virtual async Task Connect()
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(Connect));
         }
 
-        public Task Destroy()
+        public virtual async Task Deploy()
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(Deploy));
+        }
+
+        public virtual async Task Configure()
+        {
+            throw new NotImplementedException(nameof(Configure));
+        }
+
+        public virtual async Task<string> Retrieve()
+        {
+            throw new NotImplementedException(nameof(Retrieve));
+        }
+
+        public virtual async Task Destroy()
+        {
+            throw new NotImplementedException(nameof(Destroy));
         }
 
         public void Dispose()

@@ -4,7 +4,7 @@ using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Npgsql;
 using RandomDataGenerator;
-using Hl7Harmonizer.Adapters.Model;
+using TransformerFactory.Model;
 
 /*
 extern alias r5;
@@ -141,7 +141,7 @@ namespace DevTests
 
                         if (patient != null)
                         {
-                            var fhirConverter = AdapterFactory<Hl7.Fhir.Model.Patient, DataShapes.Model.Patient>.GetAdapter(Guid.NewGuid(), Hl7Version.R4);
+                            var fhirConverter = TransformerFactory<Hl7.Fhir.Model.Patient, DataShapes.Model.Patient>.GetTransformer(Guid.NewGuid(), Hl7Version.R4);
                             var metaPatient = await fhirConverter.Convert(patient);
                             lastPatient = metaPatient;
                             return lastPatient;
@@ -170,7 +170,7 @@ namespace DevTests
 
                         if (practitioner != null)
                         {
-                            var fhirConverter = AdapterFactory<Hl7.Fhir.Model.Practitioner, DataShapes.Model.Practitioner>.GetAdapter(Guid.NewGuid(), Hl7Version.R4);
+                            var fhirConverter = TransformerFactory<Hl7.Fhir.Model.Practitioner, DataShapes.Model.Practitioner>.GetTransformer(Guid.NewGuid(), Hl7Version.R4);
                             var metaPractitioner = await fhirConverter.Convert(practitioner);
                             lastPractitioner = metaPractitioner;
                             return lastPractitioner;
@@ -218,7 +218,7 @@ namespace DevTests
 
                             foreach (var prescription in prescriptions)
                             {
-                                var fhirConverter = AdapterFactory<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>.GetAdapter(_tenantId, version);
+                                var fhirConverter = TransformerFactory<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>.GetTransformer(_tenantId, version);
                                 Assert.NotNull(fhirConverter);
 
                                 var metaPrescription = await fhirConverter.Convert(prescription);
@@ -268,7 +268,7 @@ namespace DevTests
 
                             foreach (var prescription in prescriptions)
                             {
-                                var fhirConverter = AdapterFactory<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>.GetAdapter(_tenantId, version);
+                                var fhirConverter = TransformerFactory<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>.GetTransformer(_tenantId, version);
                                 Assert.NotNull(fhirConverter);
 
                                 var metaPrescription = await fhirConverter.Convert(prescription);
@@ -318,7 +318,7 @@ namespace DevTests
 
                             foreach (var location in locations)
                             {
-                                var fhirConverter = AdapterFactory<Hl7.Fhir.Model.Location, DataShapes.Model.Location>.GetAdapter(_tenantId, version);
+                                var fhirConverter = TransformerFactory<Hl7.Fhir.Model.Location, DataShapes.Model.Location>.GetTransformer(_tenantId, version);
                                 Assert.NotNull(fhirConverter);
 
                                 var metaLocation = await fhirConverter.Convert(location);
@@ -383,7 +383,7 @@ namespace DevTests
                             {
                                 if (patient != null)
                                 {
-                                    var fhirConverter = AdapterFactory<Hl7.Fhir.Model.Patient, DataShapes.Model.Patient>.GetAdapter(_tenantId, version);
+                                    var fhirConverter = TransformerFactory<Hl7.Fhir.Model.Patient, DataShapes.Model.Patient>.GetTransformer(_tenantId, version);
                                     Assert.NotNull(fhirConverter);
 
                                     var metaPatient = await fhirConverter.Convert(patient);
@@ -422,7 +422,7 @@ namespace DevTests
                                             var id = encounter.Subject.Reference.Substring("urn:uuid:".Length);
                                             if (id != null && id == patient.Id)
                                             {
-                                                var fhirEncounterConverter = AdapterFactory<Hl7.Fhir.Model.Encounter, DataShapes.Model.Encounter>.GetAdapter(_tenantId, version);
+                                                var fhirEncounterConverter = TransformerFactory<Hl7.Fhir.Model.Encounter, DataShapes.Model.Encounter>.GetTransformer(_tenantId, version);
                                                 Assert.NotNull(fhirEncounterConverter);
 
                                                 var metaEncounter = await fhirEncounterConverter.Convert(encounter);
@@ -462,7 +462,7 @@ namespace DevTests
 
                                     foreach (var device in devices)
                                     {
-                                        var fhirEncounterConverter = AdapterFactory<Hl7.Fhir.Model.Device, DataShapes.Model.Device>.GetAdapter(_tenantId, version);
+                                        var fhirEncounterConverter = TransformerFactory<Hl7.Fhir.Model.Device, DataShapes.Model.Device>.GetTransformer(_tenantId, version);
                                         Assert.NotNull(fhirEncounterConverter);
 
                                         var metaEncounter = await fhirEncounterConverter.Convert(device);
@@ -482,7 +482,7 @@ namespace DevTests
 
                                     foreach (var scrip in scrips)
                                     {
-                                        var fhirScripConverter = AdapterFactory<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>.GetAdapter(_tenantId, version);
+                                        var fhirScripConverter = TransformerFactory<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>.GetTransformer(_tenantId, version);
                                         Assert.NotNull(fhirScripConverter);
 
                                         var metaScrip = await fhirScripConverter.Convert(scrip);
@@ -593,7 +593,7 @@ namespace DevTests
 
                                 if (observation != null)
                                 {
-                                    var fhirConverter = AdapterFactory<Hl7.Fhir.Model.Observation, DataShapes.Model.Observation>.GetAdapter(_tenantId, Hl7Version.R4);
+                                    var fhirConverter = TransformerFactory<Hl7.Fhir.Model.Observation, DataShapes.Model.Observation>.GetTransformer(_tenantId, Hl7Version.R4);
                                     var metaObservation = await fhirConverter.Convert(observation);
 
                                     if (observations.PatientId == Guid.Empty)
@@ -603,7 +603,7 @@ namespace DevTests
                                         //observations.CreateDate = metaObservation.CreateDate;
                                     }
 
-                                    var item = AdapterFactory<Hl7.Fhir.Model.Observation, DataShapes.Model.ObservationItem>.GetAdapter(_tenantId, Hl7Version.R4);
+                                    var item = TransformerFactory<Hl7.Fhir.Model.Observation, DataShapes.Model.ObservationItem>.GetTransformer(_tenantId, Hl7Version.R4);
                                     observations.Items.Add(await item.Convert(observation));
                                 }
                             }
@@ -650,7 +650,7 @@ namespace DevTests
                                     Debug.WriteLine(name);
                                 }
 
-                                var aa = AdapterFactory<Hl7.Fhir.Model.Address, DataShapes.Model.Address>.GetAdapter(_tenantId, Hl7Version.R4);
+                                var aa = TransformerFactory<Hl7.Fhir.Model.Address, DataShapes.Model.Address>.GetTransformer(_tenantId, Hl7Version.R4);
 
                                 if (p.Address != null && p.Address.FirstOrDefault() != null)
                                 {

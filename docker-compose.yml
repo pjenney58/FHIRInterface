@@ -17,20 +17,20 @@ services:
     networks:
       - backend-network
 
-  #collectorsapi:
-  #  container_name: api-palisaid-collectors
-  #  environment:
-  #  - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
-  #  
-  #  image: ${DOCKER_REGISTRY-}collectors-api
-  #  restart: always
-  #  ports: 
-  #    - "5002:80"
-  #  build:
-  #    context: .
-  #    dockerfile: src/Collectors/DebugDockerfile
-  #  networks:
-  #    - backend-network
+  fhir4collector:
+    container_name: fhir4Collector
+    environment:
+    - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
+    
+    image: ${DOCKER_REGISTRY-}fhir4collector
+    restart: always
+    ports: 
+      - "5002:80"
+    build:
+      context: .
+      dockerfile: src/Collectors/Fhir4Collector/Dockerfile
+    networks:
+      - backend-network
 
   postgres:
     image: postgres:15.5-bullseye
@@ -46,8 +46,8 @@ services:
 
     volumes:
       - data:/var/lib/postgresql/data
-#      - ~/.postgres-data:/mnt/postgres-data
-#      - ~/.postgres-data:/root/.gnupg
+      - ~/.postgres-data:/mnt/configuration-data
+      - ~/.postgres-data:/root/.gnupg
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
     environment:

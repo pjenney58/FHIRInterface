@@ -28,7 +28,7 @@
     <ProjectReference Include="..\..\src\Collectors\CollectorSupport\CollectorSupport.csproj" />
     <ProjectReference Include="..\..\src\DataShapes\DataShapes.csproj" />
     <ProjectReference Include="..\..\src\Collectors\Collector\Collector.csproj" />
-    <ProjectReference Include="..\..\src\Transformers\HL7TransformationSupport\HL7TransformationSupport.csproj" />
+    <ProjectReference Include="..\..\src\Transformers\TransformerSupport\Transformer.csproj" />
     <ProjectReference Include="..\..\src\Transporters\MLLPTransporter\MLLPTransporter.csproj" />
     <ProjectReference Include="..\..\src\Transporters\RESTTransporter\RESTTransporter.csproj" />
     <ProjectReference Include="..\..\src\Transporters\TCPIPTransporter\TCPIPTransporter.csproj" />

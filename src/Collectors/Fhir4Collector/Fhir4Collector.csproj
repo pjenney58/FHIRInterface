@@ -3,11 +3,15 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>10735109-5ac4-4f01-8070-a53a7abab02c</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..</DockerfileContext>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Hl7.Fhir.R4" Version="4.3.0" />
   </ItemGroup>
@@ -20,13 +24,11 @@
     <Folder Include="Interface\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="../../Transformers/HL7TransformationSupport/Transformer.csproj" />
     <ProjectReference Include="..\Collector\Collector.csproj">
       <GlobalPropertiesToRemove />
     </ProjectReference>
     <ProjectReference Include="..\..\Support\Support.csproj">
-      <GlobalPropertiesToRemove />
-    </ProjectReference>
-    <ProjectReference Include="..\..\Transformers\HL7TransformationSupport\HL7TransformationSupport.csproj">
       <GlobalPropertiesToRemove />
     </ProjectReference>
   </ItemGroup>
