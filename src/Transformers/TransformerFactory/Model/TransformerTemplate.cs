@@ -22,12 +22,11 @@
  * SOFTWARE.
  */
 
-using DataShapes.Model;
 using TransformerFactory.Interface;
 
 namespace TransformerFactory.Model
 {
-    public class TransformerTemplate<IEntity, OEntity> : ITransformer<IEntity, OEntity>
+    public class TransformerTemplate<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
     {
@@ -35,7 +34,7 @@ namespace TransformerFactory.Model
         private OEntity? payloadOUT;
 
         public delegate OEntity VoidDelegate();
-        public delegate Task<OEntity> TaskDelegate();
+        public delegate Task<OEntity?> TaskDelegate();
 
         public Guid tenant { get; set; }
         public Hl7Version version { get; set; }
@@ -64,7 +63,7 @@ namespace TransformerFactory.Model
             throw new NotImplementedException();
         }
 
-        private async Task<OEntity> ConvertR4FhirToMeta()
+        private async Task<OEntity> ConvertFhirToMeta()
         {
             // var fhir = payloadIN as Hl7.Fhir.Model.{Type};
             // var meta = new DataShapes.Model.{Type}();
@@ -92,7 +91,7 @@ namespace TransformerFactory.Model
             throw new NotImplementedException();
         }
 
-        private async Task<OEntity> ConvertMetaToR4Fhir()
+        private async Task<OEntity> ConvertMetaToFhir()
         {
             // var fhir = payloadIN as Hl7.Fhir.Model.{Type};
             // var meta = new DataShapes.Model.{Type}();
@@ -122,7 +121,7 @@ namespace TransformerFactory.Model
         }
 
 
-        public async Task<OEntity> Convert(IEntity payload)
+        public async Task<object?> Transform(object payload)
         {
             // Override this with the appropriate key conditions - replace MSG as desired. There may
             // be several similar messages required, e.g. SIU & SRM Override this with the
@@ -134,15 +133,13 @@ namespace TransformerFactory.Model
                 { new Tuple<string, Hl7Version>(@"DataShapes.Model.{Type} => Hl7.Fhir.Model.{Type}", Hl7Version.Dstu2), ConvertMetaToR5Fhir },
                 { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.{Type} => DataShapes.Model.{Type}", Hl7Version.Stu3), ConvertR3FhirToMeta },
                 { new Tuple<string, Hl7Version>(@"DataShapes.Model.{Type} => Hl7.Fhir.Model.{Type}", Hl7Version.Stu3), ConvertMetaToR3Fhir },
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.{Type} => DataShapes.Model.{Type}", Hl7Version.R4), ConvertR4FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.{Type} => Hl7.Fhir.Model.{Type}", Hl7Version.R4), ConvertMetaToR4Fhir },
+                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.{Type} => DataShapes.Model.{Type}", Hl7Version.R4), ConvertFhirToMeta },
+                { new Tuple<string, Hl7Version>(@"DataShapes.Model.{Type} => Hl7.Fhir.Model.{Type}", Hl7Version.R4), ConvertMetaToFhir },
                 { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.{Type} => DataShapes.Model.{Type}", Hl7Version.R5), ConvertR5FhirToMeta },
                 { new Tuple<string, Hl7Version>(@"DataShapes.Model.{Type} => Hl7.Fhir.Model.{Type}", Hl7Version.R5), ConvertMetaToR5Fhir }
             };
 
-            payloadIN = payload;
-
-            payloadIN = payload;
+            payloadIN = payload as IEntity;
 
             var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
 
@@ -153,14 +150,5 @@ namespace TransformerFactory.Model
 
             return default;
         }
-
-
-
-        public IEnumerable<OEntity> CollectOEntityItemListItem()
-        {
-            throw new NotImplementedException();
-        }
-
-
     }
 }

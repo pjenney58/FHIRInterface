@@ -10,10 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hl7.Fhir.R4" Version="4.3.0" />
+    <PackageReference Include="Hl7.Fhir.R4" Version="5.4.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="xunit" Version="2.6.2" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.4">
+    <PackageReference Include="xunit" Version="2.6.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -21,19 +21,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Bogus" Version="34.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Collectors\CollectorSupport\CollectorSupport.csproj" />
-    <ProjectReference Include="..\..\src\DataShapes\DataShapes.csproj" />
-    <ProjectReference Include="..\..\src\Collectors\Collector\Collector.csproj" />
-    <ProjectReference Include="..\..\src\Transformers\TransformerSupport\Transformer.csproj" />
-    <ProjectReference Include="..\..\src\Transporters\MLLPTransporter\MLLPTransporter.csproj" />
-    <ProjectReference Include="..\..\src\Transporters\RESTTransporter\RESTTransporter.csproj" />
-    <ProjectReference Include="..\..\src\Transporters\TCPIPTransporter\TCPIPTransporter.csproj" />
-    <ProjectReference Include="..\..\src\Transporters\TransporterFactory\TransporterFactory.csproj" />
-    <ProjectReference Include="..\..\src\Transporters\Transporter\Transporter.csproj" />
+    <PackageReference Include="Bogus" Version="35.0.1" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="appdataconfig.json" />
@@ -44,5 +32,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\DataShapes\DataShapes.csproj" />
+    <ProjectReference Include="..\..\src\Transporters\Transporter\Transporter.csproj" />
+    <ProjectReference Include="..\..\src\Collectors\Collector\Collector.csproj" />
+    <ProjectReference Include="..\..\src\Transformers\TransformerFactory\TransformerFactory.csproj" />
+    <ProjectReference Include="..\..\src\Transporters\TransporterFactory\TransporterFactory.csproj" />
+    <ProjectReference Include="..\..\src\Transporters\Fhir4Transporter\Fhir4Transporter.csproj" />
+    <ProjectReference Include="..\..\src\Transformers\TransformerSupport\Transformer.csproj" />
   </ItemGroup>
 </Project>

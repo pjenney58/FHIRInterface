@@ -20,15 +20,17 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 using Hl7.Fhir.Model;
 using DataShapes.Model;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Task = System.Threading.Tasks.Task;
+using TransformerFactory.Interface;
 
 namespace TransformerFactory.Model.R4
 {
-    public class EncounterAdapter<IEntity, OEntity> : ITransformer<IEntity, OEntity>
+    public class EncounterAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
     {
-        private IEntity payloadIN;
-        private OEntity payloadOUT;
+        private IEntity? payloadIN;
+        private OEntity? payloadOUT;
 
         public delegate OEntity VoidDelegate();
 
@@ -185,7 +187,7 @@ namespace TransformerFactory.Model.R4
             return string.Empty;
         }
 
-        private async Task<OEntity> ConvertR4FhirToMeta()
+        private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Encounter;
             var meta = new DataShapes.Model.Encounter()
@@ -351,52 +353,35 @@ namespace TransformerFactory.Model.R4
             return meta as OEntity;
         }
 
-        private Task<OEntity> ConvertMetaToR4Fhir()
+        private async Task<OEntity?> ConvertMetaToFhir()
         {
+            await Task.Run(() =>
+            {
+            });
+
             throw new NotImplementedException();
         }
 
-        private List<OEntity> OEntities = new();
-
-        public IEnumerable<OEntity> CollectOEntityItemListItem()
-        {
-            if (OEntities.Count > 0)
-            {
-                foreach (var item in OEntities)
-                {
-                    yield return item;
-                }
-
-                OEntities.Clear();
-                OEntities.TrimExcess();
-            }
-        }
-
-        public async Task<OEntity> Convert(IEntity payload)
+        public async Task<object?> Transform(object payload)
         {
             // Override this with the appropriate key conditions - replace MSG as desired. There may
             // be several similar messages required, e.g. SIU & SRM
             Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Encounter => DataShapes.Model.Encounter", Hl7Version.R4), ConvertR4FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Encounter => Hl7.Fhir.Model.Encounter", Hl7Version.R4), ConvertMetaToR4Fhir },
+                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Encounter => DataShapes.Model.Encounter", Hl7Version.R4), ConvertFhirToMeta },
+                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Encounter => Hl7.Fhir.Model.Encounter", Hl7Version.R4), ConvertMetaToFhir },
             };
 
-            payloadIN = payload;
+            payloadIN = payload as IEntity;
 
             var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
 
-            if (jumpTable.TryGetValue(jumpkey, out TaskDelegate funcC))
+            if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
             {
                 return await funcC();
             }
 
             return default;
-        }
-
-        public void Resolve(OEntity payload)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -28,12 +28,12 @@ namespace Transformers.Model
     /// </summary>
     /// <typeparam name="IEntity"> </typeparam>
     /// <typeparam name="OEntity"> </typeparam>
-    public class QueryAdapter<IEntity, OEntity> : ITransformer<IEntity, OEntity>
+    public class QueryAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
     {
-        private IEntity payloadIN;
-        private OEntity payloadOUT;
+        private IEntity? payloadIN;
+        private OEntity? payloadOUT;
 
         public delegate Task<OEntity> TaskDelegate();
 
@@ -60,7 +60,7 @@ namespace Transformers.Model
             throw new NotImplementedException();
         }
 
-        private async Task<OEntity> ConvertR4FhirToMeta()
+        private async Task<OEntity> ConvertFhirToMeta()
         {
             // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
             throw new NotImplementedException();
@@ -84,7 +84,7 @@ namespace Transformers.Model
             throw new NotImplementedException();
         }
 
-        private async Task<OEntity> ConvertMetaToR4Fhir()
+        private async Task<OEntity> ConvertMetaToFhir()
         {
             // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
             throw new NotImplementedException();
@@ -109,7 +109,7 @@ namespace Transformers.Model
             throw new NotImplementedException();
         }
 
-        public async Task<OEntity> Convert(IEntity payload)
+        public async Task<object?> Transform(object payload)
         {
             // Override this with the appropriate key conditions - replace MSG as desired. There may
             // be several similar messages required, e.g. SIU & SRM
@@ -127,7 +127,7 @@ namespace Transformers.Model
                 { @"CareEvent/SIU_S26", ConvertMetaToV2_MSG }
             };
 
-            payloadIN = payload;
+            payloadIN = payload as IEntity;
 
             var jumpkey = $"{typeof(IEntity).Name}/{typeof(OEntity).Name}";
             if (jumpTable.TryGetValue(jumpkey, out TaskDelegate funcC))

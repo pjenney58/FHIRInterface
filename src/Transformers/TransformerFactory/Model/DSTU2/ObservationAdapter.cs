@@ -18,10 +18,11 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using DataShapes.Model;
+using TransformerFactory.Interface;
 
 namespace TransformerFactory.Model.Dstu2
 {
-    public class ObservationAdapter<IEntity, OEntity> : ITransformer<IEntity, OEntity>
+    public class ObservationAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
     {
@@ -54,7 +55,7 @@ namespace TransformerFactory.Model.Dstu2
             throw new NotImplementedException();
         }
 
-        private async Task<OEntity> ConvertR4FhirToMeta()
+        private async Task<OEntity> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Observation;
             var meta = new DataShapes.Model.Observation();
@@ -172,7 +173,7 @@ namespace TransformerFactory.Model.Dstu2
             throw new NotImplementedException();
         }
 
-        private async Task<OEntity> ConvertMetaToR4Fhir()
+        private async Task<OEntity> ConvertMetaToFhir()
         {
             throw new NotImplementedException();
         }
@@ -200,17 +201,17 @@ namespace TransformerFactory.Model.Dstu2
             throw new NotImplementedException();
         }
 
-        public async Task<OEntity> Convert(IEntity payload)
+        public async Task<object?> Transform(object payload)
         {
             // Override this with the appropriate key conditions - replace MSG as desired. There may
             // be several similar messages required, e.g. SIU & SRM
 
-            payloadIN = payload;
+            payloadIN = payload as IEntity;
 
             Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Observation => DataShapes.Model.Observation", Hl7Version.R4), ConvertR4FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Observation => Hl7.Fhir.Model.Observation", Hl7Version.R4), ConvertMetaToR4Fhir }
+                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Observation => DataShapes.Model.Observation", Hl7Version.R4), ConvertFhirToMeta },
+                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Observation => Hl7.Fhir.Model.Observation", Hl7Version.R4), ConvertMetaToFhir }
             };
 
             var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);

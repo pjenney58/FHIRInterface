@@ -18,120 +18,102 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using Hl7.Fhir.Validation;
+using TransformerFactory.Interface;
 
 namespace TransformerFactory.Model.R4
 {
-    public class DoseScheduleAdapter<IEntity, OEntity> : ITransformer<IEntity, OEntity>
+    public class DoseScheduleTransformer<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
     {
-        private IEntity payloadIN;
+        private IEntity? payloadIN;
 
         public delegate OEntity VoidDelegate();
 
-        public delegate Task<OEntity> TaskDelegate();
+        public delegate Task<OEntity?> TaskDelegate();
 
         public Hl7Version version { get; set; }
         public HL7Format format { get; set; }
         public SourceSystems source { get; set; } = SourceSystems.Epic;
         public Guid tenant { get; set; }
 
-        public DoseScheduleAdapter(Guid tenant, HL7Format format, Hl7Version version, SourceSystems source)
+        public DoseScheduleTransformer(Guid tenant, HL7Format format, Hl7Version version, SourceSystems source)
         {
             this.format = format;
             this.version = version;
             this.source = source;
         }
 
-        private async Task<OEntity> ConvertR2FhirToMeta()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertR3FhirToMeta()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertR4FhirToMeta()
+        private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Dosage;
+            if(fhir == null)
+            {
+                throw new ArgumentNullException(nameof(fhir));
+            }
+
             var meta = new DataShapes.Model.DoseSchedule();
+            if(meta == null)
+            {
+                throw new ArgumentNullException(nameof(meta));
+            }
 
             meta.TenantId = tenant;
             meta.EntityId = Guid.Parse(fhir.ElementId);
             meta.DoseScheduleName = fhir.Text;
 
+            await Task.Run(() =>
+            {
+                ;
+            });
+
             return meta as OEntity;
         }
 
-        private async Task<OEntity> ConvertR5FhirToMeta()
+        private async Task<OEntity?> ConvertMetaToFhir()
         {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR2Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR3Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR4Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR5Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        public DoseScheduleAdapter(Hl7Version version)
-        {
-            this.version = version;
-        }
-
-        private async Task<OEntity> ConvertV2_MSG_ToMeta()
-        {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
-
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToV2_MSG()
-        {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
-            throw new NotImplementedException();
-        }
-
-        public async Task<OEntity> Convert(IEntity payload)
-        {
-            // Override this with the appropriate key conditions - replace MSG as desired. There may
-            // be several similar messages required, e.g. SIU & SRM
-            Dictionary<string, TaskDelegate> jumpTable = new Dictionary<string, TaskDelegate>()
+            var meta = payloadIN as DataShapes.Model.DoseSchedule;
+            if(meta == null)
             {
-                { @"Hl7.Fhir.Model.Dosage/Hl7Harmonizer.Metatypes.Model.DoseSchdule", ConvertR4FhirToMeta },
-                { @"Hl7Harmonizer.Metatypes.Model.DoseSchdule/Hl7.Fhir.Model.Dosage", ConvertMetaToR4Fhir}
+                throw new ArgumentNullException(nameof(meta));
+            }
+
+            var fhir = new Hl7.Fhir.Model.Dosage();
+            if(fhir == null)
+            {
+                throw new ArgumentNullException(nameof(fhir));
+            }
+
+            fhir.ElementId = meta.EntityId.ToString();
+            fhir.Text = meta.DoseScheduleName;
+
+            // TODO: Add more fields
+
+            await Task.Run(() =>
+            {
+            });
+
+            return fhir as OEntity;
+        }
+
+        public async Task<object?> Transform(object payload)
+        {     
+            payloadIN = payload as IEntity;
+
+            // Use full names to differenciate
+            Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
+            {
+                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.DoseSchedule => DataShapes.Model.DoseSchedule", Hl7Version.R4), ConvertFhirToMeta },
+                { new Tuple<string, Hl7Version>(@"DataShapes.Model.DoseSchedule => Hl7.Fhir.Model.DoseSchedule", Hl7Version.R4), ConvertMetaToFhir }            
             };
 
-            payloadIN = payload;
-
-            var jumpkey = $"{typeof(IEntity).FullName}/{typeof(OEntity).FullName}";
-            if (jumpTable.TryGetValue(jumpkey, out TaskDelegate funcC))
+            var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
+            if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
             {
                 return await funcC();
             }
 
             return default;
-        }
-
-        public IEnumerable<OEntity> CollectOEntityItemListItem()
-        {
-            throw new NotImplementedException();
         }
     }
 }

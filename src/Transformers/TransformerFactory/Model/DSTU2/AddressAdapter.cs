@@ -32,21 +32,21 @@ using Hl7.Fhir.Model;
 //using Dstu2 = dstu2::Hl7.Fhir.Model;
 
 using DataShapes.Model;
-
+using TransformerFactory.Interface;
 using Task = System.Threading.Tasks.Task;
 
 
 namespace TransformerFactory.Model.Dstu2
 {
-    public class AddressAdapter<IEntity, OEntity> : ITransformer<IEntity, OEntity>
+    public class AddressAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
     {
-        private IEntity payloadIN;
+        private IEntity? payloadIN;
         private OEntity payloadOUT;
 
         public delegate OEntity VoidDelegate();
-        public delegate Task<OEntity> TaskDelegate();
+        public delegate Task<OEntity?> TaskDelegate();
 
         public Hl7Version version { get; set; }
         public HL7Format format { get; set; }
@@ -61,17 +61,7 @@ namespace TransformerFactory.Model.Dstu2
             this.source = source;
         }
 
-        private async Task<OEntity> ConvertR2FhirToMeta()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertR3FhirToMeta()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertR4FhirToMeta()
+        private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Address;
             if (fhir == null)
@@ -126,26 +116,20 @@ namespace TransformerFactory.Model.Dstu2
             return meta as OEntity;
         }
 
-        private async Task<OEntity> ConvertR5FhirToMeta()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR2Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR3Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR4Fhir()
+        private async Task<OEntity?> ConvertMetaToFhir()
         {
             var meta = payloadIN as DataShapes.Model.Address;
-            var fhir = new Hl7.Fhir.Model.Address();
+            if(meta == null)
+            {
+                throw new ArgumentNullException(nameof(meta));
+            }
 
+            var fhir = new Hl7.Fhir.Model.Address();
+            if(fhir == null)
+            {
+                throw new ArgumentNullException(nameof(fhir));
+            }
+            
             fhir.ElementId = meta.EntityId.ToString();
 
             await Task.Run(() =>
@@ -175,41 +159,23 @@ namespace TransformerFactory.Model.Dstu2
             return meta as OEntity;
         }
 
-        private async Task<OEntity> ConvertMetaToR5Fhir()
-        {
-            throw new NotImplementedException();
-        }
+       
 
-        private async Task<OEntity> ConvertV2_MSG_ToMeta()
+        public async Task<object?> Transform(object payload)
         {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
-
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToV2_MSG()
-        {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
-            throw new NotImplementedException();
-        }
-
-        public async Task<OEntity> Convert(IEntity payload)
-        {
-            this.payloadIN = payload;
+            this.payloadIN = payload as IEntity;
 
             // Use full names to differenciate
             Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
 
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Address => DataShapes.Model..Address", Hl7Version.R4), ConvertR4FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model..Address => Hl7.Fhir.Model.Address", Hl7Version.R4), ConvertMetaToR4Fhir }            
+                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Address => DataShapes.Model..Address", Hl7Version.Dstu2), ConvertFhirToMeta },
+                { new Tuple<string, Hl7Version>(@"DataShapes.Model..Address => Hl7.Fhir.Model.Address", Hl7Version.Dstu2), ConvertMetaToFhir }            
             };
-
-            payloadIN = payload;
 
             var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
 
-            if (jumpTable.TryGetValue(jumpkey, out TaskDelegate funcC))
+            if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
             {
                 return await funcC();
             }

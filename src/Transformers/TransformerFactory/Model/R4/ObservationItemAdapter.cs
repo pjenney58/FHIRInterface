@@ -18,17 +18,18 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using Task = System.Threading.Tasks.Task;
+using TransformerFactory.Interface;
 
 namespace TransformerFactory.Model.R4
 {
-    public class ObservationItemAdapter<IEntity, OEntity> : ITransformer<IEntity, OEntity>
+    public class ObservationItemAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
     {
         private IEntity? payloadIN;
 
         public delegate OEntity VoidDelegate();
-        public delegate Task<OEntity> TaskDelegate();
+        public delegate Task<OEntity?> TaskDelegate();
 
         public Hl7Version version { get; set; }
         public HL7Format format { get; set; }
@@ -41,22 +42,21 @@ namespace TransformerFactory.Model.R4
             this.format = format;
             this.version = version;
             this.source = source;
-        }
+        }    
 
-        private async Task<OEntity> ConvertR2FhirToMeta()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertR3FhirToMeta()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertR4FhirToMeta()
+        private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Observation;
+            if(fhir == null)
+            {
+                throw new ArgumentNullException(nameof(fhir));
+            }
+
             var meta = new DataShapes.Model.ObservationItem();
+            if(meta == null)
+            {
+                throw new ArgumentNullException(nameof(meta));
+            }
 
             meta.TenantId = this.tenant;
             meta.EntityId = Guid.Parse(fhir.Id);
@@ -80,22 +80,7 @@ namespace TransformerFactory.Model.R4
             return meta as OEntity;
         }
 
-        private async Task<OEntity> ConvertR5FhirToMeta()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR2Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR3Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR4Fhir()
+        private async Task<OEntity?> ConvertMetaToFhir()
         {
             var meta = payloadIN as DataShapes.Model.ObservationItem; ;
             var fhir = new Hl7.Fhir.Model.Observation();
@@ -118,35 +103,17 @@ namespace TransformerFactory.Model.R4
             return fhir as OEntity;
         }
 
-        private async Task<OEntity> ConvertMetaToR5Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertV2_MSG_ToMeta()
-        {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
-
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToV2_MSG()
-        {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
-            throw new NotImplementedException();
-        }
-
-        public async Task<OEntity> Convert(IEntity payload)
+        public async Task<object?> Transform(object payload)
         {
             // Override this with the appropriate key conditions - replace MSG as desired. There may
             // be several similar messages required, e.g. SIU & SRM
 
-            payloadIN = payload;
+            payloadIN = payload as IEntity;
 
             Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.ObservationItem => DataShapes.Model.ObservationItem", Hl7Version.R4), ConvertR4FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.ObservationItem => Hl7.Fhir.Model.ObservationItem", Hl7Version.R4), ConvertMetaToR4Fhir }
+                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.ObservationItem => DataShapes.Model.ObservationItem", Hl7Version.R4), ConvertFhirToMeta },
+                { new Tuple<string, Hl7Version>(@"DataShapes.Model.ObservationItem => Hl7.Fhir.Model.ObservationItem", Hl7Version.R4), ConvertMetaToFhir }
             };
 
             var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
@@ -156,11 +123,6 @@ namespace TransformerFactory.Model.R4
             }
 
             return default;
-        }
-
-        public IEnumerable<OEntity> CollectOEntityItemListItem()
-        {
-            throw new NotImplementedException();
         }
     }
 }

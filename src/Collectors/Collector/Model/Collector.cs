@@ -3,11 +3,16 @@ using Confluent.Kafka;
 using Collectors.Interface;
 using Transporters.Interface;
 using TransformerFactory.Interface;
-
+using TransformerFactory.Model;
+using Task = System.Threading.Tasks.Task;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
+using System.Reflection;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Collectors.Model
 {
-    public abstract class Collector<T> : ICollector,  IDisposable
+    public abstract class Collector<T> : ICollector, IDisposable
     {
 #region strings
         private string Name = "Name";
@@ -18,6 +23,7 @@ namespace Collectors.Model
         private string TenantId = Guid.Empty.ToString();
         private string TenantName = "TenantName";
         private string TenantDescription = "TenantDescription";
+        private string Transform = "Transform";
 
         private Dictionary<string, string> _parameters = new()
         {
@@ -28,7 +34,8 @@ namespace Collectors.Model
             { "Url", "Value" },
             { "TenantId", "Value" },
             { "TenantName", "Value" },
-            { "TenantDescription", "Value" }
+            { "TenantDescription", "Value" },
+            { "Transform", "Value" }
         };
 #endregion strings
 
@@ -36,7 +43,7 @@ namespace Collectors.Model
         protected CollectorConfig? collectorconfig;
 
         protected ITransporter transporter;
-        protected ITransformer<OEntity,IEntity> transformer;
+        
 
         protected void GetApplicationConfig(string configname)
         {
@@ -54,7 +61,18 @@ namespace Collectors.Model
             AutoOffsetReset = AutoOffsetReset.Earliest
         };
 
+        protected struct TransformerPayload
+        {
+            public Type Type1 { get; set; }
+            public Type Type2 { get; set; }
+            public HL7Format Format { get; set; }
+            public Hl7Version Version { get; set; }
+            public SourceSystems Src { get; set; }
+            public string data { get; set; }
+        }
+
         protected IConsumer<string, string> consumer;
+        protected IConsumer<string, TransformerPayload> transformerconsumer;
 
         // Message producer, data to controller
         protected ProducerConfig kpconfig = new()
@@ -70,27 +88,70 @@ namespace Collectors.Model
 
             TenantId = tenantid.ToString();
 
+            // Setup command topic
             consumer = new ConsumerBuilder<string, string>(kcconfig).Build();
             consumer.Subscribe("CollectorControl");
 
+            // Setup transform topic
+            transformerconsumer = new ConsumerBuilder<string, TransformerPayload>(kcconfig).Build();
+            transformerconsumer.Subscribe("TransformerControl");
+
+            // Setup data out topic
             producer = new ProducerBuilder<string, string>(kpconfig).Build();
+
+            TaskFactory taskFactory = new TaskFactory();
+            taskFactory.StartNew(() => WaitForCommand());
+            taskFactory.StartNew(() => WaitForTransformRequest());
         }
 
+        public T ConvertObject<T>(object input) {
+            return (T) Convert.ChangeType(input, typeof(T));
+        }
         
+        protected virtual async Task WaitForTransformRequest()
+        {
+            bool cancelled = false;
+            CancellationToken cancellationToken = new CancellationToken();
+            
+            // Listening for configuration commands
+            using (transformerconsumer)
+            {
+                while (!cancelled)
+                {
+                    var payload = transformerconsumer.Consume(cancellationToken);
+                    
+                    Type t1 = payload.Message.Value.Type1;
+                    Type t2 = payload.Message.Value.Type2;
+
+                    /*
+                    var transformer = TransformerFactory.GetTransformer<t1,t2>(Guid.Parse(TenantId), 
+                                                                               payload.Message.Value.Format, 
+                                                                               payload.Message.Value.Version, 
+                                                                               payload.Message.Value.Src);
+                    
+                    var result = await transformer.Transform(payload.Message.Value.data);
+                    */
+                }
+            }
+        
+            return;
+        }
+
         // Configure the system on input fron the controller
         protected virtual async Task WaitForCommand()
         {
             bool cancelled = false;
             CancellationToken cancellationToken = new CancellationToken();
-
-            using (var consumer = new ConsumerBuilder<string, string>(kcconfig).Build())
+            
+            // Listening for configuration commands
+            using (consumer)
             {
                 while (!cancelled)
                 {
                     var consumeResult = consumer.Consume(cancellationToken);
-
                     switch (consumeResult.Message.Key.ToLower())
                     {
+                       
                         case "name":
                             _parameters[Name] = consumeResult.Message.Value;
                             break;
@@ -132,6 +193,8 @@ namespace Collectors.Model
                     }
                 }
             }
+        
+            return;
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously

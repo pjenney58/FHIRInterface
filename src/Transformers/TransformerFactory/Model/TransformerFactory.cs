@@ -1,44 +1,29 @@
-﻿/*
- MIT License - TransformerFactory.cs
-
-Copyright (c) 2021 - Present by Sand Drift Software, LLC
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
-modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
-OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-
-using DataShapes.Model;
-using Microsoft.AspNetCore.Identity;
-using Support.Interface;
-using Support.Model;
+﻿
+using NLog.Filters;
 using TransformerFactory.Interface;
 
-
 namespace TransformerFactory.Model
-{
-    /// <summary>
-    /// Returns an HL7 version normalized adapter of type IEntity to OEntity
-    /// </summary>
-    public class TransformerFactory<IEntity, OEntity>
-        where OEntity : class, new()
-        where IEntity : class, new()
+{    
+    public static class TransformerFactory 
     {
         private static HL7Format format = HL7Format.Fhir;
         private static SourceSystems source = SourceSystems.Epic;
         private static readonly IBaseEventLogger eventLogger = new BaseEventLogger("TransformerFactory");
         private static Guid TenantId = Constants.Transform;
 
-        public static ITransformer<IEntity, OEntity> GetTransformer(Guid tenant, HL7Format fmt, Hl7Version version, SourceSystems src)
+        public static ITransformer Create<IEntity,OEntity>(Guid tenant, Hl7Version version) 
+            where OEntity : class, new()
+            where IEntity : class, new()
+        {
+            return Create<IEntity, OEntity>(tenant, HL7Format.Fhir, version, SourceSystems.Epic);
+        }
+
+        public static ITransformer Create<IEntity, OEntity>(Guid tenant, 
+                                                            HL7Format fmt, 
+                                                            Hl7Version version, 
+                                                            SourceSystems src)     
+            where OEntity : class, new()
+            where IEntity : class, new()
         {
             try
             {
@@ -97,7 +82,7 @@ namespace TransformerFactory.Model
                                     return new Stu3.AddressAdapter<IEntity, OEntity>(tenant, format, version, source);
 
                                 case Hl7Version.R4:
-                                    return new R4.AddressAdapter<IEntity, OEntity>(tenant, format, version, source);
+                                    return new R4.AddressTransformer<IEntity, OEntity>(tenant, format, version, source);
 
                                 default:
                                     throw new ArgumentNullException("Address Handler");
@@ -129,7 +114,7 @@ namespace TransformerFactory.Model
                                     return new Stu3.DoseScheduleAdapter<IEntity, OEntity>(tenant, format, version, source);
 
                                 case Hl7Version.R4:
-                                    return new R4.DoseScheduleAdapter<IEntity, OEntity>(tenant, format, version, source);
+                                    return new R4.DoseScheduleTransformer<IEntity, OEntity>(tenant, format, version, source);
 
                                 default:
                                     throw new ArgumentNullException("DoseSchedule Handler");
@@ -262,7 +247,7 @@ namespace TransformerFactory.Model
                 {
                     switch (OUT.Name.ToLower())
                     {
-                        case "careevent":
+                        case "encounter":
                         //return new ScheduleAdapter<IEntity, OEntity>(tenant, format, version, source);
 
                         default:
@@ -276,11 +261,6 @@ namespace TransformerFactory.Model
             }
 
             return default;
-        }
-
-        public static ITransformer<IEntity, OEntity> GetTransformer(Guid tenant, Hl7Version version)
-        {
-            return GetTransformer(tenant, HL7Format.None, version, SourceSystems.None);
         }
     }
 }

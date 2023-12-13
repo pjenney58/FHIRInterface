@@ -20,10 +20,11 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 using System;
 using Hl7.Fhir.Model;
 using DataShapes.Model;
+using TransformerFactory.Interface;
 
 namespace TransformerFactory.Model.Stu3
 {
-    public class PrescriptionAdapter<IEntity, OEntity> : ITransformer<IEntity, OEntity>
+    public class PrescriptionAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
     {
@@ -56,7 +57,7 @@ namespace TransformerFactory.Model.Stu3
             throw new NotImplementedException();
         }
 
-        private async Task<OEntity> ConvertR4FhirToMeta()
+        private async Task<OEntity> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.MedicationRequest;
             if (fhir == null)
@@ -233,7 +234,7 @@ namespace TransformerFactory.Model.Stu3
             throw new NotImplementedException();
         }
 
-        private async Task<OEntity> ConvertMetaToR4Fhir()
+        private async Task<OEntity> ConvertMetaToFhir()
         {
             var meta = payloadIN as DataShapes.Model.Prescription;
             var fhir = new Hl7.Fhir.Model.MedicationRequest();
@@ -258,17 +259,17 @@ namespace TransformerFactory.Model.Stu3
             throw new NotImplementedException();
         }
 
-        public async Task<OEntity> Convert(IEntity payload)
+        public async Task<object?> Transform(object payload)
         {
             // Override this with the appropriate key conditions - replace MSG as desired. There may
             // be several similar messages required, e.g. SIU & SRM
             Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.MedicationRequest => DataShapes.Model.Prescription", Hl7Version.R4), ConvertR4FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Prescription => Hl7.Fhir.Model.MedicationRequest", Hl7Version.R4), ConvertMetaToR4Fhir }
+                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.MedicationRequest => DataShapes.Model.Prescription", Hl7Version.R4), ConvertFhirToMeta },
+                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Prescription => Hl7.Fhir.Model.MedicationRequest", Hl7Version.R4), ConvertMetaToFhir }
             };
 
-            payloadIN = payload;
+            payloadIN = payload as IEntity;
 
             var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
             if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))

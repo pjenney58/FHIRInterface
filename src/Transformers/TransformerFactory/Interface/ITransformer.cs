@@ -1,5 +1,5 @@
 ﻿/*
- MIT License - IAdapter.cs
+ MIT License - ITransformer.cs
 
 Copyright (c) 2021 - Present by Sand Drift Software, LLC
 All rights reserved.
@@ -19,19 +19,8 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 
 namespace TransformerFactory.Interface
 {
-    public interface ITransformer<IEntity, OEntity>
+    public interface ITransformer
     {
-        /// <summary>
-        /// Convert a single entity
-        /// </summary>
-        /// <param name="entity"> </param>
-        /// <returns> </returns>
-        Task<OEntity> Convert(IEntity entity);
-
-        /// <summary>
-        /// Return a generated list of OEntity
-        /// </summary>
-        /// <returns> IEnumerable OEntity </returns>
-        IEnumerable<OEntity> CollectOEntityItemListItem();
+        Task<object?> Transform(object data);
     }
 }

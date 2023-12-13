@@ -7,7 +7,11 @@ namespace Collectors.Model
 {
 	public class HL7v2Collector : Collector<HL7v2Collector>
 	{
-        private readonly MllpClient client;
+        private readonly MllpClient? client;
+
+        public HL7v2Collector() : base(Guid.Empty)
+		{
+		}
 
 		public HL7v2Collector(Guid tenantid) : base(tenantid)
 		{

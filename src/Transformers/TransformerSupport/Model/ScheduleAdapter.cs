@@ -60,7 +60,7 @@ namespace Hl7Harmonizer.Adapters.Model
             throw new NotImplementedException();
         }
 
-        private async Task<OEntity> ConvertR4FhirToMeta()
+        private async Task<OEntity> ConvertFhirToMeta()
         {
             // var p = payloadIN as Hl7.Fhir.Model.{Type}; var o = new DataShapes.Model.{Type}();
             throw new NotImplementedException();
@@ -81,7 +81,7 @@ namespace Hl7Harmonizer.Adapters.Model
             throw new NotImplementedException();
         }
 
-        private async Task<OEntity> ConvertMetaToR4Fhir()
+        private async Task<OEntity> ConvertMetaToFhir()
         {
             // var p = payloadIN as DataShapes.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
             throw new NotImplementedException();
@@ -573,7 +573,7 @@ namespace Hl7Harmonizer.Adapters.Model
                 { @"CareEvent/SRM_S06", ConvertMeta_ToV2_SRM }
             };
 
-            payloadIN = payload;
+            payloadIN = payload as IEntity;
 
             var jumpkey = $"{typeof(IEntity).Name}/{typeof(OEntity).Name}";
             if (jumpTable.TryGetValue(jumpkey, out TaskDelegate funcC))

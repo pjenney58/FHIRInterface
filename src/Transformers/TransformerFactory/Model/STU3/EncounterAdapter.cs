@@ -19,19 +19,21 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 
 using DataShapes.Model;
 using Hl7.Fhir.Model;
+using Task = System.Threading.Tasks.Task;
+using TransformerFactory.Interface;
 
 namespace TransformerFactory.Model.Stu3
 {
-    public class EncounterAdapter<IEntity, OEntity> : ITransformer<IEntity, OEntity>
+    public class EncounterAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
     {
-        private IEntity payloadIN;
-        private OEntity payloadOUT;
+        private IEntity? payloadIN;
+        private OEntity? payloadOUT;
 
         public delegate OEntity VoidDelegate();
 
-        public delegate Task<OEntity> TaskDelegate();
+        public delegate Task<OEntity?> TaskDelegate();
 
         public Hl7Version version { get; set; }
         public HL7Format format { get; set; }
@@ -46,16 +48,6 @@ namespace TransformerFactory.Model.Stu3
             this.format = format;
             this.version = version;
             this.source = source;
-        }
-
-        private OEntity ConvertR2FhirToMeta()
-        {
-            throw new NotImplementedException();
-        }
-
-        private OEntity ConvertR3FhirToMeta()
-        {
-            throw new NotImplementedException();
         }
 
         private CodingSystem GetCodingSystem(string link)
@@ -194,7 +186,7 @@ namespace TransformerFactory.Model.Stu3
             return string.Empty;
         }
 
-        private async Task<OEntity> ConvertR4FhirToMeta()
+        private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Encounter;
             var meta = new DataShapes.Model.Encounter()
@@ -359,97 +351,35 @@ namespace TransformerFactory.Model.Stu3
             return meta as OEntity;
         }
 
-        private async Task<OEntity> ConvertR5FhirToMeta()
+        private async Task<OEntity?> ConvertMetaToFhir()
         {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR2Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private Task<OEntity> ConvertMetaToR3Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private Task<OEntity> ConvertMetaToR4Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR5Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertV2_MSG_ToMeta()
-        {
-            // var meta = new DataShapes.Model..{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
-
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToV2_MSG()
-        {
-            // var meta = new DataShapes.Model..{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
-            throw new NotImplementedException();
-        }
-
-        /*
-         *   if(adapter_return == default)
-         *   {
-         *      foreach(var item in OEntityItems)
-         *      {
-         *          Do Somwthing with Item
-         *      }
-         *   }
-         */
-
-        private List<OEntity> OEntities = new();
-
-        public IEnumerable<OEntity> CollectOEntityItemListItem()
-        {
-            if (OEntities.Count > 0)
+            await Task.Run(() =>
             {
-                foreach (var item in OEntities)
-                {
-                    yield return item;
-                }
+            });
 
-                OEntities.Clear();
-                OEntities.TrimExcess();
-            }
+            throw new NotImplementedException();
         }
 
-        public async Task<OEntity> Convert(IEntity payload)
+        public async Task<object?> Transform(object payload)
         {
             // Override this with the appropriate key conditions - replace MSG as desired. There may
             // be several similar messages required, e.g. SIU & SRM
             Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Encounter => DataShapes.Model..Encounter", Hl7Version.R4), ConvertR4FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model..Encounter => Hl7.Fhir.Model.Encounter", Hl7Version.R4), ConvertMetaToR4Fhir },
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Encounter => DataShapes.Model..Encounter", Hl7Version.R5), ConvertR5FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model..Encounter => Hl7.Fhir.Model.Encounter", Hl7Version.R5), ConvertMetaToR5Fhir }
-            };
+                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Encounter => DataShapes.Model..Encounter", Hl7Version.Stu3), ConvertFhirToMeta },
+                { new Tuple<string, Hl7Version>(@"DataShapes.Model..Encounter => Hl7.Fhir.Model.Encounter", Hl7Version.Stu3), ConvertMetaToFhir },
+              };
 
-            payloadIN = payload;
+            payloadIN = payload as IEntity;
 
             var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
 
-            if (jumpTable.TryGetValue(jumpkey, out TaskDelegate funcC))
+            if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
             {
                 return await funcC();
             }
 
             return default;
-        }
-
-        public void Resolve(OEntity payload)
-        {
-            throw new NotImplementedException();
         }
     }
 }

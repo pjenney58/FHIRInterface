@@ -19,10 +19,11 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 
 
 using DataShapes.Model;
+using TransformerFactory.Interface;
 
 namespace TransformerFactory.Model.Dstu2
 {
-    public class AdditionalInfoAdapter<IEntity, OEntity> : ITransformer<IEntity, OEntity>
+    public class AdditionalInfoAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
     {
@@ -30,7 +31,7 @@ namespace TransformerFactory.Model.Dstu2
         private OEntity? payloadOUT;
 
         public delegate OEntity VoidDelegate();
-        public delegate Task<OEntity> TaskDelegate();
+        public delegate Task<OEntity?> TaskDelegate();
 
         public Hl7Version version { get; set; }
         public HL7Format format { get; set; }
@@ -45,74 +46,53 @@ namespace TransformerFactory.Model.Dstu2
             this.source = source;
         }
 
-        private async Task<OEntity> ConvertR2FhirToMeta()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertR3FhirToMeta()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertR4FhirToMeta()
+        private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Extension;
+            if(fhir == null)
+            {
+                throw new ArgumentNullException(nameof(fhir));
+            }
+
             var meta = new DataShapes.Model.AdditionalInfo();
+            if(meta == null)
+            {
+                throw new ArgumentNullException(nameof(meta));
+            }
+
+            await Task.Run(() =>
+            {
+            });
 
             return meta as OEntity;
         }
 
-        private async Task<OEntity> ConvertR5FhirToMeta()
+        private async Task<OEntity?> ConvertMetaToFhir()
         {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR2Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR3Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR4Fhir()
-        {
+                  await Task.Run(() =>
+            {
+            });
             // var fhir = payloadIN as DataShapes.Model.{Type}; var meta = new Hl7.Fhir.Model.{Type}();
             throw new NotImplementedException();
         }
 
-        private async Task<OEntity> ConvertMetaToR5Fhir()
+        public async Task<object?> Transform(object payload)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<OEntity> Convert(IEntity payload)
-        {
-            payloadIN = payload;
+            payloadIN = payload as IEntity;
 
             Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Extension => DataShapes.Model.AdditionalInfo", Hl7Version.R4), ConvertR4FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.AdditionalInfo => Hl7.Fhir.Model.Extension", Hl7Version.R4), ConvertMetaToR4Fhir }
+                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Extension => DataShapes.Model.AdditionalInfo", Hl7Version.Dstu2), ConvertFhirToMeta },
+                { new Tuple<string, Hl7Version>(@"DataShapes.Model.AdditionalInfo => Hl7.Fhir.Model.Extension", Hl7Version.Dstu2), ConvertMetaToFhir }
             };
 
-            payloadIN = payload;
-
             var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
-            if (jumpTable.TryGetValue(jumpkey, out TaskDelegate funcC))
+            if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
             {
                 return await funcC();
             }
 
             return default;
-        }
-
-        public IEnumerable<OEntity> CollectOEntityItemListItem()
-        {
-            throw new NotImplementedException();
         }
     }
 }

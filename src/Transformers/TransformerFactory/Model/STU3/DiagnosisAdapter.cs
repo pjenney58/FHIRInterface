@@ -17,6 +17,8 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using TransformerFactory.Interface;
+
 namespace TransformerFactory.Model.Stu3
 {
     /// <summary>
@@ -24,7 +26,7 @@ namespace TransformerFactory.Model.Stu3
     /// </summary>
     /// <typeparam name="IEntity"> </typeparam>
     /// <typeparam name="OEntity"> </typeparam>
-    public class DiagnosisAdapter<IEntity, OEntity> : ITransformer<IEntity, OEntity>
+    public class DiagnosisAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
     {
@@ -59,7 +61,7 @@ namespace TransformerFactory.Model.Stu3
             throw new NotImplementedException();
         }
 
-        private async Task<OEntity> ConvertR4FhirToMeta()
+        private async Task<OEntity> ConvertFhirToMeta()
         {
             // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
             throw new NotImplementedException();
@@ -83,7 +85,7 @@ namespace TransformerFactory.Model.Stu3
             throw new NotImplementedException();
         }
 
-        private async Task<OEntity> ConvertMetaToR4Fhir()
+        private async Task<OEntity> ConvertMetaToFhir()
         {
             // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
             throw new NotImplementedException();
@@ -108,14 +110,14 @@ namespace TransformerFactory.Model.Stu3
             throw new NotImplementedException();
         }
 
-        public async Task<OEntity> Convert(IEntity payload)
+        public async Task<object?> Transform(object payload)
         {
-            payloadIN = payload;
+            payloadIN = payload as IEntity;
 
             Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Diagnosis => DataShapes.Model.Diagnosis", Hl7Version.R4), ConvertR4FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Diagnosis => Hl7.Fhir.Model.Diagnosis", Hl7Version.R4), ConvertMetaToR4Fhir }
+                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Diagnosis => DataShapes.Model.Diagnosis", Hl7Version.R4), ConvertFhirToMeta },
+                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Diagnosis => Hl7.Fhir.Model.Diagnosis", Hl7Version.R4), ConvertMetaToFhir }
             };
 
             var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);

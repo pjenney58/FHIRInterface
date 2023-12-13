@@ -33,10 +33,11 @@ using Stu3 = stu3::Hl7.Fhir.Model;
 
 using DataShapes.Model;
 using Hl7.Fhir.Model;
+using TransformerFactory.Interface;
 
 namespace TransformerFactory.Model.Stu3
 {
-    public class PatientAdapter<IEntity, OEntity> : ITransformer<IEntity, OEntity>
+    public class PatientAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
     {
@@ -58,17 +59,7 @@ namespace TransformerFactory.Model.Stu3
             this.source = source;
         }
 
-        private async Task<OEntity> ConvertR2FhirToMeta()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertR3FhirToMeta()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertR4FhirToMeta()
+        private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Patient;
             var meta = new DataShapes.Model.Patient()
@@ -80,21 +71,21 @@ namespace TransformerFactory.Model.Stu3
                 PrimaryPatientIdString = fhir.Id
             };
 
-            var nameconverter = TransformerFactory<Hl7.Fhir.Model.HumanName, DataShapes.Model.PersonName>.GetTransformer(tenant, version);
+            var nameconverter = TransformerFactory.Create<Hl7.Fhir.Model.HumanName, DataShapes.Model.PersonName>(tenant, format, version, source);
             foreach (var name in fhir.Name)
             {
-                meta.Name = await nameconverter.Convert(name);
+                meta.Name = await nameconverter.Transform(name) as DataShapes.Model.PersonName;
             }
 
             // Known addresses
-            var addressAdapter = TransformerFactory<Hl7.Fhir.Model.Address, DataShapes.Model.Address>.GetTransformer(tenant, version);
+            var addressAdapter = TransformerFactory.Create<Hl7.Fhir.Model.Address, DataShapes.Model.Address>(tenant, format, version, source);
             foreach (var address in fhir.Address)
             {
-                meta.Addresses.Add(await addressAdapter.Convert(address));
+                meta.Addresses.Add(await addressAdapter.Transform(address) as DataShapes.Model.Address);
             }
 
             // Practitioners ...
-            var pr = TransformerFactory<Hl7.Fhir.Model.Practitioner, DataShapes.Model.Practitioner>.GetTransformer(tenant, version);
+            var pr = TransformerFactory.Create<Hl7.Fhir.Model.Practitioner, DataShapes.Model.Practitioner>(tenant, format, version, source);
             foreach (var practioner in fhir.GeneralPractitioner)
             {
                 PatientPractitioner pp = new();
@@ -142,62 +133,23 @@ namespace TransformerFactory.Model.Stu3
             return meta as OEntity;
         }
 
-        private async Task<OEntity> ConvertR5FhirToMeta()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR5Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR2Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR3Fhir()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToR4Fhir()
+        private async Task<OEntity?> ConvertMetaToFhir()
         {
             // var p = payloadIN as DataShapes.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
             throw new NotImplementedException();
         }
 
-        private async Task<OEntity> ConvertV2_MSG_ToMeta()
-        {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
-
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToV2_MSG()
-        {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
-            throw new NotImplementedException();
-        }
-
-        public async Task<OEntity> Convert(IEntity payload)
+        public async Task<object?> Transform(object payload)
         {
             // Override this with the appropriate key conditions - replace MSG as desired. There may
             // be several similar messages required, e.g. SIU & SRM
             Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Patient => DataShapes.Model.Patient", Hl7Version.Dstu2), ConvertR5FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Patient => Hl7.Fhir.Model.Patient", Hl7Version.Dstu2), ConvertMetaToR5Fhir },
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Patient => DataShapes.Model.Patient", Hl7Version.Stu3), ConvertR3FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Patient => Hl7.Fhir.Model.Patient", Hl7Version.Stu3), ConvertMetaToR3Fhir },
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Patient => DataShapes.Model.Patient", Hl7Version.R4), ConvertR4FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Patient => Hl7.Fhir.Model.Patient", Hl7Version.R4), ConvertMetaToR4Fhir },
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Patient => DataShapes.Model.Patient", Hl7Version.R5), ConvertR5FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Patient => Hl7.Fhir.Model.Patient", Hl7Version.R5), ConvertMetaToR5Fhir }
+                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Patient => DataShapes.Model.Patient", Hl7Version.R4), ConvertFhirToMeta },
+                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Patient => Hl7.Fhir.Model.Patient", Hl7Version.R4), ConvertMetaToFhir }
             };
 
-            payloadIN = payload;
+            payloadIN = payload as IEntity;
 
             var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
             if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
