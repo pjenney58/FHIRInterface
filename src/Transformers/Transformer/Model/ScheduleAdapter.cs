@@ -1,21 +1,4 @@
-/*
- MIT License - ScheduleAdapter.cs
 
-Copyright (c) 2021 - Present by Sand Drift Software, LLC
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
-modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
-OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 
 // https://qnetconfluence.cms.gov/display/ELDF/Documentation+Repository
 
@@ -26,9 +9,9 @@ using Patient = DataShapes.Model.Patient;
 using Practitioner = DataShapes.Model.Practitioner;
 using Task = System.Threading.Tasks.Task;
 
-namespace Hl7Harmonizer.Adapters.Model
+namespace Transformers.Model
 {
-    public class ScheduleAdapter<IEntity, OEntity> : IAdapter<IEntity, OEntity>
+    public class ScheduleAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
     {
@@ -547,19 +530,20 @@ namespace Hl7Harmonizer.Adapters.Model
 
         public async Task<OEntity> Convert(IEntity payload)
         {
+           
             Dictionary<string, TaskDelegate> jumpTable = new Dictionary<string, TaskDelegate>()
             {
-                { @"SIU_S12/CareEvent", ConvertV2_SIU_ToMeta },
-                { @"SIU_S13/CareEvent", ConvertV2_SIU_ToMeta },
-                { @"SIU_S14/CareEvent", ConvertV2_SIU_ToMeta },
-                { @"SIU_S15/CareEvent", ConvertV2_SIU_ToMeta },
-                { @"SIU_S17/CareEvent", ConvertV2_SIU_ToMeta },
-                { @"SIU_S26/CareEvent", ConvertV2_SIU_ToMeta },
-                { @"SRM_S01/CareEvent", ConvertV2_SRM_ToMeta },
-                { @"SRM_S02/CareEvent", ConvertV2_SRM_ToMeta },
-                { @"SRM_S03/CareEvent", ConvertV2_SRM_ToMeta },
-                { @"SRM_S04/CareEvent", ConvertV2_SRM_ToMeta },
-                { @"SRM_S06/CareEvent", ConvertV2_SRM_ToMeta },
+                //{ @"SIU_S12/CareEvent", ConvertV2_SIU_ToMeta },
+                //{ @"SIU_S13/CareEvent", ConvertV2_SIU_ToMeta },
+               // { @"SIU_S14/CareEvent", ConvertV2_SIU_ToMeta },
+                //{ @"SIU_S15/CareEvent", ConvertV2_SIU_ToMeta },
+                //{ @"SIU_S17/CareEvent", ConvertV2_SIU_ToMeta },
+                //{ @"SIU_S26/CareEvent", ConvertV2_SIU_ToMeta },
+                //{ @"SRM_S01/CareEvent", ConvertV2_SRM_ToMeta },
+                //{ @"SRM_S02/CareEvent", ConvertV2_SRM_ToMeta },
+                //{ @"SRM_S03/CareEvent", ConvertV2_SRM_ToMeta },
+                //{ @"SRM_S04/CareEvent", ConvertV2_SRM_ToMeta },
+                //{ @"SRM_S06/CareEvent", ConvertV2_SRM_ToMeta },
                 { @"CareEvent/SIU_S12", ConvertMeta_ToV2_SIU },
                 { @"CareEvent/SIU_S13", ConvertMeta_ToV2_SIU },
                 { @"CareEvent/SIU_S14", ConvertMeta_ToV2_SIU },
@@ -585,6 +569,11 @@ namespace Hl7Harmonizer.Adapters.Model
         }
 
         public IEnumerable<OEntity> CollectOEntityItemListItem()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<object?> Transform(object data)
         {
             throw new NotImplementedException();
         }

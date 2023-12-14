@@ -2,13 +2,10 @@
 using Confluent.Kafka;
 using Collectors.Interface;
 using Transporters.Interface;
-using TransformerFactory.Interface;
 using TransformerFactory.Model;
+using Transformers.Model;
+
 using Task = System.Threading.Tasks.Task;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text.Json;
-using System.Reflection;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Collectors.Model
 {
@@ -120,8 +117,8 @@ namespace Collectors.Model
                 {
                     var payload = transformerconsumer.Consume(cancellationToken);
                     
-                    Type t1 = payload.Message.Value.Type1;
-                    Type t2 = payload.Message.Value.Type2;
+                    var transform = new Transformer(TenantId) ;
+                    var result = await transform.Transform(payload.data);
 
                     /*
                     var transformer = TransformerFactory.GetTransformer<t1,t2>(Guid.Parse(TenantId), 

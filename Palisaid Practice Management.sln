@@ -118,7 +118,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hl7CDACollector", "src\Coll
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICD", "src\Retrievers\ICD\ICD.csproj", "{92353F55-A4E6-4A28-AE98-6363C1CDA9FC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transformer", "src\Transformers\TransformerSupport\Transformer.csproj", "{AF28DA3B-7564-4068-B333-98CB6B340952}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transformer", "src\Transformers\Transformer\Transformer.csproj", "{AF28DA3B-7564-4068-B333-98CB6B340952}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransformerFactory", "src\Transformers\TransformerFactory\TransformerFactory.csproj", "{ADAC8DD0-7F25-4C9D-B058-598E720A3B57}"
 EndProject

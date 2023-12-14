@@ -40,6 +40,5 @@
     <ProjectReference Include="..\..\src\Transformers\TransformerFactory\TransformerFactory.csproj" />
     <ProjectReference Include="..\..\src\Transporters\TransporterFactory\TransporterFactory.csproj" />
     <ProjectReference Include="..\..\src\Transporters\Fhir4Transporter\Fhir4Transporter.csproj" />
-    <ProjectReference Include="..\..\src\Transformers\TransformerSupport\Transformer.csproj" />
   </ItemGroup>
 </Project>
