@@ -1,8 +1,8 @@
 ﻿
 using NLog.Filters;
-using TransformerFactory.Interface;
+using Transformers.Interface;
 
-namespace TransformerFactory.Model
+namespace Transformers.Model
 {    
     public static class TransformerFactory 
     {

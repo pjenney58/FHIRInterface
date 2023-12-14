@@ -1,4 +1,4 @@
 ﻿global using Xunit;
-global using TransformerFactory.Interface;
-global using TransformerFactory.Model.R4;
-global using TransformerFactory.Model;
+global using Transformers.Interface;
+global using Transformers.Model.R4;
+global using Transformers.Model;

@@ -16,9 +16,9 @@ OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO 
 BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-using TransformerFactory.Interface;
+using Transformers.Interface;
 
-namespace TransformerFactory.Model.R4
+namespace Transformers.Model.R4
 {
     public class LocationAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()

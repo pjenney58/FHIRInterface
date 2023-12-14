@@ -20,8 +20,8 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 using System;
 using Hl7.Fhir.Model;
 using DataShapes.Model;
-using TransformerFactory.Interface;
-namespace TransformerFactory.Model.R4
+using Transformers.Interface;
+namespace Transformers.Model.R4
 {
     public class PrescriptionAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Transformers.Model;
 
 namespace Transformers.Interface
 {
@@ -12,7 +13,7 @@ namespace Transformers.Interface
         public Type Type2 { get; set; }
         public HL7Format Format { get; set; }
         public Hl7Version Version { get; set; }
-        public SourceSystems Src { get; set; }
-        public string data { get; set; }
+        public SourceSystems SourceHost { get; set; }
+        public object data { get; set; }
     }
 }

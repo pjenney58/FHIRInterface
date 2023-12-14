@@ -3,11 +3,10 @@
 //  2. Gets messages from MQ creates the proper transformation using the TransformerFactory
 //  3. Returns converted data to the MQ
 
-using Microsoft.Extensions.Configuration;
 using Confluent.Kafka;
-using TransformerFactory.Interface;
-using System.Security.Cryptography.Xml;
-using Transformers.Interface;
+using DataShapes.Model;
+using Microsoft.Extensions.Configuration;
+
 
 namespace Transformers.Model
 {
@@ -19,7 +18,7 @@ namespace Transformers.Model
 
         protected void GetApplicationConfig(string configname)
         {
-            config = new ConfigurationBuilder()
+           config = new ConfigurationBuilder()
               .AddJsonFile(configname)
               .Build();
         }
@@ -47,10 +46,10 @@ namespace Transformers.Model
 
         public Transformer(Guid tenantid)
         {
-            GetApplicationConfig("transformersettings.json");
+           // GetApplicationConfig("transformersettings.json");
 
             TenantId = tenantid;
-
+#if !DEBUG
             // Setup command topic
             consumer = new ConsumerBuilder<string, string>(kcconfig).Build();
             consumer.Subscribe("CommandControl");
@@ -62,23 +61,32 @@ namespace Transformers.Model
             // Setup data out topic
             producer = new ProducerBuilder<string, string>(kpconfig).Build();
 
+
             TaskFactory taskFactory = new TaskFactory();
             var commandtask = taskFactory.StartNew(() => WaitForCommandRequest());
             var transfortmtask = taskFactory.StartNew(() => WaitForTransformRequest());
+#endif
         }
 
-        public async Task<string?> Transform(TransformerPayload payload)
+        public async Task<object?> Transform(TransformerPayload payload)
         {
-            /*
-            var transformer = TransformerFactory.GetTransformer<t1,t2>(Guid.Parse(TenantId), 
-                                                                       payload.Message.Value.Format, 
-                                                                       payload.Message.Value.Version, 
-                                                                       payload.Message.Value.Src);
-            
-            var result = await transformer.Transform(payload.data);
-            */
+            try
+            {
+                // Get the detailed Create to match the payload parameters
+                var transformer = typeof(TransformerFactory)
+                                     .GetMethods().First(w => w.Name == "Create" && w.GetParameters().Count() > 2)
+                                     .MakeGenericMethod(payload.Type1, payload.Type2)
+                                     .Invoke(this, new object[] { TenantId, payload.Format, payload.Version, payload.SourceHost }) as ITransformer;
 
-            return default;
+                if (transformer == null)
+                {
+                    throw new ArgumentNullException("transformer");
+                }
+
+                return await transformer.Transform(payload.data);
+            }
+            finally
+            { }
         }
 
         protected virtual async Task WaitForTransformRequest()
@@ -93,7 +101,7 @@ namespace Transformers.Model
                 {
                     var payload = transformerconsumer.Consume(cancellationToken);     
                     var result = await Transform(payload.Message.Value);
-                    var message = new Message<string, string> { Key = payload.Message.Key, Value = !string.IsNullOrEmpty(result) ? result : string.Empty };
+                    var message = new Message<string, string> { Key = payload.Message.Key, Value = result.ToString() };
                     producer.Produce("TransformedData", message);
                 }
             }

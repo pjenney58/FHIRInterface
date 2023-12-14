@@ -18,9 +18,9 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using Hl7.Fhir.Validation;
-using TransformerFactory.Interface;
+using Transformers.Interface;
 
-namespace TransformerFactory.Model.R4
+namespace Transformers.Model.R4
 {
     public class DoseScheduleTransformer<IEntity, OEntity> : ITransformer
         where OEntity : class, new()

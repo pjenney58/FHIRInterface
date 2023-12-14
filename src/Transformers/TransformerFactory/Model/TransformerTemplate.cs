@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-using TransformerFactory.Interface;
+using Transformers.Interface;
 
-namespace TransformerFactory.Model
+namespace Transformers.Model
 {
     public class TransformerTemplate<IEntity, OEntity> : ITransformer
         where OEntity : class, new()

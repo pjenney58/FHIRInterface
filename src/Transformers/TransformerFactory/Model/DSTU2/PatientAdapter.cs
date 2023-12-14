@@ -34,10 +34,10 @@ using Stu3 = stu3::Hl7.Fhir.Model;
 using DataShapes.Model;
 using Hl7.Fhir.Model;
 using Task = System.Threading.Tasks.Task;
-using TransformerFactory.Model;
-using TransformerFactory.Interface;
+using Transformers.Model;
+using Transformers.Interface;
 
-namespace TransformerFactory.Model.Dstu2
+namespace Transformers.Model.Dstu2
 {
     public class PatientAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()

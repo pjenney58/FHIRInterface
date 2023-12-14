@@ -20,9 +20,9 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 using DataShapes.Model;
 using Hl7.Fhir.Model;
 using Task = System.Threading.Tasks.Task;
-using TransformerFactory.Interface;
+using Transformers.Interface;
 
-namespace TransformerFactory.Model.Stu3
+namespace Transformers.Model.Stu3
 {
     public class EncounterAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()

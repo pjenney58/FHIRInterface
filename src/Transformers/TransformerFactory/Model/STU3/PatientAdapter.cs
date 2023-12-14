@@ -33,9 +33,9 @@ using Stu3 = stu3::Hl7.Fhir.Model;
 
 using DataShapes.Model;
 using Hl7.Fhir.Model;
-using TransformerFactory.Interface;
+using Transformers.Interface;
 
-namespace TransformerFactory.Model.Stu3
+namespace Transformers.Model.Stu3
 {
     public class PatientAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()

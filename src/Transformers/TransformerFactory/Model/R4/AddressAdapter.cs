@@ -33,9 +33,9 @@ using Hl7.Fhir.Model;
 
 using DataShapes.Model;
 using Task = System.Threading.Tasks.Task;
-using TransformerFactory.Interface;
+using Transformers.Interface;
 
-namespace TransformerFactory.Model.R4
+namespace Transformers.Model.R4
 {
     public class AddressTransformer<IEntity, OEntity> : ITransformer
         where OEntity : class, new()

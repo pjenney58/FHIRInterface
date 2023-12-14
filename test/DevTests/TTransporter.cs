@@ -15,13 +15,13 @@ namespace DevTests.Transporter
         {
             try
             {
-                global::Transporters.Model.Transporter mllptransporter = TransporterFactory.CreateTransporter("mllp");
+                Transporters.Model.Transporter mllptransporter = TransporterFactory.Create("mllp");
                 Assert.NotNull(mllptransporter);
 
-                global::Transporters.Model.Transporter tcptransporter = TransporterFactory.CreateTransporter("tcpip");
+                Transporters.Model.Transporter tcptransporter = TransporterFactory.Create("tcpip");
                 Assert.NotNull(tcptransporter);
 
-                global::Transporters.Model.Transporter resttransporter = TransporterFactory.CreateTransporter("rest");
+                Transporters.Model.Transporter resttransporter = TransporterFactory.Create("rest");
                 Assert.NotNull(resttransporter);
             }
             catch (Exception ex)

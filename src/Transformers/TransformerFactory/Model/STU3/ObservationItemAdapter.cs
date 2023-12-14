@@ -18,9 +18,9 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using Task = System.Threading.Tasks.Task;
-using TransformerFactory.Interface;
+using Transformers.Interface;
 
-namespace TransformerFactory.Model.Stu3
+namespace Transformers.Model.Stu3
 {
     public class ObservationItemAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()

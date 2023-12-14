@@ -35,11 +35,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\DataShapes\DataShapes.csproj" />
-    <ProjectReference Include="..\..\src\Transformers\TransformerFactory\TransformerFactory.csproj" />
     <ProjectReference Include="..\..\src\Transformers\Transformer\Transformer.csproj" />
+    <ProjectReference Include="..\..\src\Transporters\TransporterFactory\TransporterFactory.csproj" />
     <ProjectReference Include="..\..\src\Transporters\Transporter\Transporter.csproj" />
     <ProjectReference Include="..\..\src\Collectors\Collector\Collector.csproj" />
-    <ProjectReference Include="..\..\src\Transporters\TransporterFactory\TransporterFactory.csproj" />
     <ProjectReference Include="..\..\src\Transporters\Fhir4Transporter\Fhir4Transporter.csproj" />
   </ItemGroup>
 </Project>

@@ -4,9 +4,7 @@ using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Npgsql;
 using RandomDataGenerator;
-using TransformerFactory.Interface;
-using TransformerFactory.Model;
-using TransformerFactory.Model.R4;
+
 
 
 
@@ -390,7 +388,7 @@ namespace DevTests
                                     var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Patient, DataShapes.Model.Patient>(_tenantId, version);
                                     Assert.NotNull(fhirConverter);
 
-                                    var metaPatient = await fhirConverter.Transform(patient);
+                                    var metaPatient = await fhirConverter.Transform(patient) as DataShapes.Model.Patient;
                                     Assert.NotNull(metaPatient);
 
                                     try
@@ -429,7 +427,7 @@ namespace DevTests
                                                 var fhirEncounterConverter = TransformerFactory.Create<Hl7.Fhir.Model.Encounter, DataShapes.Model.Encounter>(_tenantId, version);
                                                 Assert.NotNull(fhirEncounterConverter);
 
-                                                var metaEncounter = await fhirEncounterConverter.Transform(encounter);
+                                                var metaEncounter = await fhirEncounterConverter.Transform(encounter) as DataShapes.Model.Encounter;
                                                 Assert.NotNull(metaEncounter);
 
                                                 try
@@ -489,7 +487,7 @@ namespace DevTests
                                         var fhirScripConverter = TransformerFactory.Create<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>(_tenantId, version);
                                         Assert.NotNull(fhirScripConverter);
 
-                                        var metaScrip = await fhirScripConverter.Transform(scrip);
+                                        var metaScrip = await fhirScripConverter.Transform(scrip) as DataShapes.Model.Prescription;
                                         Assert.NotNull(scrip);
 
                                         metaPatient?.Prescriptions?.Add(metaScrip);

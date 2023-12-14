@@ -2,7 +2,7 @@
 {
     public static class TransporterFactory
     {
-        public static Transporter CreateTransporter(string transporterType)
+        public static Transporter Create(string transporterType)
         {
             switch (transporterType.ToLower())
             {

@@ -17,9 +17,9 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using TransformerFactory.Interface;
+using Transformers.Interface;
 
-namespace TransformerFactory.Model.Stu3
+namespace Transformers.Model.Stu3
 {
     public class LocationAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()

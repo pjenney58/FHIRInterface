@@ -2,7 +2,7 @@
 
 using DataShapes.Model;
 
-namespace TransformerFactory.Model.Dstu2
+namespace Transformers.Model.Dstu2
 {
     /*
     internal class AbstractHandler

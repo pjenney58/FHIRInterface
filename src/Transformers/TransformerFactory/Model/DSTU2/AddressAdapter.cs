@@ -32,11 +32,11 @@ using Hl7.Fhir.Model;
 //using Dstu2 = dstu2::Hl7.Fhir.Model;
 
 using DataShapes.Model;
-using TransformerFactory.Interface;
+using Transformers.Interface;
 using Task = System.Threading.Tasks.Task;
 
 
-namespace TransformerFactory.Model.Dstu2
+namespace Transformers.Model.Dstu2
 {
     public class AddressAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()

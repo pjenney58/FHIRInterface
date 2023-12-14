@@ -1,4 +1,4 @@
-﻿namespace TransformerFactory.Model.Stu3
+﻿namespace Transformers.Model.Stu3
 {
     /*
     internal class AbstractHandler

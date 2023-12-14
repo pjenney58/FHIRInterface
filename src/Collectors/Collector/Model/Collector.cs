@@ -66,7 +66,7 @@ namespace Collectors.Model
         {
             BootstrapServers = "palisaid:9002"
         };
-        protected IProducer<string, string> producer;
+        protected IProducer<string, object> producer;
 #endregion MQSetup
 
         public Collector(Guid tenantid)
@@ -84,7 +84,7 @@ namespace Collectors.Model
             transformerconsumer.Subscribe("TransformerControl");
 
             // Setup data out topic
-            producer = new ProducerBuilder<string, string>(kpconfig).Build();
+            producer = new ProducerBuilder<string, object>(kpconfig).Build();
 
             TaskFactory taskFactory = new TaskFactory();
             taskFactory.StartNew(() => WaitForCommand());
@@ -105,7 +105,7 @@ namespace Collectors.Model
                     var payload = transformerconsumer.Consume(cancellationToken);
                     var transform = new Transformer(Guid.Parse(TenantId));
                     var result = await transform.Transform(payload.Value);
-                    producer.Produce(result, new Message<string, string> { Key = payload.Message.Key, Value = result });
+                    producer.Produce(payload.Message.Key, new Message<string, object> { Key = payload.Message.Key, Value = result});
                 }
             }
         

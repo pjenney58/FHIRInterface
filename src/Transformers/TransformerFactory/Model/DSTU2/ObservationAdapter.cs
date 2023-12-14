@@ -18,9 +18,9 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using DataShapes.Model;
-using TransformerFactory.Interface;
+using Transformers.Interface;
 
-namespace TransformerFactory.Model.Dstu2
+namespace Transformers.Model.Dstu2
 {
     public class ObservationAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
