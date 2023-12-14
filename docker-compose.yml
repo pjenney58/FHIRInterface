@@ -1,36 +1,87 @@
 version: '3.8'
 
-services:
+services:      
   PrimaryConsumerApi:
-    image: ${DOCKER_REGISTRY-}primary-consumer-api
+    container_name: api-palisaid-consumer
     environment:
     - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
+    
+    image: ${DOCKER_REGISTRY-}primary-consumer-api
     restart: always
     ports: 
       - "5001:80"
     build:
       context: .
-      dockerfile: src/PrimaryControllers/Dockerfile
-    depends_on:
-      - postgres
+      dockerfile: src/PrimaryControllers/DebugDockerfile
+    
+    networks:
+      - backend-network
+
+  fhir4collector:
+    container_name: fhir4Collector
+    environment:
+    - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
+    
+    image: ${DOCKER_REGISTRY-}fhir4collector
+    restart: always
+    ports: 
+      - "5002:80"
+    build:
+      context: .
+      dockerfile: src/Collectors/Fhir4Collector/Dockerfile
     networks:
       - backend-network
 
   postgres:
-    image: pjenney58/palisaiddb:latest
+    image: postgres:15.5-bullseye
+    container_name: db-postgres-all
     restart: always
     ports:
       - 5432:5432
+
     deploy:
       endpoint_mode: vip
       labels:
         com.example.description: "This label will appear on the service"
+
     volumes:
       - data:/var/lib/postgresql/data
+      - ~/.postgres-data:/mnt/configuration-data
+      - ~/.postgres-data:/root/.gnupg
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pgpassword
+
     networks:
       - backend-network
+  
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pete.jenney@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    ports:
+      - "5050:80"
+    networks:
+      - backend-network
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    networks:
+      - backend-network
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
 
 networks:
   backend-network:

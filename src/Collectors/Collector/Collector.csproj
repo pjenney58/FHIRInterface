@@ -1,34 +1,36 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <DockerComposeProjectPath>../../../docker-compose.dcproj</DockerComposeProjectPath>
-    <UserSecretsId>0acb847a-861e-4cfc-b8ad-ec127bb596a0</UserSecretsId>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<DockerComposeProjectPath>../../../docker-compose.dcproj</DockerComposeProjectPath>
+		<UserSecretsId>0acb847a-861e-4cfc-b8ad-ec127bb596a0</UserSecretsId>
+	</PropertyGroup>
 
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
-    <PackageReference Include="Quartz" Version="3.8.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Confluent.Kafka" Version="2.3.0" />
-  </ItemGroup>
+	<PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
+	<PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+		<PackageReference Include="Quartz" Version="3.8.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Confluent.Kafka" Version="2.3.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\DataShapes\DataShapes.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Transporters\Transporter\Transporter.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\DataShapes\DataShapes.csproj">
+			<GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+		</ProjectReference>
+		<ProjectReference Include="..\..\Transformers\TransformerFactory\TransformerFactory.csproj" />
+		<ProjectReference Include="..\..\Transporters\Transporter\Transporter.csproj" />
+		<ProjectReference Include="..\..\Transformers\Transformer\Transformer.csproj" />
+	</ItemGroup>
 </Project>

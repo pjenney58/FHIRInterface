@@ -2,7 +2,7 @@
 using Support.Model;
 using System.Security.Cryptography.X509Certificates;
 
-namespace Transporter.Model
+namespace Transporters.Model
 {
     public class TcpIpClient : Transporter
     {

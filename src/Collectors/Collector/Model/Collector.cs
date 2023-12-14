@@ -1,37 +1,17 @@
-﻿using DataShapes.Model;
+﻿using Collectors.Interface;
 using Confluent.Kafka;
-using Collectors.Interface;
+using DataShapes.Model;
+using Transformers.Interface;
+using Transformers.Model;
+using Transporters.Interface;
+using Transporters.Model;
+using Task = System.Threading.Tasks.Task;
 
 namespace Collectors.Model
 {
-    public abstract class Collector<T> : ICollector,  IDisposable
+    public abstract class Collector<T> : ICollector, IDisposable
     {
-        // Message consumer, commands from controller
-        private ConsumerConfig kcconfig = new()
-        {
-            GroupId = "Collectors",
-            BootstrapServers = "palisaid:9002",
-            AutoOffsetReset = AutoOffsetReset.Earliest
-        };
-        private IConsumer<string, string> consumer;
-
-        // Message producer, data to controller
-        private ProducerConfig kpconfig = new()
-        {
-            BootstrapServers = "palisaid:9002"
-        };
-        private IProducer<string, string> producer;
-
-        public Collector(Guid tenantid)
-        {
-            TenantId = tenantid.ToString();
-
-            consumer = new ConsumerBuilder<string, string>(kcconfig).Build();
-            consumer.Subscribe("CollectorControl");
-
-            producer = new ProducerBuilder<string, string>(kpconfig).Build();
-        }
-
+#region strings
         private string Name = "Name";
         private string Version = "Version";
         private string Description = "Description";
@@ -40,6 +20,7 @@ namespace Collectors.Model
         private string TenantId = Guid.Empty.ToString();
         private string TenantName = "TenantName";
         private string TenantDescription = "TenantDescription";
+        private string Transform = "Transform";
 
         private Dictionary<string, string> _parameters = new()
         {
@@ -50,26 +31,102 @@ namespace Collectors.Model
             { "Url", "Value" },
             { "TenantId", "Value" },
             { "TenantName", "Value" },
-            { "TenantDescription", "Value" }
+            { "TenantDescription", "Value" },
+            { "Transform", "Value" }
+        };
+#endregion strings
+
+        protected IConfiguration? config;
+        protected CollectorConfig? collectorconfig;
+        protected ITransporter transporter;
+        
+
+        protected void GetApplicationConfig(string configname)
+        {
+            config = new ConfigurationBuilder()
+              .AddJsonFile(configname)
+              .Build();
+        }
+
+#region MQSetup
+        // Message consumer, commands from controller
+        protected ConsumerConfig kcconfig = new()
+        {
+            GroupId = "Collectors",
+            BootstrapServers = "palisaid:9002",
+            AutoOffsetReset = AutoOffsetReset.Earliest
         };
 
-        private CollectorConfig? config;
-        private DataShapeContext? context;
 
-        // Configure the system on input fron the controller
-        private async Task WaitForCommand()
+        protected IConsumer<string, string> consumer;
+        protected IConsumer<string, TransformerPayload> transformerconsumer;
+
+        // Message producer, data to controller
+        protected ProducerConfig kpconfig = new()
+        {
+            BootstrapServers = "palisaid:9002"
+        };
+        protected IProducer<string, object> producer;
+#endregion MQSetup
+
+        public Collector(Guid tenantid)
+        {
+            GetApplicationConfig("collectorsettings.json");
+
+            TenantId = tenantid.ToString();
+
+            // Setup command topic
+            consumer = new ConsumerBuilder<string, string>(kcconfig).Build();
+            consumer.Subscribe("CollectorControl");
+
+            // Setup transform topic
+            transformerconsumer = new ConsumerBuilder<string, TransformerPayload>(kcconfig).Build();
+            transformerconsumer.Subscribe("TransformerControl");
+
+            // Setup data out topic
+            producer = new ProducerBuilder<string, object>(kpconfig).Build();
+
+            TaskFactory taskFactory = new TaskFactory();
+            taskFactory.StartNew(() => WaitForCommand());
+            taskFactory.StartNew(() => WaitForTransformRequest());
+        }
+
+        protected virtual async Task WaitForTransformRequest()
         {
             bool cancelled = false;
             CancellationToken cancellationToken = new CancellationToken();
+            
+            // Listening for configuration commands
+            using (transformerconsumer)
+            {
+                while (!cancelled)
+                {
+                    // Block until a message is consumed from the Kafka topic.
+                    var payload = transformerconsumer.Consume(cancellationToken);
+                    var transform = new Transformer(Guid.Parse(TenantId));
+                    var result = await transform.Transform(payload.Value);
+                    producer.Produce(payload.Message.Key, new Message<string, object> { Key = payload.Message.Key, Value = result});
+                }
+            }
+        
+            return;
+        }
 
-            using (var consumer = new ConsumerBuilder<string, string>(kcconfig).Build())
+        // Configure the system on input fron the controller
+        protected virtual async Task WaitForCommand()
+        {
+            bool cancelled = false;
+            CancellationToken cancellationToken = new CancellationToken();
+            
+            // Listening for configuration commands
+            using (consumer)
             {
                 while (!cancelled)
                 {
                     var consumeResult = consumer.Consume(cancellationToken);
-
                     switch (consumeResult.Message.Key.ToLower())
                     {
+                       
                         case "name":
                             _parameters[Name] = consumeResult.Message.Value;
                             break;
@@ -103,7 +160,7 @@ namespace Collectors.Model
                             break;
 
                         case "shutdown":
-                            Environment.Exit(0);
+                            await Task.Run(() => Environment.Exit(0));
                             break;
 
                         default:
@@ -111,53 +168,64 @@ namespace Collectors.Model
                     }
                 }
             }
+        
+            return;
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public async Task RegisterCollector(CollectorConfig config)
+
+        public virtual async Task RegisterCollector(CollectorConfig collectorconfig)
         {
-            this.config = config;
+            this.collectorconfig = collectorconfig;
+            throw new NotImplementedException(nameof(RegisterCollector));
         }
 
-        public async Task Start()
+        public virtual async Task Start()
         {
             // Launch Transporter - Create the proper transporter based on the config
             // Launch Scheduler   - Create the proper scheduler based on the config
             // Launch Transformer - Create the proper transformer based on the config
+            throw new NotImplementedException(nameof(Start));
         }
 
-        public async Task ShutDown()
-        { }
-
-        public async Task Panic()
-        { }
-
-        public async Task Persist()
-        { }
-
-        public Task Connect()
-        {
-            throw new NotImplementedException();
+        public virtual async Task ShutDown()
+        { 
+            throw new NotImplementedException(nameof(ShutDown));
         }
 
-        public Task Deploy()
-        {
-            throw new NotImplementedException();
+        public virtual async Task Panic()
+        { 
+            throw new NotImplementedException(nameof(Panic));
         }
 
-        public Task Configure()
-        {
-            throw new NotImplementedException();
+        public virtual async Task Persist()
+        { 
+            throw new NotImplementedException(nameof(Persist));
         }
 
-        public Task<string> Retrieve()
+        public virtual async Task Connect()
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(Connect));
         }
 
-        public Task Destroy()
+        public virtual async Task Deploy()
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(nameof(Deploy));
+        }
+
+        public virtual async Task Configure()
+        {
+            throw new NotImplementedException(nameof(Configure));
+        }
+
+        public virtual async Task<string> Retrieve()
+        {
+            throw new NotImplementedException(nameof(Retrieve));
+        }
+
+        public virtual async Task Destroy()
+        {
+            throw new NotImplementedException(nameof(Destroy));
         }
 
         public void Dispose()

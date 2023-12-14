@@ -1,9 +1,9 @@
 ﻿using Confluent.Kafka;
 using System.Security.Cryptography;
 using System.Text;
-using Transporter.Interface;
+using Transporters.Interface;
 
-namespace Transporter.Model
+namespace Transporters.Model
 {
     public abstract class Transporter : IDisposable
     {

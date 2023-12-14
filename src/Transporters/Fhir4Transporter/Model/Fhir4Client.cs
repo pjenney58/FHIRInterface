@@ -7,7 +7,7 @@ using Hl7.Fhir.Rest;
 using Hl7.Fhir.Model;
 using Task = System.Threading.Tasks.Task;
 
-namespace Transporter.Model
+namespace Transporters.Model
 {
     public class Fhir4Client : Transporter
     {
@@ -117,23 +117,11 @@ namespace Transporter.Model
         /// Return IEnumerable<string> of messages if the message contains '\xB' and '\x1C', else just return the message.
         /// </summary>
         /// <returns>IEnumerable[string]</returns>
-        public override IEnumerable<string> Read(string bundleid)
+        public Bundle? Read(string bundleid)
         {
             using (var client = InternalConnect())
             {
-                var message = client.Read<Bundle>(bundleid).ToJson();
-
-                //if (message.Contains('\x1C') && message.Contains('\xB'))
-                //{
-                //    var messages = message.Split('\xB', StringSplitOptions.RemoveEmptyEntries);
-                //
-                //    foreach (var msg in messages)
-                //    {
-                //        yield return msg.Remove(msg.IndexOf('\x1C'));
-                //    }
-                //}
-
-                yield return message;
+                return client.Read<Bundle>(bundleid);
             }
         }
 

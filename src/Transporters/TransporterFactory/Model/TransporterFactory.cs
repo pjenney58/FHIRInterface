@@ -1,8 +1,8 @@
-﻿namespace Transporter.Model
+﻿namespace Transporters.Model
 {
     public static class TransporterFactory
     {
-        public static Transporter CreateTransporter(string transporterType)
+        public static Transporter Create(string transporterType)
         {
             switch (transporterType.ToLower())
             {

@@ -9,11 +9,12 @@
     <DockerServiceName>Palisaid</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="docker-compose-debug.yml" />
-    <None Include="docker-compose.override.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
-    </None>
     <None Include="docker-compose.yml" />
+    <None Include="docker-compose-deploy.override.yml">
+      <DependentUpon>docker-compose-deploy.yml</DependentUpon>
+    </None>
+    <None Include="docker-compose-deploy.yml" />
     <None Include=".dockerignore" />
+    <None Include="init.sql" />
   </ItemGroup>
 </Project>

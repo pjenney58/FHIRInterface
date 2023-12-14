@@ -6,12 +6,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerComposeProjectPath>../../../docker-compose.dcproj</DockerComposeProjectPath>
     <UserSecretsId>5eeab08e-ce0f-4650-a38d-5c5dd626774b</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..</DockerfileContext>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="nhapi" Version="3.2.2" />
     <PackageReference Include="NHapiTools" Version="2.0.4" />

@@ -1,6 +1,6 @@
 ﻿using System.Net;
-using Transporter.Model;
-using Transporter.Interface;
+using Transporters.Model;
+using Transporters.Interface;
 
 namespace DevTests.Transporter
 {
@@ -15,13 +15,13 @@ namespace DevTests.Transporter
         {
             try
             {
-                global::Transporter.Model.Transporter mllptransporter = TransporterFactory.CreateTransporter("mllp");
+                Transporters.Model.Transporter mllptransporter = TransporterFactory.Create("mllp");
                 Assert.NotNull(mllptransporter);
 
-                global::Transporter.Model.Transporter tcptransporter = TransporterFactory.CreateTransporter("tcpip");
+                Transporters.Model.Transporter tcptransporter = TransporterFactory.Create("tcpip");
                 Assert.NotNull(tcptransporter);
 
-                global::Transporter.Model.Transporter resttransporter = TransporterFactory.CreateTransporter("rest");
+                Transporters.Model.Transporter resttransporter = TransporterFactory.Create("rest");
                 Assert.NotNull(resttransporter);
             }
             catch (Exception ex)

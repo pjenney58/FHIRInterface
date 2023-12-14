@@ -1,15 +1,26 @@
-﻿using System;
+﻿
 using Collectors.Interface;
+using Confluent.Kafka;
+using Transporters.Model;
 
 namespace Collectors.Model
 {
-	public class HL7v2Collector : ICollector
+	public class HL7v2Collector : Collector<HL7v2Collector>
 	{
-		public HL7v2Collector()
+        private readonly MllpClient? client;
+
+        public HL7v2Collector() : base(Guid.Empty)
 		{
 		}
 
-        public Task Configure()
+		public HL7v2Collector(Guid tenantid) : base(tenantid)
+		{
+            GetApplicationConfig("hl7v2settings.json");
+            
+            client = new MllpClient();     
+		}
+
+        public override async Task Configure()
         {
             throw new NotImplementedException();
         }
