@@ -29,6 +29,7 @@
     <ProjectReference Include="..\..\Support\Support.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\Transformers\Transformer\Transformer.csproj" />
     <ProjectReference Include="..\Collector\Collector.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>

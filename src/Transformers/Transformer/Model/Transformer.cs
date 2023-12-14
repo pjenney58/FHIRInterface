@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Confluent.Kafka;
 using TransformerFactory.Interface;
 using System.Security.Cryptography.Xml;
+using Transformers.Interface;
 
 namespace Transformers.Model
 {
@@ -15,6 +16,7 @@ namespace Transformers.Model
         IConfiguration? config;
         Guid TenantId = Guid.Empty;
         ITransformer? transformer;
+
         protected void GetApplicationConfig(string configname)
         {
             config = new ConfigurationBuilder()
@@ -24,26 +26,14 @@ namespace Transformers.Model
 
         // Setup for MQ
  #region MQSetup
-        // Message consumer, commands from controller
-        
-        
-
-        public struct TransformerPayload
-        {
-            public Type Type1 { get; set; }
-            public Type Type2 { get; set; }
-            public HL7Format Format { get; set; }
-            public Hl7Version Version { get; set; }
-            public SourceSystems Src { get; set; }
-            public string data { get; set; }
-        }
-        
+        // Message consumer, commands from controller        
         protected ConsumerConfig kcconfig = new()
         {
             GroupId = "Transformers",
             BootstrapServers = "palisaid:9002",
             AutoOffsetReset = AutoOffsetReset.Earliest
         };
+
         protected IConsumer<string, string> consumer;
         protected IConsumer<string, TransformerPayload> transformerconsumer;
 
@@ -73,11 +63,11 @@ namespace Transformers.Model
             producer = new ProducerBuilder<string, string>(kpconfig).Build();
 
             TaskFactory taskFactory = new TaskFactory();
-            var commandtask = taskFactory.StartNew(() => WaitForCommand());
+            var commandtask = taskFactory.StartNew(() => WaitForCommandRequest());
             var transfortmtask = taskFactory.StartNew(() => WaitForTransformRequest());
         }
 
-        public async Task<bool> Transform(TransformerPayload payload)
+        public async Task<string?> Transform(TransformerPayload payload)
         {
             /*
             var transformer = TransformerFactory.GetTransformer<t1,t2>(Guid.Parse(TenantId), 
@@ -88,7 +78,7 @@ namespace Transformers.Model
             var result = await transformer.Transform(payload.data);
             */
 
-            return true;
+            return default;
         }
 
         protected virtual async Task WaitForTransformRequest()
@@ -103,7 +93,7 @@ namespace Transformers.Model
                 {
                     var payload = transformerconsumer.Consume(cancellationToken);     
                     var result = await Transform(payload.Message.Value);
-                    var message = new Message<string, string> { Key = payload.Message.Key, Value = result };
+                    var message = new Message<string, string> { Key = payload.Message.Key, Value = !string.IsNullOrEmpty(result) ? result : string.Empty };
                     producer.Produce("TransformedData", message);
                 }
             }

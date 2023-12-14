@@ -17,7 +17,6 @@
     <ProjectReference Include="..\TransformerFactory\TransformerFactory.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Interface\" />
     <Folder Include="Model\R5\" />
     <Folder Include="Model\R4B\" />
   </ItemGroup>

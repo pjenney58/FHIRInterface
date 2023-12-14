@@ -43,7 +43,7 @@ namespace TransformerFactory.Model.Dstu2
         where IEntity : class, new()
     {
         private IEntity? payloadIN;
-        private OEntity payloadOUT;
+        private OEntity? payloadOUT;
 
         public delegate OEntity VoidDelegate();
         public delegate Task<OEntity?> TaskDelegate();
@@ -134,12 +134,13 @@ namespace TransformerFactory.Model.Dstu2
 
             await Task.Run(() =>
             {
-                var lines = new List<string>()
+                var lines = new List<string>
                 {
-                    meta.Address1,
-                    meta.Address2,
-                    meta.Address3
+                    !string.IsNullOrEmpty(meta.Address1) ? meta.Address1 : "Empty",
+                    !string.IsNullOrEmpty(meta.Address2) ? meta.Address2 : "Empty",
+                    !string.IsNullOrEmpty(meta.Address3) ? meta.Address3 : "Empty"
                 };
+                
 
                 fhir.Line = lines as IEnumerable<string>;
                 fhir.City = meta.City;

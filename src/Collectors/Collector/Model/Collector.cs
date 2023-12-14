@@ -1,10 +1,10 @@
-﻿using DataShapes.Model;
+﻿using Collectors.Interface;
 using Confluent.Kafka;
-using Collectors.Interface;
-using Transporters.Interface;
-using TransformerFactory.Model;
+using DataShapes.Model;
+using Transformers.Interface;
 using Transformers.Model;
-
+using Transporters.Interface;
+using Transporters.Model;
 using Task = System.Threading.Tasks.Task;
 
 namespace Collectors.Model
@@ -38,7 +38,6 @@ namespace Collectors.Model
 
         protected IConfiguration? config;
         protected CollectorConfig? collectorconfig;
-
         protected ITransporter transporter;
         
 
@@ -58,15 +57,6 @@ namespace Collectors.Model
             AutoOffsetReset = AutoOffsetReset.Earliest
         };
 
-        protected struct TransformerPayload
-        {
-            public Type Type1 { get; set; }
-            public Type Type2 { get; set; }
-            public HL7Format Format { get; set; }
-            public Hl7Version Version { get; set; }
-            public SourceSystems Src { get; set; }
-            public string data { get; set; }
-        }
 
         protected IConsumer<string, string> consumer;
         protected IConsumer<string, TransformerPayload> transformerconsumer;
@@ -101,10 +91,6 @@ namespace Collectors.Model
             taskFactory.StartNew(() => WaitForTransformRequest());
         }
 
-        public T ConvertObject<T>(object input) {
-            return (T) Convert.ChangeType(input, typeof(T));
-        }
-        
         protected virtual async Task WaitForTransformRequest()
         {
             bool cancelled = false;
@@ -115,19 +101,11 @@ namespace Collectors.Model
             {
                 while (!cancelled)
                 {
+                    // Block until a message is consumed from the Kafka topic.
                     var payload = transformerconsumer.Consume(cancellationToken);
-                    
-                    var transform = new Transformer(TenantId) ;
-                    var result = await transform.Transform(payload.data);
-
-                    /*
-                    var transformer = TransformerFactory.GetTransformer<t1,t2>(Guid.Parse(TenantId), 
-                                                                               payload.Message.Value.Format, 
-                                                                               payload.Message.Value.Version, 
-                                                                               payload.Message.Value.Src);
-                    
-                    var result = await transformer.Transform(payload.Message.Value.data);
-                    */
+                    var transform = new Transformer(Guid.Parse(TenantId));
+                    var result = await transform.Transform(payload.Value);
+                    producer.Produce(result, new Message<string, string> { Key = payload.Message.Key, Value = result });
                 }
             }
         
