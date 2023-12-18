@@ -30,8 +30,13 @@ public class Program
         var idconnection = builder.Configuration.GetConnectionString(AppRunningIn.Docker ? "containeridentity" : "identity")
                         ?? throw new InvalidOperationException("Connection string 'identity' not found.");
 
-        //Console.WriteLine($"dataconnection = {dataconnection}");
-        //Console.WriteLine($"idconnection = {idconnection}");
+        // Migration -- Update-Database
+        //     Update-Database -Context IdentityDataContext
+        //     Update-Database -Context DataShapeContext
+
+        ///Console.WriteLine($"Running in Docker: {AppRunningIn.Docker}");
+        ///Console.WriteLine($"dataconnection = {dataconnection}");
+        ///Console.WriteLine($"idconnection = {idconnection}");
 
         // Add services to the container.
         builder.Services.AddDbContext<DataShapeContext>(options =>
@@ -58,7 +63,6 @@ public class Program
             options.AddPolicy("TenantUser", policy => policy.RequireClaim("TenantUser"));
             options.AddPolicy("Everyone", policy => policy.RequireClaim("Everyone"));
         });
-
 
         // Adding Token management
         builder.Services.AddAuthentication(options =>
@@ -160,7 +164,6 @@ public class Program
         {
             using (UserManager<ApplicationUser> _userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>())
             {
-                
                 // Create root user
                 var user = new RegisterAdminModel()
                 {
@@ -172,20 +175,21 @@ public class Program
 
                 // TODO: ALTER TABLE AspNetUserRoles DROP CONSTRAINT FK_AspNetUserRoles_AspNetRoles_UserId;
                 // Manually deleting it works fine and user/role can be saved
-                
-               
-                if (!_userManager.Users.Any(r => r.UserName == user.Username))
-                    {
-                        var newuser = new ApplicationUser
-                        {
-                            UserName = user.Username,
-                            Email = user.Username,
-                            PhoneNumber = user.Phone,
-                            TwoFactorEnabled = false,
-                            SecurityStamp = Guid.NewGuid().ToString(),
-                            TenantId = Guid.Empty
-                        };
 
+                if (!_userManager.Users.Any(r => r.UserName == user.Username))
+                {
+                    var newuser = new ApplicationUser
+                    {
+                        UserName = user.Username,
+                        Email = user.Username,
+                        PhoneNumber = user.Phone,
+                        TwoFactorEnabled = false,
+                        SecurityStamp = Guid.NewGuid().ToString(),
+                        TenantId = Guid.Empty
+                    };
+
+                    try
+                    {
                         Task.Run(async () => await _userManager.AddToRolesAsync(newuser,
                             new string[]
                             {
@@ -196,9 +200,14 @@ public class Program
                             "Everyone"
                             }
                             )).Wait();
-
-                        Task.Run(async () => await _userManager.CreateAsync(newuser, user.Password)).Wait();
                     }
+                    catch (Exception ex)
+                    {
+                        // hit constraint
+                    }
+
+                    Task.Run(async () => await _userManager.CreateAsync(newuser, user.Password)).Wait();
+                }
             }
         }
     }
@@ -242,4 +251,3 @@ public class Program
         }
     }
 }
-

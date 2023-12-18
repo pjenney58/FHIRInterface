@@ -1,7 +1,5 @@
-﻿
-namespace Collectors
+﻿namespace Collectors
 {
-
     public class Program
     {
         public static void Main(string[] args)

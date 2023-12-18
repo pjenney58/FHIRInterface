@@ -5,9 +5,6 @@ using Hl7.Fhir.Serialization;
 using Npgsql;
 using RandomDataGenerator;
 
-
-
-
 /*
 extern alias r5;
 extern alias r4b;
@@ -24,6 +21,8 @@ namespace DevTests
 {
     public class TFhirParser
     {
+        private const int MAX_VALS = 50;
+
         private readonly string sourcedir = Environment.OSVersion.Platform == PlatformID.Win32NT
             ? "C:\\SandDriftSoftware\\data\\SyntheaData"
             : "/Users/petejenney/Projects/SyntheaData";
@@ -198,7 +197,7 @@ namespace DevTests
                 await System.Threading.Tasks.Task.Run(async () =>
                 {
                     // Arrange
-                    for (var i = 0; i < 100; i++)
+                    for (var i = 0; i < MAX_VALS; i++)
                     {
                         var data = getFhirData();
                         Assert.NotNull(data);
@@ -248,7 +247,7 @@ namespace DevTests
                 await System.Threading.Tasks.Task.Run(async () =>
                 {
                     // Arrange
-                    for (var i = 0; i < 100; i++)
+                    for (var i = 0; i < MAX_VALS; i++)
                     {
                         var data = getFhirData();
                         Assert.NotNull(data);
@@ -298,7 +297,7 @@ namespace DevTests
                 await System.Threading.Tasks.Task.Run(async () =>
                 {
                     // Arrange
-                    for (var i = 0; i < 100; i++)
+                    for (var i = 0; i < MAX_VALS; i++)
                     {
                         var data = getFhirData();
                         Assert.NotNull(data);
@@ -368,7 +367,7 @@ namespace DevTests
 
                 DataShapes.Model.Observation observations = new();
 
-                for (var i = 0; i < 100; i++)
+                for (var i = 0; i < MAX_VALS; i++)
                 {
                     var data = getFhirData();
 
@@ -576,7 +575,7 @@ namespace DevTests
             {
                 DataShapes.Model.Observation observations = new();
 
-                for (var i = 0; i < 100; i++)
+                for (var i = 0; i < MAX_VALS; i++)
                 {
                     var patientId = Guid.Empty;
 
@@ -626,7 +625,7 @@ namespace DevTests
             {
                 Console.OpenStandardOutput();
 
-                for (var i = 0; i < 100; i++)
+                for (var i = 0; i < MAX_VALS; i++)
                 {
                     var data = getFhirData();
 

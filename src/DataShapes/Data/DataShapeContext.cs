@@ -14,10 +14,10 @@ namespace DataShapes.Model
         public static bool Docker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_DOCKER_CONTAINER") == "true";
 
         public static bool Windows => OperatingSystem.IsWindows();
-
     }
 
     #region service helper
+
     public static class IServiceCollectionExtension
     {
         public static IServiceCollection configureservice(this IServiceCollection service, IConfiguration Configuration)
@@ -26,18 +26,23 @@ namespace DataShapes.Model
                .AddJsonFile("appdataconfig.json")
                .Build();
 
+            Console.WriteLine($"Running in Docker: {AppIn.Docker}");
+
             service.AddDbContext<DataShapeContext>(options =>
                 options.UseNpgsql(config.GetConnectionString(AppIn.Docker ? "docker" : "default")));
 
             return service;
         }
     }
-    #endregion
+
+    #endregion service helper
 
     #region factory
+
     public class DataShapeContextFactory : IDesignTimeDbContextFactory<DataShapeContext>
     {
-        public DataShapeContextFactory() {}
+        public DataShapeContextFactory()
+        { }
 
         internal IConfiguration? config;
 
@@ -48,19 +53,23 @@ namespace DataShapes.Model
 
         public DataShapeContext CreateDbContext(string[] args)
         {
-             config = new ConfigurationBuilder()
-               .AddJsonFile("appdataconfig.json")
-               .Build();
+            config = new ConfigurationBuilder()
+              .AddJsonFile("appdataconfig.json")
+              .Build();
+
+            Console.WriteLine($"Running in Docker: {AppIn.Docker}");
 
             var optionsBuilder = new DbContextOptionsBuilder<DataShapeContext>();
-            optionsBuilder.UseNpgsql(config.GetConnectionString(AppIn.Docker ? "docker" :"default"));
+            optionsBuilder.UseNpgsql(config.GetConnectionString(AppIn.Docker ? "docker" : "default"));
 
             return new DataShapeContext(optionsBuilder.Options);
         }
     }
+
     #endregion factory
 
     #region context
+
     public class DataShapeContext : DbContext
     {
         public DbSet<Tenant>? Tenants { get; set; }
@@ -74,7 +83,7 @@ namespace DataShapes.Model
         public DbSet<Observation>? Observations { get; set; }
         public DbSet<Medication>? Medications { get; set; }
         public DbSet<Code>? Codes { get; set; }
-        public DbSet<CollectorConfig> Collectors {get; set; }
+        public DbSet<CollectorConfig> Collectors { get; set; }
         public DbSet<TestResult> TestResults { get; set; }
         public DbSet<TestResultValue> TestResultValuess { get; set; }
 
@@ -87,6 +96,7 @@ namespace DataShapes.Model
                .AddJsonFile("appdataconfig.json")
                .Build();
 
+            Console.WriteLine($"Running in Docker: {AppIn.Docker}");
             connectionString = config.GetConnectionString(AppIn.Docker ? "docker" : "default");
         }
 
@@ -108,27 +118,6 @@ namespace DataShapes.Model
 
             // TODO: Unravel the stupid PostgreSQL => DateTimeOffset issue
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
-            //  Ensure the palisaid role exists. It gets reset wvery time there's a dccker image
-            using (var _connection= new Npgsql.NpgsqlConnection("root"))
-            {
-                _connection.Open();
-
-                using (var _command = new NpgsqlCommand())
-                {
-                    _command.CommandText =
-                            $@"do $$
-                            begin
-                                IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'palisaid') then
-                                    CREATE ROLE palisaid LOGIN PASSWORD 'password' SUPERUSER INHERIT CREATEDB CREATEROLE REPLICATION;
-                                end if;
-                            end
-                            $$language plpgsql";
-                    
-                    _command.ExecuteNonQuery(); ;
-                }
-            
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -140,6 +129,6 @@ namespace DataShapes.Model
             modelBuilder.Ignore<CustomAttributeData>();
         }
     }
-    #endregion
-}
 
+    #endregion context
+}

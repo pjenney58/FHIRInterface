@@ -21,6 +21,7 @@ using System;
 using Hl7.Fhir.Model;
 using DataShapes.Model;
 using Transformers.Interface;
+
 namespace Transformers.Model.R4
 {
     public class PrescriptionAdapter<IEntity, OEntity> : ITransformer
@@ -128,6 +129,9 @@ namespace Transformers.Model.R4
                 foreach (var instruction in fhir.DosageInstruction)
                 {
                     meta.Sig += $"{instruction?.PatientInstruction}\r";
+
+                    if (instruction?.Timing == null)
+                        continue;
 
                     foreach (var time in instruction?.Timing.Repeat.TimeOfDay)
                     {

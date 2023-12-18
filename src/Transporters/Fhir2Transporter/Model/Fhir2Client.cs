@@ -53,7 +53,6 @@ namespace Transporters.Model
                             }
                             break;
 
-
                         // Shutdown the transporter
                         case "shutdown":
                             Environment.Exit(0);
@@ -68,7 +67,7 @@ namespace Transporters.Model
 
         private FhirClient InternalConnect()
         {
-           try
+            try
             {
                 if (secure)
                 {
@@ -113,20 +112,7 @@ namespace Transporters.Model
         public Resource Read(Uri id)
         {
             var client = InternalConnect();
-           return client.Read<Resource>(id);                      
-        }
-
-        public override Task Write(string message)
-        {
-            client = InternalConnect();
-            client.Update(message);
-           
-            return Task.CompletedTask;
-        }
-
-        public override void Dispose()
-        {
-            client.Dispose();
+            return client.Read<Resource>(id);
         }
     }
 }
