@@ -56,11 +56,11 @@ services:
         networks:
         - backend-network
 
-    PrimaryConsumerApi:
+    GatewayController:
         container_name: api-palisaid-gateway
         environment:
-            - DOTNET_RUNNING_IN_DOCKER_CONTAINER=false
-        image: ${DOCKER_REGISTRY-}primary-consumer-api
+            - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
+        image: ${DOCKER_REGISTRY-}primary-gateway-api
         restart: always
         ports: 
         - "80:80"
@@ -72,7 +72,21 @@ services:
         networks:
         - backend-network
 
-    fhir4collector:
+    CollectorController:
+        container_name: api-palisaid-collector
+        environment:
+            - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
+        image: ${DOCKER_REGISTRY-}collector-api
+        restart: always
+        ports: 
+        - "5001:80"
+        build:
+            context: .
+            dockerfile: src/Collectors/Dockerfile
+        networks:
+        - backend-network
+
+    Fhir4Collector:
         container_name: fhir4Collector
         environment:
         - DOTNET_RUNNING_IN_DOCKER_CONTAINER=false
@@ -86,6 +100,7 @@ services:
             dockerfile: src/Collectors/Fhir4Collector/Dockerfile
         networks:
         - backend-network
+
 
 #    web:
 #        image: nginx

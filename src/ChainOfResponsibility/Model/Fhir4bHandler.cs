@@ -7,7 +7,7 @@ namespace ChainOfResponsibility.Model
     public class Fhir4bHandler : AbstractHandler, IChainOfResponsabilityHandler
     {
         public Fhir4bHandler(Hl7Version version, Guid tenantId)
-            : base(version, tenantId);
+            : base(version, tenantId)
 		{}
 
         public ICollector HandleRequest(Hl7Version version)
