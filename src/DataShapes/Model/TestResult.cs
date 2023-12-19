@@ -39,8 +39,6 @@ namespace DataShapes.Model
 
     public class TestResultValue : Entity
     {
-        private bool disposedValue;
-
         public DateTimeOffset Date { get; set; }
         public decimal Value { get; set; }  // Note, gRPC needs a double as it doesnt implement decimal.
         public Units Unit { get; set; }

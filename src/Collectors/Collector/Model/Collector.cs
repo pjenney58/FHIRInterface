@@ -11,16 +11,16 @@ namespace Collectors.Model
 {
     public abstract class Collector<T> : ICollector, IDisposable
     {
-#region strings
-        private string Name = "Name";
-        private string Version = "Version";
-        private string Description = "Description";
-        private string Author = "Author";
-        private string Url = "Url";
-        private string TenantId = Guid.Empty.ToString();
-        private string TenantName = "TenantName";
-        private string TenantDescription = "TenantDescription";
-        private string Transform = "Transform";
+        #region strings
+        private readonly  string Name = "Name";
+        private readonly  string Version = "Version";
+        private readonly  string Description = "Description";
+        private readonly  string Author = "Author";
+        private readonly  string Url = "Url";
+        private readonly  string TenantId = Guid.Empty.ToString();
+        private readonly  string TenantName = "TenantName";
+        private readonly  string TenantDescription = "TenantDescription";
+        private readonly string Transform = "Transform";
 
         private Dictionary<string, string> _parameters = new()
         {
@@ -34,12 +34,12 @@ namespace Collectors.Model
             { "TenantDescription", "Value" },
             { "Transform", "Value" }
         };
-#endregion strings
+        #endregion strings
 
         protected IConfiguration? config;
         protected CollectorConfig? collectorconfig;
-        protected ITransporter transporter;
-        
+        protected ITransporter? transporter;
+
 
         protected void GetApplicationConfig(string configname)
         {
@@ -48,7 +48,7 @@ namespace Collectors.Model
               .Build();
         }
 
-#region MQSetup
+        #region MQSetup
         // Message consumer, commands from controller
         protected ConsumerConfig kcconfig = new()
         {
@@ -56,7 +56,6 @@ namespace Collectors.Model
             BootstrapServers = "palisaid:9002",
             AutoOffsetReset = AutoOffsetReset.Earliest
         };
-
 
         protected IConsumer<string, string> consumer;
         protected IConsumer<string, TransformerPayload> transformerconsumer;
@@ -67,7 +66,7 @@ namespace Collectors.Model
             BootstrapServers = "palisaid:9002"
         };
         protected IProducer<string, object> producer;
-#endregion MQSetup
+        #endregion MQSetup
 
         public Collector(Guid tenantid)
         {
@@ -95,7 +94,7 @@ namespace Collectors.Model
         {
             bool cancelled = false;
             CancellationToken cancellationToken = new CancellationToken();
-            
+
             // Listening for configuration commands
             using (transformerconsumer)
             {
@@ -104,11 +103,14 @@ namespace Collectors.Model
                     // Block until a message is consumed from the Kafka topic.
                     var payload = transformerconsumer.Consume(cancellationToken);
                     var transform = new Transformer(Guid.Parse(TenantId));
-                    var result = await transform.Transform(payload.Value);
-                    producer.Produce(payload.Message.Key, new Message<string, object> { Key = payload.Message.Key, Value = result});
+                    var result = await transform.Transform(payload.Message.Value);
+                    if (result != null)
+                    {
+                        producer.Produce(payload.Message.Key, new Message<string, object> { Key = payload.Message.Key, Value = result });
+                    }
                 }
             }
-        
+
             return;
         }
 
@@ -117,7 +119,7 @@ namespace Collectors.Model
         {
             bool cancelled = false;
             CancellationToken cancellationToken = new CancellationToken();
-            
+
             // Listening for configuration commands
             using (consumer)
             {
@@ -126,7 +128,7 @@ namespace Collectors.Model
                     var consumeResult = consumer.Consume(cancellationToken);
                     switch (consumeResult.Message.Key.ToLower())
                     {
-                       
+
                         case "name":
                             _parameters[Name] = consumeResult.Message.Value;
                             break;
@@ -168,7 +170,7 @@ namespace Collectors.Model
                     }
                 }
             }
-        
+
             return;
         }
 
@@ -189,17 +191,17 @@ namespace Collectors.Model
         }
 
         public virtual async Task ShutDown()
-        { 
+        {
             throw new NotImplementedException(nameof(ShutDown));
         }
 
         public virtual async Task Panic()
-        { 
+        {
             throw new NotImplementedException(nameof(Panic));
         }
 
         public virtual async Task Persist()
-        { 
+        {
             throw new NotImplementedException(nameof(Persist));
         }
 

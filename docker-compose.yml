@@ -57,41 +57,40 @@ services:
         - backend-network
 
     GatewayController:
-        container_name: api-palisaid-gateway
+        container_name: gatewayapi
         environment:
             - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
-        image: ${DOCKER_REGISTRY-}primary-gateway-api
+        image: pjenney/gatewayapi
         restart: always
         ports: 
-        - "80:80"
-        - "443:443"
+        - "5080:80"
+        - "5081:443"
         build:
             context: .
             dockerfile: src/PrimaryControllers/Dockerfile
-    
         networks:
         - backend-network
 
     CollectorController:
-        container_name: api-palisaid-collector
+        container_name: collectorapi
         environment:
             - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
-        image: ${DOCKER_REGISTRY-}collector-api
+        image: collectorapi
         restart: always
         ports: 
         - "5001:80"
         build:
             context: .
-            dockerfile: src/Collectors/Dockerfile
+            dockerfile: src/Collectors/CollectorsController/Dockerfile
         networks:
         - backend-network
 
     Fhir4Collector:
         container_name: fhir4Collector
         environment:
-        - DOTNET_RUNNING_IN_DOCKER_CONTAINER=false
+        - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
     
-        image: ${DOCKER_REGISTRY-}fhir4collector
+        image: pjenney/fhir4collector
         restart: always
         ports: 
         - "5002:80"
