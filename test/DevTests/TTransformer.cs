@@ -3,6 +3,7 @@ using Transformers.Model;
 using Transformers.Interface;
 using Transporters.Model;
 using DataShapes.Model;
+using Support.Model;
 
 namespace DevTests.Transporter
 {
@@ -39,7 +40,7 @@ namespace DevTests.Transporter
                 data = fhiraddress,
             };
 
-            var transform = new Transformer(tenantid);
+            var transform = new Transformer(tenantid, "commandqueue", "payloadqueue");
             var result = await transform.Transform(payload) as Address;
             Assert.NotNull(result);
         }

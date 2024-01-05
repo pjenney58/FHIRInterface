@@ -3,71 +3,57 @@
 //  2. Gets messages from MQ creates the proper transformation using the TransformerFactory
 //  3. Returns converted data to the MQ
 
-using Confluent.Kafka;
-using DataShapes.Model;
+using System.Diagnostics;
+using EasyNetQ;
 using Microsoft.Extensions.Configuration;
 
 
 namespace Transformers.Model
 {
-    public class Transformer : IDisposable
+    public class Transformer : PPM_MessageQueue, IDisposable
     {
-        IConfiguration? config;
-        Guid TenantId = Guid.Empty;
+        IConfiguration? config;      
         ITransformer? transformer;
 
         protected void GetApplicationConfig(string configname)
         {
-           config = new ConfigurationBuilder()
-              .AddJsonFile(configname)
-              .Build();
+            config = new ConfigurationBuilder()
+               .AddJsonFile(configname)
+               .Build();
         }
 
-        // Setup for MQ
- #region MQSetup
-        // Message consumer, commands from controller        
-        protected ConsumerConfig kcconfig = new()
-        {
-            GroupId = "Transformers",
-            BootstrapServers = "palisaid:9002",
-            AutoOffsetReset = AutoOffsetReset.Earliest
-        };
+        public Transformer(Guid tenantid, string commandbus, string payloadbus)
+                    : base(tenantid, commandbus, payloadbus)
+        {            
+            // Get the configuration
+            GetApplicationConfig("transformersettings.json");
 
-        protected IConsumer<string, string> consumer;
-        protected IConsumer<string, TransformerPayload> transformerconsumer;
+            // Register Command Handler
+            Trace.WriteLine("Registering Command Handler");
+            RegisterCommmandHandler(ProcessCommand);
 
-        // Message producer, data to controller
-        protected ProducerConfig kpconfig = new()
-        {
-            BootstrapServers = "palisaid:9002"
-        };
-        protected IProducer<string, string> producer;
-#endregion MQSetup
+            // Register Trasform Handler
+            Trace.WriteLine("Registering Transform Handler");
+            RegisterTransformHandler(ProcessTransform);
 
-        public Transformer(Guid tenantid)
-        {
-           // GetApplicationConfig("transformersettings.json");
-
-            TenantId = tenantid;
-#if !DEBUG
-            // Setup command topic
-            consumer = new ConsumerBuilder<string, string>(kcconfig).Build();
-            consumer.Subscribe("CommandControl");
-
-            // Setup transform topic
-            transformerconsumer = new ConsumerBuilder<string, TransformerPayload>(kcconfig).Build();
-            transformerconsumer.Subscribe("TransformerControl");
-
-            // Setup data out topic
-            producer = new ProducerBuilder<string, string>(kpconfig).Build();
-
-
-            TaskFactory taskFactory = new TaskFactory();
-            var commandtask = taskFactory.StartNew(() => WaitForCommandRequest());
-            var transfortmtask = taskFactory.StartNew(() => WaitForTransformRequest());
-#endif
+            // Get things rolling
+            Trace.WriteLine("Starting Transformer");
+            ProcessCommand("Start");
         }
 
+        /// <summary>
+        /// <c>Transform</c> is the main entry point for the Transformer.  It takes a <c>TransformerPayload</c> and returns the transformed data.
+        //  The <c>TransformerPayload</c> contains the following:
+        //  <list type="bullet">Type1 - The source data type</list>
+        //  <list type="bullet">Type2 - The target data type</list>
+        //  <list type="bullet">Format - The source data format</list>
+        //  <list type="bullet">Version - The source data version</list>
+        //  <list type="bullet">SourceHost - The source data host</list>
+        //  <list type="bullet">data - The source data</list>
+        /// </summary>
+        /// <param name="payload">TransformerPayload class</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<object?> Transform(TransformerPayload payload)
         {
             try
@@ -76,7 +62,7 @@ namespace Transformers.Model
                 var transformer = typeof(TransformerFactory)
                                      .GetMethods().First(w => w.Name == "Create" && w.GetParameters().Count() > 2)
                                      .MakeGenericMethod(payload.Type1, payload.Type2)
-                                     .Invoke(this, new object[] { TenantId, payload.Format, payload.Version, payload.SourceHost }) as ITransformer;
+                                     .Invoke(this, new object[] { tenantid, payload.Format, payload.Version, payload.SourceHost }) as ITransformer;
 
                 if (transformer == null)
                 {
@@ -89,67 +75,50 @@ namespace Transformers.Model
             { }
         }
 
-        protected virtual async Task WaitForTransformRequest()
+        // Transform Handler
+        internal void ProcessTransform(TransformerPayload payload)
         {
-            bool cancelled = false;
-            CancellationToken cancellationToken = new CancellationToken();
-            
-            // Listening for configuration commands
-            using (transformerconsumer)
+            try
             {
-                while (!cancelled)
+                var result = Transform(payload);
+                using (var bus = RabbitHutch.CreateBus(AppRunningIn.Docker ? "host=rabbitmq" : "host=localhost"))
                 {
-                    var payload = transformerconsumer.Consume(cancellationToken);     
-                    var result = await Transform(payload.Message.Value);
-                    var message = new Message<string, string> { Key = payload.Message.Key, Value = result.ToString() };
-                    producer.Produce("TransformedData", message);
+                    bus.PubSub.Publish(result, payloadbus);
                 }
             }
-        
-            return;
-        }
-
-        // Configure the system on input fron the controller
-        protected virtual async Task WaitForCommandRequest()
-        {
-            bool cancelled = false;
-            CancellationToken cancellationToken = new CancellationToken();
-            
-            // Listening for configuration commands
-            using (consumer)
+            catch (Exception ex)
             {
-                while (!cancelled)
-                {
-                    var payload = consumer.Consume(cancellationToken);
-                    
-                    // Process the command
-                    switch (payload.Message.Value)
-                    {
-                        case "Read":                 
-                            cancelled = true;
-                            break;
-
-                        case "Stop":
-                            cancelled = true;
-                            break;
-                        case "Start":
-                            cancelled = false;
-                            break;
-                        default:
-                            break;
-                    }
-                }
+                Debug.WriteLine($"Error: {ex.Message}");
             }
-        
-            return;
         }
         
-        public void Dispose()
+        // Command Handler
+        internal void ProcessCommand(string payload)
         {
-            throw new NotImplementedException();
-        }
+            Debug.WriteLine($"Transformer Command Request: {payload}");
 
-        // Setup for Transformation Requests
-        // Setup for Transformation Responses
+            switch (payload.ToUpperInvariant())
+            {
+                case "SHUTDOWN":
+                    Dispose();
+                    Environment.Exit(0);
+                    break;
+
+                case "PANIC":
+                    Panic();
+                    break;
+
+                case "STOP":
+                    Stop();
+                    break;
+
+                case "START":
+                    Start();
+                    break;
+
+                default:
+                    break;
+            }
+        }
     }
 }

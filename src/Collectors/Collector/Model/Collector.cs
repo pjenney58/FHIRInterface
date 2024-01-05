@@ -1,25 +1,28 @@
-﻿using Collectors.Interface;
+﻿using System.Diagnostics;
+using Collectors.Interface;
 using Confluent.Kafka;
 using DataShapes.Model;
+using EasyNetQ;
 using Transformers.Interface;
 using Transformers.Model;
 using Transporters.Interface;
 using Transporters.Model;
 using Task = System.Threading.Tasks.Task;
+using Support.Model;
 
 namespace Collectors.Model
 {
-    public abstract class Collector<T> : ICollector, IDisposable
+    public abstract class Collector<T> : PPM_MessageQueue, ICollector, IDisposable
     {
         #region strings
-        private readonly  string Name = "Name";
-        private readonly  string Version = "Version";
-        private readonly  string Description = "Description";
-        private readonly  string Author = "Author";
-        private readonly  string Url = "Url";
-        private readonly  string TenantId = Guid.Empty.ToString();
-        private readonly  string TenantName = "TenantName";
-        private readonly  string TenantDescription = "TenantDescription";
+        private readonly string Name = "Name";
+        private readonly string Version = "Version";
+        private readonly string Description = "Description";
+        private readonly string Author = "Author";
+        private readonly string Url = "Url";
+        private readonly string TenantId = Guid.Empty.ToString();
+        private readonly string TenantName = "TenantName";
+        private readonly string TenantDescription = "TenantDescription";
         private readonly string Transform = "Transform";
 
         private Dictionary<string, string> _parameters = new()
@@ -39,7 +42,8 @@ namespace Collectors.Model
         protected IConfiguration? config;
         protected CollectorConfig? collectorconfig;
         protected ITransporter? transporter;
-
+        protected List<ITransformer?> transformers = new();
+        protected IScheduler? scheduler;
 
         protected void GetApplicationConfig(string configname)
         {
@@ -48,138 +52,111 @@ namespace Collectors.Model
               .Build();
         }
 
-        #region MQSetup
-        // Message consumer, commands from controller
-        protected ConsumerConfig kcconfig = new()
-        {
-            GroupId = "Collectors",
-            BootstrapServers = "palisaid:9002",
-            AutoOffsetReset = AutoOffsetReset.Earliest
-        };
+        SubscriptionResult? payloadSubscription;
+        SubscriptionResult? commandSubscription;
 
-        protected IConsumer<string, string> consumer;
-        protected IConsumer<string, TransformerPayload> transformerconsumer;
+        TaskFactory? taskFactory = null;
+        Task? commandTask;
+        Task? transformTask;
 
-        // Message producer, data to controller
-        protected ProducerConfig kpconfig = new()
-        {
-            BootstrapServers = "palisaid:9002"
-        };
-        protected IProducer<string, object> producer;
-        #endregion MQSetup
-
-        public Collector(Guid tenantid)
+        bool running = false;
+        bool cancelled = false;
+        public Collector(Guid tenantid, string name) 
+                  : base(tenantid, $"command-{name}", $"transform-{name}")
         {
             GetApplicationConfig("collectorsettings.json");
 
-            TenantId = tenantid.ToString();
+            // Setup MQ channels
+            Trace.WriteLine("Registering Collector Transformer[0]");
+            RegisterTransformer(tenantid, $"command-{name}", $"transform-{name}");
 
-            // Setup command topic
-            consumer = new ConsumerBuilder<string, string>(kcconfig).Build();
-            consumer.Subscribe("CollectorControl");
+            Trace.WriteLine("Registering Collector Transporter[0]");
+            RegisterTransporter();
 
-            // Setup transform topic
-            transformerconsumer = new ConsumerBuilder<string, TransformerPayload>(kcconfig).Build();
-            transformerconsumer.Subscribe("TransformerControl");
+            // Register Command Handler
+            Trace.WriteLine("Registering Collector Command Handler");
+            RegisterCommmandHandler(ProcessCommand);
 
-            // Setup data out topic
-            producer = new ProducerBuilder<string, object>(kpconfig).Build();
+            // Register Trasform Handler
+            Trace.WriteLine("Registering Transform Handler");
+            RegisterTransformHandler(ProcessTransform);
 
-            TaskFactory taskFactory = new TaskFactory();
-            taskFactory.StartNew(() => WaitForCommand());
-            taskFactory.StartNew(() => WaitForTransformRequest());
+            // Get things rolling
+            Trace.WriteLine("Starting Collector");
+            ProcessCommand("Start");
+        }
+   
+        private void RegisterTransporter()
+        {
         }
 
-        protected virtual async Task WaitForTransformRequest()
+        private void RegisterTransformer(Guid tenantid, string commandbus, string payloadbus)
         {
-            bool cancelled = false;
-            CancellationToken cancellationToken = new CancellationToken();
+            // Create the transformer
+            var transformer = new Transformer(tenantid, commandbus, payloadbus) as ITransformer;
 
-            // Listening for configuration commands
-            using (transformerconsumer)
-            {
-                while (!cancelled)
-                {
-                    // Block until a message is consumed from the Kafka topic.
-                    var payload = transformerconsumer.Consume(cancellationToken);
-                    var transform = new Transformer(Guid.Parse(TenantId));
-                    var result = await transform.Transform(payload.Message.Value);
-                    if (result != null)
-                    {
-                        producer.Produce(payload.Message.Key, new Message<string, object> { Key = payload.Message.Key, Value = result });
-                    }
-                }
-            }
-
-            return;
+            // Add the transformer to the list
+            transformers.Add(transformer);
         }
 
-        // Configure the system on input fron the controller
-        protected virtual async Task WaitForCommand()
+        private void ProcessCommand(string command)
         {
-            bool cancelled = false;
-            CancellationToken cancellationToken = new CancellationToken();
+            Debug.WriteLine($"Collector Command Request: {command}");
 
-            // Listening for configuration commands
-            using (consumer)
+            switch (command.ToUpperInvariant())
             {
-                while (!cancelled)
-                {
-                    var consumeResult = consumer.Consume(cancellationToken);
-                    switch (consumeResult.Message.Key.ToLower())
+                case"SHUTDOWN":
+                    Dispose();
+                    Environment.Exit(0);
+                    break;
+
+                case "PANIC":
+                    cancelled = true;
+                    Dispose();
+                    Environment.FailFast("Panic");
+                    break;
+
+                case "STOP":
+                    if (running)
                     {
-
-                        case "name":
-                            _parameters[Name] = consumeResult.Message.Value;
-                            break;
-
-                        case "version":
-                            _parameters[Version] = consumeResult.Message.Value;
-                            break;
-
-                        case "description":
-                            _parameters[Description] = consumeResult.Message.Value;
-                            break;
-
-                        case "author":
-                            _parameters[Author] = consumeResult.Message.Value;
-                            break;
-
-                        case "url":
-                            _parameters[Url] = consumeResult.Message.Value;
-                            break;
-
-                        case "tenantid":
-                            _parameters[TenantId] = consumeResult.Message.Value;
-                            break;
-
-                        case "tenantname":
-                            _parameters[TenantName] = consumeResult.Message.Value;
-                            break;
-
-                        case "tenantdescription":
-                            _parameters[TenantDescription] = consumeResult.Message.Value;
-                            break;
-
-                        case "shutdown":
-                            await Task.Run(() => Environment.Exit(0));
-                            break;
-
-                        default:
-                            break;
+                        Dispose(commandSubscription);
+                        Dispose(payloadSubscription);
+                        running = false;
                     }
-                }
-            }
+                    break;
 
-            return;
+                case "START":
+                    if (!running)
+                    {
+                        if (taskFactory == null)
+                        {
+                            taskFactory = new TaskFactory();
+                        }
+
+                        commandTask = taskFactory.StartNew(() => WaitForCommandRequest());
+                        transformTask = taskFactory.StartNew(() => WaitForTransformRequest());
+                        running = true;
+                    }
+
+                    break;
+
+                default:
+                    break;
+            }  
+        }
+        
+        private void ProcessTransform(TransformerPayload payload)
+        {
+            Debug.WriteLine($"Collector Transform Request: {payload}");
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 
         public virtual async Task RegisterCollector(CollectorConfig collectorconfig)
         {
+            Debug.WriteLine($"Registering Collector");
             this.collectorconfig = collectorconfig;
-            throw new NotImplementedException(nameof(RegisterCollector));
+            //throw new NotImplementedException(nameof(RegisterCollector));
         }
 
         public virtual async Task Start()
@@ -230,9 +207,18 @@ namespace Collectors.Model
             throw new NotImplementedException(nameof(Destroy));
         }
 
+        protected void Dispose(SubscriptionResult? subscription)
+        {
+            subscription?.Dispose();
+        }
+
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(commandSubscription);
+            Dispose(payloadSubscription);
+
+            commandTask?.Dispose();
+            transformTask?.Dispose();
         }
 
 

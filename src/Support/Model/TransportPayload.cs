@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Transformers.Model;
+﻿using DataShapes.Model;
 
-namespace Transformers.Interface
+namespace Support.Model
 {
     public struct TransformerPayload
     {

@@ -2,21 +2,27 @@ version: '3.8'
 # cell IP: 172.58.229.225
 # public IP: 38.7.155.219
 # LAN IP:  192.168.86.241 
-services:    
-    kafka:
-        image: 'bitnami/kafka:latest'
+services: 
+    rabbitmq:
+        image: bitnami/rabbitmq:latest
+        container_name: rabbitmq
+        restart: always
         networks:
         - backend-network
+        ports:
+        - 5672:5672
+        - 15672:15672
         environment:
-        - KAFKA_CFG_NODE_ID=0
-        - KAFKA_CFG_PROCESS_ROLES=controller,broker
-        - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
-        - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-        - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
-        - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-#        - KAFKA_KRAFT_CLUSTER_ID=PalisaidCluster
+            RABBITMQ_USERNAME: palisaid
+            RABBITMQ_PASSWORD: palisaid
+            RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+            RABBITMQ_MANAGER_PORT_NUMBER: 15672
+            RABBITMQ_NODE_PORT_NUMBER: 5672
+            RABBITMQ_NODE_NAME: rabbit@rabbitmq
+            RABBITMQ_USE_LONGNAME: "true"
+            RABBITMQ_CLUSTER_NODE_TYPE: ram
 
-  #  postgres:
+#  postgres:
   #  image: postgres:15.5-bullseye
   #      image: pjenney58/palisaiddb:latest
   #      container_name: db-postgres-all
@@ -59,8 +65,8 @@ services:
     GatewayController:
         container_name: gatewayapi
         environment:
-            - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
-        image: pjenney/gatewayapi
+            - DOTNET_RUNNING_IN_DOCKER_CONTAINER=false
+        image: pjenney58/gatewayapi
         restart: always
         ports: 
         - "5080:80"
@@ -75,7 +81,7 @@ services:
         container_name: collectorapi
         environment:
             - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
-        image: collectorapi
+        image: pjenney58/collectorapi
         restart: always
         ports: 
         - "5001:80"
@@ -90,7 +96,7 @@ services:
         environment:
         - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
     
-        image: pjenney/fhir4collector
+        image: pjenney58/fhir4collector
         restart: always
         ports: 
         - "5002:80"
