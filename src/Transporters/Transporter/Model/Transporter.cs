@@ -1,24 +1,139 @@
-﻿using Confluent.Kafka;
+﻿
+using Confluent.Kafka;
+using DataShapes.Model;
+using EasyNetQ;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Configuration;
+using NLog.Common;
+using Support.Model;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using Transporters.Interface;
 
 namespace Transporters.Model
 {
-    public abstract class Transporter : IDisposable
-    {
-        protected ConsumerConfig kcconfig = new()
-        {
-            GroupId = "Transporters",
-            BootstrapServers = "palisaid:9002",
-            AutoOffsetReset = AutoOffsetReset.Earliest
-        };
+    
+    delegate void TransporterConnectionHandler();
 
-        // Message producer, data to controller
-        protected ProducerConfig kpconfig = new()
+    public class Transporter : PalisaidMessageQueue, IDisposable
+    {     
+        private readonly IConfiguration? config;
+        private readonly CollectorConfig? cconfig;
+        TransporterConnectionHandler? client;
+
+        public Transporter(CollectorConfig cconfig, Guid tenantid, string commandbus, string payloadbus) 
+            : base(tenantid, commandbus, payloadbus) 
         {
-            BootstrapServers = "palisaid:9002"
-        };
+            config = AppConfig.Get("transportersettings.json");
+            
+            this.cconfig = cconfig;
+
+            // Register ConnectionHandler
+            Trace.WriteLine("Registering Transporter Connection Handler");
+
+            // Register Command Handler
+            Trace.WriteLine("Registering Transporter Command Handler");
+            RegisterCommmandHandler(ProcessCommand);
+
+            // Register Trasform Handler
+            Trace.WriteLine("Registering Transporter Payload Handler");
+            RegisterTransformHandler(ProcessReadData);
+
+            // Get things rolling
+            Trace.WriteLine($"Starting Transporter {cconfig.NetworkProtocolIn}");
+            ProcessCommand("Start");
+        }
+
+        internal void ProcessConnectionHandler()
+        {
+            try
+            {
+                switch(cconfig.NetworkProtocolIn)
+                {
+                    case NetworkProtocol.TCP:                  
+                        Connect();
+                        break;
+
+                    case NetworkProtocol.HTTPS:
+                        Connect();
+                        break;
+
+                    case NetworkProtocol.HTTP:
+                        Connect();
+                        break;
+
+                    case NetworkProtocol.REST:
+                        Connect();
+                        break;
+
+                    case NetworkProtocol.WebSocket:
+                        Connect();
+                        break;
+
+                    case NetworkProtocol.SignalR:
+                        Connect();
+                        break;
+
+                    case NetworkProtocol.GRPC:
+                        Connect();
+                        break;
+                       
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        internal void ProcessReadData(TransformerPayload payload)
+        {
+            try
+            {
+                var result = Read();
+
+                using (var bus = RabbitHutch.CreateBus(AppRunningIn.Docker ? "host=rabbitmq" : "host=localhost"))
+                {
+                    bus.PubSub.Publish(result, payloadbus);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        // Command Handler
+        internal void ProcessCommand(string payload)
+        {
+            Debug.WriteLine($"Transformer Command Request: {payload}");
+
+            switch (payload.ToUpperInvariant())
+            {
+                case "SHUTDOWN":
+                    Dispose();
+                    Environment.Exit(0);
+                    break;
+
+                case "PANIC":
+                    Panic();
+                    break;
+
+                case "STOP":
+                    Stop();
+                    break;
+
+                case "START":
+                    Start();
+                    break;
+
+                default:
+                    break;
+            }
+        }
 
         protected string GetHash(string input)
         {

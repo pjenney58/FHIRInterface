@@ -1,42 +1,37 @@
-﻿using System.Net;
-using Transformers.Model;
-using Transformers.Interface;
-using Transporters.Model;
+﻿using EasyNetQ;
 using Support.Model;
-using DataShapes.Model;
-using EasyNetQ;
 using System.Diagnostics;
 
 namespace DevTests.MessageQueue
 {
-    public class TestMessageQueue : PPM_MessageQueue
+    public class TestMessageQueue : PalisaidMessageQueue
     {
-            public TestMessageQueue(Guid tenantid, string commandbus, string payloadbus) 
-                    : base(tenantid, commandbus, payloadbus)
-            {
-                Debug.WriteLine("Constructed TestMessageQueue");
-            }
-
-            protected override void RegisterCommmandHandler(MQCommandHandler mqcommandhandler)
-            {
-                Debug.WriteLine("Registering Command Handler");
-            }
-
-            protected override void RegisterTransformHandler(MQTransformHandler mqtransformhandler)
-            {
-                Debug.WriteLine("Registering Transform Handler");
-            }
-
-            protected override void WaitForCommandRequest()
-            {
-                Debug.WriteLine("Waiting for Command Request");
-            }
-
-            protected override void WaitForTransformRequest()
-            {
-                Debug.WriteLine("Waiting for Transform Request");
-            }
+        public TestMessageQueue(Guid tenantid, string commandbus, string payloadbus)
+                : base(tenantid, commandbus, payloadbus)
+        {
+            Debug.WriteLine("Constructed TestMessageQueue");
         }
+
+        protected override void RegisterCommmandHandler(MQCommandHandler mqcommandhandler)
+        {
+            Debug.WriteLine("Registering Command Handler");
+        }
+
+        protected override void RegisterTransformHandler(MQTransformHandler mqtransformhandler)
+        {
+            Debug.WriteLine("Registering Transform Handler");
+        }
+
+        protected override void WaitForCommandRequest()
+        {
+            Debug.WriteLine("Waiting for Command Request");
+        }
+
+        protected override void WaitForTransformRequest()
+        {
+            Debug.WriteLine("Waiting for Transform Request");
+        }
+    }
 
     public class TMessageQueue
     {
@@ -53,8 +48,7 @@ namespace DevTests.MessageQueue
                 Assert.Fail("RabbitMQ is not running on localhost");
             }
         }
-        
-        
+
         [Fact]
         public async Task CheckMessageQueue()
         {
@@ -64,19 +58,17 @@ namespace DevTests.MessageQueue
 
             var mq = new TestMessageQueue(tenantid, commandbus, payloadbus);
             Assert.NotNull(mq);
+            mq.Dispose();
         }
-        
+
         [Fact]
         public async Task CheckCommands()
         {
-
         }
 
         [Fact]
         public async Task CheckTransforms()
         {
         }
-
     }
-
 }

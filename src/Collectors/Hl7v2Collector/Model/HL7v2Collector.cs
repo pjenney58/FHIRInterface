@@ -1,24 +1,40 @@
-﻿
-using Collectors.Interface;
-using Confluent.Kafka;
+﻿using Collectors.Interface;
+using RabbitMQ;
+using DataShapes.Model;
 using Transporters.Model;
+using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 
 namespace Collectors.Model
 {
-	public class HL7v2Collector : Collector<HL7v2Collector>
-	{
+    public class HL7v2Collector : Collector<HL7v2Collector>
+    {
         private readonly MllpClient? client;
+        private readonly DataShapeContext? context = new DataShapeContext();
 
-        public HL7v2Collector() : base(Guid.Empty)
-		{
-		}
+        public HL7v2Collector()
+            : base(Guid.Empty, nameof(HL7v2Collector))
+        {
+        }
 
-		public HL7v2Collector(Guid tenantid) : base(tenantid)
-		{
+        public HL7v2Collector(Guid tenantid)
+            : base(tenantid, nameof(HL7v2Collector))
+        {
             GetApplicationConfig("hl7v2settings.json");
-            
-            client = new MllpClient();     
-		}
+
+            var collectorconfig = context?.Collectors.Find(tenantid);
+
+            if (collectorconfig != null && collectorconfig.DataProtocolIn == DataProtocol.HL7v2 && collectorconfig.IsActive)
+            {
+                client = new MllpClient(collectorconfig,
+                                        tenantid,
+                                        $"{nameof(HL7v2Collector)}Command-{DateTimeOffset.Now.Millisecond}",
+                                        $"{nameof(HL7v2Collector)}Payload-{DateTimeOffset.Now.Millisecond}");
+            }
+            else
+            {
+                throw new Exception($"Collector Configuration {nameof(HL7v2Collector)} not found for {tenantid}");
+            }
+        }
 
         public override async Task Configure()
         {
@@ -61,4 +77,3 @@ namespace Collectors.Model
         }
     }
 }
-

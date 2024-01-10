@@ -5,6 +5,11 @@ namespace Collectors.Interface
 {
 	public interface ICollector
 	{
+		Task RegisterCollector();
+		Task RegisterTransporter();
+		Task RegisterTransformer(DataShapes.Model.DataProtocol dataProtocolIn);
+		Task RegisterScheduler();
+
 		Task Connect();
 		Task Deploy();
 		Task Configure();

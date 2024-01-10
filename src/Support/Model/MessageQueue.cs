@@ -8,7 +8,7 @@ namespace Support.Model
     public delegate void MQTransformHandler(TransformerPayload payload);
 
 
-    public abstract class PPM_MessageQueue : IDisposable
+    public abstract class PalisaidMessageQueue : IDisposable
 	{
         IConfiguration? config;      
 
@@ -39,7 +39,7 @@ namespace Support.Model
         MQCommandHandler? mqcommandhandler;
         MQTransformHandler? mqtransformhandler;
 
-        public PPM_MessageQueue(Guid tenantid, string commandbus, string payloadbus, string? username = null, string? password = null)
+        public PalisaidMessageQueue(Guid tenantid, string commandbus, string payloadbus, string? username = null, string? password = null)
 		{   
             GetApplicationConfig("messagequeuesettings.json");
 

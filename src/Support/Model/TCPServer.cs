@@ -31,13 +31,13 @@ namespace Support.Model
 {
     internal class TCPServer : IDisposable
     {
-        private readonly IBaseEventLogger logger = new BaseEventLogger("WorkingServer");
+        private readonly IBaseEventLogger logger = new BaseEventLogger("TCPServer");
 
         //private MessageService _local;
 
-        private TcpListener listener;
-        public EndPoint RemoteEndPoint;
-        public EndPoint LocalEndPoint;
+        private TcpListener? listener;
+        public EndPoint? RemoteEndPoint;
+        public EndPoint? LocalEndPoint;
 
         private bool IsSecure;
 
@@ -46,10 +46,10 @@ namespace Support.Model
         /// </summary>
         public ManualResetEvent TcpClientConnected;
 
-        private X509Certificate x509Certificate;
-        private X509Certificate2Collection x509Collection;
-        private X509Store x509Store;
-        private X509Certificate2Collection x509ValidCollection;
+        private X509Certificate? x509Certificate;
+        private X509Certificate2Collection? x509Collection;
+        private X509Store? x509Store;
+        private X509Certificate2Collection? x509ValidCollection;
 
         /// <summary>
         /// Statefull or Stateless

@@ -1,5 +1,6 @@
 ﻿
 using Collectors.Interface;
+using DataShapes.Model;
 
 namespace Collectors.Model
 {
@@ -39,6 +40,26 @@ namespace Collectors.Model
         }
 
         public Task Persist()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RegisterCollector()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RegisterScheduler()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RegisterTransformer(DataProtocol dataProtocolIn)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RegisterTransporter()
         {
             throw new NotImplementedException();
         }

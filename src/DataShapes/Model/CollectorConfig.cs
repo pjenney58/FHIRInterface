@@ -36,7 +36,7 @@ namespace DataShapes.Model
     {
         Json,
         Xml,
-        MMLP,
+        MLLP,
         PipeHat,
         Other
     };
@@ -44,10 +44,14 @@ namespace DataShapes.Model
     public enum NetworkProtocol
     {
         TCP,
-        UDP,
         REST,
         HTTP,
-        HTTPS
+        HTTPS,
+        WebSocket,
+        SignalR,
+        GRPC,
+        Kafka,
+        RabbitMQ,
     };
 
     /// <summary>
@@ -92,7 +96,6 @@ namespace DataShapes.Model
         //
         // DataProtocolOut = DataProtocol.HL7v2; TransportProtocolIn = TransportProtocol.MMLP;
         // NetworkProtocolIn = NetworkProtocol.TCP;
-
         public DataProtocol DataProtocolOut { get; set; }
         public NetworkProtocol NetworkProtocolOut { get; set; }
         public TransportPrototcol TransportPrototcolOut { get; set; }

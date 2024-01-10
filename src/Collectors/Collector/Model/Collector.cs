@@ -12,7 +12,7 @@ using Support.Model;
 
 namespace Collectors.Model
 {
-    public abstract class Collector<T> : PPM_MessageQueue, ICollector, IDisposable
+    public abstract class Collector<T> : PalisaidMessageQueue, ICollector, IDisposable
     {
         #region strings
         private readonly string Name = "Name";
@@ -41,16 +41,9 @@ namespace Collectors.Model
 
         protected IConfiguration? config;
         protected CollectorConfig? collectorconfig;
-        protected ITransporter? transporter;
+        protected List<ITransporter?> transporters = new();
         protected List<ITransformer?> transformers = new();
         protected IScheduler? scheduler;
-
-        protected void GetApplicationConfig(string configname)
-        {
-            config = new ConfigurationBuilder()
-              .AddJsonFile(configname)
-              .Build();
-        }
 
         SubscriptionResult? payloadSubscription;
         SubscriptionResult? commandSubscription;
@@ -61,10 +54,11 @@ namespace Collectors.Model
 
         bool running = false;
         bool cancelled = false;
+
         public Collector(Guid tenantid, string name) 
                   : base(tenantid, $"command-{name}", $"transform-{name}")
         {
-            GetApplicationConfig("collectorsettings.json");
+            config = AppConfig.Get("collectorsettings.json");
 
             // Setup MQ channels
             Trace.WriteLine("Registering Collector Transformer[0]");
@@ -86,11 +80,16 @@ namespace Collectors.Model
             ProcessCommand("Start");
         }
    
-        private void RegisterTransporter()
+        public void RegisterTransporter(CollectorConfig cconfig, Guid tenantid, string commandbus, string payloadbus)
         {
+            // Create the transporter
+            var transporter = new Transporter(cconfig, tenantid, commandbus, payloadbus) as ITransporter;
+
+            // Add the transporter to the list
+            transporters.Add(transporter);
         }
 
-        private void RegisterTransformer(Guid tenantid, string commandbus, string payloadbus)
+        public void RegisterTransformer(Guid tenantid, string commandbus, string payloadbus)
         {
             // Create the transformer
             var transformer = new Transformer(tenantid, commandbus, payloadbus) as ITransformer;
@@ -219,6 +218,26 @@ namespace Collectors.Model
 
             commandTask?.Dispose();
             transformTask?.Dispose();
+        }
+
+        public Task RegisterCollector()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RegisterTransporter()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RegisterTransformer(DataProtocol dataProtocolIn)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RegisterScheduler()
+        {
+            throw new NotImplementedException();
         }
 
 

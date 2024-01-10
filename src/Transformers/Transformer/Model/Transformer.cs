@@ -10,23 +10,16 @@ using Microsoft.Extensions.Configuration;
 
 namespace Transformers.Model
 {
-    public class Transformer : PPM_MessageQueue, IDisposable
+    public class Transformer : PalisaidMessageQueue, IDisposable
     {
         IConfiguration? config;      
         ITransformer? transformer;
-
-        protected void GetApplicationConfig(string configname)
-        {
-            config = new ConfigurationBuilder()
-               .AddJsonFile(configname)
-               .Build();
-        }
-
+     
         public Transformer(Guid tenantid, string commandbus, string payloadbus)
                     : base(tenantid, commandbus, payloadbus)
         {            
             // Get the configuration
-            GetApplicationConfig("transformersettings.json");
+            config = AppConfig.Get("transformersettings.json");
 
             // Register Command Handler
             Trace.WriteLine("Registering Command Handler");
