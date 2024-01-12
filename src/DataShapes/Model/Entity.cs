@@ -34,6 +34,12 @@ namespace DataShapes.Model
         public Guid TenantId { get; set; } = Guid.Empty;
         #endregion key
 
+		/// <summary>
+		/// The hash of the original data that was used to create this entity. This is used to determine if the data has changed, 
+		/// and if so, the entity needs to be updated.
+		/// </summary>
+		public string OriginHAsh { get; set; } = string.Empty;
+
         public long Version { get; set; }
 
         public DateTimeOffset CreateDate { get; set; }
