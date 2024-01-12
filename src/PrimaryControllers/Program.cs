@@ -21,6 +21,8 @@ public class Program
 
         // Add services to the container.
         ConfigurationManager configuration = builder.Configuration;
+        //configuration.AddJsonFile("controllerappsettings.json", optional: false, reloadOnChange: true);
+        
 
         //Console.WriteLine($"Running InDocker: {AppRunningIn.Docker}");
 

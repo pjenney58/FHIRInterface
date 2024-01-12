@@ -23,7 +23,7 @@ namespace DataShapes.Model
         public static IServiceCollection configureservice(this IServiceCollection service, IConfiguration Configuration)
         {
             IConfiguration config = new ConfigurationBuilder()
-               .AddJsonFile("appdataconfig.json")
+               .AddJsonFile("appdatashapeconfig.json")
                .Build();
 
             Console.WriteLine($"Running in Docker: {AppIn.Docker}");
@@ -54,7 +54,7 @@ namespace DataShapes.Model
         public DataShapeContext CreateDbContext(string[] args)
         {
             config = new ConfigurationBuilder()
-              .AddJsonFile("appdataconfig.json")
+              .AddJsonFile("appdatashapeconfig.json")
               .Build();
 
             Console.WriteLine($"Running in Docker: {AppIn.Docker}");
@@ -93,7 +93,7 @@ namespace DataShapes.Model
         public DataShapeContext()
         {
             config = new ConfigurationBuilder()
-               .AddJsonFile("appdataconfig.json")
+               .AddJsonFile("appdatashapeconfig.json")
                .Build();
 
             Console.WriteLine($"Running in Docker: {AppIn.Docker}");
@@ -111,7 +111,7 @@ namespace DataShapes.Model
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             config = new ConfigurationBuilder()
-               .AddJsonFile("appdataconfig.json")
+               .AddJsonFile("appdatashapeconfig.json")
                .Build();
 
             optionsBuilder.UseNpgsql(config.GetConnectionString(AppIn.Docker ? "docker" : "default"));

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Authentication.Data;
 using DataShapes.Model;
 using Microsoft.AspNetCore.Authorization;
@@ -42,8 +43,11 @@ namespace Primary.Controllers
                     {
                         if (User.Identity != null) 
                         {
-                            if (((System.Security.Claims.ClaimsIdentity)User.Identity).HasClaim("role","PalisaidRootAdministrator") ||
-                               ((System.Security.Claims.ClaimsIdentity)User.Identity).HasClaim("role", "PalisaidTenantAdministrator"))
+                            var user = User.Identity as System.Security.Claims.ClaimsIdentity;
+                            // user.Claims.ToList().ForEach(c => Debug.WriteLine($"Claim: {c.Type} = {c.Value}"));
+                            
+                            if(user.HasClaim(user.RoleClaimType,"PalisaidRootAdministrator") ||
+                               user.HasClaim(user.RoleClaimType, "PalisaidTenantAdministrator"))
                             {
                                 list = await Task.Run(() => _context.Patients.ToList());
                                 return Ok(list.Select(l => new { l?.EntityId, l?.Name?.FamilyName, l?.Name?.FirstName }));
