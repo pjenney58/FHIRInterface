@@ -25,7 +25,7 @@ namespace Primary.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
             if (!ModelState.IsValid)
@@ -137,8 +137,8 @@ namespace Primary.Controllers
             return Problem("");
         }
 
-        [HttpGet("{patientname}")]
-        public async Task<IActionResult> GetByName(string name)
+        [HttpGet("GetByName")]
+        public async Task<IActionResult> GetByName(string firstname, string lastname)
         {
             if (!ModelState.IsValid)
             {
