@@ -29,12 +29,12 @@ namespace Transformers.Model.R4
 
         public delegate Task<OEntity> TaskDelegate();
 
-        public Hl7Version version { get; set; }
-        public HL7Format format { get; set; }
+        public InputVersion version { get; set; }
+        public InputFormat format { get; set; }
         public SourceSystems source { get; set; } = SourceSystems.Epic;
         public Guid tenant { get; set; }
 
-        public PractitionerAdapter(Guid tenant, HL7Format format, Hl7Version version, SourceSystems source)
+        public PractitionerAdapter(Guid tenant, InputFormat format, InputVersion version, SourceSystems source)
         {
             this.tenant = tenant;
             this.format = format;
@@ -80,15 +80,15 @@ namespace Transformers.Model.R4
         {
             // Override this with the appropriate key conditions - replace MSG as desired. There may
             // be several similar messages required, e.g. SIU & SRM
-            Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
+            Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Practitioner => DataShapes.Model.Practitioner", Hl7Version.R4), ConvertFhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Practitioner => Hl7.Fhir.Model.Practitioner", Hl7Version.R4), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Practitioner => DataShapes.Model.Practitioner", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"DataShapes.Model.Practitioner => Hl7.Fhir.Model.Practitioner", InputVersion.HL7FhirR4), ConvertMetaToFhir }
             };
 
             payloadIN = payload as IEntity;
 
-            var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
+            var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
             if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
             {
                 return await funcC();

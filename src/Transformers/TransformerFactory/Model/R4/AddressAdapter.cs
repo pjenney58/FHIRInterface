@@ -47,12 +47,12 @@ namespace Transformers.Model.R4
         public delegate OEntity VoidDelegate();
         public delegate Task<OEntity?> TaskDelegate();
 
-        public Hl7Version version { get; set; }
-        public HL7Format format { get; set; }
+        public InputVersion version { get; set; }
+        public InputFormat format { get; set; }
         public SourceSystems source { get; set; } = SourceSystems.Epic;
         public Guid tenant { get; set; }
 
-        public AddressTransformer(Guid tenant, HL7Format format, Hl7Version version, SourceSystems source)
+        public AddressTransformer(Guid tenant, InputFormat format, InputVersion version, SourceSystems source)
         {
             this.tenant = tenant;
             this.format = format;
@@ -167,13 +167,13 @@ namespace Transformers.Model.R4
             payloadIN = payload as IEntity;
 
             // Use full names to differenciate
-            Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
+            Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Address => DataShapes.Model.Address", Hl7Version.R4), ConvertFhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Address => Hl7.Fhir.Model.Address", Hl7Version.R4), ConvertMetaToFhir }            
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Address => DataShapes.Model.Address", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"DataShapes.Model.Address => Hl7.Fhir.Model.Address", InputVersion.HL7FhirR4), ConvertMetaToFhir }            
             };
 
-            var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
+            var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
 
             if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
             {

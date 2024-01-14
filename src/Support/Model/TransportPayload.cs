@@ -6,8 +6,8 @@ namespace Support.Model
     {
         public Type Type1 { get; set; }
         public Type Type2 { get; set; }
-        public HL7Format Format { get; set; }
-        public Hl7Version Version { get; set; }
+        public InputFormat Format { get; set; }
+        public InputVersion Version { get; set; }
         public SourceSystems SourceHost { get; set; }
         public object data { get; set; }
     }

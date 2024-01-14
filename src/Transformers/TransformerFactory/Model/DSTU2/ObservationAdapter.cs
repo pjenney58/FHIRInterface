@@ -32,12 +32,12 @@ namespace Transformers.Model.Dstu2
         public delegate OEntity VoidDelegate();
         public delegate Task<OEntity> TaskDelegate();
 
-        public Hl7Version version { get; set; }
-        public HL7Format format { get; set; }
+        public InputVersion version { get; set; }
+        public InputFormat format { get; set; }
         public SourceSystems source { get; set; } = SourceSystems.Epic;
         public Guid tenant { get; set; }
 
-        public ObservationAdapter(Guid tenant, HL7Format format, Hl7Version version, SourceSystems source)
+        public ObservationAdapter(Guid tenant, InputFormat format, InputVersion version, SourceSystems source)
         {
             this.tenant = tenant;
             this.format = format;
@@ -183,7 +183,7 @@ namespace Transformers.Model.Dstu2
             throw new NotImplementedException();
         }
 
-        public ObservationAdapter(Hl7Version version)
+        public ObservationAdapter(InputVersion version)
         {
             this.version = version;
         }
@@ -208,13 +208,13 @@ namespace Transformers.Model.Dstu2
 
             payloadIN = payload as IEntity;
 
-            Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
+            Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Observation => DataShapes.Model.Observation", Hl7Version.R4), ConvertFhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Observation => Hl7.Fhir.Model.Observation", Hl7Version.R4), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Observation => DataShapes.Model.Observation", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"DataShapes.Model.Observation => Hl7.Fhir.Model.Observation", InputVersion.HL7FhirR4), ConvertMetaToFhir }
             };
 
-            var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
+            var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
             if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
             {
                 return await funcC();

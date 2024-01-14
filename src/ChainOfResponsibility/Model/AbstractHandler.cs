@@ -19,7 +19,7 @@ namespace ChainOfResponsibility.Model
             return handler;
         }
 
-        public virtual object? Handle(string input, string output, Hl7Version version, TaskDelegate func)
+        public virtual object? Handle(string input, string output, InputVersion version, TaskDelegate func)
         {
             if (this._nextHandler != null)
             {

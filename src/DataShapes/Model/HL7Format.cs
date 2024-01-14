@@ -25,14 +25,17 @@ using System.Threading.Tasks;
 
 namespace DataShapes.Model
 {
-    public enum HL7Format
+    public enum InputFormat
     {
-        None = 0,
-        V2,
-        V3,
-        Fhir,
-        CDA,
-        CCDA,
-        DICOM,
+        Unknown = 0,
+        HL7V2,
+        HL7V3,
+        HL7Fhir,
+        HL7CDA,
+        HL7CCDA,
+        HL7DICOM,
+        X12,
+        NCPDP,
+        
     }
 }

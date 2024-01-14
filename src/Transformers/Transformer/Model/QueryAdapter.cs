@@ -37,11 +37,11 @@ namespace Transformers.Model
 
         public delegate Task<OEntity> TaskDelegate();
 
-        public Hl7Version version { get; set; }
-        public HL7Format format { get; set; }
+        public InputVersion version { get; set; }
+        public InputFormat format { get; set; }
         public SourceSystems source { get; set; } = SourceSystems.Epic;
 
-        public QueryAdapter(HL7Format format, Hl7Version version, SourceSystems source)
+        public QueryAdapter(InputFormat format, InputVersion version, SourceSystems source)
         {
             this.format = format;
             this.version = version;

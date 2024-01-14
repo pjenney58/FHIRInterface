@@ -20,12 +20,12 @@ namespace Transformers.Model
         public delegate OEntity VoidDelegate();
         public delegate Task<OEntity> TaskDelegate();
 
-        public Hl7Version version { get; set; }
-        public HL7Format format { get; set; }
+        public InputVersion version { get; set; }
+        public InputFormat format { get; set; }
         public SourceSystems source { get; set; } = SourceSystems.Epic;
         public Guid tenant { get; set; }
 
-        public ScheduleAdapter(Guid tenant, HL7Format format, Hl7Version version, SourceSystems source)
+        public ScheduleAdapter(Guid tenant, InputFormat format, InputVersion version, SourceSystems source)
         {
             this.tenant = tenant;
             this.format = format;

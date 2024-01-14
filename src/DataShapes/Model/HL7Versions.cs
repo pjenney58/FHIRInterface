@@ -19,22 +19,22 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 
 namespace DataShapes.Model
 {
-    public enum Hl7Version
+    public enum InputVersion
     {
-        Dstu2,
-        Stu3,
-        R4,
-        R4b,
-        R5,
-        v21,
-        v22,
-        v23,
-        v231,
-        v24,
-        v25,
-        v26,
-        v27,
-        v28,
-        v29
+        HL7FhirDstu2,
+        HL7HhirStu3,
+        HL7FhirR4,
+        HL7FhirR4b,
+        HL7FhirR5,
+        HL7v21,
+        HL7v22,
+        HL7v23,
+        HL7v231,
+        HL7v24,
+        HL7v25,
+        HL7v26,
+        HL7v27,
+        HL7v28,
+        HL7v29
     }
 }

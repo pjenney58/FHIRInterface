@@ -142,7 +142,7 @@ namespace DevTests
 
                         if (patient != null)
                         {
-                            var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Patient, DataShapes.Model.Patient>(Guid.NewGuid(), Hl7Version.R4);
+                            var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Patient, DataShapes.Model.Patient>(Guid.NewGuid(), InputVersion.HL7FhirR4);
                             var metaPatient = await fhirConverter.Transform(patient) as DataShapes.Model.Patient;
                             lastPatient = metaPatient;
                             return lastPatient;
@@ -171,7 +171,7 @@ namespace DevTests
 
                         if (practitioner != null)
                         {
-                            var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Practitioner, DataShapes.Model.Practitioner>(Guid.NewGuid(), Hl7Version.R4);
+                            var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Practitioner, DataShapes.Model.Practitioner>(Guid.NewGuid(), InputVersion.HL7FhirR4);
                             var metaPractitioner = await fhirConverter.Transform(practitioner) as DataShapes.Model.Practitioner;
                             lastPractitioner = metaPractitioner;
                             return lastPractitioner;
@@ -189,8 +189,8 @@ namespace DevTests
         //[InlineData(Hl7Version.Stu3)]
         //[InlineData(Hl7Version.R4b)]
         //[InlineData(Hl7Version.R5)]
-        [InlineData(Hl7Version.R4)]
-        public async System.Threading.Tasks.Task ProcessPrescriptions(Hl7Version version)
+        [InlineData(InputVersion.HL7FhirR4)]
+        public async System.Threading.Tasks.Task ProcessPrescriptions(InputVersion version)
         {
             try
             {
@@ -239,8 +239,8 @@ namespace DevTests
         //[InlineData(Hl7Version.Stu3)]
         //[InlineData(Hl7Version.R4b)]
         //[InlineData(Hl7Version.R5)]
-        [InlineData(Hl7Version.R4)]
-        public async System.Threading.Tasks.Task ProcessTreatments(Hl7Version version)
+        [InlineData(InputVersion.HL7FhirR4)]
+        public async System.Threading.Tasks.Task ProcessTreatments(InputVersion version)
         {
             try
             {
@@ -289,8 +289,8 @@ namespace DevTests
         //[InlineData(Hl7Version.Stu3)]
         //[InlineData(Hl7Version.R4b)]
         //[InlineData(Hl7Version.R5)]
-        [InlineData(Hl7Version.R4)]
-        public async System.Threading.Tasks.Task ProcessLocations(Hl7Version version)
+        [InlineData(InputVersion.HL7FhirR4)]
+        public async System.Threading.Tasks.Task ProcessLocations(InputVersion version)
         {
             try
             {
@@ -351,8 +351,8 @@ namespace DevTests
         //[InlineData(Hl7Version.Stu3)]
         //[InlineData(Hl7Version.R4b)]
         //[InlineData(Hl7Version.R5)]
-        [InlineData(Hl7Version.R4)]
-        public async System.Threading.Tasks.Task ProcessPatients(Hl7Version version)
+        [InlineData(InputVersion.HL7FhirR4)]
+        public async System.Threading.Tasks.Task ProcessPatients(InputVersion version)
         {
             try
             {
@@ -594,7 +594,7 @@ namespace DevTests
 
                                 if (observation != null)
                                 {
-                                    var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Observation, DataShapes.Model.Observation>(_tenantId, Hl7Version.R4);
+                                    var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Observation, DataShapes.Model.Observation>(_tenantId, InputVersion.HL7FhirR4);
                                     var metaObservation = await fhirConverter.Transform(observation);
 
                                     if (observations.PatientId == Guid.Empty)
@@ -604,7 +604,7 @@ namespace DevTests
                                         //observations.CreateDate = metaObservation.CreateDate;
                                     }
 
-                                    var item = TransformerFactory.Create<Hl7.Fhir.Model.Observation, DataShapes.Model.ObservationItem>(_tenantId, Hl7Version.R4);
+                                    var item = TransformerFactory.Create<Hl7.Fhir.Model.Observation, DataShapes.Model.ObservationItem>(_tenantId, InputVersion.HL7FhirR4);
                                     observations.Items.Add(await item.Transform(observation) as DataShapes.Model.ObservationItem);
                                 }
                             }
@@ -651,7 +651,7 @@ namespace DevTests
                                     Debug.WriteLine(name);
                                 }
 
-                                var aa = TransformerFactory.Create<Hl7.Fhir.Model.Address, DataShapes.Model.Address>(_tenantId, Hl7Version.R4);
+                                var aa = TransformerFactory.Create<Hl7.Fhir.Model.Address, DataShapes.Model.Address>(_tenantId, InputVersion.HL7FhirR4);
 
                                 if (p.Address != null && p.Address.FirstOrDefault() != null)
                                 {
