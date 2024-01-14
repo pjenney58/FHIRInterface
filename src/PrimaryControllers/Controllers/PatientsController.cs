@@ -1,11 +1,12 @@
-using System.Diagnostics;
-using Authentication.Data;
+
 using PalisaidMeta.Model;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Support.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq;
+
 
 namespace Primary.Controllers
 {
@@ -45,15 +46,15 @@ namespace Primary.Controllers
                         if (User.Identity != null)
                         {
                             var user = User.Identity as System.Security.Claims.ClaimsIdentity;
-                            if(user == null)
+                            if (user == null)
                             {
                                 return BadRequest();
                             }
-                            
-                            if(user.HasClaim(user.RoleClaimType,"PalisaidRootAdministrator") ||
+
+                            if (user.HasClaim(user.RoleClaimType, "PalisaidRootAdministrator") ||
                                user.HasClaim(user.RoleClaimType, "PalisaidTenantAdministrator"))
                             {
-                                list = await Task.Run(() => _context.Patients.ToList());
+                                list = await Task.Run(() => _context.Patients.Include(n => n.Name).ToList());
                                 return Ok(list.Select(l => new { l?.EntityId, l?.Name?.FamilyName, l?.Name?.FirstName }));
                             }
                         }
@@ -62,7 +63,7 @@ namespace Primary.Controllers
                     }
                     else
                     {
-                        list = await Task.Run(() => _context.Patients.Where(t => t.TenantId == tid).ToList());
+                        list = await Task.Run(() => _context.Patients.Where(t => t.TenantId == tid).Include(n => n.Name).ToList());
                         return Ok(list.Select(l => new { l?.EntityId, l?.Name?.FamilyName, l?.Name?.FirstName }));
                     }
                 }
@@ -91,10 +92,40 @@ namespace Primary.Controllers
                     var tid = JwtTenantId.Get(Request);
                     if (tid == Guid.Empty)
                     {
-                        return Ok(await Task.Run(() => _context.Patients.Where(i => i.PrimaryPatientIdString == patientid)));
-                    }
+                        return Ok(await Task.Run(() => _context.Patients.Where(p => p.PrimaryPatientIdString == patientid)
+                                                         .Include(n => n.Name)
+                                                         .Include(a => a.Addresses)
+                                                         .Include(a => a.HL7Identifiers)
+                                                         .Include(d => d.Devices)
+                                                         .Include(p => p.Practitioners)
+                                                         .Include(l => l.Locations)
+                                                         .Include(cm => cm.ContactMethods)
+                                                         .Include(t => t.Treatments)
+                                                         .Include(p => p.Prescriptions)
+                                                         .Include(o => o.Observations)
+                                                         .Include(d => d.Diagnoses)
+                                                         .Include(l => l.Languages)
+                                                         .ToList()));
 
-                    return Ok(await Task.Run(() => _context.Patients.Where(i => i.PrimaryPatientIdString == patientid && i.TenantId == tid)));
+
+                    }
+                    else
+                    {
+                        return Ok(await Task.Run(() => _context.Patients.Where(i => i.PrimaryPatientIdString == patientid && i.TenantId == tid)
+                                                        .Include(n => n.Name)
+                                                        .Include(a => a.Addresses)
+                                                        .Include(a => a.HL7Identifiers)
+                                                        .Include(d => d.Devices)
+                                                        .Include(p => p.Practitioners)
+                                                        .Include(l => l.Locations)
+                                                        .Include(cm => cm.ContactMethods)
+                                                        .Include(t => t.Treatments)
+                                                        .Include(p => p.Prescriptions)
+                                                        .Include(o => o.Observations)
+                                                        .Include(d => d.Diagnoses)
+                                                        .Include(l => l.Languages)
+                                                        .ToList()));
+                    }
                 }
                 catch (Exception ex)
                 {

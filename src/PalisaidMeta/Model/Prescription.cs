@@ -109,7 +109,7 @@ namespace PalisaidMeta.Model
 
         public Code? Code { get; set; }
         public Location? FillingPharmacy { get; set; }
-        public Patient? Patient { get; set; }
+        public Guid? Patient { get; set; }
         public Practitioner? Practitioner { get; set; }
         public Diagnosis? Diagnosis { get; set; }
         public Medication? Medication { get; set; }
@@ -146,7 +146,7 @@ namespace PalisaidMeta.Model
                 StatusReasons?.TrimExcess();
                 StatusReasons = null;
 
-                Patient?.Dispose();
+                Patient = Guid.Empty;
                 Practitioner?.Dispose();
                 FillingPharmacy?.Dispose();
                 Medication?.Dispose();
