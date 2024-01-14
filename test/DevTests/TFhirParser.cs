@@ -24,7 +24,7 @@ namespace DevTests
         private const int MAX_VALS = 50;
 
         private readonly string sourcedir = Environment.OSVersion.Platform == PlatformID.Win32NT
-            ? "C:\\SandDriftSoftware\\data\\SyntheaData"
+            ? "C:\\Sand Drift Software\\Synthea\\R4"
             : "/Users/petejenney/Projects/SyntheaData";
 
         private DataShapeContext _context;
@@ -36,7 +36,7 @@ namespace DevTests
             //GetRandomMetaPractitioner();
 
             _context = new DataShapeContext();
-
+            buildFileList();
             lastDate = DateTime.Now.AddDays(-31);
         }
 
@@ -197,15 +197,15 @@ namespace DevTests
                 await System.Threading.Tasks.Task.Run(async () =>
                 {
                     // Arrange
-                    for (var i = 0; i < MAX_VALS; i++)
+                    foreach (var file in files)
                     {
-                        var data = getFhirData();
-                        Assert.NotNull(data);
+                        //var data = getFhirData();
+                        //Assert.NotNull(data);
 
                         var parser = new FhirJsonParser();
                         Assert.NotNull(parser);
 
-                        var parsedBundle = parser.Parse<Bundle>(data);
+                        var parsedBundle = parser.Parse<Bundle>(File.ReadAllText(file));
                         Assert.NotNull(parsedBundle);
 
                         // Act
@@ -367,12 +367,16 @@ namespace DevTests
 
                 DataShapes.Model.Observation observations = new();
 
-                for (var i = 0; i < MAX_VALS; i++)
-                {
-                    var data = getFhirData();
+                //for (var i = 0; i < MAX_VALS; i++)
+                //{
+                var data = getFhirData();
 
+                foreach (var file in files)
+                {
                     var parser = new FhirJsonParser();
-                    var parsedBundle = parser.Parse<Bundle>(data);
+                    Assert.NotNull(parser);
+
+                    var parsedBundle = parser.Parse<Bundle>(File.ReadAllText(file));
 
                     if (null != parsedBundle)
                     {
@@ -524,6 +528,7 @@ namespace DevTests
                         }
                     }
                 }
+                // }
 
                 bool done = true;
             }

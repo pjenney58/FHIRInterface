@@ -3,7 +3,7 @@ using Support.Model;
 
 namespace Transporters.Model
 {
-    public class RestClient : Transporter
-    {
-    }
+  //  public class RestClient : Transporter
+  //  {
+  //  }
 }

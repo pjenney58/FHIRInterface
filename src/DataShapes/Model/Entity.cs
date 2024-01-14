@@ -38,7 +38,7 @@ namespace DataShapes.Model
 		/// The hash of the original data that was used to create this entity. This is used to determine if the data has changed, 
 		/// and if so, the entity needs to be updated.
 		/// </summary>
-		public string OriginHAsh { get; set; } = string.Empty;
+		public string OriginHash { get; set; } = string.Empty;
 
         public long Version { get; set; }
 

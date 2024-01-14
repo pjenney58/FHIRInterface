@@ -44,7 +44,10 @@ namespace Primary.Controllers
                         if (User.Identity != null) 
                         {
                             var user = User.Identity as System.Security.Claims.ClaimsIdentity;
-                            // user.Claims.ToList().ForEach(c => Debug.WriteLine($"Claim: {c.Type} = {c.Value}"));
+                            if(user == null)
+                            {
+                                return BadRequest();
+                            }
                             
                             if(user.HasClaim(user.RoleClaimType,"PalisaidRootAdministrator") ||
                                user.HasClaim(user.RoleClaimType, "PalisaidTenantAdministrator"))
