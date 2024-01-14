@@ -19,7 +19,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 
 using System;
 using Hl7.Fhir.Model;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using Transformers.Interface;
 
 namespace Transformers.Model.Dstu2
@@ -54,62 +54,62 @@ namespace Transformers.Model.Dstu2
 
         private async Task<OEntity> ConvertR2FhirToMeta()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertR3FhirToMeta()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertFhirToMeta()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertR5FhirToMeta()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToR2Fhir()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToR3Fhir()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToFhir()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToR5Fhir()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertV2_MSG_ToMeta()
         {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
 
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToV2_MSG()
         {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
             throw new NotImplementedException();
         }
 
@@ -119,8 +119,8 @@ namespace Transformers.Model.Dstu2
 
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Diagnosis => DataShapes.Model.Diagnosis", InputVersion.HL7FhirR4), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.Diagnosis => Hl7.Fhir.Model.Diagnosis", InputVersion.HL7FhirR4), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Diagnosis => PalisaidMeta.Model.Diagnosis", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Diagnosis => Hl7.Fhir.Model.Diagnosis", InputVersion.HL7FhirR4), ConvertMetaToFhir }
             };
 
             var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);

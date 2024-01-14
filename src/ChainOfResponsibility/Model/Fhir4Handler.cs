@@ -1,7 +1,7 @@
 using ChainOfResponsibility.Interface;
 using Collector.Interface;
 using Collector.CollectorFactory;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 
 namespace ChainOfResponsibility.Model
 {

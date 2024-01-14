@@ -45,21 +45,21 @@ namespace Transformers.Model.R4
         private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Practitioner;
-            var meta = new DataShapes.Model.Practitioner();
+            var meta = new PalisaidMeta.Model.Practitioner();
 
             meta.EntityId = Guid.Parse(fhir.Id);
 
-            var n = TransformerFactory.Create<Hl7.Fhir.Model.HumanName, DataShapes.Model.PersonName>(tenant, format, version, source);
+            var n = TransformerFactory.Create<Hl7.Fhir.Model.HumanName, PalisaidMeta.Model.PersonName>(tenant, format, version, source);
             foreach (var name in fhir.Name)
             {
-                meta.Name.Add(await n.Transform(name) as DataShapes.Model.PersonName);
+                meta.Name.Add(await n.Transform(name) as PalisaidMeta.Model.PersonName);
             }
 
             // Known addresses
-            var a = TransformerFactory.Create<Hl7.Fhir.Model.Address, DataShapes.Model.Address>(tenant, format, version, source);
+            var a = TransformerFactory.Create<Hl7.Fhir.Model.Address, PalisaidMeta.Model.Address>(tenant, format, version, source);
             foreach (var address in fhir.Address)
             {
-                meta.Addresses.Add(await a.Transform(address) as DataShapes.Model.Address);
+                meta.Addresses.Add(await a.Transform(address) as PalisaidMeta.Model.Address);
             }
 
             meta.PrimaryLanguage = fhir.Language;
@@ -72,7 +72,7 @@ namespace Transformers.Model.R4
 
         private async Task<OEntity> ConvertMetaToFhir()
         {
-            // var p = payloadIN as DataShapes.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
+            // var p = payloadIN as PalisaidMeta.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
             throw new NotImplementedException();
         }
 
@@ -82,8 +82,8 @@ namespace Transformers.Model.R4
             // be several similar messages required, e.g. SIU & SRM
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Practitioner => DataShapes.Model.Practitioner", InputVersion.HL7FhirR4), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.Practitioner => Hl7.Fhir.Model.Practitioner", InputVersion.HL7FhirR4), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Practitioner => PalisaidMeta.Model.Practitioner", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Practitioner => Hl7.Fhir.Model.Practitioner", InputVersion.HL7FhirR4), ConvertMetaToFhir }
             };
 
             payloadIN = payload as IEntity;

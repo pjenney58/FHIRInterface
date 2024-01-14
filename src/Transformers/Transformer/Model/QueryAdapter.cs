@@ -19,7 +19,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 
 using System;
 using Hl7.Fhir.Model;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 
 namespace Transformers.Model
 {
@@ -50,62 +50,62 @@ namespace Transformers.Model
 
         private async Task<OEntity> ConvertR2FhirToMeta()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertR3FhirToMeta()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertFhirToMeta()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertR5FhirToMeta()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToR2Fhir()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToR3Fhir()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToFhir()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToR5Fhir()
         {
-            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new DataShapes.Model.{Type}();
+            // var fhir = payloadIN as Hl7.Fhir.Model.{Type}; var meta = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertV2_MSG_ToMeta()
         {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
 
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToV2_MSG()
         {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
             throw new NotImplementedException();
         }
 

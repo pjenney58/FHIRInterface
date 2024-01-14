@@ -52,7 +52,7 @@ namespace Transformers.Model.R4
                 throw new ArgumentNullException(nameof(fhir));
             }
 
-            var meta = new DataShapes.Model.AdditionalInfo();
+            var meta = new PalisaidMeta.Model.AdditionalInfo();
             if(meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
@@ -69,7 +69,7 @@ namespace Transformers.Model.R4
     
         private async Task<OEntity> ConvertMetaToFhir()
         {
-            // var fhir = payloadIN as DataShapes.Model.{Type}; var meta = new Hl7.Fhir.Model.{Type}();
+            // var fhir = payloadIN as PalisaidMeta.Model.{Type}; var meta = new Hl7.Fhir.Model.{Type}();
             await Task.Run(() =>
             {
             });
@@ -83,8 +83,8 @@ namespace Transformers.Model.R4
 
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Extension => DataShapes.Model.AdditionalInfo", InputVersion.HL7FhirR4), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.AdditionalInfo => Hl7.Fhir.Model.Extension", InputVersion.HL7FhirR4), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Extension => PalisaidMeta.Model.AdditionalInfo", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.AdditionalInfo => Hl7.Fhir.Model.Extension", InputVersion.HL7FhirR4), ConvertMetaToFhir }
             };
 
             var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);

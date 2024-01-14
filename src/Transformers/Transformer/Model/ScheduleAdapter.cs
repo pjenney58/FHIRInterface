@@ -2,11 +2,11 @@
 
 // https://qnetconfluence.cms.gov/display/ELDF/Documentation+Repository
 
-using DataShapes.Model;
-using Location = DataShapes.Model.Location;
-using Observation = DataShapes.Model.Observation;
-using Patient = DataShapes.Model.Patient;
-using Practitioner = DataShapes.Model.Practitioner;
+using PalisaidMeta.Model;
+using Location = PalisaidMeta.Model.Location;
+using Observation = PalisaidMeta.Model.Observation;
+using Patient = PalisaidMeta.Model.Patient;
+using Practitioner = PalisaidMeta.Model.Practitioner;
 using Task = System.Threading.Tasks.Task;
 
 namespace Transformers.Model
@@ -45,7 +45,7 @@ namespace Transformers.Model
 
         private async Task<OEntity> ConvertFhirToMeta()
         {
-            // var p = payloadIN as Hl7.Fhir.Model.{Type}; var o = new DataShapes.Model.{Type}();
+            // var p = payloadIN as Hl7.Fhir.Model.{Type}; var o = new PalisaidMeta.Model.{Type}();
             throw new NotImplementedException();
         }
 
@@ -66,7 +66,7 @@ namespace Transformers.Model
 
         private async Task<OEntity> ConvertMetaToFhir()
         {
-            // var p = payloadIN as DataShapes.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
+            // var p = payloadIN as PalisaidMeta.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
             throw new NotImplementedException();
         }
 
@@ -153,7 +153,7 @@ namespace Transformers.Model
         private async Task<OEntity> ConvertV2_SRM_ToMeta()
         {
             // SRM^S01-S04,S06 - nHAPI only supports SRM^S01, presumably that's enough
-            var meta = new DataShapes.Model.Encounter();
+            var meta = new PalisaidMeta.Model.Encounter();
             var message = payloadIN as SRM_S01;
 
             var msh = (MSH)message.GetStructure("MSH");
@@ -250,7 +250,7 @@ namespace Transformers.Model
         {
             // We could be getting SIU^S12-S15,S17,S26 nHAPI only supports SIU^S12 presumably that's enough
 
-            var meta = new DataShapes.Model.CareEvent();
+            var meta = new PalisaidMeta.Model.CareEvent();
             var message = payloadIN as SIU_S12;
 
             var msh = (MSH)message.GetStructure("MSH");

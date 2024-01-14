@@ -62,7 +62,7 @@ namespace Transformers.Model.Stu3
                 
             }
 
-            var meta = new DataShapes.Model.PersonName();
+            var meta = new PalisaidMeta.Model.PersonName();
             if(meta == null)
             {
 
@@ -124,7 +124,7 @@ namespace Transformers.Model.Stu3
 
         private async Task<OEntity> ConvertMetaToFhir()
         {
-            var meta = payloadIN as DataShapes.Model.PersonName;
+            var meta = payloadIN as PalisaidMeta.Model.PersonName;
             if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
@@ -176,14 +176,14 @@ namespace Transformers.Model.Stu3
 
         private async Task<OEntity> ConvertV2_MSG_ToMeta()
         {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
 
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToV2_MSG()
         {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
             throw new NotImplementedException();
         }
 
@@ -196,8 +196,8 @@ namespace Transformers.Model.Stu3
 
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.HumanName => DataShapes.Model.PersonName", InputVersion.HL7FhirR4), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.PersonName => Hl7.Fhir.Model.HumanName", InputVersion.HL7FhirR4), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.HumanName => PalisaidMeta.Model.PersonName", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.PersonName => Hl7.Fhir.Model.HumanName", InputVersion.HL7FhirR4), ConvertMetaToFhir }
             };
 
             var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);

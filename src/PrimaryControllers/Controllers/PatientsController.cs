@@ -1,10 +1,11 @@
 using System.Diagnostics;
 using Authentication.Data;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Support.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace Primary.Controllers
 {
@@ -14,10 +15,10 @@ namespace Primary.Controllers
     public class PatientsController : Controller
     {
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        internal readonly DataShapeContext _context;
-        internal readonly ILogger<Patient> _logger;        
-      
-        public PatientsController(DataShapeContext context, ILogger<Patient> logger)
+        internal readonly PalisaidMetaContext _context;
+        internal readonly ILogger<Patient> _logger;
+
+        public PatientsController(PalisaidMetaContext context, ILogger<Patient> logger)
         {
             _context = context;
             _logger = logger;
@@ -31,22 +32,22 @@ namespace Primary.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, ModelState);
             }
 
-            if(_context != null && _context.Patients != null)
+            if (_context != null && _context.Patients != null)
             {
                 List<Patient> list;
 
                 try
                 {
                     var tid = JwtTenantId.Get(Request);
-                
-                    if(tid == Guid.Empty && User != null)
+
+                    if (tid == Guid.Empty && User != null)
                     {
-                        if (User.Identity != null) 
+                        if (User.Identity != null)
                         {
                             var user = User.Identity as System.Security.Claims.ClaimsIdentity;
                             // user.Claims.ToList().ForEach(c => Debug.WriteLine($"Claim: {c.Type} = {c.Value}"));
-                            
-                            if(user.HasClaim(user.RoleClaimType,"PalisaidRootAdministrator") ||
+
+                            if (user.HasClaim(user.RoleClaimType, "PalisaidRootAdministrator") ||
                                user.HasClaim(user.RoleClaimType, "PalisaidTenantAdministrator"))
                             {
                                 list = await Task.Run(() => _context.Patients.ToList());
@@ -58,11 +59,11 @@ namespace Primary.Controllers
                     }
                     else
                     {
-                            list = await Task.Run(() => _context.Patients.Where(t => t.TenantId == tid).ToList());         
-                            return Ok(list.Select(l => new { l?.EntityId, l?.Name?.FamilyName, l?.Name?.FirstName }));
+                        list = await Task.Run(() => _context.Patients.Where(t => t.TenantId == tid).ToList());
+                        return Ok(list.Select(l => new { l?.EntityId, l?.Name?.FamilyName, l?.Name?.FirstName }));
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.LogError(ex.Message);
                     return Problem(ex.Message);
@@ -72,25 +73,25 @@ namespace Primary.Controllers
             return Problem("");
         }
 
-        [HttpGet("{patientid}")]
-        public async Task<IActionResult> GetById(string id)
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetById(string patientid)
         {
             if (!ModelState.IsValid)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, ModelState);
             }
 
-            if(_context != null && _context.Patients != null)
+            if (_context != null && _context.Patients != null)
             {
                 try
-                {              
+                {
                     var tid = JwtTenantId.Get(Request);
-                    if(tid == Guid.Empty)
+                    if (tid == Guid.Empty)
                     {
-                       return Ok(await Task.Run(() => _context.Patients.Where(i => i.PrimaryPatientIdString == id)));
+                        return Ok(await Task.Run(() => _context.Patients.Where(i => i.PrimaryPatientIdString == patientid)));
                     }
 
-                    return Ok(await Task.Run(() => _context.Patients.Where(i => i.PrimaryPatientIdString == id && i.TenantId == tid)));
+                    return Ok(await Task.Run(() => _context.Patients.Where(i => i.PrimaryPatientIdString == patientid && i.TenantId == tid)));
                 }
                 catch (Exception ex)
                 {
@@ -115,7 +116,7 @@ namespace Primary.Controllers
         }
 
         [HttpGet("notes/{patientid}")]
-        public async Task<IActionResult> GetNotes(string id)
+        public async Task<IActionResult> GetNotes(string patientid)
         {
             if (!ModelState.IsValid)
             {
@@ -127,7 +128,7 @@ namespace Primary.Controllers
         }
 
         [HttpGet("allergies/{patientid}")]
-        public async Task<IActionResult> GetAllergies(string id)
+        public async Task<IActionResult> GetAllergies(string patientid)
         {
             if (!ModelState.IsValid)
             {
@@ -151,7 +152,7 @@ namespace Primary.Controllers
         }
 
         [HttpGet("encounters/{patientid}")]
-        public async Task<IActionResult> GetEncounters(string id)
+        public async Task<IActionResult> GetEncounters(string patientid)
         {
             if (!ModelState.IsValid)
             {
@@ -163,19 +164,38 @@ namespace Primary.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles="PalisaidRootAdministrator, PalisaidTenantAdministrator")]
-        public async Task<IActionResult> Post()
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
+        public async Task<IActionResult> Post(Patient patient)
         {
             if (!ModelState.IsValid)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, ModelState);
             }
 
-            return BadRequest("Not Implemented");
+            var tid = JwtTenantId.Get(Request);
+            if (patient.EntityId != Guid.Empty && !patient.IsActive && !patient.IsDeleted)
+            {
+                var p = await _context.Patients.FirstOrDefaultAsync(p => p.EntityId == patient.EntityId);
+                if (p != null)
+                {
+                    _context.Update<Patient>(patient);
+                    p.MarkAsUpdated();
+                    return Ok(p);
+                }
+                else
+                {
+                    await _context.AddAsync<Patient>(patient);
+                }
+
+                await _context.SaveChangesAsync();
+                return Ok(patient);
+            }
+
+            return BadRequest();
         }
 
         [HttpPut]
-        [Authorize(Roles="PalisaidRootAdministrator, PalisaidTenantAdministrator")]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Put()
         {
             if (!ModelState.IsValid)
@@ -187,14 +207,14 @@ namespace Primary.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles="PalisaidRootAdministrator, PalisaidTenantAdministrator")]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Delete()
         {
             if (!ModelState.IsValid)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, ModelState);
             }
-            
+
             return BadRequest("Not Implemented");
         }
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously

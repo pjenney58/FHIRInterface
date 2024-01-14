@@ -1,4 +1,4 @@
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using ChainOfResponsibility.Interface;
 using Collectors.Interface;
 

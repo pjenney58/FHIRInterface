@@ -55,7 +55,7 @@ namespace Transformers.Model.Dstu2
                 throw new ArgumentNullException(nameof(fhir));
             }
 
-            var meta = new DataShapes.Model.ObservationItem
+            var meta = new PalisaidMeta.Model.ObservationItem
             {
                 TenantId = this.tenant,
                 EntityId = Guid.Parse(fhir.Id)
@@ -68,7 +68,7 @@ namespace Transformers.Model.Dstu2
 
             await Task.Run(() =>
             {
-                meta.ObservationType = DataShapes.Model.ObservationType.Visual;
+                meta.ObservationType = PalisaidMeta.Model.ObservationType.Visual;
 
                 if (fhir.Value != null)
                 {
@@ -87,7 +87,7 @@ namespace Transformers.Model.Dstu2
 
         private async Task<OEntity> ConvertMetaToFhir()
         {
-            var meta = payloadIN as DataShapes.Model.ObservationItem; ;
+            var meta = payloadIN as PalisaidMeta.Model.ObservationItem; ;
             var fhir = new Hl7.Fhir.Model.Observation();
 
             fhir.Id = meta.EntityId.ToString();
@@ -116,8 +116,8 @@ namespace Transformers.Model.Dstu2
 
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.ObservationItem => DataShapes.Model.ObservationItem", InputVersion.HL7FhirR4), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.ObservationItem => Hl7.Fhir.Model.ObservationItem", InputVersion.HL7FhirR4), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.ObservationItem => PalisaidMeta.Model.ObservationItem", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.ObservationItem => Hl7.Fhir.Model.ObservationItem", InputVersion.HL7FhirR4), ConvertMetaToFhir }
             };
 
             payloadIN = payload as IEntity;

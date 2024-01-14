@@ -31,7 +31,7 @@ using R4 = r4::Hl7.Fhir.Model;
 using Stu3 = stu3::Hl7.Fhir.Model;
 */
 
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using Hl7.Fhir.Model;
 using Transformers.Interface;
 
@@ -62,7 +62,7 @@ namespace Transformers.Model.Stu3
         private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Patient;
-            var meta = new DataShapes.Model.Patient()
+            var meta = new PalisaidMeta.Model.Patient()
             {
                 TenantId = tenant == Guid.Empty ? Constants.Transform : tenant,
                 EntityId = Guid.Parse(fhir.Id),
@@ -71,31 +71,31 @@ namespace Transformers.Model.Stu3
                 PrimaryPatientIdString = fhir.Id
             };
 
-            var nameconverter = TransformerFactory.Create<Hl7.Fhir.Model.HumanName, DataShapes.Model.PersonName>(tenant, format, version, source);
+            var nameconverter = TransformerFactory.Create<Hl7.Fhir.Model.HumanName, PalisaidMeta.Model.PersonName>(tenant, format, version, source);
             foreach (var name in fhir.Name)
             {
-                meta.Name = await nameconverter.Transform(name) as DataShapes.Model.PersonName;
+                meta.Name = await nameconverter.Transform(name) as PalisaidMeta.Model.PersonName;
             }
 
             // Known addresses
-            var addressAdapter = TransformerFactory.Create<Hl7.Fhir.Model.Address, DataShapes.Model.Address>(tenant, format, version, source);
+            var addressAdapter = TransformerFactory.Create<Hl7.Fhir.Model.Address, PalisaidMeta.Model.Address>(tenant, format, version, source);
             foreach (var address in fhir.Address)
             {
-                meta.Addresses.Add(await addressAdapter.Transform(address) as DataShapes.Model.Address);
+                meta.Addresses.Add(await addressAdapter.Transform(address) as PalisaidMeta.Model.Address);
             }
 
             // Practitioners ...
-            var pr = TransformerFactory.Create<Hl7.Fhir.Model.Practitioner, DataShapes.Model.Practitioner>(tenant, format, version, source);
+            var pr = TransformerFactory.Create<Hl7.Fhir.Model.Practitioner, PalisaidMeta.Model.Practitioner>(tenant, format, version, source);
             foreach (var practioner in fhir.GeneralPractitioner)
             {
                 PatientPractitioner pp = new();
-                pp.Practitioner = new DataShapes.Model.Practitioner();
+                pp.Practitioner = new PalisaidMeta.Model.Practitioner();
                 pp.Relationship = PractitionerRelationship.Primary;
                 meta.Practitioners.Add(pp);
             }
 
             // TODO: Possible Patient Locations - This may be managed in addresses var l =
-            // AdapterFactory<Hl7.Fhir.Model.Location,DataShapes.Model.Location>.GetAdapterr(version);
+            // AdapterFactory<Hl7.Fhir.Model.Location,PalisaidMeta.Model.Location>.GetAdapterr(version);
             // foreach (var location in p.) { o.Practitioners.Add(l.Convert(location)); }
 
             // Identifiers
@@ -103,7 +103,7 @@ namespace Transformers.Model.Stu3
             {
                 foreach (var id in fhir.Identifier)
                 {
-                    var idset = new DataShapes.Model.Identifier()
+                    var idset = new PalisaidMeta.Model.Identifier()
                     {
                         IdType = id.Type?.Text,
                         IdValue = id.Value,
@@ -135,7 +135,7 @@ namespace Transformers.Model.Stu3
 
         private async Task<OEntity?> ConvertMetaToFhir()
         {
-            // var p = payloadIN as DataShapes.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
+            // var p = payloadIN as PalisaidMeta.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
             throw new NotImplementedException();
         }
 
@@ -145,8 +145,8 @@ namespace Transformers.Model.Stu3
             // be several similar messages required, e.g. SIU & SRM
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Patient => DataShapes.Model.Patient", InputVersion.HL7FhirR4), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.Patient => Hl7.Fhir.Model.Patient", InputVersion.HL7FhirR4), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Patient => PalisaidMeta.Model.Patient", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Patient => Hl7.Fhir.Model.Patient", InputVersion.HL7FhirR4), ConvertMetaToFhir }
             };
 
             payloadIN = payload as IEntity;

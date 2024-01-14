@@ -37,9 +37,7 @@
     <None Include="..\..\.editorconfig" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataShapes\DataShapes.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
+    <ProjectReference Include="../PalisaidMeta/PalisaidMeta.csproj" />
     <ProjectReference Include="..\Support\Support.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>

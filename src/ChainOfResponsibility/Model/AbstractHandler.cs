@@ -1,6 +1,6 @@
 ﻿
 using ChainOfResponsibility.Interface;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 
 namespace ChainOfResponsibility.Model
 {

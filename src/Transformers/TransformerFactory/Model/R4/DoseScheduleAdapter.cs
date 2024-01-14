@@ -52,7 +52,7 @@ namespace Transformers.Model.R4
                 throw new ArgumentNullException(nameof(fhir));
             }
 
-            var meta = new DataShapes.Model.DoseSchedule();
+            var meta = new PalisaidMeta.Model.DoseSchedule();
             if(meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
@@ -72,7 +72,7 @@ namespace Transformers.Model.R4
 
         private async Task<OEntity?> ConvertMetaToFhir()
         {
-            var meta = payloadIN as DataShapes.Model.DoseSchedule;
+            var meta = payloadIN as PalisaidMeta.Model.DoseSchedule;
             if(meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
@@ -103,8 +103,8 @@ namespace Transformers.Model.R4
             // Use full names to differenciate
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.DoseSchedule => DataShapes.Model.DoseSchedule", InputVersion.HL7FhirR4), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.DoseSchedule => Hl7.Fhir.Model.DoseSchedule", InputVersion.HL7FhirR4), ConvertMetaToFhir }            
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.DoseSchedule => PalisaidMeta.Model.DoseSchedule", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.DoseSchedule => Hl7.Fhir.Model.DoseSchedule", InputVersion.HL7FhirR4), ConvertMetaToFhir }            
             };
 
             var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);

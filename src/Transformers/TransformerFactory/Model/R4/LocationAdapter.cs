@@ -56,7 +56,7 @@ namespace Transformers.Model.R4
         private async Task<OEntity> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Location;
-            var meta = new DataShapes.Model.Location()
+            var meta = new PalisaidMeta.Model.Location()
             {
                 TenantId = tenant == Guid.Empty ? Constants.Transform : tenant,
                 EntityId = Guid.Parse(fhir.Id),
@@ -73,7 +73,7 @@ namespace Transformers.Model.R4
             }
 
             // Known addresses
-            var addressAdapter = TransformerFactory.Create<Hl7.Fhir.Model.Address, DataShapes.Model.Address>(tenant, format, version, source);
+            var addressAdapter = TransformerFactory.Create<Hl7.Fhir.Model.Address, PalisaidMeta.Model.Address>(tenant, format, version, source);
 
             var address = await addressAdapter.Transform(fhir.Address);
             if (address != null)
@@ -101,7 +101,7 @@ namespace Transformers.Model.R4
 
         private async Task<OEntity> ConvertMetaToFhir()
         {
-            // var p = payloadIN as DataShapes.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
+            // var p = payloadIN as PalisaidMeta.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
             throw new NotImplementedException();
         }
 
@@ -117,14 +117,14 @@ namespace Transformers.Model.R4
 
         private async Task<OEntity> ConvertV2_MSG_ToMeta()
         {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
 
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToV2_MSG()
         {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
             throw new NotImplementedException();
         }
 
@@ -136,14 +136,14 @@ namespace Transformers.Model.R4
             // messages required, e.g. SIU & SRM
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Location => DataShapes.Model.Location", InputVersion.HL7FhirDstu2), ConvertR5FhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.Location => Hl7.Fhir.Model.Location", InputVersion.HL7FhirDstu2), ConvertMetaToR5Fhir },
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Location => DataShapes.Model.Location", InputVersion.HL7HhirStu3), ConvertR3FhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.Location => Hl7.Fhir.Model.Location", InputVersion.HL7HhirStu3), ConvertMetaToR3Fhir },
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Location => DataShapes.Model.Location", InputVersion.HL7FhirR4), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.Location => Hl7.Fhir.Model.Location", InputVersion.HL7FhirR4), ConvertMetaToFhir },
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Location => DataShapes.Model.Location", InputVersion.HL7FhirR5), ConvertR5FhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.Location => Hl7.Fhir.Model.Location", InputVersion.HL7FhirR5), ConvertMetaToR5Fhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Location => PalisaidMeta.Model.Location", InputVersion.HL7FhirDstu2), ConvertR5FhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Location => Hl7.Fhir.Model.Location", InputVersion.HL7FhirDstu2), ConvertMetaToR5Fhir },
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Location => PalisaidMeta.Model.Location", InputVersion.HL7HhirStu3), ConvertR3FhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Location => Hl7.Fhir.Model.Location", InputVersion.HL7HhirStu3), ConvertMetaToR3Fhir },
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Location => PalisaidMeta.Model.Location", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Location => Hl7.Fhir.Model.Location", InputVersion.HL7FhirR4), ConvertMetaToFhir },
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Location => PalisaidMeta.Model.Location", InputVersion.HL7FhirR5), ConvertR5FhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Location => Hl7.Fhir.Model.Location", InputVersion.HL7FhirR5), ConvertMetaToR5Fhir }
             };
 
             payloadIN = payload as IEntity;

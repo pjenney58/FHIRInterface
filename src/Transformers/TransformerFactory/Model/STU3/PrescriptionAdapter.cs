@@ -19,7 +19,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 
 using System;
 using Hl7.Fhir.Model;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using Transformers.Interface;
 
 namespace Transformers.Model.Stu3
@@ -65,7 +65,7 @@ namespace Transformers.Model.Stu3
                 throw new ArgumentNullException(nameof(fhir));
             }
 
-            var meta = new DataShapes.Model.Prescription()
+            var meta = new PalisaidMeta.Model.Prescription()
             {
                 TenantId = this.tenant,
                 EntityId = Guid.Parse(fhir.Id),
@@ -236,7 +236,7 @@ namespace Transformers.Model.Stu3
 
         private async Task<OEntity> ConvertMetaToFhir()
         {
-            var meta = payloadIN as DataShapes.Model.Prescription;
+            var meta = payloadIN as PalisaidMeta.Model.Prescription;
             var fhir = new Hl7.Fhir.Model.MedicationRequest();
             throw new NotImplementedException();
         }
@@ -248,14 +248,14 @@ namespace Transformers.Model.Stu3
 
         private async Task<OEntity> ConvertV2_MSG_ToMeta()
         {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
 
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToV2_MSG()
         {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
             throw new NotImplementedException();
         }
 
@@ -265,8 +265,8 @@ namespace Transformers.Model.Stu3
             // be several similar messages required, e.g. SIU & SRM
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.MedicationRequest => DataShapes.Model.Prescription", InputVersion.HL7FhirR4), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.Prescription => Hl7.Fhir.Model.MedicationRequest", InputVersion.HL7FhirR4), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.MedicationRequest => PalisaidMeta.Model.Prescription", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Prescription => Hl7.Fhir.Model.MedicationRequest", InputVersion.HL7FhirR4), ConvertMetaToFhir }
             };
 
             payloadIN = payload as IEntity;

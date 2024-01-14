@@ -17,7 +17,7 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using Hl7.Fhir.Validation;
 using Transformers.Interface;
 
@@ -53,7 +53,7 @@ namespace Transformers.Model.Dstu2
                 throw new ArgumentNullException(nameof(fhir));
             }
 
-            var meta = new DataShapes.Model.DoseSchedule();
+            var meta = new PalisaidMeta.Model.DoseSchedule();
             if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
@@ -87,8 +87,8 @@ namespace Transformers.Model.Dstu2
            
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Dosage => DataShapes.Model.DoseSchdule", InputVersion.HL7FhirDstu2), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.DoseSchdule => Hl7.Fhir.Model.Dosage", InputVersion.HL7FhirDstu2), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Dosage => PalisaidMeta.Model.DoseSchdule", InputVersion.HL7FhirDstu2), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.DoseSchdule => Hl7.Fhir.Model.Dosage", InputVersion.HL7FhirDstu2), ConvertMetaToFhir }
             };
 
             var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);

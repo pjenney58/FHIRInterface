@@ -51,7 +51,7 @@ namespace Transformers.Model.Stu3
                 throw new ArgumentNullException(nameof(fhir));
             }
 
-            var meta = new DataShapes.Model.DoseSchedule();
+            var meta = new PalisaidMeta.Model.DoseSchedule();
             if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
@@ -85,8 +85,8 @@ namespace Transformers.Model.Stu3
            
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Dosage => DataShapes.Model.DoseSchdule", InputVersion.HL7HhirStu3), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.DoseSchdule => Hl7.Fhir.Model.Dosage", InputVersion.HL7HhirStu3), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Dosage => PalisaidMeta.Model.DoseSchdule", InputVersion.HL7HhirStu3), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.DoseSchdule => Hl7.Fhir.Model.Dosage", InputVersion.HL7HhirStu3), ConvertMetaToFhir }
             };
 
             var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);

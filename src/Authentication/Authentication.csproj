@@ -29,9 +29,7 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataShapes\DataShapes.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
+    <ProjectReference Include="../PalisaidMeta/PalisaidMeta.csproj" />
     <ProjectReference Include="..\Support\Support.csproj" />
   </ItemGroup>
 </Project>

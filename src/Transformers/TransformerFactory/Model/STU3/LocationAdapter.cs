@@ -47,7 +47,7 @@ namespace Transformers.Model.Stu3
         private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Location;
-            var meta = new DataShapes.Model.Location()
+            var meta = new PalisaidMeta.Model.Location()
             {
                 TenantId = tenant == Guid.Empty ? Constants.Transform : tenant,
                 EntityId = Guid.Parse(fhir.Id),
@@ -64,7 +64,7 @@ namespace Transformers.Model.Stu3
             }
 
             // Known addresses
-            var addressAdapter = TransformerFactory.Create<Hl7.Fhir.Model.Address, DataShapes.Model.Address>(tenant, format, version, source);
+            var addressAdapter = TransformerFactory.Create<Hl7.Fhir.Model.Address, PalisaidMeta.Model.Address>(tenant, format, version, source);
 
             var address = await addressAdapter.Transform(fhir.Address);
             if (address != null)
@@ -81,7 +81,7 @@ namespace Transformers.Model.Stu3
             {
             });
 
-            // var p = payloadIN as DataShapes.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
+            // var p = payloadIN as PalisaidMeta.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
             throw new NotImplementedException();
         }
 
@@ -95,8 +95,8 @@ namespace Transformers.Model.Stu3
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
 
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Location => DataShapes.Model.Location", InputVersion.HL7HhirStu3), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.Location => Hl7.Fhir.Model.Location", InputVersion.HL7HhirStu3), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Location => PalisaidMeta.Model.Location", InputVersion.HL7HhirStu3), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Location => Hl7.Fhir.Model.Location", InputVersion.HL7HhirStu3), ConvertMetaToFhir }
             };
 
             payloadIN = payload as IEntity;

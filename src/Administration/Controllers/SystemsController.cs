@@ -1,4 +1,4 @@
-﻿using DataShapes.Model;
+﻿using PalisaidMeta.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Support.Model;
@@ -12,9 +12,9 @@ namespace Administration.Controllers
     [ApiController]
     public class SystemsController : Controller
     {
-        internal readonly DataShapeContext? _context;
+        internal readonly PalisaidMetaContext? _context;
 
-        public SystemsController(DataShapeContext context)
+        public SystemsController(PalisaidMetaContext context)
         {
             _context = context;
         }

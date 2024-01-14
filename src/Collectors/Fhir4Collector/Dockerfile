@@ -11,7 +11,7 @@ ARG BUILD_CONFIGURATION=Debug
 WORKDIR /src
 COPY ["src/Collectors/Fhir4Collector/Fhir4Collector.csproj", "src/Collectors/Fhir4Collector/"]
 COPY ["src/Transformers/Transformer/Transformer.csproj", "src/Transformers/Transformer/"]
-COPY ["src/DataShapes/DataShapes.csproj", "src/DataShapes/"]
+COPY ["src/PalisaidMeta/PalisaidMeta.csproj", "src/PalisaidMeta/"]
 COPY ["src/Support/Support.csproj", "src/Support/"]
 COPY ["src/Transformers/TransformerFactory/TransformerFactory.csproj", "src/Transformers/TransformerFactory/"]
 COPY ["src/Collectors/Collector/Collector.csproj", "src/Collectors/Collector/"]

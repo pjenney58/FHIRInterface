@@ -1,4 +1,4 @@
-﻿using DataShapes.Model;
+﻿using PalisaidMeta.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Support.Model;
@@ -12,11 +12,11 @@ namespace Collectors.Primary.Controllers
     public class CollectorController : Controller
     {
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        internal readonly DataShapeContext? _context;
+        internal readonly PalisaidMetaContext? _context;
         internal readonly ILogger<Location> _logger;
         internal CollectorConfig? collectorConfig;
 
-        public CollectorController(DataShapeContext context, ILogger<Location> logger)
+        public CollectorController(PalisaidMetaContext context, ILogger<Location> logger)
         {
             _context = context;
             _logger = logger;

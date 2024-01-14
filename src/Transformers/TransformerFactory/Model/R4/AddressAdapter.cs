@@ -31,7 +31,7 @@ using Hl7.Fhir.Model;
 //using Stu3 = stu3::Hl7.Fhir.Model;
 //using Dstu2 = dstu2::Hl7.Fhir.Model;
 
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using Task = System.Threading.Tasks.Task;
 using Transformers.Interface;
 
@@ -68,7 +68,7 @@ namespace Transformers.Model.R4
                 throw new ArgumentNullException(nameof(fhir));
             }
 
-            var meta = new DataShapes.Model.Address();
+            var meta = new PalisaidMeta.Model.Address();
             if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
@@ -126,7 +126,7 @@ namespace Transformers.Model.R4
                 throw new ArgumentNullException(nameof(fhir));
             }
 
-            var meta = new DataShapes.Model.Address();
+            var meta = new PalisaidMeta.Model.Address();
             if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
@@ -169,8 +169,8 @@ namespace Transformers.Model.R4
             // Use full names to differenciate
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Address => DataShapes.Model.Address", InputVersion.HL7FhirR4), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.Address => Hl7.Fhir.Model.Address", InputVersion.HL7FhirR4), ConvertMetaToFhir }            
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Address => PalisaidMeta.Model.Address", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Address => Hl7.Fhir.Model.Address", InputVersion.HL7FhirR4), ConvertMetaToFhir }            
             };
 
             var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);

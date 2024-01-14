@@ -7,8 +7,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="../PalisaidMeta/PalisaidMeta.csproj" />
 		<ProjectReference Include="..\Support\Support.csproj" />
-		<ProjectReference Include="..\DataShapes\DataShapes.csproj" />
 		<ProjectReference Include="..\Collectors\Collector\Collector.csproj" />
 	</ItemGroup>
 </Project>

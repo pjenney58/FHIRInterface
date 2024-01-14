@@ -17,7 +17,7 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using Transformers.Interface;
 
 namespace Transformers.Model.Dstu2
@@ -58,7 +58,7 @@ namespace Transformers.Model.Dstu2
         private async Task<OEntity> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Observation;
-            var meta = new DataShapes.Model.Observation();
+            var meta = new PalisaidMeta.Model.Observation();
 
             meta.EntityId = Guid.Parse(fhir.Id);
 
@@ -139,7 +139,7 @@ namespace Transformers.Model.Dstu2
                         {
                             //Code = n2.Key,
                             Value = n2.Value.ToString(),
-                            ObservationType = DataShapes.Model.ObservationType.Note
+                            ObservationType = PalisaidMeta.Model.ObservationType.Note
                         };
 
                         meta.Items.Add(obi);
@@ -190,14 +190,14 @@ namespace Transformers.Model.Dstu2
 
         private async Task<OEntity> ConvertV2_MSG_ToMeta()
         {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
 
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToV2_MSG()
         {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
             throw new NotImplementedException();
         }
 
@@ -210,8 +210,8 @@ namespace Transformers.Model.Dstu2
 
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Observation => DataShapes.Model.Observation", InputVersion.HL7FhirR4), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"DataShapes.Model.Observation => Hl7.Fhir.Model.Observation", InputVersion.HL7FhirR4), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Observation => PalisaidMeta.Model.Observation", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Observation => Hl7.Fhir.Model.Observation", InputVersion.HL7FhirR4), ConvertMetaToFhir }
             };
 
             var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
