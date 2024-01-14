@@ -11,7 +11,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Collectors/Hl7v2Collector/Hl7v2Collector.csproj", "src/Collectors/Hl7v2Collector/"]
 COPY ["src/Collectors/Collector/Collector.csproj", "src/Collectors/Collector/"]
-COPY ["src/DataShapes/DataShapes.csproj", "src/DataShapes/"]
+COPY ["src/PalisaidMeta/PalisaidMeta.csproj", "src/PalisaidMeta/"]
 COPY ["src/Transporters/Transporter/Transporter.csproj", "src/Transporters/Transporter/"]
 COPY ["src/Transporters/MLLPTransporter/MLLPTransporter.csproj", "src/Transporters/MLLPTransporter/"]
 COPY ["src/Support/Support.csproj", "src/Support/"]

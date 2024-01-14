@@ -1,7 +1,7 @@
 ﻿
 
 using Collectors.Interface;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 
 namespace Collectors.Model
 {

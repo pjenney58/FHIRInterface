@@ -1,4 +1,4 @@
-﻿using DataShapes.Model;
+﻿using PalisaidMeta.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -19,7 +19,7 @@ namespace Administration
                             ?? throw new InvalidOperationException("Connection string 'default' not found.");
 
             // Add services to the container.
-            builder.Services.AddDbContext<DataShapeContext>(
+            builder.Services.AddDbContext<PalisaidMetaContext>(
                 options => options.UseNpgsql(connection));
 
             builder.Services.AddControllers();

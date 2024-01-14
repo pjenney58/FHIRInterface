@@ -1,4 +1,4 @@
-﻿using DataShapes.Model;
+﻿using PalisaidMeta.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Support.Model;
@@ -11,9 +11,9 @@ namespace Administration.Controllers
     public class RetrieversController : Controller
     {
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        internal readonly DataShapeContext? _context;
+        internal readonly PalisaidMetaContext? _context;
 
-        public RetrieversController(DataShapeContext context)
+        public RetrieversController(PalisaidMetaContext context)
         {
             _context = context;
         }

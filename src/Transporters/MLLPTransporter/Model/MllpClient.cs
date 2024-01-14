@@ -1,5 +1,5 @@
 ﻿using Confluent.Kafka;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using Support.Interface;
 using Support.Model;
 using System.Security.Cryptography.X509Certificates;

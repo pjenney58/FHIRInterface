@@ -10,7 +10,7 @@
     <PackageReference Include="Hl7.Fhir.R4" Version="5.4.0" />
   </ItemGroup>
 <ItemGroup>
-	  <ProjectReference Include="..\..\DataShapes\DataShapes.csproj" />
+	  <ProjectReference Include="../../PalisaidMeta/PalisaidMeta.csproj" />
 	  <ProjectReference Include="..\..\Support\Support.csproj" />
 	</ItemGroup>
 </Project>

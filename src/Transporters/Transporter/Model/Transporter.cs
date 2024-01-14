@@ -1,6 +1,6 @@
 ﻿
 using Confluent.Kafka;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using EasyNetQ;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;

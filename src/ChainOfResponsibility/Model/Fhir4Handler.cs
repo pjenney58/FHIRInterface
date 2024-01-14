@@ -1,24 +1,24 @@
 using ChainOfResponsibility.Interface;
 using Collector.Interface;
 using Collector.CollectorFactory;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 
 namespace ChainOfResponsibility.Model
 {
     public class Fhir4Handler : IChainOfResponsabilityHandler
     {
         internal readonly Guid _tenantid;
-        internal readonly Hl7Version _version;
+        internal readonly InputVersion _version;
         public IChainOfResponsabilityHandler _next { get; }
 
         public Fhir4Handler(IChainOfResponsabilityHandler next, Guid tenantId)
         {
             _next = next;
             _tenantid = tenantId;
-            _version = Hl7Version.R4;
+            _version = InputVersion.HL7FhirR4;
         }
 
-        public void HandleRequest(Hl7Version version)
+        public void HandleRequest(InputVersion version)
         {
             
         }
@@ -28,7 +28,7 @@ namespace ChainOfResponsibility.Model
             _next.HandleRequest();
         }
 
-        ICollector IChainOfResponsabilityHandler.HandleRequest(Hl7Version version)
+        ICollector IChainOfResponsabilityHandler.HandleRequest(InputVersion version)
         {
             if (version == _version)
             {

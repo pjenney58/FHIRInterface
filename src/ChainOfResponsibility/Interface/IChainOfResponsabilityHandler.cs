@@ -1,4 +1,4 @@
-﻿using DataShapes.Model;
+﻿using PalisaidMeta.Model;
 using Microsoft.AspNetCore.Identity;
 using Collectors.Interface;
 
@@ -7,6 +7,6 @@ namespace ChainOfResponsibility.Interface
     public interface IChainOfResponsabilityHandler
     {
         IChainOfResponsabilityHandler Next(IChainOfResponsabilityHandler handler);
-        ICollector HandleRequest(Hl7Version version);
+        ICollector HandleRequest(InputVersion version);
     }
 }

@@ -7,7 +7,7 @@ namespace Collectors.Interface
 	{
 		Task RegisterCollector();
 		Task RegisterTransporter();
-		Task RegisterTransformer(DataShapes.Model.DataProtocol dataProtocolIn);
+		Task RegisterTransformer(PalisaidMeta.Model.DataProtocol dataProtocolIn);
 		Task RegisterScheduler();
 
 		Task Connect();

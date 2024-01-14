@@ -34,7 +34,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DataShapes\DataShapes.csproj" />
+    <ProjectReference Include="../../src/PalisaidMeta/PalisaidMeta.csproj" />
     <ProjectReference Include="..\..\src\Transformers\Transformer\Transformer.csproj" />
     <ProjectReference Include="..\..\src\Transporters\TransporterFactory\TransporterFactory.csproj" />
     <ProjectReference Include="..\..\src\Transporters\Transporter\Transporter.csproj" />

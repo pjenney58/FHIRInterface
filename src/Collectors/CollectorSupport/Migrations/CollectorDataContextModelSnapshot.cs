@@ -22,7 +22,7 @@ namespace CollectorSupport.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DataShapes.Model.CollectorConfig", b =>
+            modelBuilder.Entity("PalisaidMeta.Model.CollectorConfig", b =>
                 {
                     b.Property<Guid>("EntityId")
                         .ValueGeneratedOnAdd()
@@ -84,7 +84,7 @@ namespace CollectorSupport.Migrations
                     b.ToTable("Configs");
                 });
 
-            modelBuilder.Entity("DataShapes.Model.CollectorLogRecord", b =>
+            modelBuilder.Entity("PalisaidMeta.Model.CollectorLogRecord", b =>
                 {
                     b.Property<Guid>("EntityId")
                         .ValueGeneratedOnAdd()

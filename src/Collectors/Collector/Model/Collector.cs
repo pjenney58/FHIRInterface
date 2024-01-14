@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Collectors.Interface;
 using Confluent.Kafka;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using EasyNetQ;
 using Transformers.Interface;
 using Transformers.Model;

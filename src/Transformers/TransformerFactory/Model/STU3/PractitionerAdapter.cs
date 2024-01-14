@@ -29,12 +29,12 @@ namespace Transformers.Model.Stu3
 
         public delegate Task<OEntity> TaskDelegate();
 
-        public Hl7Version version { get; set; }
-        public HL7Format format { get; set; }
+        public InputVersion version { get; set; }
+        public InputFormat format { get; set; }
         public SourceSystems source { get; set; } = SourceSystems.Epic;
         public Guid tenant { get; set; }
 
-        public PractitionerAdapter(Guid tenant, HL7Format format, Hl7Version version, SourceSystems source)
+        public PractitionerAdapter(Guid tenant, InputFormat format, InputVersion version, SourceSystems source)
         {
             this.tenant = tenant;
             this.format = format;
@@ -55,21 +55,21 @@ namespace Transformers.Model.Stu3
         private async Task<OEntity> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Practitioner;
-            var meta = new DataShapes.Model.Practitioner();
+            var meta = new PalisaidMeta.Model.Practitioner();
 
             meta.EntityId = Guid.Parse(fhir.Id);
 
-            var n = TransformerFactory.Create<Hl7.Fhir.Model.HumanName, DataShapes.Model.PersonName>(tenant, format, version, source);
+            var n = TransformerFactory.Create<Hl7.Fhir.Model.HumanName, PalisaidMeta.Model.PersonName>(tenant, format, version, source);
             foreach (var name in fhir.Name)
             {
-                meta.Name.Add(await n.Transform(name) as DataShapes.Model.PersonName);
+                meta.Name.Add(await n.Transform(name) as PalisaidMeta.Model.PersonName);
             }
 
             // Known addresses
-            var a = TransformerFactory.Create<Hl7.Fhir.Model.Address, DataShapes.Model.Address>(tenant, format, version, source);
+            var a = TransformerFactory.Create<Hl7.Fhir.Model.Address, PalisaidMeta.Model.Address>(tenant, format, version, source);
             foreach (var address in fhir.Address)
             {
-                meta.Addresses.Add(await a.Transform(address) as DataShapes.Model.Address);
+                meta.Addresses.Add(await a.Transform(address) as PalisaidMeta.Model.Address);
             }
 
             meta.PrimaryLanguage = fhir.Language;
@@ -81,7 +81,7 @@ namespace Transformers.Model.Stu3
 
         private async Task<OEntity> ConvertMetaToFhir()
         {
-            // var p = payloadIN as DataShapes.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
+            // var p = payloadIN as PalisaidMeta.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
             throw new NotImplementedException();
         }
 
@@ -90,15 +90,15 @@ namespace Transformers.Model.Stu3
         {
             // Override this with the appropriate key conditions - replace MSG as desired. There may
             // be several similar messages required, e.g. SIU & SRM
-            Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
+            Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Practitioner => DataShapes.Model.Practitioner", Hl7Version.Stu3), ConvertFhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Practitioner => Hl7.Fhir.Model.Practitioner", Hl7Version.Stu3), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Practitioner => PalisaidMeta.Model.Practitioner", InputVersion.HL7HhirStu3), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Practitioner => Hl7.Fhir.Model.Practitioner", InputVersion.HL7HhirStu3), ConvertMetaToFhir }
             };
 
             payloadIN = payload as IEntity;
 
-            var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
+            var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
             if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
             {
                 return await funcC();

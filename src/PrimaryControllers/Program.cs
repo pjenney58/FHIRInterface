@@ -1,4 +1,4 @@
-﻿using DataShapes.Model;
+﻿using PalisaidMeta.Model;
 using Authentication.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +41,7 @@ public class Program
         ///Console.WriteLine($"idconnection = {idconnection}");
 
         // Add services to the container.
-        builder.Services.AddDbContext<DataShapeContext>(options =>
+        builder.Services.AddDbContext<PalisaidMetaContext>(options =>
             options.UseNpgsql(dataconnection));
 
         // Add security

@@ -1,6 +1,6 @@
 ﻿using Collectors.Interface;
 using RabbitMQ;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using Transporters.Model;
 using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 
@@ -9,7 +9,7 @@ namespace Collectors.Model
     public class HL7v2Collector : Collector<HL7v2Collector>
     {
         private readonly MllpClient? client;
-        private readonly DataShapeContext? context = new DataShapeContext();
+        private readonly PalisaidMetaContext? context = new PalisaidMetaContext();
 
         public HL7v2Collector()
             : base(Guid.Empty, nameof(HL7v2Collector))

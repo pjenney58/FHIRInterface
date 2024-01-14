@@ -18,7 +18,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using Hl7.Fhir.Model;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Task = System.Threading.Tasks.Task;
 using Transformers.Interface;
@@ -36,14 +36,14 @@ namespace Transformers.Model.Dstu2
 
         public delegate Task<OEntity> TaskDelegate();
 
-        public Hl7Version version { get; set; }
-        public HL7Format format { get; set; }
+        public InputVersion version { get; set; }
+        public InputFormat format { get; set; }
         public SourceSystems source { get; set; } = SourceSystems.Epic;
         public Guid tenant { get; set; }
 
         private readonly IBaseEventLogger eventLogger = new BaseEventLogger("EncounterAdapter");
 
-        public EncounterAdapter(Guid tenant, HL7Format format, Hl7Version version, SourceSystems source)
+        public EncounterAdapter(Guid tenant, InputFormat format, InputVersion version, SourceSystems source)
         {
             this.tenant = tenant;
             this.format = format;
@@ -86,10 +86,10 @@ namespace Transformers.Model.Dstu2
             return CodingSystem.Unknown;
         }
 
-        private async Task<DataShapes.Model.Encounter> processFhirAppointment(ResourceReference appointment)
+        private async Task<PalisaidMeta.Model.Encounter> processFhirAppointment(ResourceReference appointment)
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Encounter;
-            var meta = new DataShapes.Model.Encounter();
+            var meta = new PalisaidMeta.Model.Encounter();
 
             if (fhir == null)
             {
@@ -104,7 +104,7 @@ namespace Transformers.Model.Dstu2
             meta.TenantId = this.tenant;
             meta.EntityId = Guid.Parse(fhir.Id);
 
-            var codes = new List<DataShapes.Model.Code>();
+            var codes = new List<PalisaidMeta.Model.Code>();
 
             await System.Threading.Tasks.Task.Run(() =>
             {
@@ -123,7 +123,7 @@ namespace Transformers.Model.Dstu2
                 {
                     foreach (var code in ftype.Coding)
                     {
-                        var cd = new DataShapes.Model.Code()
+                        var cd = new PalisaidMeta.Model.Code()
                         {
                             CodingSystem = GetCodingSystem(code.System),
                             Name = code.Code,
@@ -141,7 +141,7 @@ namespace Transformers.Model.Dstu2
                     foreach (var code in rc.Coding)
                     {
 
-                        var cd = new DataShapes.Model.Code()
+                        var cd = new PalisaidMeta.Model.Code()
                         {
                             CodingSystem = GetCodingSystem(code.System),
                             Name = code.Code,
@@ -156,7 +156,7 @@ namespace Transformers.Model.Dstu2
                 /*
                 if (codes.Count > 0)
                 {
-                    var repository = RepositoryFactory<DataShapes.Model.Code>.GetRepository(Constants.IgnorePartition, RepositoryIntent.DataStorage);
+                    var repository = RepositoryFactory<PalisaidMeta.Model.Code>.GetRepository(Constants.IgnorePartition, RepositoryIntent.DataStorage);
                     if (repository == null)
                     {
                         throw new NullReferenceException(nameof(repository));
@@ -206,7 +206,7 @@ namespace Transformers.Model.Dstu2
                 throw new ArgumentNullException(nameof(fhir));
             }
 
-            var meta = new DataShapes.Model.Encounter()
+            var meta = new PalisaidMeta.Model.Encounter()
             {
                 TenantId = this.tenant,
                 EntityId = Guid.Parse(fhir.Id),
@@ -223,7 +223,7 @@ namespace Transformers.Model.Dstu2
                 ;
             }
 
-            var metaList = new List<DataShapes.Model.Encounter>();
+            var metaList = new List<PalisaidMeta.Model.Encounter>();
             var diagnoses = new List<Diagnosis>();
 
             // There are more than one appointment in a single encounter for some reason, so we'll
@@ -240,7 +240,7 @@ namespace Transformers.Model.Dstu2
                 {
                     foreach (var code in ftype.Coding)
                     {
-                        var cd = new DataShapes.Model.Code()
+                        var cd = new PalisaidMeta.Model.Code()
                         {
                             CodingSystem = GetCodingSystem(code.System),
                             Name = code.Code,
@@ -253,7 +253,7 @@ namespace Transformers.Model.Dstu2
                     }
                 }
 
-                var cla = new DataShapes.Model.Code()
+                var cla = new PalisaidMeta.Model.Code()
                 {
                     TenantId = tenant,
                     CodingSystem = GetCodingSystem(fhir.Class.System),
@@ -268,7 +268,7 @@ namespace Transformers.Model.Dstu2
                 {
                     foreach (var code in rc.Coding)
                     {
-                        var cd = new DataShapes.Model.Code()
+                        var cd = new PalisaidMeta.Model.Code()
                         {
                             TenantId = tenant,
                             CodingSystem = GetCodingSystem(code.System),
@@ -285,7 +285,7 @@ namespace Transformers.Model.Dstu2
                 {
                     foreach (var diagnosis in fhir.Diagnosis)
                     {
-                        var diag = new DataShapes.Model.Diagnosis();
+                        var diag = new PalisaidMeta.Model.Diagnosis();
                         diag.EntityId = Guid.Parse(diagnosis.ElementId.Substring("urn:uuid:".Length));
 
                         // meta.Diagnoses.Add(Guid.Parse(diagnosis.ElementId));
@@ -297,7 +297,7 @@ namespace Transformers.Model.Dstu2
                 {
                     meta.Participants.Add(new Participant()
                     {
-                        type = typeof(DataShapes.Model.Practitioner),
+                        type = typeof(PalisaidMeta.Model.Practitioner),
                         Name = participant.Individual.Display,
                         IdString = participant.Individual.Reference.Substring(participant.Individual.Reference.IndexOf('|') + 1),
                         RoleType = participant.Type[0].Text,
@@ -316,7 +316,7 @@ namespace Transformers.Model.Dstu2
                         if (pair.Key.ToLower() == "reference")
                         {
                             p.Name = fhir.Subject.Display;
-                            p.type = typeof(DataShapes.Model.Patient);
+                            p.type = typeof(PalisaidMeta.Model.Patient);
                             p.Id = Guid.Parse(pair.Value.ToString().Substring("urn:uuid:".Length));
 
                             meta.Participants.Add(p);
@@ -330,14 +330,14 @@ namespace Transformers.Model.Dstu2
                 {
                     meta.Participants.Add(new Participant()
                     {
-                        type = typeof(DataShapes.Model.Location),
+                        type = typeof(PalisaidMeta.Model.Location),
                         Name = location.Location.Display,
                         Id = Guid.Parse(location.Location.Reference.Substring(location.Location.Reference.IndexOf('|') + 1)),
                     });
                 }
 
                 var sp = new Participant();
-                sp.type = typeof(DataShapes.Model.ServiceProvider);
+                sp.type = typeof(PalisaidMeta.Model.ServiceProvider);
 
                 foreach (var pair in fhir.ServiceProvider)
                 {
@@ -399,15 +399,15 @@ namespace Transformers.Model.Dstu2
         {
             // Override this with the appropriate key conditions - replace MSG as desired. There may
             // be several similar messages required, e.g. SIU & SRM
-            Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
+            Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Encounter => DataShapes.Model..Encounter", Hl7Version.Dstu2), ConvertFhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model..Encounter => Hl7.Fhir.Model.Encounter", Hl7Version.Dstu2), ConvertMetaToFhir },
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Encounter => PalisaidMeta.Model..Encounter", InputVersion.HL7FhirDstu2), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model..Encounter => Hl7.Fhir.Model.Encounter", InputVersion.HL7FhirDstu2), ConvertMetaToFhir },
             };
 
             payloadIN = payload as IEntity;
 
-            var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
+            var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
 
             if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
             {

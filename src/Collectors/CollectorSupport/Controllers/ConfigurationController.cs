@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
 using Collectors.Data;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

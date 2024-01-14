@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DataShapes\DataShapes.csproj" />
+    <ProjectReference Include="../../PalisaidMeta/PalisaidMeta.csproj" />
     <ProjectReference Include="..\..\Support\Support.csproj" />
     <ProjectReference Include="..\TransformerFactory\TransformerFactory.csproj" />
   </ItemGroup>
