@@ -11,7 +11,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Collectors/Fhir5Collector/Fhir5Collector.csproj", "src/Collectors/Fhir5Collector/"]
 COPY ["src/Collectors/Collector/Collector.csproj", "src/Collectors/Collector/"]
-COPY ["src/DataShapes/DataShapes.csproj", "src/DataShapes/"]
+COPY ["src/PalisaidMeta/PalisaidMeta.csproj", "src/PalisaidMeta/"]
 COPY ["src/Transporters/Transporter/Transporter.csproj", "src/Transporters/Transporter/"]
 RUN dotnet restore "./src/Collectors/Fhir5Collector/./Fhir5Collector.csproj"
 COPY . .

@@ -31,12 +31,12 @@ namespace Transformers.Model.R4
         public delegate OEntity VoidDelegate();
         public delegate Task<OEntity?> TaskDelegate();
 
-        public Hl7Version version { get; set; }
-        public HL7Format format { get; set; }
+        public InputVersion version { get; set; }
+        public InputFormat format { get; set; }
         public SourceSystems source { get; set; } = SourceSystems.Epic;
         public Guid tenant { get; set; }
 
-        public AdditionalInfoAdapter(Guid tenant, HL7Format format, Hl7Version version, SourceSystems source)
+        public AdditionalInfoAdapter(Guid tenant, InputFormat format, InputVersion version, SourceSystems source)
         {
             this.tenant = tenant;
             this.format = format;
@@ -52,7 +52,7 @@ namespace Transformers.Model.R4
                 throw new ArgumentNullException(nameof(fhir));
             }
 
-            var meta = new DataShapes.Model.AdditionalInfo();
+            var meta = new PalisaidMeta.Model.AdditionalInfo();
             if(meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
@@ -69,7 +69,7 @@ namespace Transformers.Model.R4
     
         private async Task<OEntity> ConvertMetaToFhir()
         {
-            // var fhir = payloadIN as DataShapes.Model.{Type}; var meta = new Hl7.Fhir.Model.{Type}();
+            // var fhir = payloadIN as PalisaidMeta.Model.{Type}; var meta = new Hl7.Fhir.Model.{Type}();
             await Task.Run(() =>
             {
             });
@@ -81,13 +81,13 @@ namespace Transformers.Model.R4
         {
             payloadIN = payload as IEntity;
 
-            Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
+            Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Extension => DataShapes.Model.AdditionalInfo", Hl7Version.R4), ConvertFhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.AdditionalInfo => Hl7.Fhir.Model.Extension", Hl7Version.R4), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Extension => PalisaidMeta.Model.AdditionalInfo", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.AdditionalInfo => Hl7.Fhir.Model.Extension", InputVersion.HL7FhirR4), ConvertMetaToFhir }
             };
 
-            var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
+            var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
             if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
             {
                 return await funcC();

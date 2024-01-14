@@ -30,12 +30,12 @@ namespace Transformers.Model.R4
         public delegate OEntity VoidDelegate();
         public delegate Task<OEntity> TaskDelegate();
 
-        public Hl7Version version { get; set; }
-        public HL7Format format { get; set; }
+        public InputVersion version { get; set; }
+        public InputFormat format { get; set; }
         public SourceSystems source { get; set; } = SourceSystems.Epic;
         public Guid tenant { get; set; }
 
-        public LocationAdapter(Guid tenant, HL7Format format, Hl7Version version, SourceSystems source)
+        public LocationAdapter(Guid tenant, InputFormat format, InputVersion version, SourceSystems source)
         {
             this.tenant = tenant;
             this.format = format;
@@ -56,7 +56,7 @@ namespace Transformers.Model.R4
         private async Task<OEntity> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Location;
-            var meta = new DataShapes.Model.Location()
+            var meta = new PalisaidMeta.Model.Location()
             {
                 TenantId = tenant == Guid.Empty ? Constants.Transform : tenant,
                 EntityId = Guid.Parse(fhir.Id),
@@ -73,7 +73,7 @@ namespace Transformers.Model.R4
             }
 
             // Known addresses
-            var addressAdapter = TransformerFactory.Create<Hl7.Fhir.Model.Address, DataShapes.Model.Address>(tenant, format, version, source);
+            var addressAdapter = TransformerFactory.Create<Hl7.Fhir.Model.Address, PalisaidMeta.Model.Address>(tenant, format, version, source);
 
             var address = await addressAdapter.Transform(fhir.Address);
             if (address != null)
@@ -101,7 +101,7 @@ namespace Transformers.Model.R4
 
         private async Task<OEntity> ConvertMetaToFhir()
         {
-            // var p = payloadIN as DataShapes.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
+            // var p = payloadIN as PalisaidMeta.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
             throw new NotImplementedException();
         }
 
@@ -110,21 +110,21 @@ namespace Transformers.Model.R4
             throw new NotImplementedException();
         }
 
-        public LocationAdapter(Hl7Version version)
+        public LocationAdapter(InputVersion version)
         {
             this.version = version;
         }
 
         private async Task<OEntity> ConvertV2_MSG_ToMeta()
         {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
 
             throw new NotImplementedException();
         }
 
         private async Task<OEntity> ConvertMetaToV2_MSG()
         {
-            // var meta = new DataShapes.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
+            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
             throw new NotImplementedException();
         }
 
@@ -134,21 +134,21 @@ namespace Transformers.Model.R4
             // be several similar messages required, e.g. SIU & SRM Override this with the
             // appropriate key conditions - replace MSG as desired. There may be several similar
             // messages required, e.g. SIU & SRM
-            Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
+            Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Location => DataShapes.Model.Location", Hl7Version.Dstu2), ConvertR5FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Location => Hl7.Fhir.Model.Location", Hl7Version.Dstu2), ConvertMetaToR5Fhir },
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Location => DataShapes.Model.Location", Hl7Version.Stu3), ConvertR3FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Location => Hl7.Fhir.Model.Location", Hl7Version.Stu3), ConvertMetaToR3Fhir },
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Location => DataShapes.Model.Location", Hl7Version.R4), ConvertFhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Location => Hl7.Fhir.Model.Location", Hl7Version.R4), ConvertMetaToFhir },
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Location => DataShapes.Model.Location", Hl7Version.R5), ConvertR5FhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.Location => Hl7.Fhir.Model.Location", Hl7Version.R5), ConvertMetaToR5Fhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Location => PalisaidMeta.Model.Location", InputVersion.HL7FhirDstu2), ConvertR5FhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Location => Hl7.Fhir.Model.Location", InputVersion.HL7FhirDstu2), ConvertMetaToR5Fhir },
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Location => PalisaidMeta.Model.Location", InputVersion.HL7HhirStu3), ConvertR3FhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Location => Hl7.Fhir.Model.Location", InputVersion.HL7HhirStu3), ConvertMetaToR3Fhir },
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Location => PalisaidMeta.Model.Location", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Location => Hl7.Fhir.Model.Location", InputVersion.HL7FhirR4), ConvertMetaToFhir },
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Location => PalisaidMeta.Model.Location", InputVersion.HL7FhirR5), ConvertR5FhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Location => Hl7.Fhir.Model.Location", InputVersion.HL7FhirR5), ConvertMetaToR5Fhir }
             };
 
             payloadIN = payload as IEntity;
 
-            var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
+            var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
             if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
             {
                 return await funcC();

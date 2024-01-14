@@ -18,7 +18,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using System;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using Transformers.Interface;
 
 namespace Transformers.Model.Dstu2
@@ -33,12 +33,12 @@ namespace Transformers.Model.Dstu2
         public delegate OEntity VoidDelegate();
         public delegate Task<OEntity> TaskDelegate();
 
-        public Hl7Version version { get; set; }
-        public HL7Format format { get; set; }
+        public InputVersion version { get; set; }
+        public InputFormat format { get; set; }
         public SourceSystems source { get; set; } = SourceSystems.Epic;
         public Guid tenant { get; set; }
 
-        public NameAdapter(Guid tenant, HL7Format format, Hl7Version version, SourceSystems source)
+        public NameAdapter(Guid tenant, InputFormat format, InputVersion version, SourceSystems source)
         {
             this.tenant = tenant;
             this.format = format;
@@ -49,7 +49,7 @@ namespace Transformers.Model.Dstu2
         private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.HumanName;
-            var meta = new DataShapes.Model.PersonName();
+            var meta = new PalisaidMeta.Model.PersonName();
 
             meta.EntityId = fhir.ElementId == null
                 ? Guid.NewGuid()
@@ -92,7 +92,7 @@ namespace Transformers.Model.Dstu2
 
         private async Task<OEntity?> ConvertMetaToFhir()
         {
-            var meta = payloadIN as DataShapes.Model.PersonName;
+            var meta = payloadIN as PalisaidMeta.Model.PersonName;
             if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
@@ -144,13 +144,13 @@ namespace Transformers.Model.Dstu2
 
             payloadIN = payload as IEntity;
 
-            Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
+            Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.HumanName => DataShapes.Model.PersonName", Hl7Version.Dstu2), ConvertFhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.PersonName => Hl7.Fhir.Model.HumanName", Hl7Version.Dstu2), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.HumanName => PalisaidMeta.Model.PersonName", InputVersion.HL7FhirDstu2), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.PersonName => Hl7.Fhir.Model.HumanName", InputVersion.HL7FhirDstu2), ConvertMetaToFhir }
             };
 
-            var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
+            var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
             if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
             {
                 return await funcC();

@@ -9,6 +9,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Transporters.Model
 {
+    /*
     public class Fhir4Client : Transporter
     {
         private IBaseEventLogger logger = new BaseEventLogger(nameof(Fhir4Client));
@@ -23,11 +24,12 @@ namespace Transporters.Model
         public byte[] ApiKey { get; set; }
         public X509Certificate2 Certificate { get; set; }
 
-        public Fhir4Client()
-        { }
+        //public Fhir4Client()
+        //{ }
 
         private async Task WaitForCommand()
         {
+            
             bool cancelled = false;
             CancellationToken cancellationToken = new CancellationToken();
 
@@ -130,4 +132,5 @@ namespace Transporters.Model
             client.Dispose();
         }
     }
+*/
 }

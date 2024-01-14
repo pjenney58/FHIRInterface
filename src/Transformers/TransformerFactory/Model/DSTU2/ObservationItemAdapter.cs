@@ -31,12 +31,12 @@ namespace Transformers.Model.Dstu2
         public delegate OEntity VoidDelegate();
         public delegate Task<OEntity?> TaskDelegate();
 
-        public Hl7Version version { get; set; }
-        public HL7Format format { get; set; }
+        public InputVersion version { get; set; }
+        public InputFormat format { get; set; }
         public SourceSystems source { get; set; } = SourceSystems.Epic;
         public Guid tenant { get; set; }
 
-        public ObservationItemAdapter(Guid tenant, HL7Format format, Hl7Version version, SourceSystems source)
+        public ObservationItemAdapter(Guid tenant, InputFormat format, InputVersion version, SourceSystems source)
         {
             this.tenant = tenant;
             this.format = format;
@@ -55,7 +55,7 @@ namespace Transformers.Model.Dstu2
                 throw new ArgumentNullException(nameof(fhir));
             }
 
-            var meta = new DataShapes.Model.ObservationItem
+            var meta = new PalisaidMeta.Model.ObservationItem
             {
                 TenantId = this.tenant,
                 EntityId = Guid.Parse(fhir.Id)
@@ -68,7 +68,7 @@ namespace Transformers.Model.Dstu2
 
             await Task.Run(() =>
             {
-                meta.ObservationType = DataShapes.Model.ObservationType.Visual;
+                meta.ObservationType = PalisaidMeta.Model.ObservationType.Visual;
 
                 if (fhir.Value != null)
                 {
@@ -87,7 +87,7 @@ namespace Transformers.Model.Dstu2
 
         private async Task<OEntity> ConvertMetaToFhir()
         {
-            var meta = payloadIN as DataShapes.Model.ObservationItem; ;
+            var meta = payloadIN as PalisaidMeta.Model.ObservationItem; ;
             var fhir = new Hl7.Fhir.Model.Observation();
 
             fhir.Id = meta.EntityId.ToString();
@@ -114,15 +114,15 @@ namespace Transformers.Model.Dstu2
             // be several similar messages required, e.g. SIU & SRM
 
 
-            Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
+            Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.ObservationItem => DataShapes.Model.ObservationItem", Hl7Version.R4), ConvertFhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.ObservationItem => Hl7.Fhir.Model.ObservationItem", Hl7Version.R4), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.ObservationItem => PalisaidMeta.Model.ObservationItem", InputVersion.HL7FhirR4), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.ObservationItem => Hl7.Fhir.Model.ObservationItem", InputVersion.HL7FhirR4), ConvertMetaToFhir }
             };
 
             payloadIN = payload as IEntity;
 
-            var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
+            var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
             if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
             {
                 return await funcC();

@@ -11,7 +11,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Collectors/Hl7c-CDACollector/Hl7CDACollector.csproj", "src/Collectors/Hl7c-CDACollector/"]
 COPY ["src/Collectors/Collector/Collector.csproj", "src/Collectors/Collector/"]
-COPY ["src/DataShapes/DataShapes.csproj", "src/DataShapes/"]
+COPY ["src/PalisaidMeta/PalisaidMeta.csproj", "src/PalisaidMeta/"]
 COPY ["src/Transporters/Transporter/Transporter.csproj", "src/Transporters/Transporter/"]
 RUN dotnet restore "./src/Collectors/Hl7c-CDACollector/./Hl7CDACollector.csproj"
 COPY . .

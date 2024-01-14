@@ -1,10 +1,9 @@
-﻿using DataShapes.Model;
+﻿using PalisaidMeta.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Support.Model;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Collectors.Primary.Controllers
 {
     [Authorize]
@@ -13,10 +12,11 @@ namespace Collectors.Primary.Controllers
     public class CollectorController : Controller
     {
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        internal readonly DataShapeContext? _context;
+        internal readonly PalisaidMetaContext? _context;
         internal readonly ILogger<Location> _logger;
+        internal CollectorConfig? collectorConfig;
 
-        public CollectorController(DataShapeContext context, ILogger<Location> logger)
+        public CollectorController(PalisaidMetaContext context, ILogger<Location> logger)
         {
             _context = context;
             _logger = logger;
@@ -53,15 +53,23 @@ namespace Collectors.Primary.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, ModelState);
             }
 
+            this.collectorConfig = collectorConfig;
+
             try
             {
-                return BadRequest("Not Implemented");
+                var collector = CollectorFactory.Create(collectorConfig.DataProtocolIn);
+                await collector.RegisterCollector();
+                await collector.RegisterTransformer(collectorConfig.DataProtocolIn);
+                await collector.RegisterTransporter();
+                await collector.RegisterScheduler();
+                return Ok();
             }
             catch (Exception ex)
             {
                 _logger.LogWarning(ex.Message);
-                return BadRequest("Error");
             }
+
+            return BadRequest("Error");
         }
 
         [HttpPut]
@@ -103,8 +111,7 @@ namespace Collectors.Primary.Controllers
                 return BadRequest("Error");
             }
         }
+
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 }
-
-

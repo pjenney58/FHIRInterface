@@ -1,4 +1,4 @@
-﻿using DataShapes.Model;
+﻿using PalisaidMeta.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Support.Model;
@@ -13,10 +13,10 @@ namespace Primary.Controllers
     public class TreatmentsController : Controller
     {
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        internal readonly DataShapeContext? _context;
+        internal readonly PalisaidMetaContext? _context;
         internal readonly ILogger<Treatment> _logger;
 
-        public TreatmentsController(DataShapeContext context, ILogger<Treatment> logger)
+        public TreatmentsController(PalisaidMetaContext context, ILogger<Treatment> logger)
         {
             _context = context;
             _logger = logger;

@@ -1,5 +1,4 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -29,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Administration", "src\Admin
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataManagement", "DataManagement", "{4114A5B3-F34C-4B6B-B984-F171BF237FFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataShapes", "src\DataShapes\DataShapes.csproj", "{66E31B7F-9218-46E2-B8CC-9ECA45F0E6CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PalisaidMeta", "src\PalisaidMeta\PalisaidMeta.csproj", "{66E31B7F-9218-46E2-B8CC-9ECA45F0E6CD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authentication", "src\Authentication\Authentication.csproj", "{6A789D89-9DA2-4F8E-927E-48226423FCA6}"
 EndProject
@@ -121,6 +120,18 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransformerFactory", "src\Transformers\TransformerFactory\TransformerFactory.csproj", "{ADAC8DD0-7F25-4C9D-B058-598E720A3B57}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transformers", "Transformers", "{E7F6ECFE-FB80-4848-BB50-6BD47292ACC7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LOINC", "src\Retrievers\LOINC\LOINC.csproj", "{3F9349CA-8FC9-438E-A179-3D4739A2362B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RetrieverController", "src\Retrievers\RetrieverController\RetrieverController.csproj", "{96C66E23-55E8-4F17-B494-FCAFCCE34288}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Retriever", "src\Retrievers\Retriever\Retriever.csproj", "{1A54D850-8B9E-4EBB-9998-77A908D7EB66}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RetrieverFactory", "src\Retrievers\RetrieverFactory\RetrieverFactory.csproj", "{E8C07491-C321-4F2C-892A-06835389AB49}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransformerControler", "src\Transformers\TransformerControler\TransformerControler.csproj", "{DCC4ED3D-1150-463A-908F-1278473F79EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransporterController", "src\Transporters\TransporterController\TransporterController.csproj", "{EF410A2B-3639-4563-B6C8-5F8D7339D7B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -320,6 +331,30 @@ Global
 		{ADAC8DD0-7F25-4C9D-B058-598E720A3B57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADAC8DD0-7F25-4C9D-B058-598E720A3B57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADAC8DD0-7F25-4C9D-B058-598E720A3B57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F9349CA-8FC9-438E-A179-3D4739A2362B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F9349CA-8FC9-438E-A179-3D4739A2362B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F9349CA-8FC9-438E-A179-3D4739A2362B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F9349CA-8FC9-438E-A179-3D4739A2362B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96C66E23-55E8-4F17-B494-FCAFCCE34288}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96C66E23-55E8-4F17-B494-FCAFCCE34288}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96C66E23-55E8-4F17-B494-FCAFCCE34288}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96C66E23-55E8-4F17-B494-FCAFCCE34288}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A54D850-8B9E-4EBB-9998-77A908D7EB66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A54D850-8B9E-4EBB-9998-77A908D7EB66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A54D850-8B9E-4EBB-9998-77A908D7EB66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A54D850-8B9E-4EBB-9998-77A908D7EB66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8C07491-C321-4F2C-892A-06835389AB49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8C07491-C321-4F2C-892A-06835389AB49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8C07491-C321-4F2C-892A-06835389AB49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8C07491-C321-4F2C-892A-06835389AB49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCC4ED3D-1150-463A-908F-1278473F79EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCC4ED3D-1150-463A-908F-1278473F79EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCC4ED3D-1150-463A-908F-1278473F79EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCC4ED3D-1150-463A-908F-1278473F79EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF410A2B-3639-4563-B6C8-5F8D7339D7B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF410A2B-3639-4563-B6C8-5F8D7339D7B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF410A2B-3639-4563-B6C8-5F8D7339D7B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF410A2B-3639-4563-B6C8-5F8D7339D7B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -375,6 +410,12 @@ Global
 		{AF28DA3B-7564-4068-B333-98CB6B340952} = {E7F6ECFE-FB80-4848-BB50-6BD47292ACC7}
 		{ADAC8DD0-7F25-4C9D-B058-598E720A3B57} = {E7F6ECFE-FB80-4848-BB50-6BD47292ACC7}
 		{E7F6ECFE-FB80-4848-BB50-6BD47292ACC7} = {2B863462-583A-43F2-970A-F9E8EF17652D}
+		{3F9349CA-8FC9-438E-A179-3D4739A2362B} = {C03741A2-205B-4EFD-95C0-3B32BEA88BC2}
+		{96C66E23-55E8-4F17-B494-FCAFCCE34288} = {C03741A2-205B-4EFD-95C0-3B32BEA88BC2}
+		{1A54D850-8B9E-4EBB-9998-77A908D7EB66} = {C03741A2-205B-4EFD-95C0-3B32BEA88BC2}
+		{E8C07491-C321-4F2C-892A-06835389AB49} = {C03741A2-205B-4EFD-95C0-3B32BEA88BC2}
+		{DCC4ED3D-1150-463A-908F-1278473F79EA} = {E7F6ECFE-FB80-4848-BB50-6BD47292ACC7}
+		{EF410A2B-3639-4563-B6C8-5F8D7339D7B7} = {B7E8A843-0394-4C7A-A81C-7A2012053F1F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EAF7E0B8-93D7-418C-BF95-D02B4EFAD949}

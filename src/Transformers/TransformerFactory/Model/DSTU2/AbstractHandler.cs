@@ -1,6 +1,6 @@
 ﻿
 
-using DataShapes.Model;
+using PalisaidMeta.Model;
 
 namespace Transformers.Model.Dstu2
 {

@@ -1,4 +1,4 @@
-﻿using DataShapes.Model;
+﻿using PalisaidMeta.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +9,10 @@ namespace Administration.Controllers
     [ApiController]
     public class TenantsController : Controller
     {
-        internal readonly DataShapeContext? _context;
+        internal readonly PalisaidMetaContext? _context;
         internal readonly Guid Root = new Guid("{10000000-0000-0000-0000-000000000000}");
 
-        public TenantsController(DataShapeContext context)
+        public TenantsController(PalisaidMetaContext context)
         {
             _context = context;
             if (_context.Tenants is null)

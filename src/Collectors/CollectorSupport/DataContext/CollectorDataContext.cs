@@ -1,5 +1,5 @@
 ﻿using System.Reflection.Emit;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Collectors.Data

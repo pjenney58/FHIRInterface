@@ -1,4 +1,4 @@
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using ChainOfResponsibility.Interface;
 using Collectors.Interface;
 
@@ -6,11 +6,11 @@ namespace ChainOfResponsibility.Model
 {
     public class Fhir4bHandler : AbstractHandler, IChainOfResponsabilityHandler
     {
-        public Fhir4bHandler(Hl7Version version, Guid tenantId)
-            : base(version, tenantId);
+        public Fhir4bHandler(InputVersion version, Guid tenantId)
+            : base(version, tenantId)
 		{}
 
-        public ICollector HandleRequest(Hl7Version version)
+        public ICollector HandleRequest(InputVersion version)
         {
             throw new NotImplementedException();
         }

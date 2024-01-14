@@ -33,7 +33,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Support.Model;
 using Microsoft.EntityFrameworkCore;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 
 namespace Authentication.Controllers
 {

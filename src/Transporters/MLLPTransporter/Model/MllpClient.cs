@@ -1,4 +1,5 @@
 ﻿using Confluent.Kafka;
+using PalisaidMeta.Model;
 using Support.Interface;
 using Support.Model;
 using System.Security.Cryptography.X509Certificates;
@@ -9,56 +10,20 @@ namespace Transporters.Model
     public class MllpClient : Transporter
     {
         private IBaseEventLogger logger = new BaseEventLogger(nameof(MllpClient));
-        private TCPClient client;
+        private TCPClient? client;
 
         public bool secure { get; set; }
-        public string? username { get; set; }
-        public string? password { get; set; }
+        public string? username { get; set; } = string.Empty;
+        public string? password { get; set; } = string.Empty;
         public string? address { get; set; }
         public string? port { get; set; }
 
-        public byte[] ApiKey { get; set; }
-        public X509Certificate2 Certificate { get; set; }
+        public byte[] ApiKey { get; set; } = null!;
+        public X509Certificate2? Certificate { get; set; }
 
-        public MllpClient()
+        public MllpClient(CollectorConfig cconfig, Guid tenantid, string commandbus, string payloadbus) 
+                       : base(cconfig, tenantid, commandbus, payloadbus)
         { }
-
-        private async Task WaitForCommand()
-        {
-            bool cancelled = false;
-            CancellationToken cancellationToken = new CancellationToken();
-
-            using (var consumer = new ConsumerBuilder<Null, string>(kcconfig).Build())
-            {
-                // Wait for a call to action, the collector will send a message to poll
-                consumer.Subscribe("schedular");
-
-                while (!cancelled)
-                {
-                    var consumeResult = consumer.Consume(cancellationToken);
-
-                    switch (consumeResult.Message.Value.ToLower())
-                    {
-                        case "poll":
-                            using (var producer = new ProducerBuilder<string, string>(kpconfig).Build())
-                            {
-                                foreach (var message in Read())
-                                {
-                                    await producer.ProduceAsync("hl7records", new Message<string, string> { Key = GetHash(message), Value = message });
-                                }
-                            }
-                            break;
-
-                        case "shutdown":
-                            Environment.Exit(0);
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
 
         private TCPClient InternalConnect()
         {

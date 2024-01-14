@@ -5,6 +5,11 @@ namespace Collectors.Interface
 {
 	public interface ICollector
 	{
+		Task RegisterCollector();
+		Task RegisterTransporter();
+		Task RegisterTransformer(PalisaidMeta.Model.DataProtocol dataProtocolIn);
+		Task RegisterScheduler();
+
 		Task Connect();
 		Task Deploy();
 		Task Configure();

@@ -5,7 +5,7 @@ global using System.Security.Cryptography.X509Certificates;
 global using System.Text;
 global using System.Text.Json;
 
-global using DataShapes.Model;
+global using PalisaidMeta.Model;
 
 global using RestSharp;
 global using RestSharp.Authenticators;

@@ -9,7 +9,7 @@ ENV DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["src/PrimaryControllers/Primary.csproj", "src/PrimaryControllers/"]
-COPY ["src/DataShapes/DataShapes.csproj", "src/DataShapes/"]
+COPY ["src/PalisaidMeta/PalisaidMeta.csproj", "src/PalisaidMeta/"]
 COPY ["src/Support/Support.csproj", "src/Support/"]
 RUN dotnet restore "src/PrimaryControllers/Primary.csproj"
 COPY . .

@@ -2,21 +2,27 @@ version: '3.8'
 # cell IP: 172.58.229.225
 # public IP: 38.7.155.219
 # LAN IP:  192.168.86.241 
-services:    
-    kafka:
-        image: 'bitnami/kafka:latest'
+services: 
+    rabbitmq:
+        image: bitnami/rabbitmq:latest
+        container_name: palisaid-rabbitmq
+        restart: always
         networks:
         - backend-network
+        ports:
+        - 5672:5672
+        - 15672:15672
         environment:
-        - KAFKA_CFG_NODE_ID=0
-        - KAFKA_CFG_PROCESS_ROLES=controller,broker
-        - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
-        - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-        - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
-        - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-#        - KAFKA_KRAFT_CLUSTER_ID=PalisaidCluster
+            RABBITMQ_USERNAME: palisaid
+            RABBITMQ_PASSWORD: palisaid
+            RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+            RABBITMQ_MANAGER_PORT_NUMBER: 15672
+            RABBITMQ_NODE_PORT_NUMBER: 5672
+            RABBITMQ_NODE_NAME: rabbit@rabbitmq
+            RABBITMQ_USE_LONGNAME: "true"
+            RABBITMQ_CLUSTER_NODE_TYPE: ram
 
-  #  postgres:
+#  postgres:
   #  image: postgres:15.5-bullseye
   #      image: pjenney58/palisaiddb:latest
   #      container_name: db-postgres-all
@@ -56,49 +62,81 @@ services:
         networks:
         - backend-network
 
-    PrimaryConsumerApi:
-        container_name: api-palisaid-gateway
+    GatewayController:
+        container_name: palisaid-gatewayapi
         environment:
             - DOTNET_RUNNING_IN_DOCKER_CONTAINER=false
-        image: ${DOCKER_REGISTRY-}primary-consumer-api
+            - ASPNETCORE_ENVIRONMENT=Development 
+        image: pjenney58/gatewayapi
         restart: always
+        depends_on: 
+        - rabbitmq
         ports: 
-        - "80:80"
-        - "443:443"
+        - "5080:8080"
+        - "5081:8081"
         build:
             context: .
             dockerfile: src/PrimaryControllers/Dockerfile
-    
         networks:
         - backend-network
 
-    fhir4collector:
-        container_name: fhir4Collector
+    CollectorController:
+        container_name: palisaid-collectorapi
         environment:
-        - DOTNET_RUNNING_IN_DOCKER_CONTAINER=false
-    
-        image: ${DOCKER_REGISTRY-}fhir4collector
+            - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
+            - ASPNETCORE_ENVIRONMENT=Development
+        image: pjenney58/collectorapi
         restart: always
+        depends_on:
+        - rabbitmq
         ports: 
-        - "5002:80"
+        - "5001:8080"
+        build:
+            context: .
+            dockerfile: src/Collectors/CollectorsController/Dockerfile
+        networks:
+        - backend-network
+
+    Fhir4Collector:
+        container_name: palisaid-fhir4Collector
+        environment:
+            - DOTNET_RUNNING_IN_DOCKER_CONTAINER=true
+            - ASPNETCORE_ENVIRONMENT=Development
+        image: pjenney58/fhir4collector
+        restart: always
+        depends_on:
+        - rabbitmq
+        ports: 
+        - "5002:8080"
         build:
             context: .
             dockerfile: src/Collectors/Fhir4Collector/Dockerfile
         networks:
         - backend-network
 
-#    web:
-#        image: nginx
-#        volumes:
-#            - ./templates:/etc/nginx/templates
-#        ports:
-#            - "80:80"
-#            - "443:443" 
-#        environment:
-#        - NGINX_HOST=registry.sanddriftsoft.com
-#        - NGINX_PORT=80
-#        networks:
-#        - backend-network
+    reverseproxy:
+        image: nginx
+        container_name: palisaid-nginx
+        volumes:
+            - ./nginx/templates:/etc/nginx/templates
+            - ./nginx/ssl/certs:/etc/ssl/certs/nginx
+
+        ports:
+            - "80:80"
+            - "443:443" 
+
+        restart: always
+        
+        build:
+            context: .
+            dockerfile: nginx/Dockerfile
+
+        environment:
+        - NGINX_HOST=registry.palisaid.com
+        - NGINX_PORT=80
+         
+        networks:
+        - backend-network
 
 networks:
   backend-network:

@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Npgsql;
@@ -24,10 +24,10 @@ namespace DevTests
         private const int MAX_VALS = 50;
 
         private readonly string sourcedir = Environment.OSVersion.Platform == PlatformID.Win32NT
-            ? "C:\\SandDriftSoftware\\data\\SyntheaData"
+            ? "C:\\Sand Drift Software\\Synthea\\R4"
             : "/Users/petejenney/Projects/SyntheaData";
 
-        private DataShapeContext _context;
+        private PalisaidMetaContext _context;
         private Guid _tenantId = Guid.NewGuid();
 
         public TFhirParser()
@@ -35,7 +35,7 @@ namespace DevTests
             //GetRandomMetaPatient();
             //GetRandomMetaPractitioner();
 
-            _context = new DataShapeContext();
+            _context = new PalisaidMetaContext();
 
             lastDate = DateTime.Now.AddDays(-31);
         }
@@ -90,8 +90,8 @@ namespace DevTests
         #region SupportFunctions
 
         private string[]? files;
-        private DataShapes.Model.Patient lastPatient;
-        private DataShapes.Model.Practitioner lastPractitioner;
+        private PalisaidMeta.Model.Patient lastPatient;
+        private PalisaidMeta.Model.Practitioner lastPractitioner;
 
         private DateTime lastDate;
 
@@ -125,7 +125,7 @@ namespace DevTests
             }
         }
 
-        private async Task<DataShapes.Model.Patient?> GetRandomMetaPatient()
+        private async Task<PalisaidMeta.Model.Patient?> GetRandomMetaPatient()
         {
             var data = getFhirData();
 
@@ -142,8 +142,8 @@ namespace DevTests
 
                         if (patient != null)
                         {
-                            var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Patient, DataShapes.Model.Patient>(Guid.NewGuid(), Hl7Version.R4);
-                            var metaPatient = await fhirConverter.Transform(patient) as DataShapes.Model.Patient;
+                            var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Patient, PalisaidMeta.Model.Patient>(Guid.NewGuid(), InputVersion.HL7FhirR4);
+                            var metaPatient = await fhirConverter.Transform(patient) as PalisaidMeta.Model.Patient;
                             lastPatient = metaPatient;
                             return lastPatient;
                         }
@@ -154,7 +154,7 @@ namespace DevTests
             return default;
         }
 
-        private async Task<DataShapes.Model.Practitioner?> GetRandomMetaPractitioner()
+        private async Task<PalisaidMeta.Model.Practitioner?> GetRandomMetaPractitioner()
         {
             var data = getFhirData();
 
@@ -171,8 +171,8 @@ namespace DevTests
 
                         if (practitioner != null)
                         {
-                            var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Practitioner, DataShapes.Model.Practitioner>(Guid.NewGuid(), Hl7Version.R4);
-                            var metaPractitioner = await fhirConverter.Transform(practitioner) as DataShapes.Model.Practitioner;
+                            var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Practitioner, PalisaidMeta.Model.Practitioner>(Guid.NewGuid(), InputVersion.HL7FhirR4);
+                            var metaPractitioner = await fhirConverter.Transform(practitioner) as PalisaidMeta.Model.Practitioner;
                             lastPractitioner = metaPractitioner;
                             return lastPractitioner;
                         }
@@ -189,8 +189,58 @@ namespace DevTests
         //[InlineData(Hl7Version.Stu3)]
         //[InlineData(Hl7Version.R4b)]
         //[InlineData(Hl7Version.R5)]
-        [InlineData(Hl7Version.R4)]
-        public async System.Threading.Tasks.Task ProcessPrescriptions(Hl7Version version)
+        [InlineData(InputVersion.HL7FhirR4)]
+        public async System.Threading.Tasks.Task ProcessPrescriptions(InputVersion version)
+        {
+            try
+            {
+                await System.Threading.Tasks.Task.Run(async () =>
+                {
+                    // Arrange
+                    foreach (var file in files)
+                    {
+                        //var data = getFhirData();
+                        //Assert.NotNull(data);
+
+                        var parser = new FhirJsonParser();
+                        Assert.NotNull(parser);
+
+                        var parsedBundle = parser.Parse<Bundle>(File.ReadAllText(file));
+                        Assert.NotNull(parsedBundle);
+
+                        // Act
+                        if (parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.MedicationRequest>().Any())
+                        {
+                            var prescriptions = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.MedicationRequest>();
+
+                            // Assert
+                            Assert.NotNull(prescriptions);
+                            Assert.True(prescriptions.Any());
+
+                            foreach (var prescription in prescriptions)
+                            {
+                                var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.MedicationRequest, PalisaidMeta.Model.Prescription>(_tenantId, version);
+                                Assert.NotNull(fhirConverter);
+
+                                var metaPrescription = await fhirConverter.Transform(prescription) as PalisaidMeta.Model.Prescription;
+                                Assert.NotNull(metaPrescription);
+                            }
+                        }
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Assert.Fail($"{e.Message}");
+            }
+        }
+
+        [Theory]
+        //[InlineData(Hl7Version.Stu3)]
+        //[InlineData(Hl7Version.R4b)]
+        //[InlineData(Hl7Version.R5)]
+        [InlineData(InputVersion.HL7FhirR4)]
+        public async System.Threading.Tasks.Task ProcessTreatments(InputVersion version)
         {
             try
             {
@@ -219,10 +269,10 @@ namespace DevTests
 
                             foreach (var prescription in prescriptions)
                             {
-                                var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>(_tenantId, version);
+                                var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.MedicationRequest, PalisaidMeta.Model.Prescription>(_tenantId, version);
                                 Assert.NotNull(fhirConverter);
 
-                                var metaPrescription = await fhirConverter.Transform(prescription) as DataShapes.Model.Prescription;
+                                var metaPrescription = await fhirConverter.Transform(prescription) as PalisaidMeta.Model.Prescription;
                                 Assert.NotNull(metaPrescription);
                             }
                         }
@@ -239,58 +289,8 @@ namespace DevTests
         //[InlineData(Hl7Version.Stu3)]
         //[InlineData(Hl7Version.R4b)]
         //[InlineData(Hl7Version.R5)]
-        [InlineData(Hl7Version.R4)]
-        public async System.Threading.Tasks.Task ProcessTreatments(Hl7Version version)
-        {
-            try
-            {
-                await System.Threading.Tasks.Task.Run(async () =>
-                {
-                    // Arrange
-                    for (var i = 0; i < MAX_VALS; i++)
-                    {
-                        var data = getFhirData();
-                        Assert.NotNull(data);
-
-                        var parser = new FhirJsonParser();
-                        Assert.NotNull(parser);
-
-                        var parsedBundle = parser.Parse<Bundle>(data);
-                        Assert.NotNull(parsedBundle);
-
-                        // Act
-                        if (parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.MedicationRequest>().Any())
-                        {
-                            var prescriptions = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.MedicationRequest>();
-
-                            // Assert
-                            Assert.NotNull(prescriptions);
-                            Assert.True(prescriptions.Any());
-
-                            foreach (var prescription in prescriptions)
-                            {
-                                var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>(_tenantId, version);
-                                Assert.NotNull(fhirConverter);
-
-                                var metaPrescription = await fhirConverter.Transform(prescription) as DataShapes.Model.Prescription;
-                                Assert.NotNull(metaPrescription);
-                            }
-                        }
-                    }
-                });
-            }
-            catch (Exception e)
-            {
-                Assert.Fail($"{e.Message}");
-            }
-        }
-
-        [Theory]
-        //[InlineData(Hl7Version.Stu3)]
-        //[InlineData(Hl7Version.R4b)]
-        //[InlineData(Hl7Version.R5)]
-        [InlineData(Hl7Version.R4)]
-        public async System.Threading.Tasks.Task ProcessLocations(Hl7Version version)
+        [InlineData(InputVersion.HL7FhirR4)]
+        public async System.Threading.Tasks.Task ProcessLocations(InputVersion version)
         {
             try
             {
@@ -319,7 +319,7 @@ namespace DevTests
 
                             foreach (var location in locations)
                             {
-                                var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Location, DataShapes.Model.Location>(_tenantId, version);
+                                var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Location, PalisaidMeta.Model.Location>(_tenantId, version);
                                 Assert.NotNull(fhirConverter);
 
                                 var metaLocation = await fhirConverter.Transform(location);
@@ -351,28 +351,32 @@ namespace DevTests
         //[InlineData(Hl7Version.Stu3)]
         //[InlineData(Hl7Version.R4b)]
         //[InlineData(Hl7Version.R5)]
-        [InlineData(Hl7Version.R4)]
-        public async System.Threading.Tasks.Task ProcessPatients(Hl7Version version)
+        [InlineData(InputVersion.HL7FhirR4)]
+        public async System.Threading.Tasks.Task ProcessPatients(InputVersion version)
         {
             try
             {
-                var encounterList = new List<DataShapes.Model.Encounter>();
-                var patientList = new List<DataShapes.Model.Patient>();
-                var locationList = new List<DataShapes.Model.Location>();
-                var practionerList = new List<DataShapes.Model.Practitioner>();
+                var encounterList = new List<PalisaidMeta.Model.Encounter>();
+                var patientList = new List<PalisaidMeta.Model.Patient>();
+                var locationList = new List<PalisaidMeta.Model.Location>();
+                var practionerList = new List<PalisaidMeta.Model.Practitioner>();
 
-                //IRepository<DataShapes.Model.Patient>? patientRepo = RepositoryFactory<DataShapes.Model.Patient>.GetRepository(Constants.IgnorePartition, RepositoryIntent.Testing);
-                //IRepository<DataShapes.Model.Encounter>? encounterRepo = RepositoryFactory<DataShapes.Model.Encounter>.GetRepository(Constants.IgnorePartition, RepositoryIntent.Testing);
-                //IRepository<DataShapes.Model.Prescription?> scripRepo = RepositoryFactory<DataShapes.Model.Prescription>.GetRepository(Constants.IgnorePartition, RepositoryIntent.Testing);
+                //IRepository<PalisaidMeta.Model.Patient>? patientRepo = RepositoryFactory<PalisaidMeta.Model.Patient>.GetRepository(Constants.IgnorePartition, RepositoryIntent.Testing);
+                //IRepository<PalisaidMeta.Model.Encounter>? encounterRepo = RepositoryFactory<PalisaidMeta.Model.Encounter>.GetRepository(Constants.IgnorePartition, RepositoryIntent.Testing);
+                //IRepository<PalisaidMeta.Model.Prescription?> scripRepo = RepositoryFactory<PalisaidMeta.Model.Prescription>.GetRepository(Constants.IgnorePartition, RepositoryIntent.Testing);
 
-                DataShapes.Model.Observation observations = new();
+                PalisaidMeta.Model.Observation observations = new();
 
-                for (var i = 0; i < MAX_VALS; i++)
+                //for (var i = 0; i < MAX_VALS; i++)
+                //{
+                var data = getFhirData();
+
+                foreach (var file in files)
                 {
-                    var data = getFhirData();
-
                     var parser = new FhirJsonParser();
-                    var parsedBundle = parser.Parse<Bundle>(data);
+                    Assert.NotNull(parser);
+
+                    var parsedBundle = parser.Parse<Bundle>(File.ReadAllText(file));
 
                     if (null != parsedBundle)
                     {
@@ -384,10 +388,10 @@ namespace DevTests
                             {
                                 if (patient != null)
                                 {
-                                    var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Patient, DataShapes.Model.Patient>(_tenantId, version);
+                                    var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Patient, PalisaidMeta.Model.Patient>(_tenantId, version);
                                     Assert.NotNull(fhirConverter);
 
-                                    var metaPatient = await fhirConverter.Transform(patient) as DataShapes.Model.Patient;
+                                    var metaPatient = await fhirConverter.Transform(patient) as PalisaidMeta.Model.Patient;
                                     Assert.NotNull(metaPatient);
 
                                     try
@@ -423,10 +427,10 @@ namespace DevTests
                                             var id = encounter.Subject.Reference.Substring("urn:uuid:".Length);
                                             if (id != null && id == patient.Id)
                                             {
-                                                var fhirEncounterConverter = TransformerFactory.Create<Hl7.Fhir.Model.Encounter, DataShapes.Model.Encounter>(_tenantId, version);
+                                                var fhirEncounterConverter = TransformerFactory.Create<Hl7.Fhir.Model.Encounter, PalisaidMeta.Model.Encounter>(_tenantId, version);
                                                 Assert.NotNull(fhirEncounterConverter);
 
-                                                var metaEncounter = await fhirEncounterConverter.Transform(encounter) as DataShapes.Model.Encounter;
+                                                var metaEncounter = await fhirEncounterConverter.Transform(encounter) as PalisaidMeta.Model.Encounter;
                                                 Assert.NotNull(metaEncounter);
 
                                                 try
@@ -463,7 +467,7 @@ namespace DevTests
 
                                     foreach (var device in devices)
                                     {
-                                        var fhirEncounterConverter = TransformerFactory<Hl7.Fhir.Model.Device, DataShapes.Model.Device>.GetTransformer(_tenantId, version);
+                                        var fhirEncounterConverter = TransformerFactory<Hl7.Fhir.Model.Device, PalisaidMeta.Model.Device>.GetTransformer(_tenantId, version);
                                         Assert.NotNull(fhirEncounterConverter);
 
                                         var metaEncounter = await fhirEncounterConverter.Convert(device);
@@ -483,10 +487,10 @@ namespace DevTests
 
                                     foreach (var scrip in scrips)
                                     {
-                                        var fhirScripConverter = TransformerFactory.Create<Hl7.Fhir.Model.MedicationRequest, DataShapes.Model.Prescription>(_tenantId, version);
+                                        var fhirScripConverter = TransformerFactory.Create<Hl7.Fhir.Model.MedicationRequest, PalisaidMeta.Model.Prescription>(_tenantId, version);
                                         Assert.NotNull(fhirScripConverter);
 
-                                        var metaScrip = await fhirScripConverter.Transform(scrip) as DataShapes.Model.Prescription;
+                                        var metaScrip = await fhirScripConverter.Transform(scrip) as PalisaidMeta.Model.Prescription;
                                         Assert.NotNull(scrip);
 
                                         metaPatient?.Prescriptions?.Add(metaScrip);
@@ -524,6 +528,7 @@ namespace DevTests
                         }
                     }
                 }
+                // }
 
                 bool done = true;
             }
@@ -553,7 +558,7 @@ namespace DevTests
             {
                 var data = getFhirData();
 
-                var e = new DataShapes.Model.Encounter()
+                var e = new PalisaidMeta.Model.Encounter()
                 {
                     EncounterType = et,
                     EncounterStatus = EncounterStatus.InProgress,
@@ -573,7 +578,7 @@ namespace DevTests
         {
             try
             {
-                DataShapes.Model.Observation observations = new();
+                PalisaidMeta.Model.Observation observations = new();
 
                 for (var i = 0; i < MAX_VALS; i++)
                 {
@@ -594,7 +599,7 @@ namespace DevTests
 
                                 if (observation != null)
                                 {
-                                    var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Observation, DataShapes.Model.Observation>(_tenantId, Hl7Version.R4);
+                                    var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Observation, PalisaidMeta.Model.Observation>(_tenantId, InputVersion.HL7FhirR4);
                                     var metaObservation = await fhirConverter.Transform(observation);
 
                                     if (observations.PatientId == Guid.Empty)
@@ -604,8 +609,8 @@ namespace DevTests
                                         //observations.CreateDate = metaObservation.CreateDate;
                                     }
 
-                                    var item = TransformerFactory.Create<Hl7.Fhir.Model.Observation, DataShapes.Model.ObservationItem>(_tenantId, Hl7Version.R4);
-                                    observations.Items.Add(await item.Transform(observation) as DataShapes.Model.ObservationItem);
+                                    var item = TransformerFactory.Create<Hl7.Fhir.Model.Observation, PalisaidMeta.Model.ObservationItem>(_tenantId, InputVersion.HL7FhirR4);
+                                    observations.Items.Add(await item.Transform(observation) as PalisaidMeta.Model.ObservationItem);
                                 }
                             }
                         }
@@ -651,7 +656,7 @@ namespace DevTests
                                     Debug.WriteLine(name);
                                 }
 
-                                var aa = TransformerFactory.Create<Hl7.Fhir.Model.Address, DataShapes.Model.Address>(_tenantId, Hl7Version.R4);
+                                var aa = TransformerFactory.Create<Hl7.Fhir.Model.Address, PalisaidMeta.Model.Address>(_tenantId, InputVersion.HL7FhirR4);
 
                                 if (p.Address != null && p.Address.FirstOrDefault() != null)
                                 {

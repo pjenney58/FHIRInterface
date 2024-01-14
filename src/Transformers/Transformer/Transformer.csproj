@@ -5,19 +5,23 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Confluent.Kafka" Version="2.3.0" />
     <PackageReference Include="Hl7.Fhir.R4" Version="5.4.0" />
     <PackageReference Include="NLog" Version="5.2.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+    <PackageReference Include="EasyNetQ" Version="7.8.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DataShapes\DataShapes.csproj" />
+    <ProjectReference Include="../../PalisaidMeta/PalisaidMeta.csproj" />
     <ProjectReference Include="..\..\Support\Support.csproj" />
     <ProjectReference Include="..\TransformerFactory\TransformerFactory.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\R5\" />
     <Folder Include="Model\R4B\" />
+    <Folder Include="Interface\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Interface\" />
   </ItemGroup>
 </Project>

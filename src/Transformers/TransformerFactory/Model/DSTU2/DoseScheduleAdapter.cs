@@ -17,7 +17,7 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using DataShapes.Model;
+using PalisaidMeta.Model;
 using Hl7.Fhir.Validation;
 using Transformers.Interface;
 
@@ -33,12 +33,12 @@ namespace Transformers.Model.Dstu2
 
         public delegate Task<OEntity?> TaskDelegate();
 
-        public Hl7Version version { get; set; }
-        public HL7Format format { get; set; }
+        public InputVersion version { get; set; }
+        public InputFormat format { get; set; }
         public SourceSystems source { get; set; } = SourceSystems.Epic;
         public Guid tenant { get; set; }
 
-        public DoseScheduleAdapter(Guid tenant, HL7Format format, Hl7Version version, SourceSystems source)
+        public DoseScheduleAdapter(Guid tenant, InputFormat format, InputVersion version, SourceSystems source)
         {
             this.format = format;
             this.version = version;
@@ -53,7 +53,7 @@ namespace Transformers.Model.Dstu2
                 throw new ArgumentNullException(nameof(fhir));
             }
 
-            var meta = new DataShapes.Model.DoseSchedule();
+            var meta = new PalisaidMeta.Model.DoseSchedule();
             if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
@@ -85,13 +85,13 @@ namespace Transformers.Model.Dstu2
             // be several similar messages required, e.g. SIU & SRM
             payloadIN = payload as IEntity;
            
-            Dictionary<Tuple<string, Hl7Version>, TaskDelegate> jumpTable = new()
+            Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-                { new Tuple<string, Hl7Version>(@"Hl7.Fhir.Model.Dosage => DataShapes.Model.DoseSchdule", Hl7Version.Dstu2), ConvertFhirToMeta },
-                { new Tuple<string, Hl7Version>(@"DataShapes.Model.DoseSchdule => Hl7.Fhir.Model.Dosage", Hl7Version.Dstu2), ConvertMetaToFhir }
+                { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Dosage => PalisaidMeta.Model.DoseSchdule", InputVersion.HL7FhirDstu2), ConvertFhirToMeta },
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.DoseSchdule => Hl7.Fhir.Model.Dosage", InputVersion.HL7FhirDstu2), ConvertMetaToFhir }
             };
 
-            var jumpkey = new Tuple<string, Hl7Version>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
+            var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
             if (jumpTable.TryGetValue(jumpkey, out TaskDelegate? funcC))
             {
                 return await funcC();
