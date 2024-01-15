@@ -3,6 +3,7 @@ using Support.Model;
 using System.Security.Cryptography.X509Certificates;
 using PalisaidMeta.Model;
 
+
 namespace Transporters.Model
 {
     public class TcpIpClient : Transporter
@@ -19,10 +20,47 @@ namespace Transporters.Model
         public byte[]? ApiKey { get; set; } = new byte[0]; // Initialize the ApiKey property with an empty byte array
         public X509Certificate2 Certificate { get; set; } = new X509Certificate2(); // Initialize the Certificate property with a default certificate
 
-        public TcpIpClient(CollectorConfig cconfig, Guid guid, string name, string description) 
+
+        public TcpIpClient(CollectorConfig cconfig, Guid guid, string name, string description)
                         : base(cconfig, guid, name, description)
         {
-            client = new TCPClient();
+            logger = new BaseEventLogger(name);
+
+            if (secure)
+            {
+                //Certificate = new X509Certificate2(cconfig.CertificatePath, cconfig.CertificatePassword);
+            }
+        }
+
+        public override IEnumerable<string?> Read()
+        {
+            if (cconfig == null)
+            {
+                logger.ReportError("Config is null");
+                yield return default;
+            }
+
+            using(client = new TCPClient(cconfig.TargetIp, cconfig.TargetPort))
+            {
+                if (client.IsSecure)
+                {
+                    //client.Certificate = Certificate;
+                }
+
+                using (client = new TCPClient())
+                {
+                    logger.ReportInfo($"Connected to {cconfig.TargetIp}:{cconfig.TargetPort}");
+
+                    while (client.CanRead)
+                    {
+                        var data = client.Read();
+                        if (data != null)
+                        {
+                            yield return data;
+                        }
+                    }
+                }
+            }
         }
     }
 }
