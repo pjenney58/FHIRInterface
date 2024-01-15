@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Support.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
-using System.Linq;
-
+using LinqKit;
 
 namespace Primary.Controllers
 {
@@ -52,7 +50,7 @@ namespace Primary.Controllers
                             }
 
                             if (user.HasClaim(user.RoleClaimType, "PalisaidRootAdministrator") ||
-                               user.HasClaim(user.RoleClaimType, "PalisaidTenantAdministrator"))
+                                user.HasClaim(user.RoleClaimType, "PalisaidTenantAdministrator"))
                             {
                                 list = await Task.Run(() => _context.Patients.Include(n => n.Name).ToList());
                                 return Ok(list.Select(l => new { l?.EntityId, l?.Name?.FamilyName, l?.Name?.FirstName }));
@@ -92,39 +90,44 @@ namespace Primary.Controllers
                     var tid = JwtTenantId.Get(Request);
                     if (tid == Guid.Empty)
                     {
-                        return Ok(await Task.Run(() => _context.Patients.Where(p => p.PrimaryPatientIdString == patientid)
-                                                         .Include(n => n.Name)
-                                                         .Include(a => a.Addresses)
-                                                         .Include(a => a.HL7Identifiers)
-                                                         .Include(d => d.Devices)
-                                                         .Include(p => p.Practitioners)
-                                                         .Include(l => l.Locations)
-                                                         .Include(cm => cm.ContactMethods)
-                                                         .Include(t => t.Treatments)
-                                                         .Include(p => p.Prescriptions)
-                                                         .Include(o => o.Observations)
-                                                         .Include(d => d.Diagnoses)
-                                                         .Include(l => l.Languages)
-                                                         .ToList()));
+                        var user = User.Identity as System.Security.Claims.ClaimsIdentity;
+                        if (user.HasClaim(user.RoleClaimType, "PalisaidRootAdministrator") ||
+                            user.HasClaim(user.RoleClaimType, "PalisaidTenantAdministrator"))
+                        {
+                            return Ok(await Task.Run(() => _context.Patients.Where(p => p.PrimaryPatientIdString == patientid)
+                                                             .Include(n => n.Name)
+                                                             .Include(a => a.Addresses)
+                                                             .Include(a => a.HL7Identifiers)
+                                                             .Include(d => d.Devices)
+                                                             .Include(p => p.Practitioners)
+                                                             .Include(l => l.Locations)
+                                                             .Include(cm => cm.ContactMethods)
+                                                             .Include(t => t.Treatments)
+                                                             .Include(p => p.Prescriptions)
+                                                             .Include(o => o.Observations)
+                                                             .Include(d => d.Diagnoses)
+                                                             .Include(l => l.Languages)
+                                                             .ToList()));
+                        }
 
-
+                        return BadRequest();
                     }
                     else
                     {
                         return Ok(await Task.Run(() => _context.Patients.Where(i => i.PrimaryPatientIdString == patientid && i.TenantId == tid)
-                                                        .Include(n => n.Name)
-                                                        .Include(a => a.Addresses)
-                                                        .Include(a => a.HL7Identifiers)
-                                                        .Include(d => d.Devices)
-                                                        .Include(p => p.Practitioners)
-                                                        .Include(l => l.Locations)
-                                                        .Include(cm => cm.ContactMethods)
-                                                        .Include(t => t.Treatments)
-                                                        .Include(p => p.Prescriptions)
-                                                        .Include(o => o.Observations)
-                                                        .Include(d => d.Diagnoses)
-                                                        .Include(l => l.Languages)
-                                                        .ToList()));
+                                                                        .Include(n => n.Name)
+                                                                        .Include(a => a.Addresses)
+                                                                        .Include(a => a.HL7Identifiers)
+                                                                        .Include(d => d.Devices)
+                                                                        .Include(p => p.Practitioners)
+                                                                        .Include(l => l.Locations)
+                                                                        .Include(cm => cm.ContactMethods)
+                                                                        .Include(t => t.Treatments)
+                                                                        .Include(p => p.Prescriptions)
+                                                                        .Include(o => o.Observations)
+                                                                        .Include(d => d.Diagnoses)
+                                                                        .Include(l => l.Languages)
+                                                                        .ToList()));
                     }
                 }
                 catch (Exception ex)
@@ -134,19 +137,90 @@ namespace Primary.Controllers
                 }
             }
 
-            return Problem("");
+            return BadRequest();
         }
 
         [HttpGet("GetByName")]
-        public async Task<IActionResult> GetByName(string firstname, string lastname)
+        public async Task<IActionResult> GetByName(string? prefix, string firstname, string? middlename, string lastname, string? suffix)
         {
+            var predicate = PredicateBuilder.New<Patient>();
+
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            if(!string.IsNullOrEmpty(prefix)) predicate = predicate.And(p => p.Name.Prefix.Contains(prefix));
+            predicate = predicate.And(p => p.Name.GivenName.Contains(firstname));
+            if(!string.IsNullOrEmpty(middlename)) predicate = predicate.And(p => p.Name.MiddleName == middlename);
+            predicate = predicate.And(p => p.Name.FamilyName == lastname);
+            if(!string.IsNullOrEmpty(suffix)) predicate = predicate.And(p => p.Name.Suffix.Contains(suffix));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+
             if (!ModelState.IsValid)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, ModelState);
             }
 
-            var tid = JwtTenantId.Get(Request);
-            return BadRequest("Not Implemented");
+            if (_context != null && _context.Patients != null)
+            {
+                try
+                {
+                    var tid = JwtTenantId.Get(Request);
+
+                    if (tid == Guid.Empty && User != null)
+                    {
+                        if (User.Identity != null)
+                        {
+                            var user = User.Identity as System.Security.Claims.ClaimsIdentity;
+                            if (user == null)
+                            {
+                                return BadRequest();
+                            }
+
+                            if (user.HasClaim(user.RoleClaimType, "PalisaidRootAdministrator") ||
+                                user.HasClaim(user.RoleClaimType, "PalisaidTenantAdministrator"))
+                            {
+                                return Ok(await Task.Run(() => _context.Patients.Where(predicate)
+                                                                                .Include(n => n.Name)
+                                                                                .Include(a => a.Addresses)
+                                                                                .Include(a => a.HL7Identifiers)
+                                                                                .Include(d => d.Devices)
+                                                                                .Include(p => p.Practitioners)
+                                                                                .Include(l => l.Locations)
+                                                                                .Include(cm => cm.ContactMethods)
+                                                                                .Include(t => t.Treatments)
+                                                                                .Include(p => p.Prescriptions)
+                                                                                .Include(o => o.Observations)
+                                                                                .Include(d => d.Diagnoses)
+                                                                                .Include(l => l.Languages)));    
+                            }
+                        }
+
+                        return BadRequest();
+                    }
+                    else
+                    {
+                        predicate = predicate.And(t => t.TenantId == tid);
+                        return Ok(await Task.Run(() => _context.Patients.Where(predicate)
+                                                                        .Include(n => n.Name)
+                                                                        .Include(a => a.Addresses)
+                                                                        .Include(a => a.HL7Identifiers)
+                                                                        .Include(d => d.Devices)
+                                                                        .Include(p => p.Practitioners)
+                                                                        .Include(l => l.Locations)
+                                                                        .Include(cm => cm.ContactMethods)
+                                                                        .Include(t => t.Treatments)
+                                                                        .Include(p => p.Prescriptions)
+                                                                        .Include(o => o.Observations)
+                                                                        .Include(d => d.Diagnoses)
+                                                                        .Include(l => l.Languages)));    
+                        }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return Problem(ex.Message);
+                }
+            }
+
+            return BadRequest();
         }
 
         [HttpGet("notes/{patientid}")]

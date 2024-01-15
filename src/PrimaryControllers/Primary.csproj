@@ -12,6 +12,7 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   
   <ItemGroup>
+    <PackageReference Include="LinqKit" Version="1.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
