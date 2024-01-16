@@ -19,8 +19,8 @@ namespace Transporters.Model
 
     public class Transporter : PalisaidMessageQueue, IDisposable
     {     
-        private readonly IConfiguration? config;
-        private readonly CollectorConfig? cconfig;
+        protected readonly IConfiguration? config;
+        protected readonly CollectorConfig? cconfig;
         TransporterConnectionHandler? client;
 
         public Transporter(CollectorConfig cconfig, Guid tenantid, string commandbus, string payloadbus) 
