@@ -27,6 +27,9 @@ namespace PalisaidMeta.Model
 			this.TenantId = TenantId;
 		}
 
+		// Fhir doesn't necessarily use a uuid for the key, so we need to be able to set capture it as a long
+		public long EntityKey { get; set; }
+		
 		#region key
 		[Key]
 		public Guid EntityId { get; set; } = Guid.Empty;

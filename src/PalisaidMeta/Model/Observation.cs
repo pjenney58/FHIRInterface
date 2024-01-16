@@ -28,6 +28,7 @@ namespace PalisaidMeta.Model
 
         public Guid? PatientId { get; set; }
         public Guid? PractitionerId { get; set; }
+        public long AlternateId { get; set; }
         public Guid? LocationId { get; set; }
 
         public DateTimeOffset StartDate { get; set; }

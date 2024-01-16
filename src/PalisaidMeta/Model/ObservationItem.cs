@@ -45,6 +45,7 @@ namespace PalisaidMeta.Model
         public ObservationType? ObservationType { get; set; }
 
         public Code Code { get; set; } = new();
+        public string? TypeName { get; set; }
         public string? Description { get; set; }
         public string? Value { get; set; }
         public DateTimeOffset Timestamp { get; set; }

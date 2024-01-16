@@ -25,6 +25,7 @@ namespace PalisaidMeta.Model
         ICD9,
         ICD10,
         ICD11,
+        LOINC,
         ATC,
         SNOMED,
         USCDI,
@@ -44,6 +45,8 @@ namespace PalisaidMeta.Model
         public string? CodingSystemName { get => CodingSystem.ToString(); }
         public string? Name { get; set; }
         public string? Description { get; set; }
+        public string? Value { get; set; }
+        public string? Units { get; set; }
         public string? Link { get; set; }
 
         public Code() {}
@@ -59,6 +62,8 @@ namespace PalisaidMeta.Model
                 Name = null;
                 Description = null;
                 Link = null;
+                Value = null;
+                Units = null;
             }
         }    
     }

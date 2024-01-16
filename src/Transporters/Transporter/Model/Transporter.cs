@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using Transporters.Interface;
+using System.ComponentModel.DataAnnotations;
 
 namespace Transporters.Model
 {
@@ -107,7 +108,7 @@ namespace Transporters.Model
         }
 
         // Command Handler
-        internal void ProcessCommand(string payload)
+        public virtual void ProcessCommand(string payload)
         {
             Debug.WriteLine($"Transformer Command Request: {payload}");
 
@@ -177,7 +178,7 @@ namespace Transporters.Model
             throw new NotImplementedException();
         }
 
-        public virtual Task Write(string message)
+        public async virtual Task<string> Write(string message)
         {
             throw new NotImplementedException();
         }
@@ -187,7 +188,7 @@ namespace Transporters.Model
             throw new NotImplementedException();
         }
 
-        public virtual IEnumerable<string> Read()
+        public async virtual Task<IEnumerable<string>> Read()
         {
             throw new NotImplementedException();
         }

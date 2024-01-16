@@ -360,12 +360,13 @@ namespace DevTests
                 var patientList = new List<PalisaidMeta.Model.Patient>();
                 var locationList = new List<PalisaidMeta.Model.Location>();
                 var practionerList = new List<PalisaidMeta.Model.Practitioner>();
+                var observationList = new List<PalisaidMeta.Model.Observation>();
 
                 //IRepository<PalisaidMeta.Model.Patient>? patientRepo = RepositoryFactory<PalisaidMeta.Model.Patient>.GetRepository(Constants.IgnorePartition, RepositoryIntent.Testing);
                 //IRepository<PalisaidMeta.Model.Encounter>? encounterRepo = RepositoryFactory<PalisaidMeta.Model.Encounter>.GetRepository(Constants.IgnorePartition, RepositoryIntent.Testing);
                 //IRepository<PalisaidMeta.Model.Prescription?> scripRepo = RepositoryFactory<PalisaidMeta.Model.Prescription>.GetRepository(Constants.IgnorePartition, RepositoryIntent.Testing);
 
-                PalisaidMeta.Model.Observation observations = new();
+                //PalisaidMeta.Model.Observation observations = new();
 
                 //for (var i = 0; i < MAX_VALS; i++)
                 //{
@@ -380,6 +381,8 @@ namespace DevTests
 
                     if (null != parsedBundle)
                     {
+
+
                         var patients = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Patient>();
 
                         if (patients != null && patients.Any())
@@ -414,6 +417,34 @@ namespace DevTests
                                     Debug.WriteLine($"processing patient: {metaPatient.Name.FirstName} {metaPatient.Name.FamilyName}");
 
                                     patientList.Add(metaPatient);
+                                    
+                                    var observations = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Observation>();
+                                    Assert.NotNull(observations);
+                                    if(observations.Any())
+                                    {
+                                        foreach(var observation in observations)
+                                        {
+                                            var fhirObservationConverter = TransformerFactory.Create<Hl7.Fhir.Model.Observation, PalisaidMeta.Model.Observation>(_tenantId, version);
+                                            Assert.NotNull(fhirObservationConverter);
+
+                                            var metaObservation = await fhirObservationConverter.Transform(observation) as PalisaidMeta.Model.Observation;
+                                            Assert.NotNull(metaObservation);
+
+                                            try
+                                            {
+                                                metaObservation.TenantId = _tenantId;
+                                                metaObservation.OwnerId = _tenantId;
+                                                await _context.AddAsync(metaObservation);
+                                                await _context.SaveChangesAsync();
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Debug.WriteLine(ex);
+                                            }
+
+                                            observationList.Add(metaObservation);
+                                        }
+                                    }
 
                                     var encounters = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Encounter>();
                                     Assert.NotNull(encounters);
