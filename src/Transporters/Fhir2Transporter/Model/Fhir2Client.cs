@@ -6,6 +6,7 @@ using System.Threading;
 using Hl7.Fhir.Rest;
 using Hl7.Fhir;
 using Hl7.Fhir.Model;
+using PalisaidMeta.Model;
 
 namespace Transporters.Model
 {
@@ -22,47 +23,12 @@ namespace Transporters.Model
 
         public byte[] ApiKey { get; set; }
         public X509Certificate2 Certificate { get; set; }
+        private CollectorConfig cconfig;
 
-        public Fhir2Client()
-        { }
-
-        private async Task WaitForCommand()
+        public Fhir2Client(CollectorConfig cconfig, Guid tenantid, string commandbus, string payloadbus)
+            : base(cconfig, tenantid, commandbus, payloadbus)
         {
-            bool cancelled = false;
-            CancellationToken cancellationToken = new CancellationToken();
-
-            using (var consumer = new ConsumerBuilder<Null, string>(kcconfig).Build())
-            {
-                // Wait for a call to action, the collector will send a message to poll
-                consumer.Subscribe("fhir2schedular");
-
-                while (!cancelled)
-                {
-                    var consumeResult = consumer.Consume(cancellationToken);
-
-                    switch (consumeResult.Message.Value.ToLower())
-                    {
-                        // Collect all records
-                        case "poll":
-                            using (var producer = new ProducerBuilder<string, string>(kpconfig).Build())
-                            {
-                                foreach (var message in Read())
-                                {
-                                    await producer.ProduceAsync("fhir2records", new Message<string, string> { Key = GetHash(message), Value = message });
-                                }
-                            }
-                            break;
-
-                        // Shutdown the transporter
-                        case "shutdown":
-                            Environment.Exit(0);
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-            }
+            this.cconfig = cconfig;
         }
 
         private FhirClient InternalConnect()

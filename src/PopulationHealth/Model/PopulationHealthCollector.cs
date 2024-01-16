@@ -1,13 +1,14 @@
 ﻿using System;
 using Collectors.Interface;
+using PalisaidMeta.Model;
 
 namespace Collector.Model
 {
-	public class PopulationHealthCollector : ICollector
-	{
-		public PopulationHealthCollector()
-		{
-		}
+    public class PopulationHealthCollector : ICollector
+    {
+        public PopulationHealthCollector()
+        {
+        }
 
         public Task Configure()
         {
@@ -44,10 +45,29 @@ namespace Collector.Model
             throw new NotImplementedException();
         }
 
+        public Task RegisterCollector()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RegisterScheduler()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RegisterTransformer(DataProtocol dataProtocolIn)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RegisterTransporter()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<string> Retrieve()
         {
             throw new NotImplementedException();
         }
     }
 }
-

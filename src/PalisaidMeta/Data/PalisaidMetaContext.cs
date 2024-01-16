@@ -23,7 +23,7 @@ namespace PalisaidMeta.Model
         public static IServiceCollection configureservice(this IServiceCollection service, IConfiguration Configuration)
         {
             IConfiguration config = new ConfigurationBuilder()
-               .AddJsonFile("appdatashapeconfig.json")
+               .AddJsonFile("palisaidmetaconfig.json")
                .Build();
 
             Console.WriteLine($"Running in Docker: {AppIn.Docker}");
@@ -54,7 +54,7 @@ namespace PalisaidMeta.Model
         public PalisaidMetaContext CreateDbContext(string[] args)
         {
             config = new ConfigurationBuilder()
-              .AddJsonFile("appdatashapeconfig.json")
+              .AddJsonFile("palisaidmetaconfig.json")
               .Build();
 
             Console.WriteLine($"Running in Docker: {AppIn.Docker}");

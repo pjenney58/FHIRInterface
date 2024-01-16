@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PalisaidMeta.Model;
@@ -12,9 +13,11 @@ using PalisaidMeta.Model;
 namespace PalisaidMeta.Migrations
 {
     [DbContext(typeof(PalisaidMetaContext))]
-    partial class DataShapeContextModelSnapshot : ModelSnapshot
+    [Migration("20240116184507_TransporterUpdates")]
+    partial class TransporterUpdates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

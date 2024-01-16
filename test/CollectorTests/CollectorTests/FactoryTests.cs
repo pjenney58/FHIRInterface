@@ -1,6 +1,6 @@
-﻿using Collectors.Interface;
+﻿using Collectors;
+using Collectors.Interface;
 using Collectors.Model;
-using Collectors.CollectorFactory;
 
 namespace CollectorTests
 {
@@ -36,7 +36,7 @@ namespace CollectorTests
                 Assert.NotNull(hl7CDA);
 
                 var x12 = CollectorFactory.Create("X12");
-                Assert.NotNull(x12);              
+                Assert.NotNull(x12);
             }
             catch (Exception ex)
             {
