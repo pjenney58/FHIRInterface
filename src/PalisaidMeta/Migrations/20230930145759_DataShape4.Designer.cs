@@ -2109,7 +2109,7 @@ namespace PalisaidMeta.Migrations
                     b.ToTable("Tenants");
                 });
 
-            modelBuilder.Entity("PalisaidMeta.Model.TestResult", b =>
+            modelBuilder.Entity("PalisaidMeta.Model.TestResultEntry", b =>
                 {
                     b.Property<Guid>("EntityId")
                         .ValueGeneratedOnAdd()
@@ -2613,7 +2613,7 @@ namespace PalisaidMeta.Migrations
                         .WithMany("Notes")
                         .HasForeignKey("DiagnosisEntityId");
 
-                    b.HasOne("PalisaidMeta.Model.TestResult", null)
+                    b.HasOne("PalisaidMeta.Model.TestResultEntry", null)
                         .WithMany("TestNotes")
                         .HasForeignKey("TestResultEntityId");
                 });
@@ -2815,7 +2815,7 @@ namespace PalisaidMeta.Migrations
 
             modelBuilder.Entity("PalisaidMeta.Model.TestResultValue", b =>
                 {
-                    b.HasOne("PalisaidMeta.Model.TestResult", null)
+                    b.HasOne("PalisaidMeta.Model.TestResultEntry", null)
                         .WithMany("Items")
                         .HasForeignKey("TestResultEntityId");
                 });
@@ -2991,7 +2991,7 @@ namespace PalisaidMeta.Migrations
                     b.Navigation("PaymentMethods");
                 });
 
-            modelBuilder.Entity("PalisaidMeta.Model.TestResult", b =>
+            modelBuilder.Entity("PalisaidMeta.Model.TestResultEntry", b =>
                 {
                     b.Navigation("Items");
 

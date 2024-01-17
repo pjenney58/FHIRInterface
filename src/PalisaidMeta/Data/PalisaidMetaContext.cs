@@ -81,8 +81,8 @@ namespace PalisaidMeta.Model
         public DbSet<Medication>? Medications { get; set; }
         public DbSet<Code>? Codes { get; set; }
         public DbSet<CollectorConfig> Collectors { get; set; }
-        public DbSet<TestResult> TestResults { get; set; }
-        public DbSet<TestResultValue> TestResultValuess { get; set; }
+        public DbSet<TestResultEntry> TestResults { get; set; }
+        //public DbSet<TestResultEntry> TestResultEntries { get; set; }
 
         internal IConfiguration? config;
         internal string? connectionString;

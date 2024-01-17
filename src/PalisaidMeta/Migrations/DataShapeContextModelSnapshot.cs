@@ -228,21 +228,11 @@ namespace PalisaidMeta.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("OriginHash")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("Units")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("text");
 
                     b.Property<long>("Version")
                         .HasColumnType("bigint");
@@ -1309,9 +1299,6 @@ namespace PalisaidMeta.Migrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("TestResultEntityId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Text")
                         .HasColumnType("text");
 
@@ -1321,8 +1308,6 @@ namespace PalisaidMeta.Migrations
                     b.HasKey("EntityId");
 
                     b.HasIndex("DiagnosisEntityId");
-
-                    b.HasIndex("TestResultEntityId");
 
                     b.ToTable("Note");
                 });
@@ -2382,16 +2367,16 @@ namespace PalisaidMeta.Migrations
                     b.ToTable("Tenants");
                 });
 
-            modelBuilder.Entity("PalisaidMeta.Model.TestResult", b =>
+            modelBuilder.Entity("PalisaidMeta.Model.TestResultEntry", b =>
                 {
                     b.Property<Guid>("EntityId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTimeOffset>("CreateDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("BottomRangeValue")
+                        .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("EndDateTime")
+                    b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<long>("EntityKey")
@@ -2413,29 +2398,20 @@ namespace PalisaidMeta.Migrations
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("RequestedByPractionerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("RunDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("StartDateTime")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("TestEncounterId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("TestEntryID")
+                        .HasColumnType("text");
 
-                    b.Property<Guid>("TestLocationId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("TopRangeValue")
+                        .HasColumnType("text");
 
-                    b.Property<int>("TestType")
-                        .HasColumnType("integer");
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
 
-                    b.Property<Guid>("TestedPatientId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ValueUnits")
+                        .HasColumnType("text");
 
                     b.Property<long>("Version")
                         .HasColumnType("bigint");
@@ -2443,62 +2419,6 @@ namespace PalisaidMeta.Migrations
                     b.HasKey("EntityId");
 
                     b.ToTable("TestResults");
-                });
-
-            modelBuilder.Entity("PalisaidMeta.Model.TestResultValue", b =>
-                {
-                    b.Property<Guid>("EntityId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("CreateDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("Date")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTimeOffset>("LastUpdate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("OriginHash")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("TestResultEntityId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("TestType")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Unit")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("numeric");
-
-                    b.Property<long>("Version")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("EntityId");
-
-                    b.HasIndex("TestResultEntityId");
-
-                    b.ToTable("TestResultValuess");
                 });
 
             modelBuilder.Entity("PalisaidMeta.Model.Treatment", b =>
@@ -2917,10 +2837,6 @@ namespace PalisaidMeta.Migrations
                     b.HasOne("PalisaidMeta.Model.Diagnosis", null)
                         .WithMany("Notes")
                         .HasForeignKey("DiagnosisEntityId");
-
-                    b.HasOne("PalisaidMeta.Model.TestResult", null)
-                        .WithMany("TestNotes")
-                        .HasForeignKey("TestResultEntityId");
                 });
 
             modelBuilder.Entity("PalisaidMeta.Model.Observation", b =>
@@ -3116,13 +3032,6 @@ namespace PalisaidMeta.Migrations
                         .HasForeignKey("PatientEntityId");
                 });
 
-            modelBuilder.Entity("PalisaidMeta.Model.TestResultValue", b =>
-                {
-                    b.HasOne("PalisaidMeta.Model.TestResult", null)
-                        .WithMany("Items")
-                        .HasForeignKey("TestResultEntityId");
-                });
-
             modelBuilder.Entity("PalisaidMeta.Model.Treatment", b =>
                 {
                     b.HasOne("PalisaidMeta.Model.Diagnosis", "Diagnosis")
@@ -3279,13 +3188,6 @@ namespace PalisaidMeta.Migrations
                     b.Navigation("Contacts");
 
                     b.Navigation("PaymentMethods");
-                });
-
-            modelBuilder.Entity("PalisaidMeta.Model.TestResult", b =>
-                {
-                    b.Navigation("Items");
-
-                    b.Navigation("TestNotes");
                 });
 
             modelBuilder.Entity("PalisaidMeta.Model.Treatment", b =>
