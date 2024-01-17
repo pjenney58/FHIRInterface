@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PalisaidMeta.Model;
@@ -12,9 +13,11 @@ using PalisaidMeta.Model;
 namespace PalisaidMeta.Migrations
 {
     [DbContext(typeof(PalisaidMetaContext))]
-    partial class DataShapeContextModelSnapshot : ModelSnapshot
+    [Migration("20240116184507_TransporterUpdates")]
+    partial class TransporterUpdates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,14 +221,10 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("LastUpdate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Link")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("ObservationEntityId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("OriginHash")
-                        .IsRequired()
+                    b.Property<string>("Name")
                         .HasColumnType("text");
 
                     b.Property<string>("OriginHash")
@@ -247,25 +246,11 @@ namespace PalisaidMeta.Migrations
                     b.Property<long>("Version")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("codesubname")
-                        .HasColumnType("text");
-
-                    b.Property<string>("system")
-                        .HasColumnType("text");
-
-                    b.Property<string>("units")
-                        .HasColumnType("text");
-
-                    b.Property<string>("value")
-                        .HasColumnType("text");
-
                     b.HasKey("EntityId");
 
                     b.HasIndex("DiagnosisEntityId");
 
                     b.HasIndex("EncounterEntityId");
-
-                    b.HasIndex("ObservationEntityId");
 
                     b.ToTable("Codes");
                 });
@@ -1473,10 +1458,6 @@ namespace PalisaidMeta.Migrations
 
                     b.Property<string>("Value")
                         .HasColumnType("text");
-
-                    b.Property<List<Tuple<string, string>>>("Values")
-                        .IsRequired()
-                        .HasColumnType("record[]");
 
                     b.Property<long>("Version")
                         .HasColumnType("bigint");
@@ -2709,10 +2690,6 @@ namespace PalisaidMeta.Migrations
                     b.HasOne("PalisaidMeta.Model.Encounter", null)
                         .WithMany("Codes")
                         .HasForeignKey("EncounterEntityId");
-
-                    b.HasOne("PalisaidMeta.Model.Observation", null)
-                        .WithMany("Codes")
-                        .HasForeignKey("ObservationEntityId");
                 });
 
             modelBuilder.Entity("PalisaidMeta.Model.Contact", b =>
@@ -3227,8 +3204,6 @@ namespace PalisaidMeta.Migrations
 
             modelBuilder.Entity("PalisaidMeta.Model.Observation", b =>
                 {
-                    b.Navigation("Codes");
-
                     b.Navigation("Items");
                 });
 
