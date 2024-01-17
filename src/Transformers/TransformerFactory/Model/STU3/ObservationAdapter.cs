@@ -88,7 +88,7 @@ namespace Transformers.Model.Stu3
             {
                 var obi = new ObservationItem()
                 {
-                    //Code = code.CodeElement.Value,
+                    //Code = code.CodeElement.value,
                     Description = code.Display,
                     Value = Text,
                     Timestamp = DateTime.Now
@@ -149,9 +149,9 @@ namespace Transformers.Model.Stu3
 
             // Id - Item Reference? Subject - Patient? BasedOn
 
-            // Effective.Value - Observation DateTime
+            // Effective.value - Observation DateTime
 
-            // Encounter Note Performer Value
+            // Encounter Note Performer value
 
             // Status
 

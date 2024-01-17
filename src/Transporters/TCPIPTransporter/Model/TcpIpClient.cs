@@ -31,7 +31,7 @@ namespace Transporters.Model
                 //Certificate = new X509Certificate2(cconfig.CertificatePath, cconfig.CertificatePassword);
             }
         }
-
+        /*
         public override IEnumerable<string?> Read()
         {
             if (cconfig == null)
@@ -62,5 +62,6 @@ namespace Transporters.Model
                 }
             }
         }
+        */
     }
 }

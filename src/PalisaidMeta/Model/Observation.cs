@@ -35,6 +35,7 @@ namespace PalisaidMeta.Model
         public DateTimeOffset StopDate { get; set; }
 
         public DisposableList<ObservationItem>? Items { get; set; } = new();
+        public DisposableList<Code>? Codes { get; set; } = new();
 
         protected override void Dispose(bool disposing)
         {

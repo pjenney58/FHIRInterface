@@ -98,7 +98,7 @@ namespace Transformers.Model.Stu3
 
             await Task.Run(() =>
             {
-                // Split into a collection of Key/Value pairs
+                // Split into a collection of Key/value pairs
                 var items = meta.Value.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (var item in items)

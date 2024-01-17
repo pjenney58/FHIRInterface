@@ -45,9 +45,11 @@ namespace PalisaidMeta.Model
         public string? CodingSystemName { get => CodingSystem.ToString(); }
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public string? Value { get; set; }
-        public string? Units { get; set; }
-        public string? Link { get; set; }
+
+        public string? codesubname { get; set; }
+        public string? value { get; set; }
+        public string? units { get; set; }
+        public string? system { get; set; }
 
         public Code() {}
 
@@ -61,9 +63,9 @@ namespace PalisaidMeta.Model
                 CodingSystem = CodingSystem.Unknown;
                 Name = null;
                 Description = null;
-                Link = null;
-                Value = null;
-                Units = null;
+                system = null;
+                value = null;
+                units = null;
             }
         }    
     }

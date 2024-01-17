@@ -169,7 +169,7 @@ namespace Transformers.Model.R4
                         {
                             Name = med?.Coding?.FirstOrDefault()?.Code,
                             Description = med?.Coding?.FirstOrDefault()?.Display,
-                            Link = med?.Coding?.FirstOrDefault()?.System
+                            system = med?.Coding?.FirstOrDefault()?.System
                         };
 
                         // Medication lookup

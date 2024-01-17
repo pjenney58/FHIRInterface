@@ -118,7 +118,7 @@ namespace Transformers.Model.R4
                             CodingSystem = GetCodingSystem(code.System),
                             Name = code.Code,
                             Description = code.Display,
-                            Link = code.System
+                            system = code.System
                         };
 
                         // Add the code to the list, they will be persisted at the end
@@ -135,7 +135,7 @@ namespace Transformers.Model.R4
                             CodingSystem = GetCodingSystem(code.System),
                             Name = code.Code,
                             Description = code.Display,
-                            Link = code.System
+                            system = code.System
                         };
 
                         meta.Codes.Add(cd);
@@ -228,7 +228,7 @@ namespace Transformers.Model.R4
                             CodingSystem = GetCodingSystem(code.System),
                             Name = code.Code,
                             Description = code.Display,
-                            Link = code.System
+                            system = code.System
                         };
 
                         // Add the code to the list, they will be persisted at the end
@@ -242,7 +242,7 @@ namespace Transformers.Model.R4
                     CodingSystem = GetCodingSystem(fhir.Class.System),
                     Name = fhir.Class.Code,
                     Description = "Class",
-                    Link = fhir.Class.System
+                    system = fhir.Class.System
                 };
 
                 meta.Codes.Add(cla);
@@ -257,7 +257,7 @@ namespace Transformers.Model.R4
                             CodingSystem = GetCodingSystem(code.System),
                             Name = code.Code,
                             Description = code.Display,
-                            Link = code.System
+                            system = code.System
                         };
 
                         meta.Codes.Add(cd);
@@ -304,7 +304,7 @@ namespace Transformers.Model.R4
 
                             meta.Participants.Add(p);
 
-                            // meta.Patients.Add(Guid.Parse(pair.Value.ToString().Substring("urn:uuid:".Length)));
+                            // meta.Patients.Add(Guid.Parse(pair.value.ToString().Substring("urn:uuid:".Length)));
                         }
                     }
                 }

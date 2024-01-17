@@ -17,7 +17,12 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using Hl7.Fhir.Model;
+using Hl7.Fhir.Validation;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json.Linq;
 using PalisaidMeta.Model;
+using System.Text;
 using Transformers.Interface;
 
 namespace Transformers.Model.R4
@@ -69,6 +74,49 @@ namespace Transformers.Model.R4
             };
         }
 
+        PalisaidMeta.Model.Code SetValues(PalisaidMeta.Model.Code code, DataType data)
+        {
+            foreach (KeyValuePair<string, object> set in data)
+            {
+                switch (set.Key.ToLower())
+                {
+                    case "value":
+                        code.value = set.Value.ToString();
+                        break;
+
+                    case "unit":
+                        code.units = set.Value.ToString();
+                        break;
+
+                    case "system":
+                        code.system = set.Value.ToString();
+                        break;
+                }
+            }
+
+            return code;
+        }
+       
+        KeyValuePair<string,string>? GetValue(KeyValuePair<string, object> set)
+        {
+            switch (set.Key.ToLower())
+            {
+                case "value":
+                    return new KeyValuePair<string, string>("value", set.Value.ToString());
+                    break;
+
+                case "unit":
+                    return new KeyValuePair<string, string>("unit", set.Value.ToString());
+                    break;
+
+                case "system":
+                    return new KeyValuePair<string, string>("system", set.Value.ToString());
+                    break;
+            }
+
+            return default;
+        }
+
         private async Task<OEntity> ConvertMetaToFhir()
         {
             throw new NotImplementedException();
@@ -113,13 +161,11 @@ namespace Transformers.Model.R4
                 {
                     foreach (var coding in catagory.Coding)
                     {
-                        var observationitem = new ObservationItem();
-                        observationitem.TypeName = "Category Code";
-                        observationitem.Code.Name = coding.Code;
-                        observationitem.Code.Description = coding.Display;
-                        observationitem.Code.CodingSystem = GetCodingSystem(coding.System);
-                        observationitem.Timestamp = DateTime.Now;
-                        meta.Items.Add(observationitem);
+                        var Code = new PalisaidMeta.Model.Code();
+                        Code.Name = "Catagory Code";
+                        Code.Description = coding.Display;
+                        Code.CodingSystem = GetCodingSystem(coding.System);
+                        meta.Codes.Add(Code);
                     }
                 }
             }
@@ -128,41 +174,31 @@ namespace Transformers.Model.R4
             {
                 foreach (var code in fhir.Code.Coding)
                 {
-                    var observationitem = new ObservationItem();
-                    observationitem.TypeName = "Code";
-                    observationitem.Code.Name = code.Code;
-                    observationitem.Code.Description = code.Display;
-                    observationitem.Code.CodingSystem = GetCodingSystem(code.System);
-                    observationitem.Timestamp = DateTime.Now;
-                    meta.Items.Add(observationitem);
+                    var Code = new PalisaidMeta.Model.Code();
+                    Code.Name = "Code";
+                    Code.Description = code.Display;
+                    Code.CodingSystem = GetCodingSystem(code.System);
+                    meta.Codes.Add(Code);                  
                 }
             }
 
+            /*
             if(fhir.Value != null)
             {
                 var observationitem = new ObservationItem();
         
-                foreach(KeyValuePair<string,object> code in fhir.Value)
+                foreach(KeyValuePair<string, object> set in fhir.Value)
                 {
-                    observationitem.Code.Name = fhir.Value.TypeName;
-                    switch(code.Key.ToLower())
+                    var ret = GetValue(set);
+                    if(ret != null)
                     {
-                        case "value":
-                            observationitem.Code.Value = code.Value.ToString();
-                            break;
-                        
-                        case "unit":
-                            observationitem.Code.Units = code.Value.ToString();
-                            break;
-
-                        case "system":
-                            observationitem.Code.CodingSystem = GetCodingSystem(code.Value.ToString());
-                            break;
+                        observationitem.Values.Add(new Tuple<string, string>(ret.Value.Key, ret.Value.Value));             
                     }
                 }
 
                 meta.Items.Add(observationitem);
             }
+            */
 
             if (fhir.Component != null && fhir.Component.Any())
             {
@@ -170,13 +206,11 @@ namespace Transformers.Model.R4
                 {
                     foreach (var code in component.Code.Coding)
                     {
-                        var observationitem = new ObservationItem();
-                        observationitem.TypeName = "Component Code";
-                        observationitem.Code.Name = code.Code;
-                        observationitem.Code.Description = code.Display;
-                        observationitem.Code.CodingSystem = GetCodingSystem(code.System);
-                        observationitem.Timestamp = DateTime.Now;
-                        meta.Items.Add(observationitem);
+                        var Code = new PalisaidMeta.Model.Code();
+                        Code.Name = code.Code;
+                        Code.Description = code.Display;
+                        Code.CodingSystem = GetCodingSystem(code.System);
+                        meta.Codes.Add(SetValues(Code, component.Value));
                     }
                 }
             }
@@ -239,7 +273,6 @@ namespace Transformers.Model.R4
             {
                 foreach (var item in fhir.Performer)
                 {
-                    var observationitem = new ObservationItem();
                     try
                     {
                         meta.PractitionerId = Guid.Parse(item.ReferenceElement.Value);
@@ -266,9 +299,9 @@ namespace Transformers.Model.R4
 
             // Id - Item Reference? Subject - Patient? BasedOn
 
-            // Effective.Value - Observation DateTime
+            // Effective.value - Observation DateTime
 
-            // Encounter Note Performer Value
+            // Encounter Note Performer value
 
             // Status
 

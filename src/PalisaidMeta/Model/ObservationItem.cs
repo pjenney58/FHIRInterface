@@ -43,13 +43,14 @@ namespace PalisaidMeta.Model
             : base(ownerId, tenantId) { }
 
         public ObservationType? ObservationType { get; set; }
-
         public Code Code { get; set; } = new();
         public string? TypeName { get; set; }
         public string? Description { get; set; }
+        
         public string? Value { get; set; }
+        public List<Tuple<string,string>> Values { get; set; } = new();
+        
         public DateTimeOffset Timestamp { get; set; }
-
         public int Quantity { get; set; }
 
         public List<string> Interpretation { get; set; } = new();

@@ -311,7 +311,7 @@ namespace RandomDataGenerator
 
         public static string NDC(int len)
         {
-            if (len != 9 && len != 11) throw new ArgumentException("Value must be 9 or 11");
+            if (len != 9 && len != 11) throw new ArgumentException("value must be 9 or 11");
 
             string ndc = "";
 

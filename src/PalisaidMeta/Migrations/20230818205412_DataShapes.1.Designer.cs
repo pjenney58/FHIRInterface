@@ -189,7 +189,7 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("LastUpdate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Link")
+                    b.Property<string>("system")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -1188,7 +1188,7 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("Timestamp")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Value")
+                    b.Property<string>("value")
                         .HasColumnType("text");
 
                     b.Property<long>("Version")

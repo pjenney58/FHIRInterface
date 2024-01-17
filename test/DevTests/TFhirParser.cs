@@ -397,22 +397,11 @@ namespace DevTests
                                     var metaPatient = await fhirConverter.Transform(patient) as PalisaidMeta.Model.Patient;
                                     Assert.NotNull(metaPatient);
 
-                                    try
+                                    if(_context.Patients.Contains(metaPatient))
                                     {
-                                        metaPatient.TenantId = _tenantId;
-                                        metaPatient.OwnerId = _tenantId;
-                                        await _context.AddAsync(metaPatient);
-                                        await _context.SaveChangesAsync();
-                                    }
-                                    catch (NpgsqlException nx)
-                                    {
-                                        var t = nx.GetType();
                                         continue;
                                     }
-                                    catch (Exception ex)
-                                    {
-                                        Debug.WriteLine(ex);
-                                    }
+                       
 
                                     Debug.WriteLine($"processing patient: {metaPatient.Name.FirstName} {metaPatient.Name.FamilyName}");
 
@@ -420,6 +409,8 @@ namespace DevTests
                                     
                                     var observations = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Observation>();
                                     Assert.NotNull(observations);
+
+                                    // TODO: Pete => NEED TO FILTER BY PATIENT ID
                                     if(observations.Any())
                                     {
                                         foreach(var observation in observations)
@@ -433,9 +424,9 @@ namespace DevTests
                                             try
                                             {
                                                 metaObservation.TenantId = _tenantId;
-                                                metaObservation.OwnerId = _tenantId;
-                                                await _context.AddAsync(metaObservation);
-                                                await _context.SaveChangesAsync();
+                                                metaObservation.OwnerId = metaPatient.EntityId;
+                                                metaObservation.PatientId = metaPatient.EntityId;
+                                                metaPatient.Observations.Add(metaObservation);
                                             }
                                             catch (Exception ex)
                                             {
@@ -538,12 +529,12 @@ namespace DevTests
                                         try
                                         {
                                             metaScrip.TenantId = _tenantId;
-                                            metaScrip.OwnerId = _tenantId;
-                                            if (!_context.Prescriptions.Contains(metaScrip))
-                                            {
-                                                await _context.AddAsync(metaScrip);
-                                                await _context.SaveChangesAsync();
-                                            }
+                                            metaScrip.OwnerId = metaPatient.EntityId;
+                                            //if (!_context.Prescriptions.Contains(metaScrip))
+                                            //{
+                                            //    await _context.AddAsync(metaScrip);
+                                            //    await _context.SaveChangesAsync();
+                                            //}
                                         }
                                         catch (Exception ex)
                                         {
@@ -554,6 +545,22 @@ namespace DevTests
                                     }
 
                                     //patientRepo.CreateRecord(metaPatient);
+                                    try
+                                    {
+                                        metaPatient.TenantId = _tenantId;
+                                        metaPatient.OwnerId = _tenantId;
+                                        await _context.AddAsync(metaPatient);
+                                        await _context.SaveChangesAsync();
+                                    }
+                                    catch (NpgsqlException nx)
+                                    {
+                                        var t = nx.GetType();
+                                        continue;
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Debug.WriteLine(ex);
+                                    }
                                 }
                             }
                         }
