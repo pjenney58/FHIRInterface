@@ -77,6 +77,22 @@ https://levelup.gitconnected.com/12-bad-practices-to-avoid-in-asp-net-core-api-c
   git add .
   
   git commit -m "fixed untracked files" 
+
+## Drop and Recreate Database
+  In pgAdmin4, select Palisaid, right click and select Delete(Force) -- Poof, its gone
+
+  Rebuild it like this
+
+`petejenney@bert PrimaryControllers % cd ../PalisaidMeta` 
+
+`petejenney@bert PalisaidMeta % dotnet ef database update`
+
+`Build started...`
+`Build succeeded.`
+`Running in Docker: False`
+
+`Applying migration '20240118140201_RefreshedPrimary.1'.`
+`Done.`
   
 ## How to repair a confused solution/ projects
 
