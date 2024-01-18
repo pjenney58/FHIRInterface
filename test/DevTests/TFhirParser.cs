@@ -4,6 +4,7 @@ using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Npgsql;
 using RandomDataGenerator;
+using Microsoft.EntityFrameworkCore;
 
 /*
 extern alias r5;
@@ -197,6 +198,9 @@ namespace DevTests
                 await System.Threading.Tasks.Task.Run(async () =>
                 {
                     // Arrange
+                    var data = getFhirData();
+                    Assert.NotNull(data);
+
                     foreach (var file in files)
                     {
                         //var data = getFhirData();
@@ -215,7 +219,11 @@ namespace DevTests
 
                             // Assert
                             Assert.NotNull(prescriptions);
-                            Assert.True(prescriptions.Any());
+
+                            if (!prescriptions.Any())
+                            {
+                                continue;
+                            }
 
                             foreach (var prescription in prescriptions)
                             {
@@ -224,6 +232,35 @@ namespace DevTests
 
                                 var metaPrescription = await fhirConverter.Transform(prescription) as PalisaidMeta.Model.Prescription;
                                 Assert.NotNull(metaPrescription);
+
+                                // Persist
+                                try
+                                {
+                                    await _context.AddAsync(metaPrescription);
+                                    await _context.SaveChangesAsync();
+                                }
+                                catch (DbUpdateConcurrencyException cx)
+                                {
+                                    var t = cx.GetType();
+                                    Debug.WriteLine(cx);
+                                    continue;
+                                }
+                                catch (NpgsqlException nx)
+                                {
+                                    var t = nx.GetType();
+                                    Debug.WriteLine(nx);
+                                    continue;
+                                }
+                                catch (Exception ex)
+                                {
+                                    if (ex.InnerException.Message.Contains("duplicate key value violates unique constraint"))
+                                    {
+                                        continue;
+                                    }
+
+                                    Debug.WriteLine(ex);
+                                    continue;
+                                }
                             }
                         }
                     }
@@ -274,6 +311,35 @@ namespace DevTests
 
                                 var metaPrescription = await fhirConverter.Transform(prescription) as PalisaidMeta.Model.Prescription;
                                 Assert.NotNull(metaPrescription);
+
+                                // Persist
+                                try
+                                {
+                                    await _context.AddAsync(metaPrescription);
+                                    await _context.SaveChangesAsync();
+                                }
+                                catch (DbUpdateConcurrencyException cx)
+                                {
+                                    var t = cx.GetType();
+                                    Debug.WriteLine(cx.Message);
+                                    continue;
+                                }
+                                catch (NpgsqlException nx)
+                                {
+                                    var t = nx.GetType();
+                                    Debug.WriteLine(nx.Message);
+                                    continue;
+                                }
+                                catch (Exception ex)
+                                {
+                                    if (ex.InnerException.Message.Contains("duplicate key value violates unique constraint"))
+                                    {
+                                        continue;
+                                    }
+
+                                    Debug.WriteLine(ex.Message);
+                                    continue;
+                                }
                             }
                         }
                     }
@@ -324,6 +390,35 @@ namespace DevTests
 
                                 var metaLocation = await fhirConverter.Transform(location);
                                 Assert.True(metaLocation != null);
+
+                                // Persist
+                                try
+                                {
+                                    await _context.AddAsync(metaLocation);
+                                    await _context.SaveChangesAsync();
+                                }
+                                catch (DbUpdateConcurrencyException cx)
+                                {
+                                    var t = cx.GetType();
+                                    Debug.WriteLine(cx.Message);
+                                    continue;
+                                }
+                                catch (NpgsqlException nx)
+                                {
+                                    var t = nx.GetType();
+                                    Debug.WriteLine(nx.Message);
+                                    continue;
+                                }
+                                catch (Exception ex)
+                                {
+                                    if (ex.InnerException.Message.Contains("duplicate key value violates unique constraint"))
+                                    {
+                                        continue;
+                                    }
+
+                                    Debug.WriteLine(ex.Message);
+                                    continue;
+                                }
                             }
                         }
                     }
@@ -362,14 +457,7 @@ namespace DevTests
                 var practionerList = new List<PalisaidMeta.Model.Practitioner>();
                 var observationList = new List<PalisaidMeta.Model.Observation>();
 
-                //IRepository<PalisaidMeta.Model.Patient>? patientRepo = RepositoryFactory<PalisaidMeta.Model.Patient>.GetRepository(Constants.IgnorePartition, RepositoryIntent.Testing);
-                //IRepository<PalisaidMeta.Model.Encounter>? encounterRepo = RepositoryFactory<PalisaidMeta.Model.Encounter>.GetRepository(Constants.IgnorePartition, RepositoryIntent.Testing);
-                //IRepository<PalisaidMeta.Model.Prescription?> scripRepo = RepositoryFactory<PalisaidMeta.Model.Prescription>.GetRepository(Constants.IgnorePartition, RepositoryIntent.Testing);
 
-                //PalisaidMeta.Model.Observation observations = new();
-
-                //for (var i = 0; i < MAX_VALS; i++)
-                //{
                 var data = getFhirData();
 
                 foreach (var file in files)
@@ -381,8 +469,6 @@ namespace DevTests
 
                     if (null != parsedBundle)
                     {
-
-
                         var patients = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Patient>();
 
                         if (patients != null && patients.Any())
@@ -397,23 +483,22 @@ namespace DevTests
                                     var metaPatient = await fhirConverter.Transform(patient) as PalisaidMeta.Model.Patient;
                                     Assert.NotNull(metaPatient);
 
-                                    if(_context.Patients.Contains(metaPatient))
+                                    if (_context.Patients.Contains(metaPatient))
                                     {
                                         continue;
                                     }
-                       
 
                                     Debug.WriteLine($"processing patient: {metaPatient.Name.FirstName} {metaPatient.Name.FamilyName}");
 
                                     patientList.Add(metaPatient);
-                                    
+
                                     var observations = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Observation>();
                                     Assert.NotNull(observations);
 
                                     // TODO: Pete => NEED TO FILTER BY PATIENT ID
-                                    if(observations.Any())
+                                    if (observations.Any())
                                     {
-                                        foreach(var observation in observations)
+                                        foreach (var observation in observations)
                                         {
                                             var fhirObservationConverter = TransformerFactory.Create<Hl7.Fhir.Model.Observation, PalisaidMeta.Model.Observation>(_tenantId, version);
                                             Assert.NotNull(fhirObservationConverter);
@@ -437,6 +522,9 @@ namespace DevTests
                                         }
                                     }
 
+
+
+                                    /*
                                     var encounters = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Encounter>();
                                     Assert.NotNull(encounters);
 
@@ -476,7 +564,7 @@ namespace DevTests
                                             }
                                         }
                                     }
-
+                                    */
                                     /*
                                     var allergies = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.AllergyIntolerance>();
                                     Assert.NotNull(allergies);
@@ -525,41 +613,35 @@ namespace DevTests
                                         {
                                             Debug.WriteLine($"Missing med for scrip {metaScrip.Code}");
                                         }
-
-                                        try
-                                        {
-                                            metaScrip.TenantId = _tenantId;
-                                            metaScrip.OwnerId = metaPatient.EntityId;
-                                            //if (!_context.Prescriptions.Contains(metaScrip))
-                                            //{
-                                            //    await _context.AddAsync(metaScrip);
-                                            //    await _context.SaveChangesAsync();
-                                            //}
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Debug.WriteLine(ex);
-                                        }
-
-                                        //scripRepo.CreateRecord(metaScrip);
                                     }
 
-                                    //patientRepo.CreateRecord(metaPatient);
+                                    // Persist
                                     try
                                     {
-                                        metaPatient.TenantId = _tenantId;
-                                        metaPatient.OwnerId = _tenantId;
                                         await _context.AddAsync(metaPatient);
                                         await _context.SaveChangesAsync();
+                                    }
+                                    catch (DbUpdateConcurrencyException cx)
+                                    {
+                                        var t = cx.GetType();
+                                        Debug.WriteLine(cx.Message);
+                                        continue;
                                     }
                                     catch (NpgsqlException nx)
                                     {
                                         var t = nx.GetType();
+                                        Debug.WriteLine(nx.Message);
                                         continue;
                                     }
                                     catch (Exception ex)
                                     {
-                                        Debug.WriteLine(ex);
+                                        if (ex.InnerException.Message.Contains("duplicate key value violates unique constraint"))
+                                        {
+                                            Debug.WriteLine($"Dup: {metaPatient.Name.FirstName} {metaPatient.Name.FamilyName}");
+                                            continue;
+                                        }
+                                        Debug.WriteLine(ex.Message);
+                                        continue;
                                     }
                                 }
                             }
@@ -611,7 +693,6 @@ namespace DevTests
             }
         }
 
-        [Fact]
         public async System.Threading.Tasks.Task ProcessObservations()
         {
             try

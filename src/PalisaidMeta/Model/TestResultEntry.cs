@@ -39,7 +39,7 @@ namespace PalisaidMeta.Model
 
     public class TestResultEntry : Entity
     {
-        public string? TestEntryID { get; set; }
+        public string? TestName { get; set; }
         public string? Value { get; set; }
         public string? ValueUnits { get; set; }
         public string? BottomRangeValue { get; set; }
@@ -49,7 +49,7 @@ namespace PalisaidMeta.Model
         {
             if (disposing)
             {
-                TestEntryID = null;
+                TestName = null;
                 Value = null;
                 ValueUnits = null;
                 BottomRangeValue = null;

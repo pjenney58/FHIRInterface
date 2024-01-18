@@ -58,7 +58,7 @@ namespace Transformers.Model.R4
             var fhir = payloadIN as Hl7.Fhir.Model.Location;
             var meta = new PalisaidMeta.Model.Location()
             {
-                TenantId = tenant == Guid.Empty ? Constants.Transform : tenant,
+                TenantId = tenant,
                 EntityId = Guid.Parse(fhir.Id),
                 CreateDate = DateTimeOffset.Now,
                 LastUpdate = DateTimeOffset.Now,

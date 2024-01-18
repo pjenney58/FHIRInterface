@@ -45,16 +45,17 @@ namespace PalisaidMeta.Model
         public string? CodingSystemName { get => CodingSystem.ToString(); }
         public string? Name { get; set; }
         public string? Description { get; set; }
+        public string? Codesubname { get; set; }
+        public string? Value { get; set; }
+        public string? Units { get; set; }
+        public string? System { get; set; }
 
-        public string? codesubname { get; set; }
-        public string? value { get; set; }
-        public string? units { get; set; }
-        public string? system { get; set; }
-
-        public Code() {}
+        public Code() 
+        {}
 
         public Code(Guid ownerId, Guid tenantId)
-            : base(ownerId,tenantId) { }
+            : base(ownerId, tenantId) 
+            { }
 
         protected override void Dispose(bool disposing)
         {
@@ -63,9 +64,9 @@ namespace PalisaidMeta.Model
                 CodingSystem = CodingSystem.Unknown;
                 Name = null;
                 Description = null;
-                system = null;
-                value = null;
-                units = null;
+                System = null;
+                Value = null;
+                Units = null;
             }
         }    
     }

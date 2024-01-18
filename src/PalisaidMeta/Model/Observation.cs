@@ -46,6 +46,7 @@ namespace PalisaidMeta.Model
                 PatientId = Guid.Empty;
 
                 Items?.Dispose();
+                Codes?.Dispose();
 
                 StartDate = DateTimeOffset.MinValue;
                 StopDate = DateTimeOffset.MinValue;

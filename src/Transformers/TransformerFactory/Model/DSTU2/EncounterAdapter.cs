@@ -128,7 +128,7 @@ namespace Transformers.Model.Dstu2
                             CodingSystem = GetCodingSystem(code.System),
                             Name = code.Code,
                             Description = code.Display,
-                            system = code.System
+                            System = code.System
                         };
 
                         // Add the code to the list, they will be persisted at the end
@@ -146,7 +146,7 @@ namespace Transformers.Model.Dstu2
                             CodingSystem = GetCodingSystem(code.System),
                             Name = code.Code,
                             Description = code.Display,
-                            system = code.System
+                            System = code.System
                         };
 
                         meta.Codes.Add(cd);
@@ -245,7 +245,7 @@ namespace Transformers.Model.Dstu2
                             CodingSystem = GetCodingSystem(code.System),
                             Name = code.Code,
                             Description = code.Display,
-                            system = code.System
+                            System = code.System
                         };
 
                         // Add the code to the list, they will be persisted at the end
@@ -259,7 +259,7 @@ namespace Transformers.Model.Dstu2
                     CodingSystem = GetCodingSystem(fhir.Class.System),
                     Name = fhir.Class.Code,
                     Description = "Class",
-                    system = fhir.Class.System
+                    System = fhir.Class.System
                 };
 
                 meta.Codes.Add(cla);
@@ -274,7 +274,7 @@ namespace Transformers.Model.Dstu2
                             CodingSystem = GetCodingSystem(code.System),
                             Name = code.Code,
                             Description = code.Display,
-                            system = code.System
+                            System = code.System
                         };
 
                         meta.Codes.Add(cd);
