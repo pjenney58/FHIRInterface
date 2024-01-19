@@ -37,18 +37,22 @@ namespace PalisaidMeta.Model
     {
         public Guid ObservationReference { get; set; }
 
-        public ObservationItem() { }
+        public ObservationItem() 
+        { }
         
         public ObservationItem(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+            : base(ownerId, tenantId) 
+            { }
 
         public ObservationType? ObservationType { get; set; }
-
         public Code Code { get; set; } = new();
+        public string? TypeName { get; set; }
         public string? Description { get; set; }
+        
         public string? Value { get; set; }
+        public Dictionary<string,string> Values { get; set; } = new();
+        
         public DateTimeOffset Timestamp { get; set; }
-
         public int Quantity { get; set; }
 
         public List<string> Interpretation { get; set; } = new();
@@ -66,6 +70,9 @@ namespace PalisaidMeta.Model
             if (disposing)
             {
                 Code.Dispose();
+                Method.Dispose();
+                BodySite.Dispose();
+                
                 Value = null;
                 Description = null;
                 Timestamp = DateTime.MinValue;

@@ -14,9 +14,9 @@ namespace Lists.Controllers
     {
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         internal readonly PalisaidMetaContext? _context;
-        internal readonly ILogger<TestResult> _logger;
+        internal readonly ILogger<TestResultEntry> _logger;
 
-        public TestResultsController(PalisaidMetaContext context, ILogger<TestResult> logger)
+        public TestResultsController(PalisaidMetaContext context, ILogger<TestResultEntry> logger)
         {
             _context = context;
             _logger = logger;

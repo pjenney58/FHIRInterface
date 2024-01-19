@@ -25,6 +25,7 @@ namespace PalisaidMeta.Model
         ICD9,
         ICD10,
         ICD11,
+        LOINC,
         ATC,
         SNOMED,
         USCDI,
@@ -44,12 +45,17 @@ namespace PalisaidMeta.Model
         public string? CodingSystemName { get => CodingSystem.ToString(); }
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public string? Link { get; set; }
+        public string? Codesubname { get; set; }
+        public string? Value { get; set; }
+        public string? Units { get; set; }
+        public string? System { get; set; }
 
-        public Code() {}
+        public Code() 
+        {}
 
         public Code(Guid ownerId, Guid tenantId)
-            : base(ownerId,tenantId) { }
+            : base(ownerId, tenantId) 
+            { }
 
         protected override void Dispose(bool disposing)
         {
@@ -58,7 +64,9 @@ namespace PalisaidMeta.Model
                 CodingSystem = CodingSystem.Unknown;
                 Name = null;
                 Description = null;
-                Link = null;
+                System = null;
+                Value = null;
+                Units = null;
             }
         }    
     }

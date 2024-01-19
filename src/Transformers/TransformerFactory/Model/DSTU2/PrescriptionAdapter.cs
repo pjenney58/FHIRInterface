@@ -166,7 +166,7 @@ namespace Transformers.Model.Dstu2
                         {
                             Name = med?.Coding?.FirstOrDefault()?.Code,
                             Description = med?.Coding?.FirstOrDefault()?.Display,
-                            Link = med?.Coding?.FirstOrDefault()?.System
+                            System = med?.Coding?.FirstOrDefault()?.System
                         };
 
                         // Medication lookup

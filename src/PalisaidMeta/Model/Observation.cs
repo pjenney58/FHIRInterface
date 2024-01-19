@@ -28,12 +28,14 @@ namespace PalisaidMeta.Model
 
         public Guid? PatientId { get; set; }
         public Guid? PractitionerId { get; set; }
+        public long AlternateId { get; set; }
         public Guid? LocationId { get; set; }
 
         public DateTimeOffset StartDate { get; set; }
         public DateTimeOffset StopDate { get; set; }
 
         public DisposableList<ObservationItem>? Items { get; set; } = new();
+        public DisposableList<Code>? Codes { get; set; } = new();
 
         protected override void Dispose(bool disposing)
         {
@@ -44,6 +46,7 @@ namespace PalisaidMeta.Model
                 PatientId = Guid.Empty;
 
                 Items?.Dispose();
+                Codes?.Dispose();
 
                 StartDate = DateTimeOffset.MinValue;
                 StopDate = DateTimeOffset.MinValue;

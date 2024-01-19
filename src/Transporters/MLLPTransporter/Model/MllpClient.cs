@@ -1,4 +1,5 @@
 ﻿using Confluent.Kafka;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PalisaidMeta.Model;
 using Support.Interface;
 using Support.Model;
@@ -69,7 +70,7 @@ namespace Transporters.Model
         /// Return IEnumerable<string> of messages if the message contains '\xB' and '\x1C', else just return the message.
         /// </summary>
         /// <returns>IEnumerable[string]</returns>
-        public override IEnumerable<string> Read()
+     /*   public  override IEnumerable<string> Read()
         {
             using (var client = InternalConnect())
             {
@@ -88,15 +89,15 @@ namespace Transporters.Model
                 yield return message;
             }
         }
-
-        public override Task Write(string message)
+        */
+        public async override Task<string> Write(string message)
         {
             using (var client = InternalConnect())
             {
                 client.Write($"\xB{message}\x1C\x0D");
             }
 
-            return Task.CompletedTask;
+            return message;
         }
 
         public override void Dispose()

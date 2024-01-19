@@ -17,11 +17,18 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using Hl7.Fhir.Model;
+using Hl7.Fhir.Validation;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json.Linq;
 using PalisaidMeta.Model;
+using System.Text;
 using Transformers.Interface;
 
 namespace Transformers.Model.R4
 {
+
+
     public class ObservationAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
@@ -45,132 +52,66 @@ namespace Transformers.Model.R4
             this.source = source;
         }
 
-        private async Task<OEntity> ConvertR2FhirToMeta()
+        CodingSystem GetCodingSystem(string system)
         {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertR3FhirToMeta()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertFhirToMeta()
-        {
-            var fhir = payloadIN as Hl7.Fhir.Model.Observation;
-            var meta = new PalisaidMeta.Model.Observation();
-
-            meta.EntityId = Guid.Parse(fhir.Id);
-
-            // Find all the list entries and add their contents as OservationItems
-            //Type _observation = typeof(Hl7.Fhir.Model.Observation);
-            //PropertyInfo[] _properties = _observation.GetProperties();
-            //
-            //foreach(var prop in _properties)
-            //{
-            //    var t = prop.GetType();
-            //}
-
-            string Text = "";
-
-            if (fhir.Value != null)
+            return system switch
             {
-                foreach (var val in fhir.Value)
+                "http://loinc.org" => CodingSystem.LOINC,
+                "http://hl7.org/fhir/sid/icd-10" => CodingSystem.ICD10,
+                "http://hl7.org/fhir/sid/icd-9" => CodingSystem.ICD9,
+                "http://hl7.org/fhir/sid/icd-11" => CodingSystem.ICD11,
+                "http://hl7.org/fhir/sid/atc" => CodingSystem.ATC,
+                "http://snomed.info/sct" => CodingSystem.SNOMED,
+                "http://hl7.org/fhir/sid/us-ssn" => CodingSystem.USCDI,
+                "http://hl7.org/fhir/sid/ichi/icd-10" => CodingSystem.ICHI,
+                "http://hl7.org/fhir/sid/icpm" => CodingSystem.ICPM,
+                "http://hl7.org/fhir/sid/hcpcs" => CodingSystem.HCPCS,
+                "http://hl7.org/fhir/sid/gtin" => CodingSystem.GTIN,
+                "http://hl7.org/fhir/sid/ndc" => CodingSystem.NDC,
+                "http://hl7.org/fhir/sid/din" => CodingSystem.DIN,
+                "http://terminology.hl7.org/CodeSystem/v3-ActCode" => CodingSystem.v3_ActCode,
+                _ => CodingSystem.Unknown
+            };
+        }
+
+        PalisaidMeta.Model.Code SetValues(PalisaidMeta.Model.Code code, DataType data)
+        {
+            foreach (KeyValuePair<string, object> set in data)
+            {
+                switch (set.Key.ToLower())
                 {
-                    if (val.Value != null)
-                    {
-                        Text += $"{val.Key}:{val.Value.ToString()} ";
-                    }
+                    case "value":
+                        code.Value = set.Value.ToString();
+                        break;
+
+                    case "unit":
+                        code.Units = set.Value.ToString();
+                        break;
+
+                    case "system":
+                        code.System = set.Value.ToString();
+                        break;
                 }
             }
 
-            foreach (var code in fhir.Code.Coding)
-            {
-                var obi = new ObservationItem()
-                {
-                    //Code = code.CodeElement.Value,
-                    Description = code.Display,
-                    Value = Text,
-                    Timestamp = DateTime.Now
-                };
-
-                meta.Items.Add(obi);
-            }
-
-            if (fhir.Effective != null)
-            {
-                foreach (var e in fhir.Effective)
-                {
-                    var foo = new KeyValuePair<string, object>(e.Key, e.Value);
-                }
-            }
-
-            if (fhir.Encounter != null)
-            {
-                // These might map to events
-                foreach (var e in fhir.Encounter)
-                {
-                    var bar = new KeyValuePair<string, object>(e.Key, e.Value);
-                }
-            }
-
-            if (fhir.Subject != null)
-            {
-                // handle prefix: urn:uuid:
-                var str = fhir.Subject.FirstOrDefault().Value.ToString().Contains("urn")
-                    ? fhir.Subject.FirstOrDefault().Value.ToString().Substring(9)
-                    : fhir.Subject.FirstOrDefault().Value.ToString();
-
-                meta.OwnerId = Guid.Parse(str);
-            }
-
-            if (fhir.Performer != null && fhir.Performer.Count > 0)
-            {
-                meta.PractitionerId = Guid.Parse(fhir.Performer.FirstOrDefault().ReferenceElement.Value);
-            }
-
-            if (fhir.Note != null)
-            {
-                foreach (var n in fhir.Note)
-                {
-                    foreach (var n2 in n)
-                    {
-                        var obi = new ObservationItem()
-                        {
-                            //Code = n2.Key,
-                            Value = n2.Value.ToString(),
-                            ObservationType = PalisaidMeta.Model.ObservationType.Note
-                        };
-
-                        meta.Items.Add(obi);
-                    }
-                }
-            }
-
-            // Id - Item Reference? Subject - Patient? BasedOn
-
-            // Effective.Value - Observation DateTime
-
-            // Encounter Note Performer Value
-
-            // Status
-
-            return meta as OEntity;
+            return code;
         }
-
-        private async Task<OEntity> ConvertR5FhirToMeta()
+       
+        KeyValuePair<string,string>? GetValue(KeyValuePair<string, object> set)
         {
-            throw new NotImplementedException();
-        }
+            switch (set.Key.ToLower())
+            {
+                case "value":
+                    return new KeyValuePair<string, string>("value", set.Value.ToString());
 
-        private async Task<OEntity> ConvertMetaToR2Fhir()
-        {
-            throw new NotImplementedException();
-        }
+                case "unit":
+                    return new KeyValuePair<string, string>("unit", set.Value.ToString());
 
-        private async Task<OEntity> ConvertMetaToR3Fhir()
-        {
-            throw new NotImplementedException();
+                case "system":
+                    return new KeyValuePair<string, string>("system", set.Value.ToString());
+            }
+
+            return default;
         }
 
         private async Task<OEntity> ConvertMetaToFhir()
@@ -178,28 +119,204 @@ namespace Transformers.Model.R4
             throw new NotImplementedException();
         }
 
-        private async Task<OEntity> ConvertMetaToR5Fhir()
+        private async Task<OEntity> ConvertFhirToMeta()
         {
-            throw new NotImplementedException();
+            var fhir = payloadIN as Hl7.Fhir.Model.Observation;
+            if (fhir == null)
+            {
+                throw new Exception("Invalid payload type");
+            }
+
+            var meta = new PalisaidMeta.Model.Observation();
+            if (meta == null)
+            {
+                throw new Exception("Invalid meta type");
+            }
+
+            meta.TenantId = tenant;
+            
+            if(fhir.HasVersionId)
+            {
+                meta.Version = long.Parse(fhir.VersionId);
+            }
+
+            // Fhir doesn't necessarily use a uuid for the key, so we need to be able to set capture it as a long
+            if(!string.IsNullOrEmpty(fhir.Id))
+            {
+                try
+                {
+                    meta.EntityId = Guid.Parse(fhir.Id);
+                }
+                catch
+                {
+                    meta.EntityId = Guid.NewGuid();
+                    meta.EntityKey = long.Parse(fhir.Id);
+                }
+            }
+
+            if (fhir.Category != null && fhir.Category.Any())
+            {
+                foreach (var catagory in fhir.Category)
+                {
+                    foreach (var coding in catagory.Coding)
+                    {
+                        var Code = new PalisaidMeta.Model.Code
+                        {
+                            Name = "Catagory Code",
+                            Description = coding.Display,
+                            CodingSystem = GetCodingSystem(coding.System)
+                        };
+                        
+                        meta.Codes.Add(Code);
+                    }
+                }
+            }
+
+            if (fhir.Code != null && fhir.Code.Coding.Any())
+            {
+                foreach (var code in fhir.Code.Coding)
+                {
+                    var Code = new PalisaidMeta.Model.Code
+                    {
+                        Name = "Code",
+                        Description = code.Display,
+                        CodingSystem = GetCodingSystem(code.System)
+                    };
+                    
+                    meta.Codes.Add(Code);                  
+                }
+            }
+            
+            if (fhir.Component != null && fhir.Component.Any())
+            {
+                foreach (var component in fhir.Component)
+                {
+                    foreach (var code in component.Code.Coding)
+                    {
+                        var Code = new PalisaidMeta.Model.Code
+                        {
+                            Name = code.Code,
+                            Description = code.Display,
+                            CodingSystem = GetCodingSystem(code.System)
+                        };
+
+                        meta.Codes.Add(SetValues(Code, component.Value));
+                    }
+                }
+            }
+
+            if (fhir.Contained != null && fhir.Contained.Any())
+            {
+                foreach (var contained in fhir.Contained)
+                {
+                    foreach (var item in contained)
+                    {
+                        var observationitem = new ObservationItem
+                        {
+                            TypeName = item.Key
+                        };
+                        
+                        observationitem.Code.Name = item.Value.ToString();
+                        observationitem.Timestamp = DateTime.Now;
+                        meta.Items.Add(observationitem);
+                    }
+                }
+            }
+
+            if (fhir.Effective != null && fhir.Effective.Any())
+            {
+                foreach (var item in fhir.Effective)
+                {
+                    var observationitem = new ObservationItem
+                    {
+                        TypeName = item.Key
+                    };
+
+                    observationitem.Code.Name = item.Value.ToString();
+                    observationitem.Timestamp = DateTime.Now;
+                    meta.Items.Add(observationitem);
+                }
+            }
+
+            if (fhir.Encounter != null && fhir.Encounter.Any())
+            {
+                foreach (var item in fhir.Encounter)
+                {
+                    var observationitem = new ObservationItem
+                    {
+                        TypeName = item.Key
+                    };
+
+                    observationitem.Code.Name = item.Value.ToString();
+                    observationitem.Timestamp = DateTime.Now;
+                    meta.Items.Add(observationitem);
+                }
+            }
+            
+            if (fhir.Subject != null && fhir.Subject.Any())
+            {
+                foreach (var item in fhir.Subject)
+                {
+                    var observationitem = new ObservationItem
+                    {
+                        TypeName = item.Key
+                    };
+
+                    observationitem.Code.Name = item.Value.ToString().Contains("urn")
+                        ? item.Value.ToString().Substring(9)
+                        : item.Value.ToString();
+
+                    observationitem.Timestamp = DateTime.Now;
+                    meta.Items.Add(observationitem);
+                }
+            }
+            
+            if (fhir.Performer != null && fhir.Performer.Any())
+            {
+                foreach (var item in fhir.Performer)
+                {
+                    try
+                    {
+                        meta.PractitionerId = Guid.Parse(item.ReferenceElement.Value);
+                    }
+                    catch
+                    {
+                        meta.PractitionerId = Guid.Empty;
+                        meta.AlternateId = long.Parse(item.ReferenceElement.Value);
+                    }
+                }
+            }
+           
+            if (fhir.Note != null && fhir.Note.Any())
+            {
+                foreach (var item in fhir.Note)
+                {
+                    var observationitem = new ObservationItem();               
+                    observationitem.Code.Name = item.TypeName;
+                    observationitem.Timestamp = DateTime.Now;
+                    meta.Items.Add(observationitem);
+                }
+            }
+            
+
+            // Id - Item Reference? Subject - Patient? BasedOn
+
+            // Effective.value - Observation DateTime
+
+            // Encounter Note Performer value
+
+            // Status
+
+            return meta as OEntity;
         }
+
+
 
         public ObservationAdapter(InputVersion version)
         {
             this.version = version;
         }
 
-        private async Task<OEntity> ConvertV2_MSG_ToMeta()
-        {
-            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
-
-            throw new NotImplementedException();
-        }
-
-        private async Task<OEntity> ConvertMetaToV2_MSG()
-        {
-            // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
-            throw new NotImplementedException();
-        }
 
         public async Task<object?> Transform(object payload)
         {

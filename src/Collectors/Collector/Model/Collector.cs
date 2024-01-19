@@ -27,15 +27,15 @@ namespace Collectors.Model
 
         private Dictionary<string, string> _parameters = new()
         {
-            { "Name", "Value" },
-            { "Version", "Value" },
-            { "Description", "Value" },
-            { "Author", "Value" },
-            { "Url", "Value" },
-            { "TenantId", "Value" },
-            { "TenantName", "Value" },
-            { "TenantDescription", "Value" },
-            { "Transform", "Value" }
+            { "Name", "value" },
+            { "Version", "value" },
+            { "Description", "value" },
+            { "Author", "value" },
+            { "Url", "value" },
+            { "TenantId", "value" },
+            { "TenantName", "value" },
+            { "TenantDescription", "value" },
+            { "Transform", "value" }
         };
         #endregion strings
 

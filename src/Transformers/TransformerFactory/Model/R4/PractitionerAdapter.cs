@@ -48,7 +48,8 @@ namespace Transformers.Model.R4
             var meta = new PalisaidMeta.Model.Practitioner();
 
             meta.EntityId = Guid.Parse(fhir.Id);
-
+            meta.TenantId = tenant;
+            
             var n = TransformerFactory.Create<Hl7.Fhir.Model.HumanName, PalisaidMeta.Model.PersonName>(tenant, format, version, source);
             foreach (var name in fhir.Name)
             {

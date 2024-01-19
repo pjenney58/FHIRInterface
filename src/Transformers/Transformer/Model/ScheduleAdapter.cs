@@ -140,14 +140,14 @@ namespace Transformers.Model
         private Tuple<string, string> getMessageType(MSH msh)
         {
             var msgType = msh.MessageType;
-            return new Tuple<string, string>(msgType.MessageType.Value.ToUpper(System.Globalization.CultureInfo.InvariantCulture),
-                                             msgType.TriggerEvent.Value.ToUpper(System.Globalization.CultureInfo.InvariantCulture));
+            return new Tuple<string, string>(msgType.MessageType.value.ToUpper(System.Globalization.CultureInfo.InvariantCulture),
+                                             msgType.TriggerEvent.value.ToUpper(System.Globalization.CultureInfo.InvariantCulture));
         }
 
         private string messageType(MSH msh)
         {
             var msgType = msh.MessageType;
-            return $"{msgType.MessageType.Value.ToUpper(System.Globalization.CultureInfo.InvariantCulture)}^{msgType.TriggerEvent.Value.ToUpper(System.Globalization.CultureInfo.InvariantCulture)}";
+            return $"{msgType.MessageType.value.ToUpper(System.Globalization.CultureInfo.InvariantCulture)}^{msgType.TriggerEvent.value.ToUpper(System.Globalization.CultureInfo.InvariantCulture)}";
         }
         
         private async Task<OEntity> ConvertV2_SRM_ToMeta()
@@ -197,16 +197,16 @@ namespace Transformers.Model
                 EntityID = Guid.NewGuid(),
                 CreateDate = DateTimeOffset.Now,
                 LastUpdate = DateTimeOffset.Now,
-                PractitionerIdentifier = doc.IDNumber.Value,
+                PractitionerIdentifier = doc.IDNumber.value,
             };
 
             newdoc.Name.Add(new PersonName(new IdentityKey { TenantId = Guid.Empty, OwnerId = newdoc.EntityID })
             {
-                FamilyName = doc.FamilyLastName.FamilyName.Value,
-                MiddleName = doc.MiddleInitialOrName.Value,
-                FirstName = doc.GivenName.Value,
-                Title = doc.PrefixEgDR.Value,
-                Degree = doc.DegreeEgMD.Value
+                FamilyName = doc.FamilyLastName.FamilyName.value,
+                MiddleName = doc.MiddleInitialOrName.value,
+                FirstName = doc.GivenName.value,
+                Title = doc.PrefixEgDR.value,
+                Degree = doc.DegreeEgMD.value
             });
 
             return newdoc;
@@ -224,11 +224,11 @@ namespace Transformers.Model
 
             newpat.Name = new PersonName(new IdentityKey { TenantId = Guid.Empty, OwnerId = newpat.EntityID })
             {
-                FamilyName = patient.FamilyLastName.FamilyName.Value,
-                MiddleName = patient.MiddleInitialOrName.Value,
-                FirstName = patient.GivenName.Value,
-                Title = patient.PrefixEgDR.Value,
-                Degree = patient.DegreeEgMD.Value
+                FamilyName = patient.FamilyLastName.FamilyName.value,
+                MiddleName = patient.MiddleInitialOrName.value,
+                FirstName = patient.GivenName.value,
+                Title = patient.PrefixEgDR.value,
+                Degree = patient.DegreeEgMD.value
             };
 
             return newpat;
@@ -287,18 +287,18 @@ namespace Transformers.Model
                 {
                     // Process Schedule Event
                     var sch = (SCH)message.GetStructure("SCH");
-                    meta.CareEventTypeString = sch.AppointmentType.Text.Value;
-                    meta.CareEventReasonString.Add($"Event:{sch.EventReason.Text.Value}");
-                    meta.CareEventReasonString.Add($"Appointment:{sch.AppointmentReason.Text.Value}");
-                    meta.CareEventIdString.Add($"Actual:{sch.ScheduleID.Identifier.Value}");
-                    meta.CareEventIdString.Add($"Placer:{sch.PlacerAppointmentID.EntityIdentifier.Value}");
-                    meta.CareEventIdString.Add($"Filler:{sch.FillerAppointmentID.EntityIdentifier.Value}");
+                    meta.CareEventTypeString = sch.AppointmentType.Text.value;
+                    meta.CareEventReasonString.Add($"Event:{sch.EventReason.Text.value}");
+                    meta.CareEventReasonString.Add($"Appointment:{sch.AppointmentReason.Text.value}");
+                    meta.CareEventIdString.Add($"Actual:{sch.ScheduleID.Identifier.value}");
+                    meta.CareEventIdString.Add($"Placer:{sch.PlacerAppointmentID.EntityIdentifier.value}");
+                    meta.CareEventIdString.Add($"Filler:{sch.FillerAppointmentID.EntityIdentifier.value}");
 
                     // Process practitioners providing service
                     var fillers = sch.GetFillerContactPerson();
                     foreach (var filler in fillers)
                     {
-                        var doc = System.Threading.Tasks.Task.Run(() => docrepo.QueryFluent(d => d.PractitionerIdentifier == filler.IDNumber.Value)).Result.FirstOrDefault();
+                        var doc = System.Threading.Tasks.Task.Run(() => docrepo.QueryFluent(d => d.PractitionerIdentifier == filler.IDNumber.value)).Result.FirstOrDefault();
                         if (doc == null)
                         {
                             var newdoc = AddPractitioner(filler);
@@ -318,7 +318,7 @@ namespace Transformers.Model
                     var enteredby = sch.GetEnteredByPerson();
                     foreach (var enter in enteredby)
                     {
-                        var doc = Task.Run(() => docrepo.QueryFluent(d => d.PractitionerIdentifier == enter.IDNumber.Value)).Result.FirstOrDefault();
+                        var doc = Task.Run(() => docrepo.QueryFluent(d => d.PractitionerIdentifier == enter.IDNumber.value)).Result.FirstOrDefault();
                         if (doc == null)
                         {
                             var newdoc = AddPractitioner(enter);
@@ -336,27 +336,27 @@ namespace Transformers.Model
 
                     // Process the event timing
                     var tq = sch.GetAppointmentTimingQuantity().FirstOrDefault();
-                    if (DateTimeOffset.TryParseExact(tq.StartDateTime.TimeOfAnEvent.Value, "yyyyMMddHHmmss", null as IFormatProvider, System.Globalization.DateTimeStyles.AssumeLocal, out DateTimeOffset sd))
+                    if (DateTimeOffset.TryParseExact(tq.StartDateTime.TimeOfAnEvent.value, "yyyyMMddHHmmss", null as IFormatProvider, System.Globalization.DateTimeStyles.AssumeLocal, out DateTimeOffset sd))
                     {
                         meta.StartDate = sd;
                     }
 
-                    if (DateTimeOffset.TryParseExact(tq.EndDateTime.TimeOfAnEvent.Value, "yyyyMMddHHmmss", null as IFormatProvider, System.Globalization.DateTimeStyles.AssumeLocal, out DateTimeOffset ed))
+                    if (DateTimeOffset.TryParseExact(tq.EndDateTime.TimeOfAnEvent.value, "yyyyMMddHHmmss", null as IFormatProvider, System.Globalization.DateTimeStyles.AssumeLocal, out DateTimeOffset ed))
                     {
                         meta.StopDate = ed;
                     }
 
-                    meta.Duration = TimeSpan.Parse(tq.Duration.Value);
+                    meta.Duration = TimeSpan.Parse(tq.Duration.value);
 
                     // Process visit and the providers
                     var pv1 = message.GetPATIENT().PV1;
-                    meta.CareEventIdString.Add($"AlternateVisitId:{pv1.AlternateVisitID.ID.Value}");
-                    meta.PatientIdString.Add($"Class:{pv1.PatientClass.Value}");
+                    meta.CareEventIdString.Add($"AlternateVisitId:{pv1.AlternateVisitID.ID.value}");
+                    meta.PatientIdString.Add($"Class:{pv1.PatientClass.value}");
 
                     var attendingDoc = pv1.GetAttendingDoctor();
                     foreach (var doctor in attendingDoc)
                     {
-                        var doc = Task.Run(() => docrepo.QueryFluent(d => d.PractitionerIdentifier == doctor.IDNumber.Value)).Result.FirstOrDefault();
+                        var doc = Task.Run(() => docrepo.QueryFluent(d => d.PractitionerIdentifier == doctor.IDNumber.value)).Result.FirstOrDefault();
                         if (doc == null)
                         {
                             var newdoc = AddPractitioner(doctor);
@@ -370,13 +370,13 @@ namespace Transformers.Model
                             meta.Practitioners.Add((Guid)doc.EntityID);
                             meta.PractitionerIdString.Add(doc.PractitionerIdentifier);
                         }
-                        //meta.PractitionerIdString.Add($"Referring:{doc.IDNumber} {doc.FamilyLastName.FamilyName.Value}, {doc.GivenName.Value}, {doc.MiddleInitialOrName.Value} {doc.SuffixEgJRorIII.Value}");
+                        //meta.PractitionerIdString.Add($"Referring:{doc.IDNumber} {doc.FamilyLastName.FamilyName.value}, {doc.GivenName.value}, {doc.MiddleInitialOrName.value} {doc.SuffixEgJRorIII.value}");
                     }
 
                     var referringDoc = pv1.GetReferringDoctor();
                     foreach (var doctor in referringDoc)
                     {
-                        var doc = Task.Run(() => docrepo.QueryFluent(d => d.PractitionerIdentifier == doctor.IDNumber.Value)).Result.FirstOrDefault();
+                        var doc = Task.Run(() => docrepo.QueryFluent(d => d.PractitionerIdentifier == doctor.IDNumber.value)).Result.FirstOrDefault();
                         if (doc == null)
                         {
                             var newdoc = AddPractitioner(doctor);
@@ -390,22 +390,22 @@ namespace Transformers.Model
                             meta.ReferringPractitioners.Add((Guid)doc.EntityID);
                             meta.ReferringPractitionerIdString.Add(doc.PractitionerIdentifier);
                         }
-                        //meta.PractitionerIdString.Add($"Referring:{doc.IDNumber} {doc.FamilyLastName.FamilyName.Value}, {doc.GivenName.Value}, {doc.MiddleInitialOrName.Value} {doc.SuffixEgJRorIII.Value}");
+                        //meta.PractitionerIdString.Add($"Referring:{doc.IDNumber} {doc.FamilyLastName.FamilyName.value}, {doc.GivenName.value}, {doc.MiddleInitialOrName.value} {doc.SuffixEgJRorIII.value}");
                     }
 
                     // Process Patient
                     var pid = message.GetPATIENT().PID;
                     meta.PatientIdString.Add($"Id:{pid.PatientID.ID}");
-                    meta.PatientIdString.Add($"Account:{pid.PatientAccountNumber.ID.Value}");
+                    meta.PatientIdString.Add($"Account:{pid.PatientAccountNumber.ID.value}");
 
                     var names = pid.GetPatientName();
                     foreach (var name in names)
                     {
-                        var pat = Task.Run(() => patrepo.QueryFluent(d => d.PrimaryPatientIdString == pid.PatientID.ID.Value)).Result.FirstOrDefault();
+                        var pat = Task.Run(() => patrepo.QueryFluent(d => d.PrimaryPatientIdString == pid.PatientID.ID.value)).Result.FirstOrDefault();
                         if (pat == null)
                         {
-                            var newpat = AddPatient(name, pid.PatientID.ID.Value);
-                            newpat.PatientClass = pv1.PatientClass.Value;
+                            var newpat = AddPatient(name, pid.PatientID.ID.value);
+                            newpat.PatientClass = pv1.PatientClass.value;
 
                             patrepo.CreateRecord(newpat);
 
@@ -432,7 +432,7 @@ namespace Transformers.Model
                             IsDeleted = false,
                         };
 
-                        if (DateTimeOffset.TryParseExact(tq.StartDateTime.TimeOfAnEvent.Value, "yyyyMMddHHmmss", null as IFormatProvider, System.Globalization.DateTimeStyles.AssumeLocal, out DateTimeOffset start))
+                        if (DateTimeOffset.TryParseExact(tq.StartDateTime.TimeOfAnEvent.value, "yyyyMMddHHmmss", null as IFormatProvider, System.Globalization.DateTimeStyles.AssumeLocal, out DateTimeOffset start))
                         {
                             metaobx.StartDate = sd;
                         }
@@ -452,7 +452,7 @@ namespace Transformers.Model
                     //var locations = message.GetRESOURCES().LOCATION_RESOURCEs;
                     foreach (var location in message.GetRESOURCES().LOCATION_RESOURCEs)
                     {
-                        var loc = Task.Run(() => locrepo.QueryFluent(d => d.Name == location.AIL.LocationResourceID.PointOfCare.Value)).Result.FirstOrDefault();
+                        var loc = Task.Run(() => locrepo.QueryFluent(d => d.Name == location.AIL.LocationResourceID.PointOfCare.value)).Result.FirstOrDefault();
                         if (loc == null)
                         {
                             var newloc = AddLocation(location);
@@ -467,13 +467,13 @@ namespace Transformers.Model
                             meta.LocationIdString.Add(loc.Name);
                         }
 
-                        meta.LocationIdString.Add($"PointOfCare:{location.AIL.LocationResourceID.PointOfCare.Value}");
-                        meta.LocationIdString.Add($"Facility:{location.AIL.LocationResourceID.Facility.NamespaceID.Value}");
-                        meta.LocationIdString.Add($"Building:{location.AIL.LocationResourceID.Building.Value}");
-                        meta.LocationIdString.Add($"Floor:{location.AIL.LocationResourceID.Floor.Value}");
-                        meta.LocationIdString.Add($"Room:{location.AIL.LocationResourceID.Room.Value}");
-                        meta.LocationIdString.Add($"Bed:{location.AIL.LocationResourceID.Bed.Value}");
-                        meta.LocationIdString.Add($"Type:{location.AIL.LocationResourceID.PersonLocationType.Value}");
+                        meta.LocationIdString.Add($"PointOfCare:{location.AIL.LocationResourceID.PointOfCare.value}");
+                        meta.LocationIdString.Add($"Facility:{location.AIL.LocationResourceID.Facility.NamespaceID.value}");
+                        meta.LocationIdString.Add($"Building:{location.AIL.LocationResourceID.Building.value}");
+                        meta.LocationIdString.Add($"Floor:{location.AIL.LocationResourceID.Floor.value}");
+                        meta.LocationIdString.Add($"Room:{location.AIL.LocationResourceID.Room.value}");
+                        meta.LocationIdString.Add($"Bed:{location.AIL.LocationResourceID.Bed.value}");
+                        meta.LocationIdString.Add($"Type:{location.AIL.LocationResourceID.PersonLocationType.value}");
                     }
 
                     switch (messagekeys.Item2)

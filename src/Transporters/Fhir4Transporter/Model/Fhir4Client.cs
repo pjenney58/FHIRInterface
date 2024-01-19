@@ -1,4 +1,4 @@
-using Confluent.Kafka;
+
 using Support.Interface;
 using Support.Model;
 using System.Security.Cryptography.X509Certificates;
@@ -6,14 +6,23 @@ using System.Threading;
 using Hl7.Fhir.Rest;
 using Hl7.Fhir.Model;
 using Task = System.Threading.Tasks.Task;
+using PalisaidMeta.Model;
+using Confluent.Kafka;
 
 namespace Transporters.Model
-{
-    /*
+{ 
     public class Fhir4Client : Transporter
     {
         private IBaseEventLogger logger = new BaseEventLogger(nameof(Fhir4Client));
         private FhirClient client;
+
+        CollectorConfig cconfig;
+
+        public Fhir4Client(CollectorConfig cconfig, Guid tenantid, string commandbus, string payloadbus) 
+            : base(cconfig, tenantid, commandbus, payloadbus)
+        {
+            this.cconfig = cconfig;
+        }
 
         public bool secure { get; set; }
         public string? username { get; set; }
@@ -21,53 +30,10 @@ namespace Transporters.Model
         public string? address { get; set; }
         public string? port { get; set; }
 
-        public byte[] ApiKey { get; set; }
+        public byte[]? ApiKey { get; set; }
         public X509Certificate2 Certificate { get; set; }
 
-        //public Fhir4Client()
-        //{ }
-
-        private async Task WaitForCommand()
-        {
-            
-            bool cancelled = false;
-            CancellationToken cancellationToken = new CancellationToken();
-
-            using (var consumer = new ConsumerBuilder<Null, string>(kcconfig).Build())
-            {
-                // Wait for a call to action, the collector will send a message to poll
-                consumer.Subscribe("schedular");
-
-                while (!cancelled)
-                {
-                    var consumeResult = consumer.Consume(cancellationToken);
-
-                    switch (consumeResult.Message.Value.ToLower())
-                    {
-                        case "poll":
-                            using (var producer = new ProducerBuilder<string, string>(kpconfig).Build())
-                            {
-                                foreach (var message in Read())
-                                {
-                                    await producer.ProduceAsync("fhir4records", new Message<string, string> { Key = GetHash(message), Value = message });
-                                }
-                            }
-                            break;
-
-                        case "shutdown":
-                            Environment.Exit(0);
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-            }
-        
-            return; //Task.CompletedTask;
-        }
-
-        private FhirClient InternalConnect()
+        public async override Task Connect()
         {
             try
             {
@@ -81,37 +47,41 @@ namespace Transporters.Model
                     Timeout = 0,
                     PreferredFormat = ResourceFormat.Json,
                     VerifyFhirVersion = true,
-                    ReturnPreference = ReturnPreference.Minimal
+                    ReturnPreference = ReturnPreference.Minimal,
+                    
                 };
 
-                client = new FhirClient(new Uri(address), settings);
+                await Task.Run(() => client = new FhirClient(cconfig.TargetUri, settings));
             }
             catch (Exception ex)
             {
                 throw new Exception(logger.ReportError(ex.Message, false));
             }
-
-            return client;
         }
 
-        public Task Authenticate()
+        public async override Task<IEnumerable<string>> Read()
+        {
+            // Break the bundle into individual messages -- Should we do it here or in the transformer?
+            throw new NotImplementedException();
+        }
+
+        public async Task Authenticate()
         {
             throw new NotImplementedException();
         }
 
-        public Task Cancel(CancellationToken cancellationToken)
+        public async Task Cancel(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
-        }
-
-        public Task Connect()
-        {
-            client = InternalConnect();
-            return Task.CompletedTask;
         }
 
         public Task Disconnect()
         {
+            if(client != null)
+            {
+                client.Dispose();
+            }
+
             throw new NotImplementedException();
         }
 
@@ -120,11 +90,13 @@ namespace Transporters.Model
         /// </summary>
         /// <returns>IEnumerable[string]</returns>
         public Bundle? Read(string bundleid)
-        {
-            using (var client = InternalConnect())
+        {        
+            if(client != null)
             {
-                return client.Read<Bundle>(bundleid);
+                return client.Read<Bundle>(bundleid);    
             }
+
+            return default;    
         }
 
         public override void Dispose()
@@ -132,5 +104,5 @@ namespace Transporters.Model
             client.Dispose();
         }
     }
-*/
+
 }

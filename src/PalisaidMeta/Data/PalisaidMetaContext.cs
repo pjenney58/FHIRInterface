@@ -1,11 +1,8 @@
-﻿using System;
-using System.Reflection;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Npgsql;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.Reflection;
 
 namespace PalisaidMeta.Model
 {
@@ -23,7 +20,7 @@ namespace PalisaidMeta.Model
         public static IServiceCollection configureservice(this IServiceCollection service, IConfiguration Configuration)
         {
             IConfiguration config = new ConfigurationBuilder()
-               .AddJsonFile("appdatashapeconfig.json")
+               .AddJsonFile("palisaidmetaconfig.json")
                .Build();
 
             Console.WriteLine($"Running in Docker: {AppIn.Docker}");
@@ -54,7 +51,7 @@ namespace PalisaidMeta.Model
         public PalisaidMetaContext CreateDbContext(string[] args)
         {
             config = new ConfigurationBuilder()
-              .AddJsonFile("appdatashapeconfig.json")
+              .AddJsonFile("palisaidmetaconfig.json")
               .Build();
 
             Console.WriteLine($"Running in Docker: {AppIn.Docker}");
@@ -84,8 +81,8 @@ namespace PalisaidMeta.Model
         public DbSet<Medication>? Medications { get; set; }
         public DbSet<Code>? Codes { get; set; }
         public DbSet<CollectorConfig> Collectors { get; set; }
-        public DbSet<TestResult> TestResults { get; set; }
-        public DbSet<TestResultValue> TestResultValuess { get; set; }
+        public DbSet<TestResultEntry> TestResults { get; set; }
+        //public DbSet<TestResultEntry> TestResultEntries { get; set; }
 
         internal IConfiguration? config;
         internal string? connectionString;

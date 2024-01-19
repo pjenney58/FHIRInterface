@@ -222,7 +222,7 @@ namespace Authentication.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<string>("Value")
+                    b.Property<string>("value")
                         .HasColumnType("text");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
