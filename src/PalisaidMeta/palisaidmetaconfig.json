@@ -8,8 +8,8 @@
   "AllowedHosts": "*",
   "ConnectionStrings": {
     "docker": "Host=localhost;port=5432;Database=Palisaid;User Id=palisaid;Password=topsecret",
-    "default": "Host=localhost;port=5432;Database=Palisaid;User Id=palisaid;Password=topsecret",
-    "identity": "Host=localhost;port=5432;Database=Identity;User Id=palisaid;Password=topsecret",
+    "default": "Host=joey;port=5432;Database=Palisaid;User Id=palisaid;Password=topsecret",
+    "identity": "Host=joey;port=5432;Database=Identity;User Id=palisaid;Password=topsecret",
     "dockerIdentity": "Host=localhost;port=5432;Database=Palisaid;User Id=palisaid;Password=topsecret",
     "migrating": "Host=joey;port=5432;Database=Palisaid;User Id=palisaid;Password=topsecret"
   }

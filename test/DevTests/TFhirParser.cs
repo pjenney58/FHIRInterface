@@ -447,6 +447,76 @@ namespace DevTests
         //[InlineData(Hl7Version.R4b)]
         //[InlineData(Hl7Version.R5)]
         [InlineData(InputVersion.HL7FhirR4)]
+        public async System.Threading.Tasks.Task ProcessEncounters(InputVersion version)
+        {
+            var data = getFhirData();
+
+            foreach (var file in files)
+            {
+                var parser = new FhirJsonParser();
+                Assert.NotNull(parser);
+
+                var parsedBundle = parser.Parse<Bundle>(File.ReadAllText(file));
+                var encounters = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Encounter>();
+                Assert.NotNull(encounters);
+
+                if (encounters.Any())
+                {
+                    foreach (var encounter in encounters)
+                    {
+                        Assert.NotNull(encounter);
+
+                        var id = encounter.Subject.Reference.Substring("urn:uuid:".Length);
+
+                        var fhirEncounterConverter = TransformerFactory.Create<Hl7.Fhir.Model.Encounter, PalisaidMeta.Model.Encounter>(_tenantId, version);
+                        Assert.NotNull(fhirEncounterConverter);
+
+                        var metaEncounter = await fhirEncounterConverter.Transform(encounter) as PalisaidMeta.Model.Encounter;
+                        Assert.NotNull(metaEncounter);
+
+                        try
+                        {
+                            metaEncounter.TenantId = _tenantId;
+                            metaEncounter.OwnerId = _tenantId;
+                            if (!_context.Encounters.Contains(metaEncounter))
+                            {
+                                await _context.AddAsync(metaEncounter);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                        catch (DbUpdateConcurrencyException cx)
+                        {
+                            var t = cx.GetType();
+                            Debug.WriteLine(cx.Message);
+                            continue;
+                        }
+                        catch (NpgsqlException nx)
+                        {
+                            var t = nx.GetType();
+                            Debug.WriteLine(nx.Message);
+                            continue;
+                        }
+                        catch (Exception ex)
+                        {
+                            if (ex.InnerException.Message.Contains("duplicate key value violates unique constraint"))
+                            {
+                                Debug.WriteLine($"Dup: {metaEncounter.EncounterIdString}");
+                                continue;
+                            }
+                            Debug.WriteLine(ex.Message);
+                        }
+
+                    }
+                }
+
+            }
+        }
+
+        [Theory]
+        //[InlineData(Hl7Version.Stu3)]
+        //[InlineData(Hl7Version.R4b)]
+        //[InlineData(Hl7Version.R5)]
+        [InlineData(InputVersion.HL7FhirR4)]
         public async System.Threading.Tasks.Task ProcessPatients(InputVersion version)
         {
             try

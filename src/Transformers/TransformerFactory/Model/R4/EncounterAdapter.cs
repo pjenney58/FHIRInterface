@@ -100,9 +100,6 @@ namespace Transformers.Model.R4
             {
                 meta.EncounterType = EncounterType.Appointment;
 
-                meta.TenantId = Constants.Transform;
-                meta.EntityId = Guid.Parse(fhir.Id);
-
                 if (fhir.Participant != null)
                 {
                     meta.StartDate = DateTimeOffset.Parse(fhir.Period.Start);
