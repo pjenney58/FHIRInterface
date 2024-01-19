@@ -25,7 +25,7 @@ namespace DevTests
         private const int MAX_VALS = 50;
 
         private readonly string sourcedir = Environment.OSVersion.Platform == PlatformID.Win32NT
-            ? "C:\\Sand Drift Software\\Synthea\\R4"
+            ? "C:/SandDriftSoftware/Data/SyntheaData"
             : "/Users/petejenney/Projects/SyntheaData";
 
         private PalisaidMetaContext _context;
