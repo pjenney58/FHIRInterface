@@ -1,11 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace PalisaidMeta.Model
 {
+    public class DateTimeOffsetConverter : ValueConverter<DateTimeOffset, DateTimeOffset>
+    {
+        public DateTimeOffsetConverter()
+            : base(
+                d => d.ToUniversalTime(),
+                d => d.ToUniversalTime())
+        {
+        }
+    }
+
     public static class AppIn
     {
         public static bool Docker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_DOCKER_CONTAINER") == "true";
@@ -54,7 +66,7 @@ namespace PalisaidMeta.Model
               .AddJsonFile("palisaidmetaconfig.json")
               .Build();
 
-            Console.WriteLine($"Running in Docker: {AppIn.Docker}");
+            Debug.WriteLine($"Running in Container: {AppIn.Docker}");
 
             var optionsBuilder = new DbContextOptionsBuilder<PalisaidMetaContext>();
             optionsBuilder.UseNpgsql(config.GetConnectionString(AppIn.Docker ? "docker" : "default"));
@@ -82,7 +94,6 @@ namespace PalisaidMeta.Model
         public DbSet<Code>? Codes { get; set; }
         public DbSet<CollectorConfig> Collectors { get; set; }
         public DbSet<TestResultEntry> TestResults { get; set; }
-        //public DbSet<TestResultEntry> TestResultEntries { get; set; }
 
         internal IConfiguration? config;
         internal string? connectionString;
@@ -93,7 +104,7 @@ namespace PalisaidMeta.Model
                .AddJsonFile("palisaidmetaconfig.json")
                .Build();
 
-            Console.WriteLine($"Running in Docker: {AppIn.Docker}");
+            Debug.WriteLine($"Running in Container: {AppIn.Docker}");
             connectionString = config.GetConnectionString(AppIn.Docker ? "docker" : "default");
         }
 
@@ -105,23 +116,33 @@ namespace PalisaidMeta.Model
             this.connectionString = connectionString;
         }
 
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder
+                .Properties<DateTimeOffset>()
+                .HaveConversion<DateTimeOffsetConverter>();
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             config = new ConfigurationBuilder()
                .AddJsonFile("palisaidmetaconfig.json")
                .Build();
 
-            optionsBuilder.UseNpgsql(config.GetConnectionString(AppIn.Docker ? "docker" : "default"));
+            // TODO: Remove this when Npgsql fixes the issue with timestamp
+            // AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-            // TODO: Unravel the stupid PostgreSQL => DateTimeOffset issue
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+#if DEBUG
+            optionsBuilder.UseNpgsql(config.GetConnectionString(AppIn.Docker ? "docker" : "default"))
+                          .EnableSensitiveDataLogging()
+                          .EnableDetailedErrors();
+#else
+            optionsBuilder.UseNpgsql(config.GetConnectionString(AppIn.Docker ? "docker" : "default"));
+#endif
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //base.OnModelCreating(modelBuilder);
-            //modelBuilder.Entity<Entity>().HasKey(pk => new { pk.EntityId, pk.TenantId });
-
             modelBuilder.Ignore<Type>();
             modelBuilder.Ignore<CustomAttributeData>();
         }
