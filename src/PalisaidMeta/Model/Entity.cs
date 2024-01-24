@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata;
 
 namespace PalisaidMeta.Model
 {
@@ -7,10 +8,8 @@ namespace PalisaidMeta.Model
 	{
 		public Entity()
 		{
-            EntityId = Guid.NewGuid();
             CreateDate = DateTimeOffset.Now;
-            Version = 1;
-            IsActive = true;
+            IsActive = false;
         }
 
 		public Entity(Guid OwnerId, Guid TenantId)
@@ -18,9 +17,11 @@ namespace PalisaidMeta.Model
 			if(EntityId == Guid.Empty)
 			{
 				EntityId = Guid.NewGuid();
-				CreateDate = DateTimeOffset.Now;
-				Version = 1;
-				IsActive = true;
+			}
+
+			if(TenantId == Guid.Empty)
+			{
+				throw new ArgumentException("TenantId cannot be empty");
 			}
 
 			this.OwnerId = OwnerId;
@@ -48,8 +49,8 @@ namespace PalisaidMeta.Model
         public DateTimeOffset CreateDate { get; set; }
 		public DateTimeOffset LastUpdate { get; set; }
 
-		public bool IsActive { get; set; }
-		public bool IsDeleted { get; set; }
+		public bool IsActive { get; set; } = true;
+		public bool IsDeleted { get; set; } = false;
 
 		public void MarkAsUpdated()
 		{
