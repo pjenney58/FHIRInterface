@@ -23,8 +23,8 @@ namespace PalisaidMeta.Model
     {
         public Observation() { }
        
-        public Observation(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Observation(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         public Guid? PatientId { get; set; }
         public Guid? PractitionerId { get; set; }

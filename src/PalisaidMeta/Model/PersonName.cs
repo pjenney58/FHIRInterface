@@ -26,8 +26,8 @@ namespace PalisaidMeta.Model
     {
         public PersonName() { }
         
-        public PersonName(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public PersonName(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         public List<string?>? Prefix { get; set; } = new();
 

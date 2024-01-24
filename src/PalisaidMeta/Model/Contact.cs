@@ -44,8 +44,8 @@ namespace PalisaidMeta.Model
 
         public Contact() { }
         
-        public Contact(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Contact(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         protected override void Dispose(bool disposing)
         {

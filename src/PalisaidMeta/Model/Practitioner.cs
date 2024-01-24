@@ -55,8 +55,8 @@ namespace PalisaidMeta.Model
         /// Any provider type
         /// </summary>
         /// <param name="key"> </param>
-        public Practitioner(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Practitioner(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         /// <summary>
         /// Practitioners plain text Id as defined in the EHR system
@@ -129,7 +129,7 @@ namespace PalisaidMeta.Model
         {
             get => ContactMethods != null && ContactMethods.Count > 0
                        ? ContactMethods?.FirstOrDefault(cm => cm?.Phone?.Priority == PhonePriority.Primary)?.Phone
-                        : new Phone(this.OwnerId, this.TenantId);
+                        : new Phone(this.TenantId, this.OwnerId);
         }
 
         /// <summary>

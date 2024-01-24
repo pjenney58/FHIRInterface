@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Support.Model;
 using Microsoft.EntityFrameworkCore;
 using LinqKit;
+using NLog.LayoutRenderers;
 
 namespace Primary.Controllers
 {
@@ -94,38 +95,31 @@ namespace Primary.Controllers
                         if (user.HasClaim(user.RoleClaimType, "PalisaidRootAdministrator") ||
                             user.HasClaim(user.RoleClaimType, "PalisaidTenantAdministrator"))
                         {
-                            return Ok(await Task.Run(() => _context.Patients.Where(p => p.PrimaryPatientIdString == patientid)
-                                                             .Include(n => n.Name)
-                                                             .Include(a => a.Addresses)
-                                                             .Include(a => a.HL7Identifiers)
-                                                             .Include(d => d.Devices)
-                                                             .Include(p => p.Practitioners)
-                                                             .Include(l => l.Locations)
-                                                             .Include(cm => cm.ContactMethods)
-                                                             .Include(t => t.Treatments)
-                                                             .Include(p => p.Prescriptions)
-                                                             .Include(o => o.Observations)
-                                                             .Include(d => d.Diagnoses)
-                                                             .Include(l => l.Languages)
-                                                             .ToList()));
+                            return Ok(await Task.Run(() => _context.Patients.Where(p => p.PrimaryPatientIdString == patientid &&
+                                                                                        p.IsActive == true && 
+                                                                                        p.IsDeleted == false)
+                                                                            .Include(n => n.Name)
+                                                                            .Include(a => a.Addresses)
+                                                                            .Include(a => a.HL7Identifiers)
+                                                                            .Include(l => l.Locations)
+                                                                            .Include(cm => cm.ContactMethods)
+                                                                            .Include(t => t.Treatments).Include(l => l.Languages)
+                                                                            .ToList()));
                         }
 
                         return BadRequest();
                     }
                     else
                     {
-                        return Ok(await Task.Run(() => _context.Patients.Where(i => i.PrimaryPatientIdString == patientid && i.TenantId == tid)
+                        return Ok(await Task.Run(() => _context.Patients.Where(i => i.PrimaryPatientIdString == patientid && 
+                                                                               i.TenantId == tid && 
+                                                                               i.IsActive == true && 
+                                                                               i.IsDeleted == false)
                                                                         .Include(n => n.Name)
                                                                         .Include(a => a.Addresses)
                                                                         .Include(a => a.HL7Identifiers)
-                                                                        .Include(d => d.Devices)
-                                                                        .Include(p => p.Practitioners)
                                                                         .Include(l => l.Locations)
                                                                         .Include(cm => cm.ContactMethods)
-                                                                        .Include(t => t.Treatments)
-                                                                        .Include(p => p.Prescriptions)
-                                                                        .Include(o => o.Observations)
-                                                                        .Include(d => d.Diagnoses)
                                                                         .Include(l => l.Languages)
                                                                         .ToList()));
                     }
@@ -141,16 +135,28 @@ namespace Primary.Controllers
         }
 
         [HttpGet("GetByName")]
-        public async Task<IActionResult> GetByName(string? prefix, string firstname, string? middlename, string lastname, string? suffix)
+        public async Task<IActionResult> GetByName(string? prefix, string? givenname, string? middlename, string familyname, string? suffix)
         {
             var predicate = PredicateBuilder.New<Patient>();
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-            if(!string.IsNullOrEmpty(prefix)) predicate = predicate.And(p => p.Name.Prefix.Contains(prefix));
-            predicate = predicate.And(p => p.Name.GivenName.Contains(firstname));
-            if(!string.IsNullOrEmpty(middlename)) predicate = predicate.And(p => p.Name.MiddleName == middlename);
-            predicate = predicate.And(p => p.Name.FamilyName == lastname);
-            if(!string.IsNullOrEmpty(suffix)) predicate = predicate.And(p => p.Name.Suffix.Contains(suffix));
+
+            if (!string.IsNullOrEmpty(prefix))
+                predicate = predicate.And(p => p.Name.Prefix.Contains(prefix));
+
+            if (!string.IsNullOrEmpty(givenname))
+                predicate = predicate.And(p => p.Name.GivenName.Contains(givenname));
+
+            if (!string.IsNullOrEmpty(middlename))
+                predicate = predicate.And(p => p.Name.MiddleName == middlename);
+
+            predicate = predicate.And(p => p.Name.FamilyName == familyname);
+
+            if (!string.IsNullOrEmpty(suffix))
+                predicate = predicate.And(p => p.Name.Suffix.Contains(suffix));
+
+            predicate = predicate.And(p => p.IsActive == true && p.IsDeleted == false);
+
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             if (!ModelState.IsValid)
@@ -181,15 +187,9 @@ namespace Primary.Controllers
                                                                                 .Include(n => n.Name)
                                                                                 .Include(a => a.Addresses)
                                                                                 .Include(a => a.HL7Identifiers)
-                                                                                .Include(d => d.Devices)
-                                                                                .Include(p => p.Practitioners)
                                                                                 .Include(l => l.Locations)
                                                                                 .Include(cm => cm.ContactMethods)
-                                                                                .Include(t => t.Treatments)
-                                                                                .Include(p => p.Prescriptions)
-                                                                                .Include(o => o.Observations)
-                                                                                .Include(d => d.Diagnoses)
-                                                                                .Include(l => l.Languages)));    
+                                                                                .Include(l => l.Languages)));
                             }
                         }
 
@@ -202,16 +202,10 @@ namespace Primary.Controllers
                                                                         .Include(n => n.Name)
                                                                         .Include(a => a.Addresses)
                                                                         .Include(a => a.HL7Identifiers)
-                                                                        .Include(d => d.Devices)
-                                                                        .Include(p => p.Practitioners)
                                                                         .Include(l => l.Locations)
                                                                         .Include(cm => cm.ContactMethods)
-                                                                        .Include(t => t.Treatments)
-                                                                        .Include(p => p.Prescriptions)
-                                                                        .Include(o => o.Observations)
-                                                                        .Include(d => d.Diagnoses)
-                                                                        .Include(l => l.Languages)));    
-                        }
+                                                                        .Include(l => l.Languages)));
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -271,8 +265,8 @@ namespace Primary.Controllers
             return BadRequest("Not Implemented");
         }
 
-        [HttpPost]
-        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
+        [HttpPost("AddNewPatient")]
+        [Authorize(Roles = "Everyone")]
         public async Task<IActionResult> Post(Patient patient)
         {
             if (!ModelState.IsValid)
@@ -281,40 +275,60 @@ namespace Primary.Controllers
             }
 
             var tid = JwtTenantId.Get(Request);
-            if (patient.EntityId != Guid.Empty && !patient.IsActive && !patient.IsDeleted)
+
+            try
             {
-                var p = await _context.Patients.FirstOrDefaultAsync(p => p.EntityId == patient.EntityId);
-                if (p != null)
+                patient.TenantId = tid;
+                if (patient.EntityId == Guid.Empty)
                 {
-                    _context.Update<Patient>(patient);
-                    p.MarkAsUpdated();
-                    return Ok(p);
-                }
-                else
-                {
-                    await _context.AddAsync<Patient>(patient);
+                    patient.EntityId = Guid.NewGuid();
                 }
 
+                patient.PrimaryPatientIdString = patient.EntityId.ToString();
+
+                patient.MarkAsUpdated();
+                await _context.AddAsync<Patient>(patient);
                 await _context.SaveChangesAsync();
-                return Ok(patient);
+                // _context.Update<Patient>(patient);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
             }
 
             return BadRequest();
         }
 
-        [HttpPut]
+        [HttpPut("UpdatePatient")]
         [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
-        public async Task<IActionResult> Put()
+        public async Task<IActionResult> Put(Patient patient)
         {
             if (!ModelState.IsValid)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, ModelState);
             }
 
-            return BadRequest("Not Implemented");
+            patient.PrimaryPatientIdString = patient.EntityId.ToString();
+
+            try
+            {
+                patient.MarkAsUpdated();
+                _context.Update<Patient>(patient);
+                await _context.SaveChangesAsync();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return BadRequest();
         }
 
-        [HttpDelete]
+        [HttpDelete("DeletePatient")]
         [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
         public async Task<IActionResult> Delete()
         {
@@ -323,7 +337,21 @@ namespace Primary.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, ModelState);
             }
 
-            return BadRequest("Not Implemented");
+            try
+            {
+                var patient = await _context.Patients.FindAsync(Guid.Parse(Request.Query["patientid"]));
+                patient.MarkDeleted();
+                _context.Update<Patient>(patient);
+                await _context.SaveChangesAsync();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return BadRequest();
         }
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }

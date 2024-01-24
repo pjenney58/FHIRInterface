@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Support.Model;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 namespace Collectors.Primary.Controllers
@@ -22,7 +23,7 @@ namespace Collectors.Primary.Controllers
             _logger = logger;
         }
 
-        [HttpGet("GetDeploydList")]
+        [HttpGet("GetDeployed")]
         [Authorize(Roles = "Everyone")]
         public async Task<IActionResult> Get()
         {
@@ -35,7 +36,7 @@ namespace Collectors.Primary.Controllers
 
             try
             {
-                return BadRequest("Not Implemented");
+                return Ok(await _context.Collectors.Where(t => t.TenantId == tid).ToListAsync());   
             }
             catch (Exception ex)
             {

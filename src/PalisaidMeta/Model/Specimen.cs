@@ -5,8 +5,8 @@ namespace PalisaidMeta.Model
 	{
 		public Specimen() { }
 		
-        public Specimen(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Specimen(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         public Code? SpecimenType { get; set; } = new();
 		public DateTimeOffset DateCollected { get; set; } = DateTimeOffset.Now;

@@ -49,8 +49,8 @@ namespace PalisaidMeta.Model
         /// The root object for each partition
         /// </summary>
         /// <param name="key"> </param>
-        public Tenant(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Tenant(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
     
         
         protected override void Dispose(bool disposing)

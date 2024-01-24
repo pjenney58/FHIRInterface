@@ -23,8 +23,8 @@ namespace PalisaidMeta.Model
     {
         public DoseEvent() { }
               
-        public DoseEvent(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public DoseEvent(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         public TimeSpan Time { get; set; }
         public decimal MinmumCountOrDefault { get; set; }

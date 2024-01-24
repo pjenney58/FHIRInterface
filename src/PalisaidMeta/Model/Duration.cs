@@ -10,8 +10,8 @@ namespace PalisaidMeta.Model
         public Duration()
         { }
 
-        public Duration(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId)
+        public Duration(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId)
         { }
 
         protected override void Dispose(bool disposing)

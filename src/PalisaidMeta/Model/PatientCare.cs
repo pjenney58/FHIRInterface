@@ -39,8 +39,8 @@ namespace PalisaidMeta.Model
 
         public PatientCare() { }
        
-        public PatientCare(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public PatientCare(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         public string? CareId { get; set; }
         public string? SocialSecurityNumber { get; set; }

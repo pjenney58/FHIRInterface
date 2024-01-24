@@ -23,8 +23,8 @@ namespace PalisaidMeta.Model
     {
         public Allergy() { }
 
-        public Allergy(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) {}
+        public Allergy(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) {}
 
         public string? Icd9Code { get; set; }
         public string? Icd9ShortDescription { get; set; }

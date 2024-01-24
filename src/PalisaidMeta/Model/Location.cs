@@ -43,8 +43,8 @@ namespace PalisaidMeta.Model
     {
         public Location() { }
       
-        public Location(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Location(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
 
         public string? Name { get; set; }
@@ -89,7 +89,7 @@ namespace PalisaidMeta.Model
         {
             get => ContactMethods != null && ContactMethods.Count > 0
                        ? ContactMethods?.FirstOrDefault(cm => cm?.Phone?.Priority == PhonePriority.Primary)?.Phone
-                        : new Phone(this.OwnerId, this.TenantId);
+                        : new Phone(this.TenantId, this.OwnerId);
         }
 
         protected override void Dispose(bool disposing)

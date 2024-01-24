@@ -23,8 +23,8 @@ namespace PalisaidMeta.Model
 	{
 		public Version() { }
 	
-		public Version(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+		public Version(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         public Code? Type { get; set; }
 		public string? Identifier { get; set; }

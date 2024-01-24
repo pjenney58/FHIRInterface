@@ -23,8 +23,8 @@ namespace PalisaidMeta.Model
     {
         public ContactMethod() { }
 
-        public ContactMethod(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public ContactMethod(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         public Phone? Phone { get; set; }
         public Dictionary<string, string> SocialMedia { get; set; } = new();

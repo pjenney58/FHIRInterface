@@ -5,6 +5,7 @@ using Hl7.Fhir.Serialization;
 using Npgsql;
 using RandomDataGenerator;
 using Microsoft.EntityFrameworkCore;
+using System.Net.WebSockets;
 
 /*
 extern alias r5;
@@ -662,7 +663,7 @@ namespace DevTests
                                     var tests = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.TestReport>();
                                     Assert.NotNull(tests);
                                     */
-                                    var scrips = parsedBundle.Entry.ByResourceType<MedicationRequest>();
+                                    /*var scrips = parsedBundle.Entry.ByResourceType<MedicationRequest>();
                                     Assert.NotNull(scrips);
 
                                     foreach (var scrip in scrips)
@@ -684,7 +685,7 @@ namespace DevTests
                                             Debug.WriteLine($"Missing med for scrip {metaScrip.Code}");
                                         }
                                     }
-
+                                */
                                     // Persist
                                     try
                                     {
@@ -763,46 +764,42 @@ namespace DevTests
             }
         }
 
+        [Fact]
         public async System.Threading.Tasks.Task ProcessObservations()
         {
             try
             {
-                PalisaidMeta.Model.Observation observations = new();
-
-                for (var i = 0; i < MAX_VALS; i++)
+                 var data = getFhirData();
+                
+                foreach (var file in files)
                 {
-                    var patientId = Guid.Empty;
-
-                    var data = getFhirData();
-
                     var parser = new FhirJsonParser();
-                    var parsedBundle = parser.Parse<Bundle>(data);
+                    var parsedBundle = parser.Parse<Bundle>(File.ReadAllText(file));
 
-                    if (null != parsedBundle)
+                    Assert.NotNull(parsedBundle);
+
+                    var observations = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Observation>();
+                    Assert.NotNull(observations);
+
+                    
+                    foreach (var observation in observations)
                     {
-                        foreach (var e in parsedBundle.Entry)
+                        Assert.NotNull(observation);
+
+                        var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Observation, PalisaidMeta.Model.Observation>(_tenantId, InputVersion.HL7FhirR4);
+                        var metaObservation = await fhirConverter.Transform(observation);
+
+                        // Persist
+                        try
                         {
-                            if (e.Resource.TypeName == "Observation")
-                            {
-                                var observation = e.Resource as Hl7.Fhir.Model.Observation;
-
-                                if (observation != null)
-                                {
-                                    var fhirConverter = TransformerFactory.Create<Hl7.Fhir.Model.Observation, PalisaidMeta.Model.Observation>(_tenantId, InputVersion.HL7FhirR4);
-                                    var metaObservation = await fhirConverter.Transform(observation);
-
-                                    if (observations.PatientId == Guid.Empty)
-                                    {
-                                        observations.PatientId = Guid.NewGuid();
-                                        observations.PractitionerId = Guid.NewGuid();
-                                        //observations.CreateDate = metaObservation.CreateDate;
-                                    }
-
-                                    var item = TransformerFactory.Create<Hl7.Fhir.Model.Observation, PalisaidMeta.Model.ObservationItem>(_tenantId, InputVersion.HL7FhirR4);
-                                    observations.Items.Add(await item.Transform(observation) as PalisaidMeta.Model.ObservationItem);
-                                }
-                            }
+                            await _context.AddAsync(metaObservation);
+                            await _context.SaveChangesAsync();
                         }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine(ex.Message);
+                        }
+
                     }
                 }
             }

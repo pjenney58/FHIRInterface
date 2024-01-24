@@ -7,8 +7,8 @@ namespace PalisaidMeta.Model
 		public Device() { }
         
 
-        public Device(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Device(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         public List<string> Identifier { get; set; } = new();
 		public string? DisplayName { get; set; } = nameof(Device);

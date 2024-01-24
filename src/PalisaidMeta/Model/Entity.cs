@@ -12,20 +12,20 @@ namespace PalisaidMeta.Model
             IsActive = false;
         }
 
-		public Entity(Guid OwnerId, Guid TenantId)
+		public Entity(Guid tenantId, Guid ownerId)
 		{
 			if(EntityId == Guid.Empty)
 			{
 				EntityId = Guid.NewGuid();
 			}
 
-			if(TenantId == Guid.Empty)
+			if(tenantId == Guid.Empty)
 			{
-				throw new ArgumentException("TenantId cannot be empty");
+				//throw new ArgumentException("TenantId cannot be empty");
 			}
 
-			this.OwnerId = OwnerId;
-			this.TenantId = TenantId;
+			this.OwnerId = ownerId;
+			this.TenantId = tenantId;
 		}
 
 		// Fhir doesn't necessarily use a uuid for the key, so we need to be able to set capture it as a long
@@ -58,14 +58,14 @@ namespace PalisaidMeta.Model
 			LastUpdate = DateTimeOffset.Now;
 		}
 
-		protected void Delete()
+		public void MarkDeleted()
 		{
 			MarkAsUpdated();
 			IsActive = false;
 			IsDeleted = true;
 		}
 
-		protected void UnDelete()
+		public void UnDelete()
 		{
 			MarkAsUpdated();
 			IsDeleted = false;

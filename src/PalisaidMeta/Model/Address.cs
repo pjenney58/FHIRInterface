@@ -50,8 +50,8 @@ namespace PalisaidMeta.Model
         public Address()
         { }
 
-        public Address(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId)
+        public Address(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId)
         {
         }       
 

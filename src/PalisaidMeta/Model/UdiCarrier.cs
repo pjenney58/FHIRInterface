@@ -11,8 +11,8 @@
 
 		public UdiCarrier() { }
 
-		public UdiCarrier(Guid ownerId, Guid tenantId)
-			: base(ownerId, tenantId) { }
+		public UdiCarrier(Guid tenantId, Guid ownerId)
+			: base(tenantId, ownerId) { }
 	}
 }
 

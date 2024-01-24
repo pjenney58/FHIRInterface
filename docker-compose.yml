@@ -69,8 +69,8 @@ services:
             - ASPNETCORE_ENVIRONMENT=Development 
         image: pjenney58/gatewayapi
         restart: always
-        depends_on: 
-        - rabbitmq
+        #depends_on: 
+        #- rabbitmq
         ports: 
         - "5080:8080"
         - "5081:8081"

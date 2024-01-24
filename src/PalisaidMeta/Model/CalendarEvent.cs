@@ -82,8 +82,8 @@ namespace PalisaidMeta.Model
 
         public CalendarEvent() { }
 
-        public CalendarEvent(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public CalendarEvent(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         protected override void Dispose(bool disposing)
         {

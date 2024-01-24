@@ -35,8 +35,8 @@ namespace PalisaidMeta.Model
     {
         public Note() { }
         
-        public Note(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Note(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         public NoteType NoteType { get; set; } = NoteType.NotClasified;
         public string? NoteId { get; set; }
