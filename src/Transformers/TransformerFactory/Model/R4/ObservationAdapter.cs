@@ -156,7 +156,7 @@ namespace Transformers.Model.R4
                 catch
                 {
                     meta.EntityId = Guid.NewGuid();
-                    meta.EntityKey = long.Parse(fhir.Id);
+                    meta.OriginId = fhir.Id;
                 }
             }
 

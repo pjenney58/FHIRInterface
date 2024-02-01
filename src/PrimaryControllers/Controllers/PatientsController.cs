@@ -77,7 +77,7 @@ namespace Primary.Controllers
         }
 
         [HttpGet("GetById")]
-        public async Task<IActionResult> GetById(string patientid)
+        public async Task<IActionResult> GetById(Guid patientid)
         {
             if (!ModelState.IsValid)
             {
@@ -95,7 +95,7 @@ namespace Primary.Controllers
                         if (user.HasClaim(user.RoleClaimType, "PalisaidRootAdministrator") ||
                             user.HasClaim(user.RoleClaimType, "PalisaidTenantAdministrator"))
                         {
-                            return Ok(await Task.Run(() => _context.Patients.Where(p => p.PrimaryPatientIdString == patientid &&
+                            var response = await Task.Run(() => _context.Patients.Where(p => p.EntityId == patientid &&
                                                                                         p.IsActive == true && 
                                                                                         p.IsDeleted == false)
                                                                             .Include(n => n.Name)
@@ -104,14 +104,15 @@ namespace Primary.Controllers
                                                                             .Include(l => l.Locations)
                                                                             .Include(cm => cm.ContactMethods)
                                                                             .Include(t => t.Treatments).Include(l => l.Languages)
-                                                                            .ToList()));
+                                                                            .FirstOrDefault());
+                            return Ok(response);
                         }
 
                         return BadRequest();
                     }
                     else
                     {
-                        return Ok(await Task.Run(() => _context.Patients.Where(i => i.PrimaryPatientIdString == patientid && 
+                        return Ok(await Task.Run(() => _context.Patients.Where(i => i.EntityId == patientid && 
                                                                                i.TenantId == tid && 
                                                                                i.IsActive == true && 
                                                                                i.IsDeleted == false)
@@ -121,7 +122,7 @@ namespace Primary.Controllers
                                                                         .Include(l => l.Locations)
                                                                         .Include(cm => cm.ContactMethods)
                                                                         .Include(l => l.Languages)
-                                                                        .ToList()));
+                                                                        .FirstOrDefault()));
                     }
                 }
                 catch (Exception ex)
@@ -278,20 +279,17 @@ namespace Primary.Controllers
 
             try
             {
-                patient.TenantId = tid;
-                if (patient.EntityId == Guid.Empty)
-                {
-                    patient.EntityId = Guid.NewGuid();
-                }
+                patient.TenantId = patient.TenantId == Guid.Empty 
+                        ? patient.DefaultTenantId 
+                        : tid;
 
-                patient.PrimaryPatientIdString = patient.EntityId.ToString();
+                patient.OriginId = patient.EntityId.ToString();
 
                 patient.MarkAsUpdated();
                 await _context.AddAsync<Patient>(patient);
                 await _context.SaveChangesAsync();
-                // _context.Update<Patient>(patient);
-
-                return Ok();
+            
+                return Ok(patient);
             }
             catch (Exception ex)
             {

@@ -47,21 +47,19 @@ services:
   
    #     networks:
    #     - backend-network
- 
-    pgadmin:
-        container_name: pgadmin4_container
-        image: dpage/pgadmin4
-        restart: always
-  #      depends_on:
-  #      - postgres
-        environment:
-            PGADMIN_DEFAULT_EMAIL: pete.jenney@gmail.com
-            PGADMIN_DEFAULT_PASSWORD: postgres
-        ports:
-        - "5050:80"
-        networks:
-        - backend-network
-
+   # pgadmin:
+   #     container_name: pgadmin4_container
+   #     image: dpage/pgadmin4
+   #     restart: always
+   #     depends_on:
+   #     - postgres
+   #     environment:
+   #         PGADMIN_DEFAULT_EMAIL: pete.jenney@gmail.com
+   #         PGADMIN_DEFAULT_PASSWORD: postgres
+   #     ports:
+   #     - "5050:80"
+   #     networks:
+   #     - backend-network
     GatewayController:
         container_name: palisaid-gatewayapi
         environment:

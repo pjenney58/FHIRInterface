@@ -34,14 +34,14 @@ namespace PalisaidMeta.Model
         [NotMapped]
         public Address? PrimaryAddress
         {
-            get => Addresses?.FirstOrDefault(a => a.AddressType == AddressType.Primary);
+            get => Addresses?.FirstOrDefault(a => a.AddressType == AddressType.Primary) ?? new Address();
         }
 
         public DisposableList<ContactMethod>? ContactMethods { get; set; } = new();
         public DisposableList<Address>? Addresses { get; set; } = new();
         public DisposableList<Contact>? Contacts { get; set; } = new();
         public DisposableList<PaymentMethod>? PaymentMethods { get; set; } = new();
-
+        
         public Tenant() { }
        
 
@@ -68,13 +68,6 @@ namespace PalisaidMeta.Model
                 Addresses?.Dispose();
                 Contacts?.Dispose();
                 PaymentMethods?.Dispose();
-
-                Addresses?.Clear();
-                Addresses?.TrimExcess();
-                Contacts?.Clear();
-                Contacts?.TrimExcess();
-                PaymentMethods?.Clear();
-                PaymentMethods?.TrimExcess();
             }
         }
     }

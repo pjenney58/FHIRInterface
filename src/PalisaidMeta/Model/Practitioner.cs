@@ -93,7 +93,7 @@ namespace PalisaidMeta.Model
         /// Name based on the FHIR HumanName It, a list because there can be multiple give names
         /// that can be treated as aliases, one per alias" <seealso cref="PersonName" />
         /// </summary>
-        public DisposableList<PersonName>? Name { get; set; } = new();
+        public PersonName? Name { get; set; } = new();
 
         /// <summary>
         /// All addresses for practioner incliding Office, Hospital, Clinic, Personal, etc ...
