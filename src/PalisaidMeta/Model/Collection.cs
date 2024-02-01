@@ -5,8 +5,8 @@
 
 		public Collection() { }
 
-		public Collection(Guid ownerId, Guid tenantId)
-			: base(ownerId, tenantId) { }
+		public Collection(Guid tenantId, Guid ownerId)
+			: base(tenantId, ownerId) { }
 
 
 		public Guid CollectorId { get; set; }

@@ -91,8 +91,8 @@ namespace PalisaidMeta.Model
     {
         public Encounter() {}
 
-        public Encounter(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) {}
+        public Encounter(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) {}
 
         public List<string> EncounterIdString { get; set; } = new();
         public List<string> EncounterReasonString { get; set; } = new();

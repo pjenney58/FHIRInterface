@@ -34,8 +34,8 @@ namespace PalisaidMeta.Model
 
         public Email() { }
        
-        public Email(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Email(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
 
         protected override void Dispose(bool disposing)

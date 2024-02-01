@@ -77,7 +77,7 @@ namespace PalisaidMeta.Model
     {
         public Prescription() { }
 
-        private void Init(Guid ownerId, Guid tenantId)
+        private void Init(Guid tenantId, Guid ownerId)
         {
             DoseSchedule = new(ownerId, tenantId);
         }
@@ -85,8 +85,8 @@ namespace PalisaidMeta.Model
         /// <summary>
         /// </summary>
         /// <param name="key"> </param>
-        public Prescription(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Prescription(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         /// <summary>
         /// Generally referred to as a Prescription Number, but many use alphas, e.g.987652C where C

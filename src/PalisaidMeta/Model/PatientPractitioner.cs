@@ -31,8 +31,8 @@ namespace PalisaidMeta.Model
     {
         public PatientPractitioner() { }
      
-        public PatientPractitioner(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public PatientPractitioner(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         public PractitionerRelationship Relationship { get; set; }
 

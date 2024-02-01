@@ -23,8 +23,8 @@ namespace PalisaidMeta.Model
     {
         public Medication() { }
 
-        public Medication(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Medication(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
        
         public Guid MedicationId { get => EntityId; set => EntityId = value; }

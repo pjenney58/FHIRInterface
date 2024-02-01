@@ -126,10 +126,10 @@ namespace Primary.Controllers
 
                     _logger.LogInformation($"User {user.Id} logged in.");
 
-                    return Ok(new
+                    return Ok(new TokenModel
                     {
-                        accesstoken = new JwtSecurityTokenHandler().WriteToken(token),
-                        refreshtoken = refreshToken,
+                        accessToken = new JwtSecurityTokenHandler().WriteToken(token),
+                        refreshToken = refreshToken,
                         validTo = token.ValidTo
                     });
                 }
@@ -570,15 +570,15 @@ namespace Primary.Controllers
         [Route("refresh-token")]
         public async Task<IActionResult> RefreshToken(TokenModel tokenModel)
         {
-            if (tokenModel is null || tokenModel.AccessToken is null || tokenModel.RefreshToken is null)
+            if (tokenModel is null || tokenModel.accessToken is null || tokenModel.refreshToken is null)
             {
                 return BadRequest("tokenmodel");
             }
 
             try
             {
-                string? accessToken = tokenModel.AccessToken;
-                string? refreshToken = tokenModel.RefreshToken;
+                string? accessToken = tokenModel.accessToken;
+                string? refreshToken = tokenModel.refreshToken;
 
                 var principal = GetPrincipalFromExpiredToken(accessToken);
                 if (principal == null)

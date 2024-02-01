@@ -25,8 +25,8 @@ namespace PalisaidMeta.Model
     {
         public DoseSchedule() { }
 
-        public DoseSchedule(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public DoseSchedule(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         /// <summary>
         /// Schdule name or pattern

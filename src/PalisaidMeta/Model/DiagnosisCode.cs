@@ -32,8 +32,8 @@ namespace PalisaidMeta.Model
         /// Coding system and code
         /// </summary>
         /// <param name="key"> </param>
-        public DiagnosisCode(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public DiagnosisCode(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         // TODO: Finish Set Code in DiagnosisCodes - Needs Lookup
         public void SetCode(CodingSystem codetype, string? code)

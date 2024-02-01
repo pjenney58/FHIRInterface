@@ -39,8 +39,8 @@ namespace PalisaidMeta.Model
     {
         public Phone() { }
       
-        public Phone(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Phone(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         public string? CountryCode { get; set; }
         public string? Number { get; set; }

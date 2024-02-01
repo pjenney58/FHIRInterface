@@ -22,6 +22,8 @@ using Hl7.Fhir.Validation;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json.Linq;
 using PalisaidMeta.Model;
+using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Transformers.Interface;
 
@@ -126,8 +128,12 @@ namespace Transformers.Model.R4
             {
                 throw new Exception("Invalid payload type");
             }
+            
+            var meta = new PalisaidMeta.Model.Observation()
+            {
+                TenantId = tenant,
+            };
 
-            var meta = new PalisaidMeta.Model.Observation();
             if (meta == null)
             {
                 throw new Exception("Invalid meta type");
@@ -150,7 +156,7 @@ namespace Transformers.Model.R4
                 catch
                 {
                     meta.EntityId = Guid.NewGuid();
-                    meta.EntityKey = long.Parse(fhir.Id);
+                    meta.OriginId = fhir.Id;
                 }
             }
 
@@ -162,9 +168,10 @@ namespace Transformers.Model.R4
                     {
                         var Code = new PalisaidMeta.Model.Code
                         {
-                            Name = "Catagory Code",
+                            Name = coding.Code,
                             Description = coding.Display,
-                            CodingSystem = GetCodingSystem(coding.System)
+                            CodingSystem = GetCodingSystem(coding.System),
+                            System = coding.System
                         };
                         
                         meta.Codes.Add(Code);
@@ -178,9 +185,10 @@ namespace Transformers.Model.R4
                 {
                     var Code = new PalisaidMeta.Model.Code
                     {
-                        Name = "Code",
+                        Name = code.Code,
                         Description = code.Display,
-                        CodingSystem = GetCodingSystem(code.System)
+                        CodingSystem = GetCodingSystem(code.System),
+                        System = code.System
                     };
                     
                     meta.Codes.Add(Code);                  
@@ -213,7 +221,8 @@ namespace Transformers.Model.R4
                     {
                         var observationitem = new ObservationItem
                         {
-                            TypeName = item.Key
+                            TypeName = item.Key,
+                            TenantId = tenant
                         };
                         
                         observationitem.Code.Name = item.Value.ToString();
@@ -227,14 +236,21 @@ namespace Transformers.Model.R4
             {
                 foreach (var item in fhir.Effective)
                 {
-                    var observationitem = new ObservationItem
+                    if(fhir.Effective is FhirDateTime)
                     {
-                        TypeName = item.Key
-                    };
-
-                    observationitem.Code.Name = item.Value.ToString();
-                    observationitem.Timestamp = DateTime.Now;
-                    meta.Items.Add(observationitem);
+                        meta.StartDate = DateTimeOffset.Parse(fhir.Effective.ToString());
+                    }
+                    else if(fhir.Effective is Period)
+                    {
+                        if(meta.StartDate == DateTimeOffset.MinValue)
+                        {
+                            meta.StartDate = DateTimeOffset.Parse(fhir.Effective.ToString());
+                        }
+                        else
+                        {
+                            meta.StopDate = DateTimeOffset.Parse(fhir.Effective.ToString());
+                        }
+                    }
                 }
             }
 
@@ -244,10 +260,11 @@ namespace Transformers.Model.R4
                 {
                     var observationitem = new ObservationItem
                     {
-                        TypeName = item.Key
+                        TypeName = item.Key,
+                        TenantId = tenant
                     };
 
-                    observationitem.Code.Name = item.Value.ToString();
+                    observationitem.Code.Name = "Encounter";
                     observationitem.Timestamp = DateTime.Now;
                     meta.Items.Add(observationitem);
                 }
@@ -257,9 +274,82 @@ namespace Transformers.Model.R4
             {
                 foreach (var item in fhir.Subject)
                 {
+                    
+                    if(fhir.Subject is Hl7.Fhir.Model.Patient)
+                    {
+                        meta.PatientId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    else if(fhir.Subject is Hl7.Fhir.Model.Location)
+                    {
+                        meta.LocationId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    else if(fhir.Subject is Hl7.Fhir.Model.Practitioner)
+                    {
+                        meta.PractitionerId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    /*
+                    else if(fhir.Subject is Hl7.Fhir.Model.Group)
+                    {
+                        meta.GroupId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    else if(fhir.Subject is Hl7.Fhir.Model.Device)
+                    {
+                        meta.DeviceId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    else if(fhir.Subject is Hl7.Fhir.Model.Location)
+                    {
+                        meta.LocationId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    else if(fhir.Subject is Hl7.Fhir.Model.Organization)
+                    {
+                        meta.OrganizationId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    else if(fhir.Subject is Hl7.Fhir.Model.Practitioner)
+                    {
+                        meta.PractitionerId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    else if(fhir.Subject is Hl7.Fhir.Model.RelatedPerson)
+                    {
+                        meta.RelatedPersonId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    else if(fhir.Subject is Hl7.Fhir.Model.Substance)
+                    {
+                        meta.SubstanceId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    else if(fhir.Subject is Hl7.Fhir.Model.Specimen)
+                    {
+                        meta.SpecimenId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    else if(fhir.Subject is Hl7.Fhir.Model.Group)
+                    {
+                        meta.GroupId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    else if(fhir.Subject is Hl7.Fhir.Model.Location)
+                    {
+                        meta.LocationId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    else if(fhir.Subject is Hl7.Fhir.Model.Organization)
+                    {
+                        meta.OrganizationId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    else if(fhir.Subject is Hl7.Fhir.Model.Practitioner)
+                    {
+                        meta.PractitionerId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    else if(fhir.Subject is Hl7.Fhir.Model.RelatedPerson)
+                    {
+                        meta.RelatedPersonId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    else if(fhir.Subject is Hl7.Fhir.Model.Substance)
+                    {
+                        meta.SubstanceId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                    }
+                    */
+
                     var observationitem = new ObservationItem
                     {
-                        TypeName = item.Key
+                        TypeName = item.Key,
+                        TenantId = tenant
                     };
 
                     observationitem.Code.Name = item.Value.ToString().Contains("urn")
@@ -291,7 +381,12 @@ namespace Transformers.Model.R4
             {
                 foreach (var item in fhir.Note)
                 {
-                    var observationitem = new ObservationItem();               
+                    var observationitem = new ObservationItem()
+                    {
+                        TypeName = "Note",
+                        TenantId = tenant
+                    };
+                              
                     observationitem.Code.Name = item.TypeName;
                     observationitem.Timestamp = DateTime.Now;
                     meta.Items.Add(observationitem);

@@ -53,8 +53,8 @@ namespace PalisaidMeta.Model
         public Code() 
         {}
 
-        public Code(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) 
+        public Code(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) 
             { }
 
         protected override void Dispose(bool disposing)

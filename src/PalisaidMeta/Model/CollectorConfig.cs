@@ -111,8 +111,8 @@ namespace PalisaidMeta.Model
         public CollectorConfig()
         { }
 
-        public CollectorConfig(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId)
+        public CollectorConfig(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId)
         { }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously

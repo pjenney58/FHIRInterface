@@ -27,8 +27,8 @@ namespace PalisaidMeta.Model
     {
         public Diagnosis() { }
 
-        public Diagnosis(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Diagnosis(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         /// <summary>
         /// Unique name for the diagnosis

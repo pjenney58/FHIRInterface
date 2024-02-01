@@ -53,7 +53,7 @@ namespace Transformers.Model.R4
             var n = TransformerFactory.Create<Hl7.Fhir.Model.HumanName, PalisaidMeta.Model.PersonName>(tenant, format, version, source);
             foreach (var name in fhir.Name)
             {
-                meta.Name.Add(await n.Transform(name) as PalisaidMeta.Model.PersonName);
+                meta.Name = await n.Transform(name) as PalisaidMeta.Model.PersonName;
             }
 
             // Known addresses

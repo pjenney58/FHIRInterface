@@ -63,7 +63,7 @@ namespace Transformers.Model.R4
 
             await Task.Run(() =>
             {
-                meta.ObservationType = PalisaidMeta.Model.ObservationType.Visual;
+                meta.ObservationType = ObservationType.Report;
 
                 if (fhir.Value != null)
                 {

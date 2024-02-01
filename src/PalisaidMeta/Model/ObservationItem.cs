@@ -40,8 +40,8 @@ namespace PalisaidMeta.Model
         public ObservationItem() 
         { }
         
-        public ObservationItem(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) 
+        public ObservationItem(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) 
             { }
 
         public ObservationType? ObservationType { get; set; }

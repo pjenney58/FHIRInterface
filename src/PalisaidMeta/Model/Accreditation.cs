@@ -24,8 +24,8 @@ namespace PalisaidMeta.Model
         public string? AccredidationCode { get; set; }
         public string? AccredidationName { get; set; }
 
-        public Accreditation(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Accreditation(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         public Accreditation() { }
     }

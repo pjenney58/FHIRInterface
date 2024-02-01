@@ -32,8 +32,8 @@ namespace PalisaidMeta.Model
 
         public Identifier() { }
 
-        public Identifier(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Identifier(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         protected override void Dispose(bool disposing)
         {

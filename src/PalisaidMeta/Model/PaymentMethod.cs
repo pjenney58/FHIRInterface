@@ -46,8 +46,8 @@ namespace PalisaidMeta.Model
         /// Payment type specificsß
         /// </summary>
         /// <param name="key"> </param>
-        public PaymentMethod(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public PaymentMethod(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         public void SetCardData(string? id, string? cvv, DateTimeOffset date)
         {

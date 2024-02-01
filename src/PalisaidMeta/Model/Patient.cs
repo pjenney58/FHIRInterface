@@ -25,8 +25,8 @@ namespace PalisaidMeta.Model
     {
         public Patient() { }
 
-        public Patient(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public Patient(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         public string? PrimaryPatientIdString { get; set; }
         public string? AlternatePatientIdString { get; set; }
@@ -75,7 +75,7 @@ namespace PalisaidMeta.Model
         {
             get => Languages != null &&  Languages.Count  > 0
                 ? Languages?.FirstOrDefault(l => l.Use == SpokenLanguageUse.Primary)
-                : new SpokenLanguage(this.OwnerId, this.TenantId);
+                : new SpokenLanguage(this.TenantId, this.OwnerId);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace PalisaidMeta.Model
         {
             get => Locations != null && Locations.Count > 0
                 ? Locations?.FirstOrDefault(l => l.LocationType == LocationType.NursingHome)
-                : new Location(this.OwnerId, this.TenantId);
+                : new Location(this.TenantId, this.OwnerId);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace PalisaidMeta.Model
         {
             get => Locations != null && Locations.Count > 0
                 ? Locations?.FirstOrDefault(l => l.LocationType == LocationType.RetailPharmacy)
-                : new Location(this.OwnerId, this.TenantId);
+                : new Location(this.TenantId, this.OwnerId);
         }
 
         [NotMapped]
@@ -105,7 +105,7 @@ namespace PalisaidMeta.Model
         {
             get => Practitioners != null && Practitioners.Count > 0
                 ? Practitioners?.FirstOrDefault(p => p.Relationship == PractitionerRelationship.Primary)?.Practitioner
-                : new Practitioner(this.OwnerId, this.TenantId);
+                : new Practitioner(this.TenantId, this.OwnerId);
         }
 
         [NotMapped]
@@ -113,7 +113,7 @@ namespace PalisaidMeta.Model
         {
             get => Practitioners != null && Practitioners.Count > 0
                 ? Practitioners?.FirstOrDefault(p => p.Relationship == PractitionerRelationship.Secondary)?.Practitioner
-                : new Practitioner(this.OwnerId, this.TenantId);
+                : new Practitioner(this.TenantId, this.OwnerId);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace PalisaidMeta.Model
         {
             get => Addresses != null && Addresses.Count > 0
                     ? Addresses?.FirstOrDefault(a => a.AddressType == AddressType.Primary)
-                    : new Address(this.OwnerId, this.TenantId);
+                    : new Address(this.TenantId, this.OwnerId);
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace PalisaidMeta.Model
         {
             get => ContactMethods != null && ContactMethods.Count > 0
                     ? ContactMethods?.FirstOrDefault(cm => cm?.Phone?.Priority == PhonePriority.Primary)?.Phone
-                    : new Phone(this.OwnerId, this.TenantId);
+                    : new Phone(this.TenantId, this.OwnerId);
         }
 
         protected override void Dispose(bool disposing)

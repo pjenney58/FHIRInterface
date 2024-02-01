@@ -37,8 +37,8 @@ namespace PalisaidMeta.Model
 
         public SpokenLanguage() {}
 
-        public SpokenLanguage(Guid ownerId, Guid tenantId)
-            : base(ownerId, tenantId) { }
+        public SpokenLanguage(Guid tenantId, Guid ownerId)
+            : base(tenantId, ownerId) { }
 
         public string? Locale { get; set; }
 

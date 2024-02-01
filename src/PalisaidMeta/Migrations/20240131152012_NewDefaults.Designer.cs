@@ -13,8 +13,8 @@ using PalisaidMeta.Model;
 namespace PalisaidMeta.Migrations
 {
     [DbContext(typeof(PalisaidMetaContext))]
-    [Migration("20240118140201_RefreshedPrimary.1")]
-    partial class RefreshedPrimary1
+    [Migration("20240131152012_NewDefaults")]
+    partial class NewDefaults
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,8 +57,8 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -73,6 +73,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -119,11 +123,11 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("District")
                         .HasColumnType("text");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("HL7AddressCode")
                         .IsRequired()
@@ -142,6 +146,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -203,6 +211,9 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -211,9 +222,6 @@ namespace PalisaidMeta.Migrations
 
                     b.Property<Guid?>("EncounterEntityId")
                         .HasColumnType("uuid");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -231,6 +239,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -281,8 +293,8 @@ namespace PalisaidMeta.Migrations
                     b.Property<int>("DataProtocolOut")
                         .HasColumnType("integer");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<Dictionary<string, string>>("HttpHeaders")
                         .IsRequired()
@@ -304,6 +316,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -378,8 +394,8 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -397,6 +413,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -437,11 +457,11 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("EmailEntityId")
+                    b.Property<Guid>("DefaultTenantId")
                         .HasColumnType("uuid");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid?>("EmailEntityId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("IM")
                         .HasColumnType("text");
@@ -459,6 +479,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -527,6 +551,9 @@ namespace PalisaidMeta.Migrations
                     b.Property<decimal>("Cycle")
                         .HasColumnType("numeric");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("DeviceCategoryEntityId")
                         .HasColumnType("uuid");
 
@@ -544,9 +571,6 @@ namespace PalisaidMeta.Migrations
 
                     b.Property<Guid?>("DurationEntityId")
                         .HasColumnType("uuid");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<DateTimeOffset>("ExpireyDate")
                         .HasColumnType("timestamp with time zone");
@@ -586,6 +610,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -653,14 +681,14 @@ namespace PalisaidMeta.Migrations
                     b.Property<Guid>("CurrentLocation")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("DiagnosisName")
                         .HasColumnType("text");
 
                     b.Property<Guid>("DurationEntityId")
                         .HasColumnType("uuid");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -672,6 +700,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -705,11 +737,11 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("DoseScheduleEntityId")
+                    b.Property<Guid>("DefaultTenantId")
                         .HasColumnType("uuid");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid?>("DoseScheduleEntityId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -721,6 +753,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -757,14 +793,14 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("DoseDayEntityId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("DoseScheduleEntityId")
                         .HasColumnType("uuid");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("Instruction")
                         .HasColumnType("text");
@@ -788,6 +824,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -824,14 +864,14 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("DoseRepeatPattern")
                         .HasColumnType("text");
 
                     b.Property<string>("DoseScheduleName")
                         .HasColumnType("text");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -846,6 +886,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -872,11 +916,11 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTimeOffset>("EndDate")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -888,6 +932,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -920,8 +968,8 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -933,6 +981,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -965,6 +1017,9 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<List<string>>("EncounterIdString")
                         .IsRequired()
                         .HasColumnType("text[]");
@@ -972,9 +1027,6 @@ namespace PalisaidMeta.Migrations
                     b.Property<List<string>>("EncounterReasonString")
                         .IsRequired()
                         .HasColumnType("text[]");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -986,6 +1038,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -1028,8 +1084,8 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("IdSource")
                         .HasColumnType("text");
@@ -1053,6 +1109,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -1098,6 +1158,9 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -1106,9 +1169,6 @@ namespace PalisaidMeta.Migrations
 
                     b.Property<Guid?>("EncounterEntityId")
                         .HasColumnType("uuid");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -1129,6 +1189,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -1175,8 +1239,8 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTimeOffset?>("ExpireDate")
                         .HasColumnType("timestamp with time zone");
@@ -1218,6 +1282,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -1268,11 +1336,11 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("DiagnosisEntityId")
+                    b.Property<Guid>("DefaultTenantId")
                         .HasColumnType("uuid");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid?>("DiagnosisEntityId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -1290,6 +1358,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -1327,14 +1399,14 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("DiagnosisEntityId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("EncounterEntityId")
                         .HasColumnType("uuid");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -1349,6 +1421,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -1402,11 +1478,11 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<List<string>>("Interpretation")
                         .IsRequired()
@@ -1438,6 +1514,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -1493,11 +1573,11 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("EncounterEntityId")
+                    b.Property<Guid>("DefaultTenantId")
                         .HasColumnType("uuid");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid?>("EncounterEntityId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -1518,6 +1598,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -1574,14 +1658,14 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("DeceasedDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTimeOffset>("DischargeDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("EncounterEntityId")
                         .HasColumnType("uuid");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("Floor")
                         .HasColumnType("text");
@@ -1608,6 +1692,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -1676,14 +1764,14 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("HipaaChangeAuthorLogin")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("HipaaChangeDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("HipaaDataTransmitAuthentication")
                         .HasColumnType("boolean");
@@ -1704,6 +1792,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -1742,8 +1834,8 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -1755,6 +1847,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -1806,8 +1902,8 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTimeOffset>("ExpDate")
                         .HasColumnType("timestamp with time zone");
@@ -1822,6 +1918,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -1853,8 +1953,8 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("FamilyName")
                         .HasColumnType("text");
@@ -1881,10 +1981,11 @@ namespace PalisaidMeta.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("OriginId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<Guid?>("PractitionerEntityId")
+                    b.Property<Guid>("OwnerId")
                         .HasColumnType("uuid");
 
                     b.Property<List<string>>("Prefix")
@@ -1907,8 +2008,6 @@ namespace PalisaidMeta.Migrations
 
                     b.HasKey("EntityId");
 
-                    b.HasIndex("PractitionerEntityId");
-
                     b.ToTable("PersonName");
                 });
 
@@ -1924,8 +2023,8 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Extension")
                         .HasColumnType("text");
@@ -1943,6 +2042,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -1981,14 +2084,14 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("DeceasedDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("DiagnosisEntityId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("EncounterEntityId")
                         .HasColumnType("uuid");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<int>("Gender")
                         .HasColumnType("integer");
@@ -2012,7 +2115,14 @@ namespace PalisaidMeta.Migrations
                         .IsRequired()
                         .HasColumnType("hstore");
 
+                    b.Property<Guid?>("NameEntityId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -2040,6 +2150,8 @@ namespace PalisaidMeta.Migrations
 
                     b.HasIndex("EncounterEntityId");
 
+                    b.HasIndex("NameEntityId");
+
                     b.ToTable("Practitioners");
                 });
 
@@ -2065,6 +2177,9 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("DcDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("DiagnosisEntityId")
                         .HasColumnType("uuid");
 
@@ -2076,9 +2191,6 @@ namespace PalisaidMeta.Migrations
 
                     b.Property<Guid?>("DoseScheduleEntityId")
                         .HasColumnType("uuid");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<Guid?>("FillingPharmacyEntityId")
                         .HasColumnType("uuid");
@@ -2105,6 +2217,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -2202,8 +2318,8 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("DateCollected")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("FeatureDescription")
                         .HasColumnType("text");
@@ -2221,6 +2337,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -2263,8 +2383,8 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Fluency")
                         .HasColumnType("integer");
@@ -2285,6 +2405,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -2325,11 +2449,11 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Department")
                         .HasColumnType("text");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -2347,6 +2471,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -2382,8 +2510,8 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -2395,6 +2523,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -2436,6 +2568,9 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("DcDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("DiagnosisEntityId")
                         .HasColumnType("uuid");
 
@@ -2444,9 +2579,6 @@ namespace PalisaidMeta.Migrations
 
                     b.Property<Guid?>("DoseScheduleEntityId")
                         .HasColumnType("uuid");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -2464,6 +2596,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -2536,11 +2672,11 @@ namespace PalisaidMeta.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DefaultTenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("DeviceIdentifier")
                         .HasColumnType("text");
-
-                    b.Property<long>("EntityKey")
-                        .HasColumnType("bigint");
 
                     b.Property<Guid?>("EntryTypeEntityId")
                         .HasColumnType("uuid");
@@ -2561,6 +2697,10 @@ namespace PalisaidMeta.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("OriginHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -2946,13 +3086,6 @@ namespace PalisaidMeta.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PalisaidMeta.Model.PersonName", b =>
-                {
-                    b.HasOne("PalisaidMeta.Model.Practitioner", null)
-                        .WithMany("Name")
-                        .HasForeignKey("PractitionerEntityId");
-                });
-
             modelBuilder.Entity("PalisaidMeta.Model.Practitioner", b =>
                 {
                     b.HasOne("PalisaidMeta.Model.Diagnosis", null)
@@ -2962,6 +3095,12 @@ namespace PalisaidMeta.Migrations
                     b.HasOne("PalisaidMeta.Model.Encounter", null)
                         .WithMany("Practitioners")
                         .HasForeignKey("EncounterEntityId");
+
+                    b.HasOne("PalisaidMeta.Model.PersonName", "Name")
+                        .WithMany()
+                        .HasForeignKey("NameEntityId");
+
+                    b.Navigation("Name");
                 });
 
             modelBuilder.Entity("PalisaidMeta.Model.Prescription", b =>
@@ -3178,8 +3317,6 @@ namespace PalisaidMeta.Migrations
                     b.Navigation("FhirIdentifiers");
 
                     b.Navigation("Locations");
-
-                    b.Navigation("Name");
                 });
 
             modelBuilder.Entity("PalisaidMeta.Model.Tenant", b =>
