@@ -110,8 +110,8 @@ https://levelup.gitconnected.com/12-bad-practices-to-avoid-in-asp-net-core-api-c
 6. From the PalisaidMeta directory run `dotnet ef database update`
 7. From the Authentication directory run `dotnet ef database update`
 8. Install xunit if it's not already there
-9. Buld and run DevTests/TFhirParser/ProcessPatients
-10. Buld and run Controllers/Primary
+10. Build and run Controllers/Primary -- This is important as it does additional database configuration/setup
+11. Build and run DevTests/TFhirParser/ProcessPatients
 
 This will work on Windows, Windows/WSL, Linux, and macOS and the overhead is low.
 
