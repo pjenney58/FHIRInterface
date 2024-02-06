@@ -7,6 +7,7 @@ using Support.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Npgsql;
 
 namespace Data;
 
@@ -22,7 +23,7 @@ public class Program
         // Add services to the container.
         ConfigurationManager configuration = builder.Configuration;
         //configuration.AddJsonFile("controllerappsettings.json", optional: false, reloadOnChange: true);
-        
+
 
         //Console.WriteLine($"Running InDocker: {AppRunningIn.Docker}");
 
@@ -31,6 +32,10 @@ public class Program
 
         var idconnection = builder.Configuration.GetConnectionString(AppRunningIn.Docker ? "containeridentity" : "identity")
                         ?? throw new InvalidOperationException("Connection string 'identity' not found.");
+
+        // boooooGussss hack ...
+        BogusConstraints.DropData(dataconnection);
+        BogusConstraints.DropIdentity(idconnection);
 
         // Migration -- Update-Database
         //     Update-Database -Context IdentityDataContext
@@ -145,6 +150,10 @@ public class Program
             var services = scope.ServiceProvider;
             SeedRoles.Initialize(services);
             SeedUsers.Initialize(services);
+
+            //var context = services.GetRequiredService<PalisaidMetaContext>();
+            //context.Database.ExecuteSqlRaw($"ALTER TABLE Address DROP CONSTRAINT FK_Address_Tenants_TenantId");
+            //context.Database.ExecuteSqlRaw($"ALTER TABLE Address DROP CONSTRAINT FK_Contact_Tenants_TenantId");
         }
 
         // Configure the HTTP request pipeline.
@@ -163,12 +172,67 @@ public class Program
         app.Run();
     }
 
+    public static class BogusConstraints
+    {
+        public static void DropData(string dataconnection)
+        {
+            using (var connection = new NpgsqlConnection(dataconnection))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand("ALTER TABLE IF EXISTS \"Address\" DROP CONSTRAINT \"FK_Address_Tenants_TenantId\"", connection))
+                {
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        // hit constraint
+                    }
+
+                    try
+                    {
+                        command.CommandText = "ALTER TABLE IF EXISTS \"Contact\" DROP CONSTRAINT \"FK_Contact_Tenants_TenantId\"";
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        // hit constraint
+                    }
+                }
+            }
+        }
+
+        public static void DropIdentity(string idconnection)
+        {
+            using (var connection = new NpgsqlConnection(idconnection))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand("ALTER TABLE \"AspNetUserRoles\" DROP CONSTRAINT \"FK_AspNetUserRoles_AspNetRoles_UserId\"", connection))
+                {
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch
+                    {
+                        // hit constraint
+                    }
+                }
+            }
+        }
+    }
     public static class SeedUsers
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
             using (UserManager<ApplicationUser> _userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>())
             {
+                // Drop bum constraints
+                // TODO: ALTER TABLE AspNetUserRoles DROP CONSTRAINT FK_AspNetUserRoles_AspNetRoles_UserId;
+                // Manually deleting it works fine and user/role can be saved
+                // var context = serviceProvider.GetRequiredService<IdentityDataContext>();
+                // context.Database.ExecuteSqlRaw("ALTER TABLE AspNetUserRoles DROP CONSTRAINT FK_AspNetUserRoles_AspNetUsers_UserId");
                 // Create root user
                 var user = new RegisterAdminModel()
                 {
@@ -178,8 +242,7 @@ public class Program
                     Phone = "603.264.3961"
                 };
 
-                // TODO: ALTER TABLE AspNetUserRoles DROP CONSTRAINT FK_AspNetUserRoles_AspNetRoles_UserId;
-                // Manually deleting it works fine and user/role can be saved
+
 
                 if (!_userManager.Users.Any(r => r.UserName == user.Username))
                 {
@@ -255,9 +318,9 @@ public class Program
             }
         }
 
-      //  private void RemoveConstraints()
-      //  {
-      //      // ALTER TABLE AspNetUserRoles DROP CONSTRAINT FK_AspNetUserRoles_AspNetRoles_UserId;
-      //  }
+        //  private void RemoveConstraints()
+        //  {
+        //      // ALTER TABLE AspNetUserRoles DROP CONSTRAINT FK_AspNetUserRoles_AspNetRoles_UserId;
+        //  }
     }
 }
