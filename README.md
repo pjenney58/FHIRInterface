@@ -99,3 +99,19 @@ https://levelup.gitconnected.com/12-bad-practices-to-avoid-in-asp-net-core-api-c
   Open Nuget Package Manager
   
     Update-Package -reinstall
+
+# Setting up the Palisaid Back End on a Local Machine
+
+1. Install Postgres16
+2. Install .NET 8.01 or latest
+3. Pull Palisaid Practice Management master branch from GitHub
+4. From the PalisaidMeta directory run `dotnet ef database update`
+5. Install xunit if it's not already there
+6. Install pgAdmin if it's not already there
+7. Buld and run DevTests/TFhirParser/ProcessPatients
+8. Buld and run Controllers/Primary
+
+This will work on Windows, Windows/WSL, Linux, and macOS and the overhead is low.
+
+You can also run any of the other DevTests to add other types of data. 
+
