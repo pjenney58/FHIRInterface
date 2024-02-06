@@ -103,14 +103,15 @@ https://levelup.gitconnected.com/12-bad-practices-to-avoid-in-asp-net-core-api-c
 # Setting up the Palisaid Back End on a Local Machine
 
 1. Install Postgres16, use pgpassword for the admin account
-2. Install .NET 8.01 or latest
-3. Pull Palisaid Practice Management master branch from GitHub
-4. Change the default connection string in PalisaidMeta/palisaidmetaconfig.json to "default": "Host=localhost;port=5432;Database=Palisaid;User Id=postgres;Password=pgpassword;"
-5. From the PalisaidMeta directory run `dotnet ef database update`
-6. Install xunit if it's not already there
-7. Install pgAdmin if it's not already there
-8. Buld and run DevTests/TFhirParser/ProcessPatients
-9. Buld and run Controllers/Primary
+2. Install pgAdmin if it's not already there
+3. Using pgAdmin, add role "palisaid"/"password"/SuperUser, CanLogin
+4. Install .NET 8.01 or latest
+5. Pull Palisaid Practice Management master branch from GitHub
+6. From the PalisaidMeta directory run `dotnet ef database update`
+7. From the Authentication directory run `dotnet ef database update`
+8. Install xunit if it's not already there
+9. Buld and run DevTests/TFhirParser/ProcessPatients
+10. Buld and run Controllers/Primary
 
 This will work on Windows, Windows/WSL, Linux, and macOS and the overhead is low.
 
