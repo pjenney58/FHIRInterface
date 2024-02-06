@@ -5,7 +5,7 @@ using Hl7.Fhir.Serialization;
 using Npgsql;
 using RandomDataGenerator;
 using Microsoft.EntityFrameworkCore;
-using System.Net.WebSockets;
+
 
 /*
 extern alias r5;
@@ -25,19 +25,23 @@ namespace DevTests
     {
         private const int MAX_VALS = 50;
 
-        private readonly string sourcedir = Environment.OSVersion.Platform == PlatformID.Win32NT
-            ? "C:/SandDriftSoftware/Data/SyntheaData"
-            : "/Users/petejenney/Projects/SyntheaData";
+        private readonly string sourcedir = "../../../../../data/test/Patients_fhir_0fded401-29da-4937-887f-24b9a446194d";
 
         private PalisaidMetaContext _context;
         private Guid _tenantId = Guid.NewGuid();
 
         public TFhirParser()
         {
-            //GetRandomMetaPatient();
-            //GetRandomMetaPractitioner();
-
             _context = new PalisaidMetaContext();
+            if(_context == null)
+            {
+                throw new Exception("Context is null");
+            }
+
+            if(Directory.Exists(sourcedir) == false)
+            {
+                throw new Exception("Directory not found");
+            }
 
             lastDate = DateTime.Now.AddDays(-31);
         }

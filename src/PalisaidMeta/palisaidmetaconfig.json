@@ -7,10 +7,10 @@
   },
   "AllowedHosts": "*",
   "ConnectionStrings": {
-    "docker": "Host=joey;port=5432;Database=Palisaid;User Id=palisaid;Password=topsecret;sslmode=Require;Trust Server Certificate=true",
-    "default": "Host=joey;port=5432;Database=Palisaid;User Id=palisaid;Password=topsecret;sslmode=Require;Trust Server Certificate=true",
-    "identity": "Host=joey;port=5432;Database=Identity;User Id=palisaid;Password=topsecret;sslmode=Require;Trust Server Certificate=true",
-    "dockerIdentity": "Host=joey;port=5432;Database=Palisaid;User Id=palisaid;Password=topsecret;sslmode=Require;Trust Server Certificate=true",
-    "migrating": "Host=joey;port=5432;Database=Palisaid;User Id=palisaid;Password=topsecret"
+    "docker": "Host=localhost;port=5432;Database=Palisaid;User Id=palisaid;Password=topsecret;sslmode=Require;Trust Server Certificate=true",
+    "default": "Host=localhost;port=5432;Database=Palisaid;User Id=palisaid;Password=password",
+    "identity": "Host=localhost;port=5432;Database=Identity;User Id=palisaid;Password=password",
+    "dockerIdentity": "Host=localhost;port=5432;Database=Palisaid;User Id=palisaid;Password=topsecret;sslmode=Require;Trust Server Certificate=true",
+    "migrating": "Host=localhost;port=5432;Database=Palisaid;User Id=palisaid;Password=topsecret"
   }
 }

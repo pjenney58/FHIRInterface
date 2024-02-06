@@ -254,5 +254,10 @@ public class Program
                 context.SaveChanges();
             }
         }
+
+      //  private void RemoveConstraints()
+      //  {
+      //      // ALTER TABLE AspNetUserRoles DROP CONSTRAINT FK_AspNetUserRoles_AspNetRoles_UserId;
+      //  }
     }
 }
