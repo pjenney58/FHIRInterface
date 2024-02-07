@@ -12,8 +12,17 @@ namespace PalisaidMeta.Model
 
 		public Entity()
 		{
+			if (EntityId == Guid.Empty)
+			{
+				EntityId = Guid.NewGuid();
+			}
+
+			TenantId = DefaultTenantId;
+			OwnerId = TenantId;
+			
 			CreateDate = DateTimeOffset.Now;
-			IsActive = false;
+			LastUpdate = DateTimeOffset.Now;
+			IsActive = true;
 		}
 
 		public Entity(Guid tenantId, Guid ownerId)

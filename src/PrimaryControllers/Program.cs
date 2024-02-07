@@ -25,7 +25,7 @@ public class Program
         //configuration.AddJsonFile("controllerappsettings.json", optional: false, reloadOnChange: true);
 
 
-        //Console.WriteLine($"Running InDocker: {AppRunningIn.Docker}");
+      
 
         var dataconnection = builder.Configuration.GetConnectionString(AppRunningIn.Docker ? "containerdefault" : "default")
                         ?? throw new InvalidOperationException("Connection string 'default' not found.");
@@ -36,14 +36,6 @@ public class Program
         // boooooGussss hack ...
         BogusConstraints.DropData(dataconnection);
         BogusConstraints.DropIdentity(idconnection);
-
-        // Migration -- Update-Database
-        //     Update-Database -Context IdentityDataContext
-        //     Update-Database -Context DataShapeContext
-
-        ///Console.WriteLine($"Running in Docker: {AppRunningIn.Docker}");
-        ///Console.WriteLine($"dataconnection = {dataconnection}");
-        ///Console.WriteLine($"idconnection = {idconnection}");
 
         // Add services to the container.
         builder.Services.AddDbContext<PalisaidMetaContext>(options =>

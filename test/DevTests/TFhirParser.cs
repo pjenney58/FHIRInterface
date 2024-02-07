@@ -33,12 +33,12 @@ namespace DevTests
         public TFhirParser()
         {
             _context = new PalisaidMetaContext();
-            if(_context == null)
+            if (_context == null)
             {
                 throw new Exception("Context is null");
             }
 
-            if(Directory.Exists(sourcedir) == false)
+            if (Directory.Exists(sourcedir) == false)
             {
                 throw new Exception("Directory not found");
             }
@@ -368,15 +368,16 @@ namespace DevTests
                 await System.Threading.Tasks.Task.Run(async () =>
                 {
                     // Arrange
-                    for (var i = 0; i < MAX_VALS; i++)
-                    {
-                        var data = getFhirData();
-                        Assert.NotNull(data);
 
+                    var data = getFhirData();
+                    Assert.NotNull(data);
+
+                    foreach (var file in files)
+                    {
                         var parser = new FhirJsonParser();
                         Assert.NotNull(parser);
 
-                        var parsedBundle = parser.Parse<Bundle>(data);
+                        var parsedBundle = parser.Parse<Bundle>(file);
                         Assert.NotNull(parsedBundle);
 
                         // Act
@@ -773,8 +774,8 @@ namespace DevTests
         {
             try
             {
-                 var data = getFhirData();
-                
+                var data = getFhirData();
+
                 foreach (var file in files)
                 {
                     var parser = new FhirJsonParser();
@@ -785,7 +786,7 @@ namespace DevTests
                     var observations = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Observation>();
                     Assert.NotNull(observations);
 
-                    
+
                     foreach (var observation in observations)
                     {
                         Assert.NotNull(observation);
