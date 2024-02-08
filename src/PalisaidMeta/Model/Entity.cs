@@ -1,15 +1,12 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection.Metadata;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
 
+
 namespace PalisaidMeta.Model
 {
-	public abstract class Entity : IDisposable
+    public abstract class Entity : IDisposable
 	{
-		public Guid DefaultTenantId { get; set; } = new Guid("146b7ab1-d6b0-436e-8b7c-e96f39861a26");
-
 		public Entity()
 		{
 			if (EntityId == Guid.Empty)
@@ -17,7 +14,7 @@ namespace PalisaidMeta.Model
 				EntityId = Guid.NewGuid();
 			}
 
-			TenantId = DefaultTenantId;
+			TenantId = BaseConstants.DefaultTenantId;
 			OwnerId = TenantId;
 			
 			CreateDate = DateTimeOffset.Now;
@@ -37,7 +34,7 @@ namespace PalisaidMeta.Model
 
 			if (tenantId == Guid.Empty)
 			{
-				TenantId = DefaultTenantId;
+				TenantId = BaseConstants.DefaultTenantId;
 			}
 
 			if (ownerId == Guid.Empty)

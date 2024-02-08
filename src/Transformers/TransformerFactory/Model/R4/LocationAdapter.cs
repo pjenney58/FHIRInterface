@@ -17,10 +17,11 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 using Transformers.Interface;
+using Support;
 
 namespace Transformers.Model.R4
 {
-    public class LocationAdapter<IEntity, OEntity> : ITransformer
+    public class LocationTransformer<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
     {
@@ -35,7 +36,9 @@ namespace Transformers.Model.R4
         public SourceSystems source { get; set; } = SourceSystems.Epic;
         public Guid tenant { get; set; }
 
-        public LocationAdapter(Guid tenant, InputFormat format, InputVersion version, SourceSystems source)
+        private readonly IBaseEventLogger logger = new BaseEventLogger(nameof(LocationTransformer<IEntity, OEntity>));
+
+        public LocationTransformer(Guid tenant, InputFormat format, InputVersion version, SourceSystems source)
         {
             this.tenant = tenant;
             this.format = format;
@@ -55,14 +58,27 @@ namespace Transformers.Model.R4
 
         private async Task<OEntity> ConvertFhirToMeta()
         {
+            logger.ReportInfo("Hl7.Fhir.Model.Location to PalisaidMeta.Model.Location");
+            
             var fhir = payloadIN as Hl7.Fhir.Model.Location;
+            if (fhir == null)
+            {
+                throw new ArgumentNullException(logger.ReportError("FHIR payload is null",false));
+            }
+
             var meta = new PalisaidMeta.Model.Location()
             {
                 TenantId = tenant,
                 EntityId = Guid.Parse(fhir.Id),
                 CreateDate = DateTimeOffset.Now,
                 LastUpdate = DateTimeOffset.Now,
+                LocationType = LocationType.Clinic
             };
+
+            if (meta == null)
+            {
+                throw new ArgumentNullException(logger.ReportError("Meta payload is null",false));
+            }
 
             meta.Name = fhir.Name;
             meta.Description = fhir.Description;
@@ -72,16 +88,23 @@ namespace Transformers.Model.R4
                 meta.OwnerId = Guid.Parse(fhir.ManagingOrganization.Identifier.Value);
             }
 
-            // Known addresses
-            var addressAdapter = TransformerFactory.Create<Hl7.Fhir.Model.Address, PalisaidMeta.Model.Address>(tenant, format, version, source);
-
-            var address = await addressAdapter.Transform(fhir.Address);
-            if (address != null)
+            try
             {
-                meta.Addresses.Add(await addressAdapter.Transform(fhir.Address) as Address);
+                // Known addresses
+                var addressTransformer = TransformerFactory.Create<Hl7.Fhir.Model.Address, PalisaidMeta.Model.Address>(tenant, format, version, source);
+                var address = await addressTransformer.Transform(fhir.Address);
+                if (address != null)
+                {
+                    meta.Addresses?.Add(await addressTransformer.Transform(fhir.Address) as Address ?? new Address(){ Address1 = "Bogus" });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                logger.ReportDebug($"Location Adapter/Address Exception: {ex.Message}");
             }
 
-            return meta as OEntity;
+            return meta as OEntity ?? throw new ArgumentNullException(logger.ReportError("meta is null",false));
         }
 
         private async Task<OEntity> ConvertR5FhirToMeta()
@@ -110,7 +133,7 @@ namespace Transformers.Model.R4
             throw new NotImplementedException();
         }
 
-        public LocationAdapter(InputVersion version)
+        public LocationTransformer(InputVersion version)
         {
             this.version = version;
         }

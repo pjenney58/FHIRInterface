@@ -177,7 +177,7 @@ public class Program
                     {
                         command.ExecuteNonQuery();
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         // hit constraint
                     }
@@ -187,9 +187,9 @@ public class Program
                         command.CommandText = "ALTER TABLE IF EXISTS \"Contact\" DROP CONSTRAINT \"FK_Contact_Tenants_TenantId\"";
                         command.ExecuteNonQuery();
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        // hit constraint
+                      // hit constraint 
                     }
                 }
             }
@@ -245,7 +245,7 @@ public class Program
                         PhoneNumber = user.Phone,
                         TwoFactorEnabled = false,
                         SecurityStamp = Guid.NewGuid().ToString(),
-                        TenantId = Guid.Empty
+                        TenantId = BaseConstants.AdminId
                     };
 
                     try

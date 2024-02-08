@@ -146,7 +146,7 @@ namespace Transformers.Model
                                     return new Stu3.LocationAdapter<IEntity, OEntity>(tenant, format, version, source);
 
                                 case InputVersion.HL7FhirR4:
-                                    return new R4.LocationAdapter<IEntity, OEntity>(version);
+                                    return new R4.LocationTransformer<IEntity, OEntity>(version);
 
                                 default:
                                     throw new ArgumentNullException("Location Handler");

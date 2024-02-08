@@ -52,6 +52,9 @@ namespace Transformers.Model.R4
         public SourceSystems source { get; set; } = SourceSystems.Epic;
         public Guid tenant { get; set; }
 
+        private readonly IBaseEventLogger logger = new BaseEventLogger(nameof(AddressTransformer<IEntity, OEntity>));
+
+
         public AddressTransformer(Guid tenant, InputFormat format, InputVersion version, SourceSystems source)
         {
             this.tenant = tenant;
@@ -65,13 +68,13 @@ namespace Transformers.Model.R4
             var fhir = payloadIN as Hl7.Fhir.Model.Address;
             if (fhir == null)
             {
-                throw new ArgumentNullException(nameof(fhir));
+                throw new ArgumentNullException(logger.ReportError("FHIR payload is null", false));
             }
 
             var meta = new PalisaidMeta.Model.Address();
             if (meta == null)
             {
-                throw new ArgumentNullException(nameof(meta));
+                throw new ArgumentNullException(logger.ReportError("Meta payload is null", false));
             }
 
             meta.TenantId = this.tenant;

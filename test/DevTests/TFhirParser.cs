@@ -377,7 +377,7 @@ namespace DevTests
                         var parser = new FhirJsonParser();
                         Assert.NotNull(parser);
 
-                        var parsedBundle = parser.Parse<Bundle>(file);
+                        var parsedBundle = parser.Parse<Bundle>(File.ReadAllText(file));
                         Assert.NotNull(parsedBundle);
 
                         // Act

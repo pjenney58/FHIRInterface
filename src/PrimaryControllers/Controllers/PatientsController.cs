@@ -40,7 +40,7 @@ namespace Primary.Controllers
                 {
                     var tid = JwtTenantId.Get(Request);
 
-                    if (tid == Guid.Empty && User != null)
+                    if (tid == BaseConstants.AdminId && User != null)
                     {
                         if (User.Identity != null)
                         {
@@ -89,14 +89,14 @@ namespace Primary.Controllers
                 try
                 {
                     var tid = JwtTenantId.Get(Request);
-                    if (tid == Guid.Empty)
+                    if (tid == BaseConstants.AdminId)
                     {
                         var user = User.Identity as System.Security.Claims.ClaimsIdentity;
                         if (user.HasClaim(user.RoleClaimType, "PalisaidRootAdministrator") ||
                             user.HasClaim(user.RoleClaimType, "PalisaidTenantAdministrator"))
                         {
                             var response = await Task.Run(() => _context.Patients.Where(p => p.EntityId == patientid &&
-                                                                                        p.IsActive == true && 
+                                                                                        p.IsActive == true &&
                                                                                         p.IsDeleted == false)
                                                                             .Include(n => n.Name)
                                                                             .Include(a => a.Addresses)
@@ -112,9 +112,9 @@ namespace Primary.Controllers
                     }
                     else
                     {
-                        return Ok(await Task.Run(() => _context.Patients.Where(i => i.EntityId == patientid && 
-                                                                               i.TenantId == tid && 
-                                                                               i.IsActive == true && 
+                        return Ok(await Task.Run(() => _context.Patients.Where(i => i.EntityId == patientid &&
+                                                                               i.TenantId == tid &&
+                                                                               i.IsActive == true &&
                                                                                i.IsDeleted == false)
                                                                         .Include(n => n.Name)
                                                                         .Include(a => a.Addresses)
@@ -171,7 +171,7 @@ namespace Primary.Controllers
                 {
                     var tid = JwtTenantId.Get(Request);
 
-                    if (tid == Guid.Empty && User != null)
+                    if (tid == BaseConstants.AdminId && User != null)
                     {
                         if (User.Identity != null)
                         {
@@ -279,8 +279,8 @@ namespace Primary.Controllers
 
             try
             {
-                patient.TenantId = patient.TenantId == Guid.Empty 
-                        ? patient.DefaultTenantId 
+                patient.TenantId = patient.TenantId == Guid.Empty
+                        ? BaseConstants.DefaultTenantId
                         : tid;
 
                 patient.OriginId = patient.EntityId.ToString();
@@ -288,7 +288,7 @@ namespace Primary.Controllers
                 patient.MarkAsUpdated();
                 await _context.AddAsync<Patient>(patient);
                 await _context.SaveChangesAsync();
-            
+
                 return Ok(patient);
             }
             catch (Exception ex)
@@ -328,7 +328,7 @@ namespace Primary.Controllers
 
         [HttpDelete("DeletePatient")]
         [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
-        public async Task<IActionResult> Delete()
+        public async Task<IActionResult> Delete(Guid patientid)
         {
             if (!ModelState.IsValid)
             {
@@ -337,12 +337,42 @@ namespace Primary.Controllers
 
             try
             {
-                var patient = await _context.Patients.FindAsync(Guid.Parse(Request.Query["patientid"]));
-                patient.MarkDeleted();
-                _context.Update<Patient>(patient);
-                await _context.SaveChangesAsync();
+                var patient = await _context.Patients.FindAsync(patientid);
+                if (patient != null)
+                {
+                    patient.MarkDeleted();
+                    _context.Update<Patient>(patient);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
 
-                return Ok();
+            return BadRequest();
+        }
+
+        [HttpPost("RecoverPatient")]
+        [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
+        public async Task<IActionResult> UnDeletePatient(Guid patientid)
+        {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+            }
+
+            try
+            {
+                var patient = await _context.Patients.FindAsync(patientid);
+                if (patient != null)
+                {
+                    patient.UnDelete();
+                    _context.Update<Patient>(patient);
+                    await _context.SaveChangesAsync();
+                    return Ok(patient);
+                }
             }
             catch (Exception ex)
             {
