@@ -29,7 +29,7 @@ namespace Primary.Controllers
         [Authorize(Roles = "Everyone")]
         public async Task<IActionResult> Get()
         {
-           if (!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, ModelState);
             }
@@ -55,8 +55,8 @@ namespace Primary.Controllers
                             if (user.HasClaim(user.RoleClaimType, "PalisaidRootAdministrator") ||
                                 user.HasClaim(user.RoleClaimType, "PalisaidTenantAdministrator"))
                             {
-                                list = await  _context.Locations.ToListAsync();
-                                return Ok(list.Select(l => new { l?.EntityId, l?.Name}));
+                                list = await _context.Locations.ToListAsync();
+                                return Ok(list.Select(l => new { l?.EntityId, l?.Name }));
                             }
                         }
 
@@ -64,7 +64,7 @@ namespace Primary.Controllers
                     }
                     else
                     {
-                        list = await  _context.Locations.Where(t => t.TenantId == tid).ToListAsync();
+                        list = await _context.Locations.Where(t => t.TenantId == tid).ToListAsync();
                         return Ok(list.Select(l => new { l?.EntityId, l?.Name }));
                     }
                 }
@@ -94,13 +94,18 @@ namespace Primary.Controllers
                     if (tid == BaseConstants.DefaultTenantId)
                     {
                         var user = User.Identity as System.Security.Claims.ClaimsIdentity;
+                        if (user == null)
+                        {
+                            return BadRequest();
+                        }
+
                         if (user.HasClaim(user.RoleClaimType, "PalisaidRootAdministrator") ||
                             user.HasClaim(user.RoleClaimType, "PalisaidTenantAdministrator"))
                         {
                             var response = await Task.Run(() => _context.Locations.Where(p => p.EntityId == locationid &&
-                                                                                        p.IsActive == true && 
+                                                                                        p.IsActive == true &&
                                                                                         p.IsDeleted == false)
-                                                                                    .Include(a => a.Addresses)                                                                           
+                                                                                    .Include(a => a.Addresses)
                                                                                     .Include(cm => cm.ContactMethods)
                                                                                     .Include(cn => cn.Contacts)
                                                                                     .FirstOrDefault());
@@ -111,15 +116,15 @@ namespace Primary.Controllers
                     }
                     else
                     {
-                        return Ok(await Task.Run(() => _context.Locations.Where(i => i.EntityId == locationid && 
-                                                                               i.TenantId == tid && 
-                                                                               i.IsActive == true && 
+                        return Ok(await Task.Run(() => _context.Locations.Where(i => i.EntityId == locationid &&
+                                                                               i.TenantId == tid &&
+                                                                               i.IsActive == true &&
                                                                                i.IsDeleted == false)
-                                                                            .Include(a => a.Addresses)                                                                           
+                                                                            .Include(a => a.Addresses)
                                                                             .Include(cm => cm.ContactMethods)
                                                                             .Include(cn => cn.Contacts)
                                                                             .FirstOrDefault()));
-                                                                        
+
                     }
                 }
                 catch (Exception ex)
@@ -144,9 +149,14 @@ namespace Primary.Controllers
 
             try
             {
-                await _context.AddAsync(location);
-                await _context.SaveChangesAsync();
-                return Ok(location);
+                if (_context != null)
+                {
+                    await _context.AddAsync(location);
+                    await _context.SaveChangesAsync();
+                    return Ok(location);
+                }
+
+                return Problem("Null Error");
             }
             catch (Exception ex)
             {
@@ -166,9 +176,14 @@ namespace Primary.Controllers
 
             try
             {
-                _context.Update(location);
-                await _context.SaveChangesAsync();
-                return Ok(location);
+                if (_context != null)
+                {
+                    _context.Update(location);
+                    await _context.SaveChangesAsync();
+                    return Ok(location);
+                }
+
+                return Problem("Null Error");
             }
             catch (Exception ex)
             {
@@ -188,15 +203,20 @@ namespace Primary.Controllers
 
             try
             {
-                var location = await _context.Locations.FindAsync(id);
-                if (location == null)
+                if (_context != null && _context.Locations != null)
                 {
-                    return NotFound();
-                }
-               
-                location.MarkDeleted();
-                await _context.SaveChangesAsync();
-                return Ok();
+                    var location = await _context.Locations.FindAsync(id);
+                    if (location == null)
+                    {
+                        return NotFound();
+                    }
+
+                    location.MarkDeleted();
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }               
+
+                return Problem("Null Error");
             }
             catch (Exception ex)
             {
@@ -216,15 +236,20 @@ namespace Primary.Controllers
 
             try
             {
-                var location = await _context.Locations.FindAsync(id);
-                if (location == null)
+                if (_context != null && _context.Locations != null)
                 {
-                    return NotFound();
+                    var location = await _context.Locations.FindAsync(id);
+                    if (location == null)
+                    {
+                        return NotFound();
+                    }
+
+                    location.UnDelete();
+                    await _context.SaveChangesAsync();
+                    return Ok(location);
                 }
-               
-                location.UnDelete();
-                await _context.SaveChangesAsync();
-                return Ok(location);
+                
+                return Problem("Null Error");
             }
             catch (Exception ex)
             {

@@ -141,9 +141,9 @@ namespace Transformers.Model.R4
             {
                 var lines = new List<string>()
                 {
-                    meta.Address1,
-                    meta.Address2,
-                    meta.Address3
+                    meta.Address1 ?? "Bogus",
+                    meta.Address2 ?? "Bogus",
+                    meta.Address3 ?? "Bogus"
                 };
 
                 fhir.Line = lines as IEnumerable<string>;

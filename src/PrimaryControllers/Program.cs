@@ -261,7 +261,7 @@ public class Program
                             }
                             )).Wait();
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         // hit constraint
                     }

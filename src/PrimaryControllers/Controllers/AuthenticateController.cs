@@ -467,8 +467,7 @@ namespace Primary.Controllers
             return Ok();
         }
 
-        [HttpDelete]
-        [Route("role/{role}")]
+        [HttpDelete("DeleteRole")]
         [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator, PalisaidOwner")]
         public async Task<IActionResult> DeleteRole(string role)
         {
@@ -481,8 +480,7 @@ namespace Primary.Controllers
             return Ok();
         }
 
-        [HttpPut]
-        [Route("role/{id,role}")]
+        [HttpPut("AddUserRole")]
         [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator, PalisaidOwner")]
         public async Task<IActionResult> AddUserRole(Guid id, string role)
         {
@@ -510,8 +508,7 @@ namespace Primary.Controllers
             return BadRequest();
         }
 
-        [HttpDelete]
-        [Route("role/{id,role}")]
+        [HttpDelete("DeleteUserRole")]
         [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator, PalisaidOwner")]
         public async Task<IActionResult> DeleteUserRole(Guid id, string role)
         {
@@ -537,8 +534,7 @@ namespace Primary.Controllers
             return StatusCode(StatusCodes.Status400BadRequest, ModelState);
         }
 
-        [HttpGet]
-        [Route("role/{id}")]
+        [HttpGet("GetUserRoles")]
         [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator, PalisaidOwner")]
         public async Task<IActionResult> GetUserRoles(Guid id)
         {

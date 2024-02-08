@@ -92,6 +92,11 @@ namespace Primary.Controllers
                     if (tid == BaseConstants.AdminId)
                     {
                         var user = User.Identity as System.Security.Claims.ClaimsIdentity;
+                        if (user == null)
+                        {
+                            return Problem("Null User");
+                        }
+
                         if (user.HasClaim(user.RoleClaimType, "PalisaidRootAdministrator") ||
                             user.HasClaim(user.RoleClaimType, "PalisaidTenantAdministrator"))
                         {
@@ -337,14 +342,20 @@ namespace Primary.Controllers
 
             try
             {
-                var patient = await _context.Patients.FindAsync(patientid);
-                if (patient != null)
+                if (_context != null && _context.Patients != null)
                 {
-                    patient.MarkDeleted();
-                    _context.Update<Patient>(patient);
-                    await _context.SaveChangesAsync();
-                    return Ok();
+                    var patient = await _context.Patients.FindAsync(patientid);
+                    if (patient != null)
+                    {
+                        patient.MarkDeleted();
+                        _context.Update<Patient>(patient);
+                        await _context.SaveChangesAsync();
+                        return Ok();
+                    }
                 }
+
+                _logger.LogError("_context or _context.Patients is null.");
+                return Problem("Null Error");
             }
             catch (Exception ex)
             {
@@ -365,14 +376,20 @@ namespace Primary.Controllers
 
             try
             {
-                var patient = await _context.Patients.FindAsync(patientid);
-                if (patient != null)
+                if (_context != null && _context.Patients != null)
                 {
-                    patient.UnDelete();
-                    _context.Update<Patient>(patient);
-                    await _context.SaveChangesAsync();
-                    return Ok(patient);
+                    var patient = await _context.Patients.FindAsync(patientid);
+                    if (patient != null)
+                    {
+                        patient.UnDelete();
+                        _context.Update<Patient>(patient);
+                        await _context.SaveChangesAsync();
+                        return Ok(patient);
+                    }
                 }
+
+                _logger.LogError("_context or _context.Patients is null.");
+                return Problem("Null Error");
             }
             catch (Exception ex)
             {

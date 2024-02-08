@@ -46,7 +46,9 @@ namespace Transformers.Model.R4
             this.source = source;
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         private async Task<OEntity> ConvertR2FhirToMeta()
+
         {
             throw new NotImplementedException();
         }
@@ -55,6 +57,7 @@ namespace Transformers.Model.R4
         {
             throw new NotImplementedException();
         }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
         private async Task<OEntity> ConvertFhirToMeta()
         {
@@ -107,7 +110,9 @@ namespace Transformers.Model.R4
             return meta as OEntity ?? throw new ArgumentNullException(logger.ReportError("meta is null",false));
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         private async Task<OEntity> ConvertR5FhirToMeta()
+
         {
             throw new NotImplementedException();
         }
@@ -150,6 +155,7 @@ namespace Transformers.Model.R4
             // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
             throw new NotImplementedException();
         }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
         public async Task<object?> Transform(object payload)
         {
