@@ -25,7 +25,7 @@ public class Program
         //configuration.AddJsonFile("controllerappsettings.json", optional: false, reloadOnChange: true);
 
 
-      
+
 
         var dataconnection = builder.Configuration.GetConnectionString(AppRunningIn.Docker ? "containerdefault" : "default")
                         ?? throw new InvalidOperationException("Connection string 'default' not found.");
@@ -40,6 +40,7 @@ public class Program
         // Add services to the container.
         builder.Services.AddDbContext<PalisaidMetaContext>(options =>
             options.UseNpgsql(dataconnection));
+
 
         // Add security
         builder.Services.AddDbContext<IdentityDataContext>(options =>
@@ -136,29 +137,34 @@ public class Program
 
         var app = builder.Build();
 
-        // Seed the db if it's not setup yet
-        using (var scope = app.Services.CreateScope())
-        {
-            var services = scope.ServiceProvider;
-            SeedRoles.Initialize(services);
-            SeedUsers.Initialize(services);
-
-            //var context = services.GetRequiredService<PalisaidMetaContext>();
-            //context.Database.ExecuteSqlRaw($"ALTER TABLE Address DROP CONSTRAINT FK_Address_Tenants_TenantId");
-            //context.Database.ExecuteSqlRaw($"ALTER TABLE Address DROP CONSTRAINT FK_Contact_Tenants_TenantId");
-        }
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
+            // Seed the db if it's not setup yet
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                SeedRoles.Initialize(services);
+                SeedUsers.Initialize(services);
+            }
+
+            // Create the palisaid database if it doesn't exist
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<PalisaidMetaContext>();
+                dbContext.Database.EnsureCreated();
+                dbContext.Database.Migrate();
+            }
+
             app.UseSwagger();
             app.UseSwaggerUI();
         }
 
         app.UseHttpsRedirection();
-
         app.UseAuthorization();
-
+        app.UseAuthentication();
+        app.UseCors("AllowAll");
         app.MapControllers();
 
         app.Run();
@@ -189,7 +195,7 @@ public class Program
                     }
                     catch
                     {
-                      // hit constraint 
+                        // hit constraint 
                     }
                 }
             }

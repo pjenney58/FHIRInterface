@@ -129,9 +129,6 @@ namespace PalisaidMeta.Model
                .AddJsonFile("palisaidmetaconfig.json")
                .Build();
 
-            // TODO: Remove this when Npgsql fixes the issue with timestamp
-            // AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
 #if DEBUG
             optionsBuilder.UseNpgsql(config.GetConnectionString(AppIn.Docker ? "docker" : "default"))
                           .EnableSensitiveDataLogging()
