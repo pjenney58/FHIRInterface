@@ -38,6 +38,10 @@ namespace DevTests
                 throw new Exception("Context is null");
             }
 
+            _context.Database.Migrate();
+            _context.Database.EnsureCreated();
+
+            
             if (Directory.Exists(sourcedir) == false)
             {
                 throw new Exception("Directory not found");

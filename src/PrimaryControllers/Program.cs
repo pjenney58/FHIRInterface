@@ -25,22 +25,17 @@ public class Program
         //configuration.AddJsonFile("controllerappsettings.json", optional: false, reloadOnChange: true);
 
 
-
-
         var dataconnection = builder.Configuration.GetConnectionString(AppRunningIn.Docker ? "containerdefault" : "default")
                         ?? throw new InvalidOperationException("Connection string 'default' not found.");
 
         var idconnection = builder.Configuration.GetConnectionString(AppRunningIn.Docker ? "containeridentity" : "identity")
                         ?? throw new InvalidOperationException("Connection string 'identity' not found.");
 
-        // boooooGussss hack ...
-        BogusConstraints.DropData(dataconnection);
-        BogusConstraints.DropIdentity(idconnection);
+
 
         // Add services to the container.
         builder.Services.AddDbContext<PalisaidMetaContext>(options =>
             options.UseNpgsql(dataconnection));
-
 
         // Add security
         builder.Services.AddDbContext<IdentityDataContext>(options =>
@@ -153,9 +148,14 @@ public class Program
             using (var scope = app.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<PalisaidMetaContext>();
-                dbContext.Database.EnsureCreated();
                 dbContext.Database.Migrate();
+                dbContext.Database.EnsureCreated();
+                
             }
+
+            // booooohGussss hack ...
+            BogusConstraints.DropData(dataconnection);
+            BogusConstraints.DropIdentity(idconnection);
 
             app.UseSwagger();
             app.UseSwaggerUI();
