@@ -41,7 +41,7 @@ namespace DevTests
             _context.Database.Migrate();
             _context.Database.EnsureCreated();
 
-            
+
             if (Directory.Exists(sourcedir) == false)
             {
                 throw new Exception("Directory not found");
@@ -570,12 +570,11 @@ namespace DevTests
 
                                     Debug.WriteLine($"processing patient: {metaPatient.Name.FirstName} {metaPatient.Name.FamilyName}");
 
-                                    patientList.Add(metaPatient);
 
                                     var observations = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Observation>();
                                     Assert.NotNull(observations);
 
-                                    // TODO: Pete => NEED TO FILTER BY PATIENT ID
+
                                     if (observations.Any())
                                     {
                                         foreach (var observation in observations)
@@ -598,11 +597,54 @@ namespace DevTests
                                                 Debug.WriteLine(ex);
                                             }
 
-                                            observationList.Add(metaObservation);
+                                            Debug.WriteLine($"Processed observation: {metaObservation.EntityId}");
                                         }
                                     }
 
+                                    try
+                                    {
+                                        metaPatient.TenantId = _tenantId;
+                                        metaPatient.OwnerId = _tenantId;
+                                        if (!_context.Patients.Contains(metaPatient))
+                                        {
+                                            await _context.AddAsync(metaPatient);
+                                            await _context.SaveChangesAsync();
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Debug.WriteLine(ex);
+                                    }
 
+
+                                    var locations = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Location>();
+                                    Assert.NotNull(locations);
+                                    if (locations.Any())
+                                    {
+                                        foreach (var location in locations)
+                                        {
+                                            var fhirLocationConverter = TransformerFactory.Create<Hl7.Fhir.Model.Location, PalisaidMeta.Model.Location>(_tenantId, version);
+                                            Assert.NotNull(fhirLocationConverter);
+
+                                            var metaLocation = await fhirLocationConverter.Transform(location) as PalisaidMeta.Model.Location;
+                                            Assert.NotNull(metaLocation);
+
+                                            try
+                                            {
+                                                metaLocation.TenantId = _tenantId;
+                                                metaLocation.OwnerId = metaPatient.EntityId;
+                                                if (!_context.Locations.Contains(metaLocation))
+                                                {
+                                                    await _context.AddAsync(metaLocation);
+                                                    await _context.SaveChangesAsync();
+                                                }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Debug.WriteLine(ex);
+                                            }
+                                        }
+                                    }
 
                                     /*
                                     var encounters = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Encounter>();
@@ -626,7 +668,8 @@ namespace DevTests
                                                 try
                                                 {
                                                     metaEncounter.TenantId = _tenantId;
-                                                    metaEncounter.OwnerId = _tenantId;
+                                                    metaEncounter.OwnerId = metaPatient.EntityId;
+
                                                     if (!_context.Encounters.Contains(metaEncounter))
                                                     {
                                                         await _context.AddAsync(metaEncounter);
@@ -644,35 +687,35 @@ namespace DevTests
                                             }
                                         }
                                     }
-                                    */
-                                    /*
+
+
                                     var allergies = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.AllergyIntolerance>();
                                     Assert.NotNull(allergies);
+                                    if (allergies.Any())
+                                    { }
 
                                     var diagnoses = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.DiagnosticReport>();
                                     Assert.NotNull(diagnoses);
+                                    if (diagnoses.Any())
+                                    { }
 
                                     var devices = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Device>();
                                     Assert.NotNull(devices);
+                                    if (devices.Any())
+                                    { }
 
-                                    foreach (var device in devices)
-                                    {
-                                        var fhirEncounterConverter = TransformerFactory<Hl7.Fhir.Model.Device, PalisaidMeta.Model.Device>.GetTransformer(_tenantId, version);
-                                        Assert.NotNull(fhirEncounterConverter);
-
-                                        var metaEncounter = await fhirEncounterConverter.Convert(device);
-                                        Assert.NotNull(device);
-
-                                        metaPatient.Devices.Add(metaEncounter);
-                                    }
 
                                     var supplies = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.SupplyDelivery>();
                                     Assert.NotNull(supplies);
+                                    if (supplies.Any())
+                                    { }
 
                                     var tests = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.TestReport>();
                                     Assert.NotNull(tests);
-                                    */
-                                    /*var scrips = parsedBundle.Entry.ByResourceType<MedicationRequest>();
+                                    if (tests.Any())
+                                    { }
+
+                                    var scrips = parsedBundle.Entry.ByResourceType<MedicationRequest>();
                                     Assert.NotNull(scrips);
 
                                     foreach (var scrip in scrips)
@@ -693,42 +736,12 @@ namespace DevTests
                                         {
                                             Debug.WriteLine($"Missing med for scrip {metaScrip.Code}");
                                         }
-                                    }
-                                */
-                                    // Persist
-                                    try
-                                    {
-                                        await _context.AddAsync(metaPatient);
-                                        await _context.SaveChangesAsync();
-                                    }
-                                    catch (DbUpdateConcurrencyException cx)
-                                    {
-                                        var t = cx.GetType();
-                                        Debug.WriteLine(cx.Message);
-                                        continue;
-                                    }
-                                    catch (NpgsqlException nx)
-                                    {
-                                        var t = nx.GetType();
-                                        Debug.WriteLine(nx.Message);
-                                        continue;
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        if (ex.InnerException.Message.Contains("duplicate key value violates unique constraint"))
-                                        {
-                                            Debug.WriteLine($"Dup: {metaPatient.Name.FirstName} {metaPatient.Name.FamilyName}");
-                                            continue;
-                                        }
-                                        Debug.WriteLine(ex.Message);
-                                        continue;
-                                    }
-                                }
+                                    }*/
+                                }                              
                             }
                         }
                     }
                 }
-                // }
 
                 bool done = true;
             }

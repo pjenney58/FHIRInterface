@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Npgsql;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Data;
 
@@ -30,7 +31,6 @@ public class Program
 
         var idconnection = builder.Configuration.GetConnectionString(AppRunningIn.Docker ? "containeridentity" : "identity")
                         ?? throw new InvalidOperationException("Connection string 'identity' not found.");
-
 
 
         // Add services to the container.
@@ -139,6 +139,10 @@ public class Program
             // Seed the db if it's not setup yet
             using (var scope = app.Services.CreateScope())
             {
+                var dbContext = scope.ServiceProvider.GetRequiredService<IdentityDataContext>();
+                dbContext.Database.Migrate();
+                dbContext.Database.EnsureCreated();
+                
                 var services = scope.ServiceProvider;
                 SeedRoles.Initialize(services);
                 SeedUsers.Initialize(services);
@@ -150,7 +154,6 @@ public class Program
                 var dbContext = scope.ServiceProvider.GetRequiredService<PalisaidMetaContext>();
                 dbContext.Database.Migrate();
                 dbContext.Database.EnsureCreated();
-                
             }
 
             // booooohGussss hack ...
@@ -225,12 +228,7 @@ public class Program
         public static void Initialize(IServiceProvider serviceProvider)
         {
             using (UserManager<ApplicationUser> _userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>())
-            {
-                // Drop bum constraints
-                // TODO: ALTER TABLE AspNetUserRoles DROP CONSTRAINT FK_AspNetUserRoles_AspNetRoles_UserId;
-                // Manually deleting it works fine and user/role can be saved
-                // var context = serviceProvider.GetRequiredService<IdentityDataContext>();
-                // context.Database.ExecuteSqlRaw("ALTER TABLE AspNetUserRoles DROP CONSTRAINT FK_AspNetUserRoles_AspNetUsers_UserId");
+            {     
                 // Create root user
                 var user = new RegisterAdminModel()
                 {
@@ -239,7 +237,6 @@ public class Program
                     Email = "root@palisaid.com",
                     Phone = "603.264.3961"
                 };
-
 
 
                 if (!_userManager.Users.Any(r => r.UserName == user.Username))
