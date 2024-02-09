@@ -107,8 +107,6 @@ https://levelup.gitconnected.com/12-bad-practices-to-avoid-in-asp-net-core-api-c
 3. Using pgAdmin, add role "palisaid"/"password"/SuperUser, CanLogin
 4. Install .NET 8.01 or latest
 5. Pull Palisaid Practice Management master branch from GitHub
-6. From the PalisaidMeta directory run `dotnet ef database update`
-7. From the Authentication directory run `dotnet ef database update`
 8. Install xunit if it's not already there
 10. Build and run Controllers/Primary -- This is important as it does additional database configuration/setup
 11. Build and run DevTests/TFhirParser/ProcessPatients
