@@ -42,7 +42,7 @@ namespace Primary.Controllers
                 {
                     var tid = JwtTenantId.Get(Request);
 
-                    if (tid == Guid.Empty && User != null)
+                    if (tid == BaseConstants.AdminId && User != null)
                     {
                         if (User.Identity != null)
                         {
@@ -91,7 +91,7 @@ namespace Primary.Controllers
                 try
                 {
                     var tid = JwtTenantId.Get(Request);
-                    if (tid == BaseConstants.DefaultTenantId)
+                    if (tid == BaseConstants.AdminId)
                     {
                         var user = User.Identity as System.Security.Claims.ClaimsIdentity;
                         if (user == null)

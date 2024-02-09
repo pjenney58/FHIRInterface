@@ -23,12 +23,11 @@ namespace DevTests
 {
     public class TFhirParser
     {
-        private const int MAX_VALS = 50;
 
         private readonly string sourcedir = "../../../../../data/test/Patients_fhir_0fded401-29da-4937-887f-24b9a446194d";
 
         private PalisaidMetaContext _context;
-        private Guid _tenantId = Guid.NewGuid();
+        private readonly Guid _tenantId;
 
         public TFhirParser()
         {
@@ -38,12 +37,18 @@ namespace DevTests
                 throw new Exception("Context is null");
             }
 
+            _context.Database.Migrate();
+            _context.Database.EnsureCreated();
+
+
             if (Directory.Exists(sourcedir) == false)
             {
                 throw new Exception("Directory not found");
             }
 
             lastDate = DateTime.Now.AddDays(-31);
+
+            _tenantId = Guid.NewGuid();
         }
 
         [Fact]
@@ -289,15 +294,16 @@ namespace DevTests
                 await System.Threading.Tasks.Task.Run(async () =>
                 {
                     // Arrange
-                    for (var i = 0; i < MAX_VALS; i++)
-                    {
-                        var data = getFhirData();
-                        Assert.NotNull(data);
 
+                    var data = getFhirData();
+                    Assert.NotNull(data);
+
+                    foreach (var file in files)
+                    {
                         var parser = new FhirJsonParser();
                         Assert.NotNull(parser);
 
-                        var parsedBundle = parser.Parse<Bundle>(data);
+                        var parsedBundle = parser.Parse<Bundle>(File.ReadAllText(file));
                         Assert.NotNull(parsedBundle);
 
                         // Act
@@ -527,12 +533,6 @@ namespace DevTests
         {
             try
             {
-                var encounterList = new List<PalisaidMeta.Model.Encounter>();
-                var patientList = new List<PalisaidMeta.Model.Patient>();
-                var locationList = new List<PalisaidMeta.Model.Location>();
-                var practionerList = new List<PalisaidMeta.Model.Practitioner>();
-                var observationList = new List<PalisaidMeta.Model.Observation>();
-
 
                 var data = getFhirData();
 
@@ -546,9 +546,9 @@ namespace DevTests
                     if (null != parsedBundle)
                     {
                         var patients = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Patient>();
-
                         if (patients != null && patients.Any())
                         {
+                            Debug.WriteLine($"Processing {patients.Count()} patients");
                             foreach (var patient in patients)
                             {
                                 if (patient != null)
@@ -566,12 +566,11 @@ namespace DevTests
 
                                     Debug.WriteLine($"processing patient: {metaPatient.Name.FirstName} {metaPatient.Name.FamilyName}");
 
-                                    patientList.Add(metaPatient);
 
                                     var observations = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Observation>();
                                     Assert.NotNull(observations);
 
-                                    // TODO: Pete => NEED TO FILTER BY PATIENT ID
+
                                     if (observations.Any())
                                     {
                                         foreach (var observation in observations)
@@ -594,139 +593,190 @@ namespace DevTests
                                                 Debug.WriteLine(ex);
                                             }
 
-                                            observationList.Add(metaObservation);
+                                            Debug.WriteLine($"Processed observation: {metaObservation.EntityId}");
                                         }
                                     }
 
-
-
-                                    /*
-                                    var encounters = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Encounter>();
-                                    Assert.NotNull(encounters);
-
-                                    if (encounters.Any())
-                                    {
-                                        foreach (var encounter in encounters)
-                                        {
-                                            Assert.NotNull(encounter);
-
-                                            var id = encounter.Subject.Reference.Substring("urn:uuid:".Length);
-                                            if (id != null && id == patient.Id)
-                                            {
-                                                var fhirEncounterConverter = TransformerFactory.Create<Hl7.Fhir.Model.Encounter, PalisaidMeta.Model.Encounter>(_tenantId, version);
-                                                Assert.NotNull(fhirEncounterConverter);
-
-                                                var metaEncounter = await fhirEncounterConverter.Transform(encounter) as PalisaidMeta.Model.Encounter;
-                                                Assert.NotNull(metaEncounter);
-
-                                                try
-                                                {
-                                                    metaEncounter.TenantId = _tenantId;
-                                                    metaEncounter.OwnerId = _tenantId;
-                                                    if (!_context.Encounters.Contains(metaEncounter))
-                                                    {
-                                                        await _context.AddAsync(metaEncounter);
-                                                        await _context.SaveChangesAsync();
-                                                    }
-                                                }
-                                                catch (Exception ex)
-                                                {
-                                                    Debug.WriteLine(ex);
-                                                }
-
-                                                encounterList.Add(metaEncounter);
-
-                                                //encounterRepo.CreateRecord(metaEncounter);
-                                            }
-                                        }
-                                    }
-                                    */
-                                    /*
-                                    var allergies = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.AllergyIntolerance>();
-                                    Assert.NotNull(allergies);
-
-                                    var diagnoses = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.DiagnosticReport>();
-                                    Assert.NotNull(diagnoses);
-
-                                    var devices = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Device>();
-                                    Assert.NotNull(devices);
-
-                                    foreach (var device in devices)
-                                    {
-                                        var fhirEncounterConverter = TransformerFactory<Hl7.Fhir.Model.Device, PalisaidMeta.Model.Device>.GetTransformer(_tenantId, version);
-                                        Assert.NotNull(fhirEncounterConverter);
-
-                                        var metaEncounter = await fhirEncounterConverter.Convert(device);
-                                        Assert.NotNull(device);
-
-                                        metaPatient.Devices.Add(metaEncounter);
-                                    }
-
-                                    var supplies = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.SupplyDelivery>();
-                                    Assert.NotNull(supplies);
-
-                                    var tests = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.TestReport>();
-                                    Assert.NotNull(tests);
-                                    */
-                                    /*var scrips = parsedBundle.Entry.ByResourceType<MedicationRequest>();
-                                    Assert.NotNull(scrips);
-
-                                    foreach (var scrip in scrips)
-                                    {
-                                        var fhirScripConverter = TransformerFactory.Create<Hl7.Fhir.Model.MedicationRequest, PalisaidMeta.Model.Prescription>(_tenantId, version);
-                                        Assert.NotNull(fhirScripConverter);
-
-                                        var metaScrip = await fhirScripConverter.Transform(scrip) as PalisaidMeta.Model.Prescription;
-                                        Assert.NotNull(scrip);
-
-                                        metaPatient?.Prescriptions?.Add(metaScrip);
-
-                                        if (metaScrip.Medication != null)
-                                        {
-                                            Debug.WriteLine($"\tProcessing scrip {metaScrip?.Code?.Name} for {metaScrip?.Medication.GenericName}, written on {metaScrip?.WrittenDate}");
-                                        }
-                                        else
-                                        {
-                                            Debug.WriteLine($"Missing med for scrip {metaScrip.Code}");
-                                        }
-                                    }
-                                */
-                                    // Persist
                                     try
                                     {
-                                        await _context.AddAsync(metaPatient);
-                                        await _context.SaveChangesAsync();
-                                    }
-                                    catch (DbUpdateConcurrencyException cx)
-                                    {
-                                        var t = cx.GetType();
-                                        Debug.WriteLine(cx.Message);
-                                        continue;
-                                    }
-                                    catch (NpgsqlException nx)
-                                    {
-                                        var t = nx.GetType();
-                                        Debug.WriteLine(nx.Message);
-                                        continue;
+                                        metaPatient.TenantId = _tenantId;
+                                        metaPatient.OwnerId = _tenantId;
+                                        if (!_context.Patients.Contains(metaPatient))
+                                        {
+                                            await _context.AddAsync(metaPatient);
+                                            await _context.SaveChangesAsync();
+                                        }
                                     }
                                     catch (Exception ex)
                                     {
-                                        if (ex.InnerException.Message.Contains("duplicate key value violates unique constraint"))
+                                        Debug.WriteLine(ex);
+                                    }
+
+                                }
+                            }
+                        }
+
+                        var locations = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Location>();
+                        if (locations != null && locations.Any())
+                        {
+                            Debug.WriteLine($"Processing {locations.Count()} locations");
+                            foreach (var location in locations)
+                            {
+                                var fhirLocationConverter = TransformerFactory.Create<Hl7.Fhir.Model.Location, PalisaidMeta.Model.Location>(_tenantId, version);
+                                Assert.NotNull(fhirLocationConverter);
+
+                                var metaLocation = await fhirLocationConverter.Transform(location) as PalisaidMeta.Model.Location;
+                                Assert.NotNull(metaLocation);
+
+                                try
+                                {
+                                    metaLocation.TenantId = _tenantId;
+                                    metaLocation.OwnerId = _tenantId;
+                                    if (!_context.Locations.Contains(metaLocation))
+                                    {
+                                        await _context.AddAsync(metaLocation);
+                                        await _context.SaveChangesAsync();
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Debug.WriteLine(ex);
+                                }
+                            }
+                        }
+
+                        var encounters = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Encounter>();
+                        if (encounters != null && encounters.Any())
+                        {
+                            Debug.WriteLine($"Processing {encounters.Count()} encounters");
+                            foreach (var encounter in encounters)
+                            {
+                                Assert.NotNull(encounter);
+
+                                var id = encounter.Subject.Reference.Substring("urn:uuid:".Length);
+                                if (id != null)
+                                {
+                                    var fhirEncounterConverter = TransformerFactory.Create<Hl7.Fhir.Model.Encounter, PalisaidMeta.Model.Encounter>(_tenantId, version);
+                                    Assert.NotNull(fhirEncounterConverter);
+
+                                    var metaEncounter = await fhirEncounterConverter.Transform(encounter) as PalisaidMeta.Model.Encounter;
+                                    Assert.NotNull(metaEncounter);
+
+                                    try
+                                    {
+                                        metaEncounter.TenantId = _tenantId;
+                                        metaEncounter.OwnerId = _tenantId;
+
+                                        if (!_context.Encounters.Contains(metaEncounter))
                                         {
-                                            Debug.WriteLine($"Dup: {metaPatient.Name.FirstName} {metaPatient.Name.FamilyName}");
-                                            continue;
+                                            await _context.AddAsync(metaEncounter);
+                                            await _context.SaveChangesAsync();
                                         }
-                                        Debug.WriteLine(ex.Message);
-                                        continue;
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Debug.WriteLine(ex);
                                     }
                                 }
                             }
                         }
+
+                        var practitioners = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Practitioner>();
+                        if (practitioners != null && practitioners.Any())
+                        {
+                            Debug.WriteLine($"Processing {practitioners.Count()} practitioners");
+                            foreach (var practitioner in practitioners)
+                            {
+                                var fhirPractitionerConverter = TransformerFactory.Create<Hl7.Fhir.Model.Practitioner, PalisaidMeta.Model.Practitioner>(_tenantId, version);
+                                Assert.NotNull(fhirPractitionerConverter);
+
+                                var metaPractitioner = await fhirPractitionerConverter.Transform(practitioner) as PalisaidMeta.Model.Practitioner;
+                                Assert.NotNull(metaPractitioner);
+
+                                try
+                                {
+                                    metaPractitioner.TenantId = _tenantId;
+                                    metaPractitioner.OwnerId = _tenantId;
+                                    if (!_context.Practitioners.Contains(metaPractitioner))
+                                    {
+                                        await _context.AddAsync(metaPractitioner);
+                                        await _context.SaveChangesAsync();
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Debug.WriteLine(ex);
+                                }
+                            }
+                        }
+
+                        var scrips = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.MedicationRequest>();
+                        if (scrips != null && scrips.Any())
+                        {
+                            Debug.WriteLine($"Processing {scrips.Count()} scrips");
+                            foreach (var scrip in scrips)
+                            {
+                                var fhirScripConverter = TransformerFactory.Create<Hl7.Fhir.Model.MedicationRequest, PalisaidMeta.Model.Prescription>(_tenantId, version);
+                                Assert.NotNull(fhirScripConverter);
+
+                                var metaScrip = await fhirScripConverter.Transform(scrip) as PalisaidMeta.Model.Prescription;
+                                Assert.NotNull(scrip);
+
+                                if (metaScrip.Medication != null)
+                                {
+                                    Debug.WriteLine($"\tProcessing scrip {metaScrip?.Code?.Name} for {metaScrip?.Medication.GenericName}, written on {metaScrip?.WrittenDate}");
+                                }
+                                else
+                                {
+                                    Debug.WriteLine($"Missing med for scrip {metaScrip.Code}");
+                                }
+
+                                try
+                                {
+                                    metaScrip.TenantId = _tenantId;
+                                    metaScrip.OwnerId = _tenantId;
+
+                                    if (!_context.Prescriptions.Contains(metaScrip))
+                                    {
+                                        await _context.AddAsync(metaScrip);
+                                        await _context.SaveChangesAsync();
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Debug.WriteLine(ex);
+                                }
+                            }
+                        }
+
+                        /*
+                        var allergies = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.AllergyIntolerance>();
+                        Assert.NotNull(allergies);
+                        if (allergies.Any())
+                        { }
+
+                        var diagnoses = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.DiagnosticReport>();
+                        Assert.NotNull(diagnoses);
+                        if (diagnoses.Any())
+                        { }
+
+                        var devices = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Device>();
+                        Assert.NotNull(devices);
+                        if (devices.Any())
+                        { }
+
+                        var supplies = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.SupplyDelivery>();
+                        Assert.NotNull(supplies);
+                        if (supplies.Any())
+                        { }
+
+                        var tests = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.TestReport>();
+                        Assert.NotNull(tests);
+                        if (tests.Any())
+                        { }
+                        */
                     }
                 }
-                // }
-
-                bool done = true;
             }
             catch (Exception ex)
             {
@@ -819,19 +869,18 @@ namespace DevTests
         {
             try
             {
+                var data = getFhirData();
+
                 Console.OpenStandardOutput();
-
-                for (var i = 0; i < MAX_VALS; i++)
+                var settings = new ParserSettings()
                 {
-                    var data = getFhirData();
+                    AcceptUnknownMembers = true
+                };
 
-                    var settings = new ParserSettings()
-                    {
-                        AcceptUnknownMembers = true
-                    };
-
-                    var parser = new FhirJsonParser(settings);
-                    var parsedBundle = parser.Parse<Bundle>(data);
+                var parser = new FhirJsonParser(settings);
+                foreach (var file in files)
+                {
+                    var parsedBundle = parser.Parse<Bundle>(File.ReadAllText(file));
 
                     if (null != parsedBundle)
                     {

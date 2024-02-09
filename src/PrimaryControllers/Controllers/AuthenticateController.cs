@@ -577,16 +577,12 @@ namespace Primary.Controllers
                 string? refreshToken = tokenModel.refreshToken;
 
                 var principal = GetPrincipalFromExpiredToken(accessToken);
-                if (principal == null)
+                if (principal == null || principal.Identity == null || principal.Identity.Name == null)
                 {
                     return BadRequest("Invalid access token or refresh token");
                 }
 
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
                 string username = principal.Identity.Name;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
                 var user = await _userManager.FindByNameAsync(username ?? throw new ArgumentNullException("principal.Identity.Name"));
 
