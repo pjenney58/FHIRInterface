@@ -130,7 +130,8 @@ namespace Primary.Controllers
                     {
                         accessToken = new JwtSecurityTokenHandler().WriteToken(token),
                         refreshToken = refreshToken,
-                        validTo = token.ValidTo
+                        validTo = token.ValidTo,
+                        userId = Guid.Parse(user.Id)
                     });
                 }
             }

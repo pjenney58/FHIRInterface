@@ -566,6 +566,8 @@ namespace DevTests
 
                                     Debug.WriteLine($"processing patient: {metaPatient.Name.FirstName} {metaPatient.Name.FamilyName}");
 
+                                    var diagnosticreport = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.DiagnosticReport>();
+                                    Assert.NotNull(diagnosticreport);
 
                                     var observations = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Observation>();
                                     Assert.NotNull(observations);
