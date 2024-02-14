@@ -78,7 +78,8 @@ namespace PalisaidMeta.Model
 
         public Location Place { get; set; } = new();
         public Practitioner Host { get; set; } = new();
-        public DisposableList<Patient> Invitees { get; set; } = new();
+        public DisposableList<Patient> PatientParticipants { get; set; } = new();
+        public DisposableList<Practitioner> PractitionerParticipants { get; set; } = new();
 
         public CalendarEvent() { }
 
