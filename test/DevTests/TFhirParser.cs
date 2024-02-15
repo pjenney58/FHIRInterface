@@ -586,8 +586,8 @@ namespace DevTests
                                             try
                                             {
                                                 metaObservation.TenantId = _tenantId;
-                                                metaObservation.OwnerId = metaPatient.EntityId;
-                                                metaObservation.PatientId = metaPatient.EntityId;
+                                                metaObservation.OwnerId = Guid.Parse(metaPatient.EntityId);
+                                                metaObservation.PatientId = Guid.Parse(metaPatient.EntityId);
                                                 metaPatient.Observations.Add(metaObservation);
                                             }
                                             catch (Exception ex)

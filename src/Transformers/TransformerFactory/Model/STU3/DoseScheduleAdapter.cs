@@ -62,7 +62,7 @@ namespace Transformers.Model.Stu3
             });
 
             meta.TenantId = tenant;
-            meta.EntityId = Guid.Parse(fhir.ElementId);
+            meta.EntityId = fhir.ElementId ?? Guid.NewGuid().ToString();
             meta.DoseScheduleName = fhir.Text;
 
             return meta as OEntity;

@@ -149,15 +149,7 @@ namespace Transformers.Model.R4
             // Fhir doesn't necessarily use a uuid for the key, so we need to be able to set capture it as a long
             if(!string.IsNullOrEmpty(fhir.Id))
             {
-                try
-                {
-                    meta.EntityId = Guid.Parse(fhir.Id);
-                }
-                catch
-                {
-                    meta.EntityId = Guid.NewGuid();
-                    meta.OriginId = fhir.Id;
-                }
+                meta.EntityId = fhir.Id ?? Guid.NewGuid().ToString();
             }
 
             if (fhir.Category != null && fhir.Category.Any())

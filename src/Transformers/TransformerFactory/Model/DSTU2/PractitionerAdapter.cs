@@ -57,7 +57,7 @@ namespace Transformers.Model.Dstu2
             var fhir = payloadIN as Hl7.Fhir.Model.Practitioner;
             var meta = new PalisaidMeta.Model.Practitioner();
 
-            meta.EntityId = Guid.Parse(fhir.Id);
+            meta.EntityId = fhir.Id ?? Guid.NewGuid().ToString();
 
             var n = TransformerFactory.Create<Hl7.Fhir.Model.HumanName, PalisaidMeta.Model.PersonName>(tenant, format, version, source);
             foreach (var name in fhir.Name)

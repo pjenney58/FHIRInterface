@@ -59,7 +59,7 @@ namespace Transformers.Model.Stu3
             }
 
             meta.TenantId = this.tenant;
-            meta.EntityId = Guid.Parse(fhir.Id);
+            meta.EntityId = fhir.Id ?? Guid.NewGuid().ToString();
 
             await Task.Run(() =>
             {

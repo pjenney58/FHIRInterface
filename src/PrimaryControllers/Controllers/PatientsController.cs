@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Support.Model;
 using Microsoft.EntityFrameworkCore;
 using LinqKit;
-using NLog.LayoutRenderers;
 
 namespace Primary.Controllers
 {
@@ -77,7 +76,7 @@ namespace Primary.Controllers
         }
 
         [HttpGet("GetById")]
-        public async Task<IActionResult> GetById(Guid patientid)
+        public async Task<IActionResult> GetById(string patientid)
         {
             if (!ModelState.IsValid)
             {
@@ -288,8 +287,6 @@ namespace Primary.Controllers
                         ? BaseConstants.DefaultTenantId
                         : tid;
 
-                patient.OriginId = patient.EntityId.ToString();
-
                 patient.MarkAsUpdated();
                 await _context.AddAsync<Patient>(patient);
                 await _context.SaveChangesAsync();
@@ -347,7 +344,7 @@ namespace Primary.Controllers
                     var patient = await _context.Patients.FindAsync(patientid);
                     if (patient != null)
                     {
-                        patient.MarkDeleted();
+                        patient.MarkAsDeleted();
                         _context.Update<Patient>(patient);
                         await _context.SaveChangesAsync();
                         return Ok();
@@ -381,7 +378,7 @@ namespace Primary.Controllers
                     var patient = await _context.Patients.FindAsync(patientid);
                     if (patient != null)
                     {
-                        patient.UnDelete();
+                        patient.MarkAsUnDeleted();
                         _context.Update<Patient>(patient);
                         await _context.SaveChangesAsync();
                         return Ok(patient);

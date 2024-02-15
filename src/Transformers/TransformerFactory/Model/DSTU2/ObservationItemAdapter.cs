@@ -58,7 +58,7 @@ namespace Transformers.Model.Dstu2
             var meta = new PalisaidMeta.Model.ObservationItem
             {
                 TenantId = this.tenant,
-                EntityId = Guid.Parse(fhir.Id)
+                EntityId = fhir.Id ?? Guid.NewGuid().ToString()
             };
 
             if(meta == null)
@@ -90,7 +90,7 @@ namespace Transformers.Model.Dstu2
             var meta = payloadIN as PalisaidMeta.Model.ObservationItem; ;
             var fhir = new Hl7.Fhir.Model.Observation();
 
-            fhir.Id = meta.EntityId.ToString();
+            fhir.Id = meta.EntityId;
 
             await Task.Run(() =>
             {

@@ -62,14 +62,22 @@ namespace Transformers.Model.Stu3
         private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Patient;
-            var meta = new PalisaidMeta.Model.Patient()
+            if (fhir == null)
             {
-                TenantId = tenant == Guid.Empty ? Constants.Transform : tenant,
-                EntityId = Guid.Parse(fhir.Id),
-                CreateDate = DateTimeOffset.Now,
-                LastUpdate = DateTimeOffset.Now,
-                PrimaryPatientIdString = fhir.Id
-            };
+                throw new ArgumentNullException(nameof(fhir));
+            }
+
+            var meta = new PalisaidMeta.Model.Patient();
+            if (meta == null)
+            {
+                throw new ArgumentNullException(nameof(meta));
+            }
+
+            meta.TenantId = tenant == Guid.Empty ? Constants.Transform : tenant;
+            meta.EntityId = fhir.Id ?? Guid.NewGuid().ToString();
+            meta.CreateDate = DateTimeOffset.Now;
+            meta.LastUpdate = DateTimeOffset.Now;
+            meta.PrimaryPatientIdString = fhir.Id;
 
             var nameconverter = TransformerFactory.Create<Hl7.Fhir.Model.HumanName, PalisaidMeta.Model.PersonName>(tenant, format, version, source);
             foreach (var name in fhir.Name)
@@ -78,13 +86,23 @@ namespace Transformers.Model.Stu3
             }
 
             // Known addresses
+            if(meta.Addresses == null)
+            {
+                meta.Addresses = new();
+            }
+
             var addressAdapter = TransformerFactory.Create<Hl7.Fhir.Model.Address, PalisaidMeta.Model.Address>(tenant, format, version, source);
             foreach (var address in fhir.Address)
             {
-                meta.Addresses.Add(await addressAdapter.Transform(address) as PalisaidMeta.Model.Address);
+                meta.Addresses.Add(await addressAdapter.Transform(address) as PalisaidMeta.Model.Address ?? new PalisaidMeta.Model.Address());
             }
 
             // Practitioners ...
+            if(meta.Practitioners == null)
+            {
+                meta.Practitioners = new();
+            }
+            
             var pr = TransformerFactory.Create<Hl7.Fhir.Model.Practitioner, PalisaidMeta.Model.Practitioner>(tenant, format, version, source);
             foreach (var practioner in fhir.GeneralPractitioner)
             {

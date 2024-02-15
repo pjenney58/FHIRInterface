@@ -51,10 +51,7 @@ namespace Transformers.Model.Dstu2
             var fhir = payloadIN as Hl7.Fhir.Model.HumanName;
             var meta = new PalisaidMeta.Model.PersonName();
 
-            meta.EntityId = fhir.ElementId == null
-                ? Guid.NewGuid()
-                : Guid.Parse(fhir.ElementId);
-
+            meta.EntityId = fhir.ElementId ?? Guid.NewGuid().ToString();       
             meta.TenantId = tenant;
 
             foreach (var given in fhir.Given)
@@ -104,7 +101,7 @@ namespace Transformers.Model.Dstu2
                 throw new ArgumentNullException(nameof(fhir));
             }
 
-            fhir.ElementId = meta.EntityId.ToString();
+            fhir.ElementId = meta.EntityId;
 
             foreach (var given in meta.GivenName)
             {

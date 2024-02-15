@@ -67,7 +67,7 @@ namespace Transformers.Model.Dstu2
             var meta = new PalisaidMeta.Model.Patient()
             {
                 TenantId = tenant == Guid.Empty ? Constants.Transform : tenant,
-                EntityId = Guid.Parse(fhir.Id),
+                EntityId = fhir.Id ?? Guid.NewGuid().ToString(),
                 CreateDate = DateTimeOffset.Now,
                 LastUpdate = DateTimeOffset.Now,
                 PrimaryPatientIdString = fhir.Id

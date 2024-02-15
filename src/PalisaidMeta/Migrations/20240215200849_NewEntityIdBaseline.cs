@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PalisaidMeta.Migrations
 {
     /// <inheritdoc />
-    public partial class NewDefaults : Migration
+    public partial class NewEntityIdBaseline : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +19,7 @@ namespace PalisaidMeta.Migrations
                 name: "Collectors",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     TargetName = table.Column<string>(type: "text", nullable: true),
                     TargetUrl = table.Column<string>(type: "text", nullable: true),
                     TargetUri = table.Column<string>(type: "text", nullable: true),
@@ -41,11 +41,9 @@ namespace PalisaidMeta.Migrations
                     username = table.Column<string>(type: "text", nullable: true),
                     password = table.Column<string>(type: "text", nullable: true),
                     apitoken = table.Column<string>(type: "text", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -61,16 +59,14 @@ namespace PalisaidMeta.Migrations
                 name: "DoseSchedule",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     DoseScheduleName = table.Column<string>(type: "text", nullable: true),
                     DoseRepeatPattern = table.Column<string>(type: "text", nullable: true),
                     IsPrn = table.Column<bool>(type: "boolean", nullable: false),
                     AlternatingRepeatDays = table.Column<int>(type: "integer", nullable: false),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -86,14 +82,12 @@ namespace PalisaidMeta.Migrations
                 name: "Duration",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -109,15 +103,13 @@ namespace PalisaidMeta.Migrations
                 name: "Email",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     Address = table.Column<string>(type: "text", nullable: true),
                     Type = table.Column<int>(type: "integer", nullable: false),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -133,8 +125,8 @@ namespace PalisaidMeta.Migrations
                 name: "Medications",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    MedicationId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
+                    MedicationId = table.Column<string>(type: "text", nullable: false),
                     MedicationCode = table.Column<string>(type: "text", nullable: true),
                     IsGeneric = table.Column<bool>(type: "boolean", nullable: false),
                     IsOtc = table.Column<bool>(type: "boolean", nullable: false),
@@ -152,11 +144,9 @@ namespace PalisaidMeta.Migrations
                     SpecialInstructions = table.Column<string>(type: "text", nullable: true),
                     Schedule = table.Column<string>(type: "text", nullable: true),
                     RxCuiCode = table.Column<string>(type: "text", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -172,7 +162,7 @@ namespace PalisaidMeta.Migrations
                 name: "PatientCare",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     CareId = table.Column<string>(type: "text", nullable: true),
                     SocialSecurityNumber = table.Column<string>(type: "text", nullable: true),
                     MedicareId = table.Column<string>(type: "text", nullable: true),
@@ -188,11 +178,9 @@ namespace PalisaidMeta.Migrations
                     CodeStatusLimitedCodeOptions = table.Column<byte>(type: "smallint", nullable: false),
                     HipaaChangeAuthorLogin = table.Column<string>(type: "text", nullable: true),
                     HipaaChangeDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -208,7 +196,7 @@ namespace PalisaidMeta.Migrations
                 name: "PersonName",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     Prefix = table.Column<List<string>>(type: "text[]", nullable: true),
                     GivenName = table.Column<List<string>>(type: "text[]", nullable: true),
                     FamilyName = table.Column<string>(type: "text", nullable: true),
@@ -217,11 +205,9 @@ namespace PalisaidMeta.Migrations
                     Suffix = table.Column<List<string>>(type: "text[]", nullable: true),
                     StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     StopDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -237,17 +223,15 @@ namespace PalisaidMeta.Migrations
                 name: "Phone",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     CountryCode = table.Column<string>(type: "text", nullable: true),
                     Number = table.Column<string>(type: "text", nullable: true),
                     Extension = table.Column<string>(type: "text", nullable: true),
                     Type = table.Column<int>(type: "integer", nullable: false),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -263,18 +247,16 @@ namespace PalisaidMeta.Migrations
                 name: "Tenants",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Department = table.Column<string>(type: "text", nullable: true),
                     WorkGroup = table.Column<string>(type: "text", nullable: true),
                     Team = table.Column<string>(type: "text", nullable: true),
                     ManagerName = table.Column<string>(type: "text", nullable: true),
                     AdminName = table.Column<string>(type: "text", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -290,17 +272,15 @@ namespace PalisaidMeta.Migrations
                 name: "TestResults",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     TestName = table.Column<string>(type: "text", nullable: true),
                     Value = table.Column<string>(type: "text", nullable: true),
                     ValueUnits = table.Column<string>(type: "text", nullable: true),
                     BottomRangeValue = table.Column<string>(type: "text", nullable: true),
                     TopRangeValue = table.Column<string>(type: "text", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -316,16 +296,15 @@ namespace PalisaidMeta.Migrations
                 name: "PaymentMethod",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     PaymentType = table.Column<int>(type: "integer", nullable: false),
                     CardNumber = table.Column<string>(type: "text", nullable: true),
                     CVV2 = table.Column<string>(type: "text", nullable: true),
                     ExpDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TenantEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -336,26 +315,23 @@ namespace PalisaidMeta.Migrations
                 {
                     table.PrimaryKey("PK_PaymentMethod", x => x.EntityId);
                     table.ForeignKey(
-                        name: "FK_PaymentMethod_Tenants_TenantId",
-                        column: x => x.TenantId,
+                        name: "FK_PaymentMethod_Tenants_TenantEntityId",
+                        column: x => x.TenantEntityId,
                         principalTable: "Tenants",
-                        principalColumn: "EntityId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EntityId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Accreditation",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     AccredidationCode = table.Column<string>(type: "text", nullable: true),
                     AccredidationName = table.Column<string>(type: "text", nullable: true),
-                    LocationEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    LocationEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -371,7 +347,7 @@ namespace PalisaidMeta.Migrations
                 name: "Address",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     Use = table.Column<int>(type: "integer", nullable: false),
                     AddressType = table.Column<int>(type: "integer", nullable: false),
                     Address1 = table.Column<string>(type: "text", nullable: true),
@@ -385,14 +361,13 @@ namespace PalisaidMeta.Migrations
                     StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     StopDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     HL7AddressCode = table.Column<string>(type: "text", nullable: false),
-                    LocationEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PatientEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PractitionerEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    LocationEntityId = table.Column<string>(type: "text", nullable: true),
+                    PatientEntityId = table.Column<string>(type: "text", nullable: true),
+                    PractitionerEntityId = table.Column<string>(type: "text", nullable: true),
+                    TenantEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -403,18 +378,17 @@ namespace PalisaidMeta.Migrations
                 {
                     table.PrimaryKey("PK_Address", x => x.EntityId);
                     table.ForeignKey(
-                        name: "FK_Address_Tenants_TenantId",
-                        column: x => x.TenantId,
+                        name: "FK_Address_Tenants_TenantEntityId",
+                        column: x => x.TenantEntityId,
                         principalTable: "Tenants",
-                        principalColumn: "EntityId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EntityId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Codes",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     CodingSystem = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
@@ -422,14 +396,12 @@ namespace PalisaidMeta.Migrations
                     Value = table.Column<string>(type: "text", nullable: true),
                     Units = table.Column<string>(type: "text", nullable: true),
                     System = table.Column<string>(type: "text", nullable: true),
-                    DiagnosisEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    EncounterEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ObservationEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DiagnosisEntityId = table.Column<string>(type: "text", nullable: true),
+                    EncounterEntityId = table.Column<string>(type: "text", nullable: true),
+                    ObservationEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -445,18 +417,16 @@ namespace PalisaidMeta.Migrations
                 name: "Specimen",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SpecimenTypeEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
+                    SpecimenTypeEntityId = table.Column<string>(type: "text", nullable: true),
                     DateCollected = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     Request = table.Column<List<string>>(type: "text[]", nullable: false),
-                    RoleEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    FeatureEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    RoleEntityId = table.Column<string>(type: "text", nullable: true),
+                    FeatureEntityId = table.Column<string>(type: "text", nullable: true),
                     FeatureDescription = table.Column<string>(type: "text", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -487,18 +457,16 @@ namespace PalisaidMeta.Migrations
                 name: "UdiCarrier",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     DeviceIdentifier = table.Column<string>(type: "text", nullable: true),
                     Issuer = table.Column<string>(type: "text", nullable: true),
                     Juristiction = table.Column<string>(type: "text", nullable: true),
                     CarrierAIDC = table.Column<string>(type: "text", nullable: true),
                     CarrierHRF = table.Column<string>(type: "text", nullable: true),
-                    EntryTypeEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntryTypeEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -519,16 +487,15 @@ namespace PalisaidMeta.Migrations
                 name: "Contact",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     Type = table.Column<int>(type: "integer", nullable: false),
-                    NameEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    AddressEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    LocationEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    NameEntityId = table.Column<string>(type: "text", nullable: true),
+                    AddressEntityId = table.Column<string>(type: "text", nullable: true),
+                    LocationEntityId = table.Column<string>(type: "text", nullable: true),
+                    TenantEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -549,31 +516,29 @@ namespace PalisaidMeta.Migrations
                         principalTable: "PersonName",
                         principalColumn: "EntityId");
                     table.ForeignKey(
-                        name: "FK_Contact_Tenants_TenantId",
-                        column: x => x.TenantId,
+                        name: "FK_Contact_Tenants_TenantEntityId",
+                        column: x => x.TenantEntityId,
                         principalTable: "Tenants",
-                        principalColumn: "EntityId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EntityId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "ContactMethod",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PhoneEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
+                    PhoneEntityId = table.Column<string>(type: "text", nullable: true),
                     SocialMedia = table.Column<Dictionary<string, string>>(type: "hstore", nullable: false),
-                    EmailEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    EmailEntityId = table.Column<string>(type: "text", nullable: true),
                     IM = table.Column<string>(type: "text", nullable: true),
-                    ContactEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    LocationEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PatientEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PractitionerEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ContactEntityId = table.Column<string>(type: "text", nullable: true),
+                    LocationEntityId = table.Column<string>(type: "text", nullable: true),
+                    PatientEntityId = table.Column<string>(type: "text", nullable: true),
+                    PractitionerEntityId = table.Column<string>(type: "text", nullable: true),
+                    TenantEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -599,22 +564,21 @@ namespace PalisaidMeta.Migrations
                         principalTable: "Phone",
                         principalColumn: "EntityId");
                     table.ForeignKey(
-                        name: "FK_ContactMethod_Tenants_TenantId",
-                        column: x => x.TenantId,
+                        name: "FK_ContactMethod_Tenants_TenantEntityId",
+                        column: x => x.TenantEntityId,
                         principalTable: "Tenants",
-                        principalColumn: "EntityId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EntityId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Device",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     Identifier = table.Column<List<string>>(type: "text[]", nullable: false),
                     DisplayName = table.Column<string>(type: "text", nullable: true),
-                    UdiCarrierEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    StatusEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    UdiCarrierEntityId = table.Column<string>(type: "text", nullable: true),
+                    StatusEntityId = table.Column<string>(type: "text", nullable: true),
                     AvailabilityStatus = table.Column<string>(type: "text", nullable: true),
                     BiologicalSourceEvent = table.Column<string>(type: "text", nullable: true),
                     Manufacturer = table.Column<string>(type: "text", nullable: true),
@@ -623,26 +587,24 @@ namespace PalisaidMeta.Migrations
                     LotId = table.Column<string>(type: "text", nullable: true),
                     SerialNumber = table.Column<string>(type: "text", nullable: true),
                     DeviceName = table.Column<string>(type: "text", nullable: true),
-                    DeviceTypeEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeviceTypeEntityId = table.Column<string>(type: "text", nullable: true),
                     ModelNumber = table.Column<string>(type: "text", nullable: true),
                     PartNumber = table.Column<string>(type: "text", nullable: true),
-                    DeviceCategoryEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeviceCategoryEntityId = table.Column<string>(type: "text", nullable: true),
                     Versions = table.Column<List<string>>(type: "text[]", nullable: false),
-                    ModeEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModeEntityId = table.Column<string>(type: "text", nullable: true),
                     Cycle = table.Column<decimal>(type: "numeric", nullable: false),
-                    DurationEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DurationEntityId = table.Column<string>(type: "text", nullable: true),
                     Organization = table.Column<string>(type: "text", nullable: true),
                     Contact = table.Column<string>(type: "text", nullable: true),
                     Location = table.Column<string>(type: "text", nullable: true),
-                    DeviceCodeEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeviceCodeEntityId = table.Column<string>(type: "text", nullable: true),
                     Annotation = table.Column<string>(type: "text", nullable: true),
                     Reference = table.Column<string>(type: "text", nullable: true),
-                    PatientEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PatientEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -693,16 +655,14 @@ namespace PalisaidMeta.Migrations
                 name: "Diagnoses",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     DiagnosisName = table.Column<string>(type: "text", nullable: true),
-                    PatientEntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PatientEntityId = table.Column<string>(type: "text", nullable: false),
                     CurrentLocation = table.Column<Guid>(type: "uuid", nullable: false),
-                    DurationEntityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DurationEntityId = table.Column<string>(type: "text", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -724,18 +684,16 @@ namespace PalisaidMeta.Migrations
                 name: "Note",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     NoteType = table.Column<int>(type: "integer", nullable: false),
                     NoteId = table.Column<string>(type: "text", nullable: true),
                     Text = table.Column<string>(type: "text", nullable: true),
                     Author = table.Column<string>(type: "text", nullable: true),
                     Reference = table.Column<string>(type: "text", nullable: true),
-                    DiagnosisEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DiagnosisEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -756,8 +714,8 @@ namespace PalisaidMeta.Migrations
                 name: "DiagnosisEncounter",
                 columns: table => new
                 {
-                    DiagnosesEntityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    EncountersEntityId = table.Column<Guid>(type: "uuid", nullable: false)
+                    DiagnosesEntityId = table.Column<string>(type: "text", nullable: false),
+                    EncountersEntityId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -774,15 +732,13 @@ namespace PalisaidMeta.Migrations
                 name: "DoseDay",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     ThisDoseDay = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    DoseScheduleEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    TreatmentEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DoseScheduleEntityId = table.Column<string>(type: "text", nullable: true),
+                    TreatmentEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -803,19 +759,17 @@ namespace PalisaidMeta.Migrations
                 name: "DoseEvent",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     Time = table.Column<TimeSpan>(type: "interval", nullable: false),
                     MinmumCountOrDefault = table.Column<decimal>(type: "numeric", nullable: false),
                     MaxmumCount = table.Column<decimal>(type: "numeric", nullable: false),
                     Instruction = table.Column<string>(type: "text", nullable: true),
                     Observation = table.Column<string>(type: "text", nullable: true),
-                    DoseDayEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DoseScheduleEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DoseDayEntityId = table.Column<string>(type: "text", nullable: true),
+                    DoseScheduleEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -841,18 +795,16 @@ namespace PalisaidMeta.Migrations
                 name: "Encounters",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     EncounterIdString = table.Column<List<string>>(type: "text[]", nullable: false),
                     EncounterReasonString = table.Column<List<string>>(type: "text[]", nullable: false),
                     StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     StopDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    PrescriptionEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    TreatmentEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PrescriptionEntityId = table.Column<string>(type: "text", nullable: true),
+                    TreatmentEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -868,19 +820,17 @@ namespace PalisaidMeta.Migrations
                 name: "Participant",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     IdString = table.Column<string>(type: "text", nullable: true),
                     Name = table.Column<string>(type: "text", nullable: true),
                     RoleType = table.Column<string>(type: "text", nullable: true),
                     StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     StopDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    EncounterEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EncounterEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -901,13 +851,13 @@ namespace PalisaidMeta.Migrations
                 name: "Patients",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     PrimaryPatientIdString = table.Column<string>(type: "text", nullable: true),
                     AlternatePatientIdString = table.Column<string>(type: "text", nullable: true),
                     Accounts = table.Column<List<string>>(type: "text[]", nullable: false),
                     PatientClass = table.Column<string>(type: "text", nullable: true),
                     UsePatientInfo = table.Column<bool>(type: "boolean", nullable: false),
-                    NameEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    NameEntityId = table.Column<string>(type: "text", nullable: true),
                     Gender = table.Column<int>(type: "integer", nullable: false),
                     BirthDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     IsDeceased = table.Column<bool>(type: "boolean", nullable: false),
@@ -917,15 +867,13 @@ namespace PalisaidMeta.Migrations
                     Floor = table.Column<string>(type: "text", nullable: true),
                     Room = table.Column<string>(type: "text", nullable: true),
                     Bed = table.Column<string>(type: "text", nullable: true),
-                    PatientCareEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    PatientCareEntityId = table.Column<string>(type: "text", nullable: true),
                     AdmissionDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     DischargeDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    EncounterEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EncounterEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -956,24 +904,22 @@ namespace PalisaidMeta.Migrations
                 name: "Practitioners",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     IsRefering = table.Column<bool>(type: "boolean", nullable: false),
                     PractitionerIdentifier = table.Column<string>(type: "text", nullable: true),
                     PractitionerType = table.Column<int>(type: "integer", nullable: false),
                     LicensesAndQualifications = table.Column<Dictionary<string, string>>(type: "hstore", nullable: false),
-                    NameEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    NameEntityId = table.Column<string>(type: "text", nullable: true),
                     PrimaryLanguage = table.Column<string>(type: "text", nullable: true),
                     Gender = table.Column<int>(type: "integer", nullable: false),
                     BirthDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     IsDeceased = table.Column<bool>(type: "boolean", nullable: false),
                     DeceasedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    DiagnosisEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    EncounterEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DiagnosisEntityId = table.Column<string>(type: "text", nullable: true),
+                    EncounterEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -1004,20 +950,19 @@ namespace PalisaidMeta.Migrations
                 name: "Observations",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     PatientId = table.Column<Guid>(type: "uuid", nullable: true),
                     PractitionerId = table.Column<Guid>(type: "uuid", nullable: true),
                     AlternateId = table.Column<long>(type: "bigint", nullable: false),
                     LocationId = table.Column<Guid>(type: "uuid", nullable: true),
                     StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     StopDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    DiagnosisEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    EncounterEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DiagnosisEntityId = table.Column<string>(type: "text", nullable: true),
+                    EncounterEntityId = table.Column<string>(type: "text", nullable: true),
+                    PatientEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -1038,8 +983,8 @@ namespace PalisaidMeta.Migrations
                         principalTable: "Encounters",
                         principalColumn: "EntityId");
                     table.ForeignKey(
-                        name: "FK_Observations_Patients_PatientId",
-                        column: x => x.PatientId,
+                        name: "FK_Observations_Patients_PatientEntityId",
+                        column: x => x.PatientEntityId,
                         principalTable: "Patients",
                         principalColumn: "EntityId");
                 });
@@ -1048,18 +993,16 @@ namespace PalisaidMeta.Migrations
                 name: "SpokenLanguage",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     UsEnglishLanguageName = table.Column<string>(type: "text", nullable: true),
                     NativeLanguageName = table.Column<string>(type: "text", nullable: true),
                     Fluency = table.Column<int>(type: "integer", nullable: false),
                     Use = table.Column<int>(type: "integer", nullable: false),
                     Locale = table.Column<string>(type: "text", nullable: true),
-                    PatientEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PatientEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -1080,7 +1023,7 @@ namespace PalisaidMeta.Migrations
                 name: "Identifier",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     ThisId = table.Column<Guid>(type: "uuid", nullable: false),
                     IdType = table.Column<string>(type: "text", nullable: true),
                     IdValue = table.Column<string>(type: "text", nullable: true),
@@ -1088,13 +1031,11 @@ namespace PalisaidMeta.Migrations
                     IdSource = table.Column<string>(type: "text", nullable: true),
                     StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     StopDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    PatientEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PractitionerEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PatientEntityId = table.Column<string>(type: "text", nullable: true),
+                    PractitionerEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -1120,21 +1061,19 @@ namespace PalisaidMeta.Migrations
                 name: "Locations",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     LocationType = table.Column<int>(type: "integer", nullable: true),
                     Licenses = table.Column<Dictionary<string, string>>(type: "hstore", nullable: true),
                     StarRating = table.Column<int>(type: "integer", nullable: false),
-                    DiagnosisEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    EncounterEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PatientEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PractitionerEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DiagnosisEntityId = table.Column<string>(type: "text", nullable: true),
+                    EncounterEntityId = table.Column<string>(type: "text", nullable: true),
+                    PatientEntityId = table.Column<string>(type: "text", nullable: true),
+                    PractitionerEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -1170,17 +1109,16 @@ namespace PalisaidMeta.Migrations
                 name: "PatientPractitioner",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     Relationship = table.Column<int>(type: "integer", nullable: false),
+                    PractitionerEntityId = table.Column<string>(type: "text", nullable: true),
                     PractitionerId = table.Column<Guid>(type: "uuid", nullable: false),
                     StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     StopDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    PatientEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PatientEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -1196,21 +1134,20 @@ namespace PalisaidMeta.Migrations
                         principalTable: "Patients",
                         principalColumn: "EntityId");
                     table.ForeignKey(
-                        name: "FK_PatientPractitioner_Practitioners_PractitionerId",
-                        column: x => x.PractitionerId,
+                        name: "FK_PatientPractitioner_Practitioners_PractitionerEntityId",
+                        column: x => x.PractitionerEntityId,
                         principalTable: "Practitioners",
-                        principalColumn: "EntityId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EntityId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "ObservationItem",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     ObservationReference = table.Column<Guid>(type: "uuid", nullable: false),
                     ObservationType = table.Column<int>(type: "integer", nullable: true),
-                    CodeEntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CodeEntityId = table.Column<string>(type: "text", nullable: false),
                     TypeName = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Value = table.Column<string>(type: "text", nullable: true),
@@ -1219,16 +1156,14 @@ namespace PalisaidMeta.Migrations
                     Quantity = table.Column<int>(type: "integer", nullable: false),
                     Interpretation = table.Column<List<string>>(type: "text[]", nullable: false),
                     Notes = table.Column<List<string>>(type: "text[]", nullable: false),
-                    BodySiteEntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    BodySiteEntityId = table.Column<string>(type: "text", nullable: false),
                     BodyStructure = table.Column<string>(type: "text", nullable: true),
-                    MethodEntityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SpecimenEntityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ObservationEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    MethodEntityId = table.Column<string>(type: "text", nullable: false),
+                    SpecimenEntityId = table.Column<string>(type: "text", nullable: false),
+                    ObservationEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -1273,7 +1208,7 @@ namespace PalisaidMeta.Migrations
                 name: "Prescriptions",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     PrescriptionName = table.Column<string>(type: "text", nullable: true),
                     RxType = table.Column<int>(type: "integer", nullable: false),
                     PriorPrescriptionName = table.Column<string>(type: "text", nullable: true),
@@ -1284,12 +1219,12 @@ namespace PalisaidMeta.Migrations
                     Status = table.Column<int>(type: "integer", nullable: false),
                     Priority = table.Column<int>(type: "integer", nullable: false),
                     DoNotPerform = table.Column<bool>(type: "boolean", nullable: false),
-                    CodeEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    FillingPharmacyEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CodeEntityId = table.Column<string>(type: "text", nullable: true),
+                    FillingPharmacyEntityId = table.Column<string>(type: "text", nullable: true),
                     Patient = table.Column<Guid>(type: "uuid", nullable: true),
-                    PractitionerEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DiagnosisEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    MedicationEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    PractitionerEntityId = table.Column<string>(type: "text", nullable: true),
+                    DiagnosisEntityId = table.Column<string>(type: "text", nullable: true),
+                    MedicationEntityId = table.Column<string>(type: "text", nullable: true),
                     Sig = table.Column<string>(type: "text", nullable: true),
                     WrittenQuantity = table.Column<decimal>(type: "numeric", nullable: false),
                     WrittenDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -1300,16 +1235,14 @@ namespace PalisaidMeta.Migrations
                     RefillRequestDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     RefillRequestType = table.Column<int>(type: "integer", nullable: false),
                     IsIsolated = table.Column<bool>(type: "boolean", nullable: false),
-                    DoseScheduleEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DoseScheduleEntityId = table.Column<string>(type: "text", nullable: true),
                     SpecialInstructions = table.Column<List<string>>(type: "text[]", nullable: true),
                     MaximumRefills = table.Column<int>(type: "integer", nullable: false),
                     RemainingRefills = table.Column<int>(type: "integer", nullable: false),
-                    PatientEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PatientEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -1360,7 +1293,7 @@ namespace PalisaidMeta.Migrations
                 name: "Treatments",
                 columns: table => new
                 {
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
                     TreatmentId = table.Column<string>(type: "text", nullable: true),
                     TreatmentName = table.Column<string>(type: "text", nullable: true),
                     StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -1370,18 +1303,16 @@ namespace PalisaidMeta.Migrations
                     ShortDescription = table.Column<string>(type: "text", nullable: true),
                     LongDescription = table.Column<string>(type: "text", nullable: true),
                     Sig = table.Column<string>(type: "text", nullable: true),
-                    PatientEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PractitionerEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DiagnosisEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    LocationEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    PatientEntityId = table.Column<string>(type: "text", nullable: true),
+                    PractitionerEntityId = table.Column<string>(type: "text", nullable: true),
+                    DiagnosisEntityId = table.Column<string>(type: "text", nullable: true),
+                    LocationEntityId = table.Column<string>(type: "text", nullable: true),
                     WrittenQuantity = table.Column<decimal>(type: "numeric", nullable: false),
                     WrittenDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    DoseScheduleEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DefaultTenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DoseScheduleEntityId = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     OriginHash = table.Column<string>(type: "text", nullable: false),
-                    OriginId = table.Column<string>(type: "text", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     CreateDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastUpdate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -1439,9 +1370,9 @@ namespace PalisaidMeta.Migrations
                 column: "PractitionerEntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Address_TenantId",
+                name: "IX_Address_TenantEntityId",
                 table: "Address",
-                column: "TenantId");
+                column: "TenantEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Codes_DiagnosisEntityId",
@@ -1474,9 +1405,9 @@ namespace PalisaidMeta.Migrations
                 column: "NameEntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contact_TenantId",
+                name: "IX_Contact_TenantEntityId",
                 table: "Contact",
-                column: "TenantId");
+                column: "TenantEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ContactMethod_ContactEntityId",
@@ -1509,9 +1440,9 @@ namespace PalisaidMeta.Migrations
                 column: "PractitionerEntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContactMethod_TenantId",
+                name: "IX_ContactMethod_TenantEntityId",
                 table: "ContactMethod",
-                column: "TenantId");
+                column: "TenantEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Device_DeviceCategoryEntityId",
@@ -1669,9 +1600,9 @@ namespace PalisaidMeta.Migrations
                 column: "EncounterEntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Observations_PatientId",
+                name: "IX_Observations_PatientEntityId",
                 table: "Observations",
-                column: "PatientId");
+                column: "PatientEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Participant_EncounterEntityId",
@@ -1684,9 +1615,9 @@ namespace PalisaidMeta.Migrations
                 column: "PatientEntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PatientPractitioner_PractitionerId",
+                name: "IX_PatientPractitioner_PractitionerEntityId",
                 table: "PatientPractitioner",
-                column: "PractitionerId");
+                column: "PractitionerEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Patients_EncounterEntityId",
@@ -1704,9 +1635,9 @@ namespace PalisaidMeta.Migrations
                 column: "PatientCareEntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PaymentMethod_TenantId",
+                name: "IX_PaymentMethod_TenantEntityId",
                 table: "PaymentMethod",
-                column: "TenantId");
+                column: "TenantEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Practitioners_DiagnosisEntityId",
@@ -1946,7 +1877,7 @@ namespace PalisaidMeta.Migrations
                 table: "Diagnoses");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Observations_Patients_PatientId",
+                name: "FK_Observations_Patients_PatientEntityId",
                 table: "Observations");
 
             migrationBuilder.DropForeignKey(

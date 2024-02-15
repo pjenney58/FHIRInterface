@@ -57,21 +57,18 @@ namespace Transformers.Model.Stu3
         private async Task<OEntity> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.HumanName;
-            if(fhir == null)
+            if (fhir == null)
             {
-                
+                throw new ArgumentNullException(nameof(fhir));
             }
 
             var meta = new PalisaidMeta.Model.PersonName();
-            if(meta == null)
+            if (meta == null)
             {
-
+                throw new ArgumentNullException(nameof(meta));
             }
 
-            meta.EntityId = fhir.ElementId == null
-                ? Guid.NewGuid()
-                : Guid.Parse(fhir.ElementId);
-
+            meta.EntityId = fhir.ElementId ?? Guid.NewGuid().ToString();
             meta.TenantId = tenant;
 
             foreach (var given in fhir.Given)
@@ -131,12 +128,22 @@ namespace Transformers.Model.Stu3
             }
 
             var fhir = new Hl7.Fhir.Model.HumanName();
-            if(fhir == null)
+            if (fhir == null)
             {
                 throw new ArgumentNullException(nameof(fhir));
             }
 
             fhir.ElementId = meta.EntityId.ToString();
+
+            if (meta.GivenName == null)
+            {
+                meta.GivenName = new();
+            }
+
+            foreach (var given in meta.GivenName)
+            {
+                fhir.Given.Append(given);
+            }
 
             foreach (var given in meta.GivenName)
             {
@@ -145,9 +152,19 @@ namespace Transformers.Model.Stu3
 
             fhir.Family = meta.FamilyName;
 
+            if (meta.Prefix == null)
+            {
+                meta.Prefix = new();
+            }
+
             foreach (var prefix in meta.Prefix)
             {
-                fhir.Prefix.ToList().Add(prefix);
+                fhir.Prefix.Append(prefix);
+            }
+
+            if (meta.Suffix == null)
+            {
+                meta.Suffix = new();
             }
 
             foreach (var suffix in meta.Suffix)
@@ -159,7 +176,7 @@ namespace Transformers.Model.Stu3
             {
                 if (fhir.Period == null)
                 {
-                  //  fhir.Period = new Duration(); 
+                    fhir.Period = new(); 
                 }
 
                 fhir.Period.Start = meta.StartDate.ToString("yyyyMMdd");

@@ -9,9 +9,9 @@ namespace PalisaidMeta.Model
 	{
 		public Entity()
 		{
-			if (EntityId == Guid.Empty)
+			if (string.IsNullOrEmpty(EntityId))
 			{
-				EntityId = Guid.NewGuid();
+				EntityId = Guid.NewGuid().ToString();
 			}
 
 			TenantId = BaseConstants.DefaultTenantId;
@@ -24,13 +24,13 @@ namespace PalisaidMeta.Model
 
 		public Entity(Guid tenantId, Guid ownerId)
 		{
-			if (EntityId == Guid.Empty)
+			if (string.IsNullOrEmpty(EntityId))
 			{
-				EntityId = Guid.NewGuid();
+				EntityId = Guid.NewGuid().ToString();
 			}
 
-			this.OwnerId = ownerId;
-			this.TenantId = tenantId;
+			OwnerId = ownerId;
+			TenantId = tenantId;
 
 			if (tenantId == Guid.Empty)
 			{
@@ -44,11 +44,18 @@ namespace PalisaidMeta.Model
 		}
 
 		#region internalkeys
+		string _entityId = string.Empty;
+		
 		[Key]
-		public Guid EntityId { get; set; } = Guid.Empty;
+		public string EntityId 
+		{ 
+			get => _entityId; 
+			set => _entityId = value ?? Guid.NewGuid().ToString(); 
+		}
+
 		public Guid OwnerId { get; set; } = Guid.Empty;
 		public Guid TenantId { get; set; } = Guid.Empty;
-		#endregion key
+		#endregion internalkeys
 
 		/// <summary>
 		/// The hash of the original data that was used to create this entity. This is used to determine if the data has changed, 
@@ -78,25 +85,6 @@ namespace PalisaidMeta.Model
             return sBuilder.ToString();
 		}
 		
-		/// <summary>
-		/// The id of the original data might not be a UUID. OriginId is a string that will contain whatever the original id was. There 
-		/// will be a lookup table assciatedt with the entity at the Tennant level to resolve the Id.
-		/// </summary>
-		public string OriginId { get; set; } = string.Empty;
-		//public Type OriginIdType { get; set; } = typeof(Guid);
-
-        /*
-        public Type RegisterTenantIdType { 
-            get => OriginIdType; 
-            set => OriginIdType = value; 
-        }
-
-        public void RegisterTenetIdResolverDictionary(string connectstring)
-        {
-            RegisterTenantIdType = typeof(Guid);
-        }
-        */
-		
 		public long Version { get; set; }
 
 		public DateTimeOffset CreateDate { get; set; }
@@ -111,14 +99,14 @@ namespace PalisaidMeta.Model
 			LastUpdate = DateTimeOffset.Now;
 		}
 
-		public void MarkDeleted()
+		public void MarkAsDeleted()
 		{
 			MarkAsUpdated();
 			IsActive = false;
 			IsDeleted = true;
 		}
 
-		public void UnDelete()
+		public void MarkAsUnDeleted()
 		{
 			MarkAsUpdated();
 			IsDeleted = false;

@@ -9,6 +9,11 @@ namespace Support.Model
         public DateTime RefreshTokenExpiryTime { get; set; }
         public Guid TenantId { get; set; }
 
+        /// <summary>
+        /// The entity id of the user, useful if the user is a practitioner or a patient
+        /// </summary>
+        public string? EntityId { get; set; }
+
         public void Dispose()
         {
             RefreshToken = null;

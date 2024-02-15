@@ -59,7 +59,7 @@ namespace Transformers.Model.R4
             }
 
             meta.TenantId = this.tenant;
-            meta.EntityId = Guid.Parse(fhir.Id);
+            meta.EntityId = fhir.Id ?? Guid.NewGuid().ToString();
 
             await Task.Run(() =>
             {
@@ -83,9 +83,18 @@ namespace Transformers.Model.R4
         private async Task<OEntity?> ConvertMetaToFhir()
         {
             var meta = payloadIN as PalisaidMeta.Model.ObservationItem; ;
-            var fhir = new Hl7.Fhir.Model.Observation();
+            if(meta == null)
+            {
+                throw new ArgumentNullException(nameof(meta));
+            }
 
-            fhir.Id = meta.EntityId.ToString();
+            var fhir = new Hl7.Fhir.Model.Observation();
+            if(fhir == null)
+            {
+                throw new ArgumentNullException(nameof(fhir));
+            }
+            
+            fhir.Id = meta.EntityId;
 
             await Task.Run(() =>
             {

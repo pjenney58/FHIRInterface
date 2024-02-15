@@ -71,7 +71,7 @@ namespace Primary.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel login)
+        public async Task<IActionResult> Login([FromBody] LoginModel login, string? entityId = null)
         {
             if (!ModelState.IsValid)
             {
@@ -112,6 +112,7 @@ namespace Primary.Controllers
 
                     user.RefreshToken = refreshToken;
                     user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
+                    user.EntityId = entityId;
 
                     var result = await _userManager.UpdateAsync(user);
 
@@ -131,7 +132,7 @@ namespace Primary.Controllers
                         accessToken = new JwtSecurityTokenHandler().WriteToken(token),
                         refreshToken = refreshToken,
                         validTo = token.ValidTo,
-                        userId = Guid.Parse(user.Id)
+                        entityId = entityId ?? user.Id
                     });
                 }
             }
@@ -141,6 +142,19 @@ namespace Primary.Controllers
             _logger.LogInformation($"Login failure {login.Username}.");
 
             return Unauthorized();
+        }
+
+        [HttpPost("AssociateEntity")]
+        public async Task<IActionResult> AssociateEntity(string userId, string entityId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return BadRequest("Invalid user name");
+            }
+
+            user.EntityId = entityId;
+            return Ok(await _userManager.UpdateAsync(user));
         }
 
         [HttpGet]
