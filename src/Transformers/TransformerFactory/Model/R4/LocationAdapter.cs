@@ -72,7 +72,7 @@ namespace Transformers.Model.R4
             var meta = new PalisaidMeta.Model.Location()
             {
                 TenantId = tenant,
-                EntityId = Guid.Parse(fhir.Id),
+                EntityId = fhir.Id ?? Guid.NewGuid().ToString(),
                 CreateDate = DateTimeOffset.Now,
                 LastUpdate = DateTimeOffset.Now,
                 LocationType = LocationType.Clinic

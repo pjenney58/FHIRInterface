@@ -68,7 +68,7 @@ namespace Transformers.Model.Dstu2
             var meta = new PalisaidMeta.Model.Prescription()
             {
                 TenantId = this.tenant,
-                EntityId = Guid.Parse(fhir.Id),
+                EntityId = fhir.Id ?? Guid.NewGuid().ToString(),
                 OwnerId = Guid.Parse(fhir.Subject.Reference.Substring("urn:uuid:".Length)),
                 CreateDate = DateTimeOffset.UtcNow,
                 LastUpdate = DateTimeOffset.UtcNow,
@@ -137,8 +137,8 @@ namespace Transformers.Model.Dstu2
                             var day = new DoseDay()
                             {
                                 TenantId = tenant,
-                                OwnerId = meta.EntityId,
-                                EntityId = Guid.NewGuid(),
+                                OwnerId = Guid.Parse(meta.EntityId),
+                                EntityId = Guid.NewGuid().ToString(),
                                 CreateDate = DateTimeOffset.Now,
                                 IsActive = true
                             };

@@ -79,7 +79,7 @@ namespace Primary.Controllers
         }
 
         [HttpGet("GetById")]
-        public async Task<IActionResult> GetById(Guid locationid)
+        public async Task<IActionResult> GetById(string locationid)
         {
             if (!ModelState.IsValid)
             {
@@ -211,7 +211,7 @@ namespace Primary.Controllers
                         return NotFound();
                     }
 
-                    location.MarkDeleted();
+                    location.MarkAsDeleted();
                     await _context.SaveChangesAsync();
                     return Ok();
                 }               
@@ -244,7 +244,7 @@ namespace Primary.Controllers
                         return NotFound();
                     }
 
-                    location.UnDelete();
+                    location.MarkAsUnDeleted();
                     await _context.SaveChangesAsync();
                     return Ok(location);
                 }

@@ -92,7 +92,7 @@ namespace Transformers.Model.R4
             }
 
             meta.TenantId = this.tenant;
-            meta.EntityId = Guid.Parse(fhir.Id);
+            meta.EntityId = fhir.Id ?? Guid.NewGuid().ToString();
 
             var codes = new List<PalisaidMeta.Model.Code>();
 
@@ -190,7 +190,7 @@ namespace Transformers.Model.R4
             var meta = new PalisaidMeta.Model.Encounter()
             {
                 TenantId = this.tenant,
-                EntityId = Guid.Parse(fhir.Id),
+                EntityId = fhir.Id,
                 OwnerId = Guid.Parse(fhir.Subject.Reference.Substring("urn:uuid:".Length)),
                 CreateDate = DateTimeOffset.UtcNow,
                 LastUpdate = DateTimeOffset.UtcNow
@@ -266,7 +266,7 @@ namespace Transformers.Model.R4
                     foreach (var diagnosis in fhir.Diagnosis)
                     {
                         var diag = new PalisaidMeta.Model.Diagnosis();
-                        diag.EntityId = Guid.Parse(diagnosis.ElementId.Substring("urn:uuid:".Length));
+                        diag.EntityId = diagnosis.ElementId.Substring("urn:uuid:".Length);
 
                         // meta.Diagnoses.Add(Guid.Parse(diagnosis.ElementId));
                     }

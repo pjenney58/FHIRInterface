@@ -55,9 +55,18 @@ namespace Transformers.Model.Stu3
         private async Task<OEntity> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Practitioner;
-            var meta = new PalisaidMeta.Model.Practitioner();
+            if(fhir == null)
+            {
+                throw new ArgumentNullException(nameof(fhir));
+            }
 
-            meta.EntityId = Guid.Parse(fhir.Id);
+            var meta = new PalisaidMeta.Model.Practitioner();
+            if(meta == null)
+            {
+                throw new ArgumentNullException(nameof(meta));
+            }
+            
+            meta.EntityId = fhir.Id ?? Guid.NewGuid().ToString();
 
             var n = TransformerFactory.Create<Hl7.Fhir.Model.HumanName, PalisaidMeta.Model.PersonName>(tenant, format, version, source);
             foreach (var name in fhir.Name)

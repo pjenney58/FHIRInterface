@@ -60,7 +60,7 @@ namespace Transformers.Model.Dstu2
             var fhir = payloadIN as Hl7.Fhir.Model.Observation;
             var meta = new PalisaidMeta.Model.Observation();
 
-            meta.EntityId = Guid.Parse(fhir.Id);
+            meta.EntityId = fhir.Id ?? Guid.NewGuid().ToString();
 
             // Find all the list entries and add their contents as OservationItems
             //Type _observation = typeof(Hl7.Fhir.Model.Observation);

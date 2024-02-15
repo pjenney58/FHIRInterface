@@ -59,7 +59,7 @@ namespace Transformers.Model.R4
             }
 
             meta.TenantId = tenant;
-            meta.EntityId = Guid.Parse(fhir.ElementId);
+            meta.EntityId = fhir.ElementId ?? Guid.NewGuid().ToString();
             meta.DoseScheduleName = fhir.Text;
 
             await Task.Run(() =>
@@ -84,7 +84,7 @@ namespace Transformers.Model.R4
                 throw new ArgumentNullException(nameof(fhir));
             }
 
-            fhir.ElementId = meta.EntityId.ToString();
+            fhir.ElementId = meta.EntityId;
             fhir.Text = meta.DoseScheduleName;
 
             // TODO: Add more fields

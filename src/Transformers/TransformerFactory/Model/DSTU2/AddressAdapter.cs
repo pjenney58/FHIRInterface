@@ -76,10 +76,8 @@ namespace Transformers.Model.Dstu2
             }
 
             meta.TenantId = this.tenant;
-            meta.EntityId = fhir.ElementId == null
-               ? Guid.NewGuid()
-               : Guid.Parse(fhir.ElementId);
-
+            meta.EntityId = fhir.ElementId ?? Guid.NewGuid().ToString();
+            
             await Task.Run(() =>
             {
                 if (fhir.Line != null)
@@ -130,7 +128,7 @@ namespace Transformers.Model.Dstu2
                 throw new ArgumentNullException(nameof(fhir));
             }
             
-            fhir.ElementId = meta.EntityId.ToString();
+            fhir.ElementId = meta.EntityId;
 
             await Task.Run(() =>
             {

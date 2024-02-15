@@ -9,10 +9,12 @@
 		public string? CarrierHRF { get; set; }
 		public Code? EntryType { get; set; }
 
-		public UdiCarrier() { }
+		public UdiCarrier() 
+		{ }
 
 		public UdiCarrier(Guid tenantId, Guid ownerId)
-			: base(tenantId, ownerId) { }
+			: base(tenantId, ownerId) 
+		{ }
 	}
 }
 

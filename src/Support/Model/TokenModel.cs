@@ -5,7 +5,7 @@
         public string? accessToken { get; set; }
         public string? refreshToken { get; set; }
         public DateTimeOffset? validTo { get; set; }
-        public Guid userId { get; set; }
+        public string? entityId { get; set; }
     }
 }
 

@@ -27,7 +27,7 @@ namespace PalisaidMeta.Model
             : base(tenantId, ownerId) { }
 
        
-        public Guid MedicationId { get => EntityId; set => EntityId = value; }
+        public string MedicationId { get => EntityId; set => EntityId = value; }
 
         public string? MedicationCode { get; set; }
         public bool IsGeneric { get; set; }

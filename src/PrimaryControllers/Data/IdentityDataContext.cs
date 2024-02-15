@@ -3,9 +3,20 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using System.Reflection.Metadata;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Authentication.Data
 {
+    public class DateTimeOffsetConverter : ValueConverter<DateTimeOffset, DateTimeOffset>
+    {
+        public DateTimeOffsetConverter()
+            : base(
+                d => d.ToUniversalTime(),
+                d => d.ToUniversalTime())
+        {
+        }
+    }
+    
     /// <summary>
     /// IdentityDbContext - Supports Azure Identity Management in our PostgreSQL db
     /// </summary>
@@ -26,6 +37,13 @@ namespace Authentication.Data
         public IdentityDataContext(DbContextOptions<IdentityDataContext> options)
             : base(options)
         { }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder
+                .Properties<DateTimeOffset>()
+                .HaveConversion<DateTimeOffsetConverter>();
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
