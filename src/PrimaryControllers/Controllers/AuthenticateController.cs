@@ -107,11 +107,17 @@ namespace Primary.Controllers
 
                     var token = CreateToken(authClaims);
                     var refreshToken = GenerateRefreshToken();
-
-                    int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
-
+                    
                     user.RefreshToken = refreshToken;
+
+#if DEBUG
+                    int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
                     user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
+#else
+                    long.TryParse(_configuration["JWT:RefreshTokenValidityInSeconds"], out long refreshTokenValidityInSeconds);
+                    user.RefreshTokenExpiryTime = DateTime.Now.AddSeconds(refreshTokenValidityInSeconds); 
+#endif
+                         
                     user.EntityId = entityId;
 
                     var result = await _userManager.UpdateAsync(user);
@@ -129,10 +135,10 @@ namespace Primary.Controllers
 
                     return Ok(new TokenModel
                     {
-                        accessToken = new JwtSecurityTokenHandler().WriteToken(token),
-                        refreshToken = refreshToken,
-                        validTo = token.ValidTo,
-                        entityId = entityId ?? user.Id
+                        access_token = new JwtSecurityTokenHandler().WriteToken(token),
+                        refresh_token = refreshToken,
+                        valid_to = token.ValidTo,
+                        entity_id = entityId ?? user.Id.ToString()
                     });
                 }
             }
@@ -240,7 +246,7 @@ namespace Primary.Controllers
         [HttpPost]
         [Route("principal-user")]
         [Authorize(Roles = "PalisaidRootAdministrator, PalisaidOwner")]
-        public async Task<IActionResult> RegistePrincipal([FromBody] RegisterModel? model)
+        public async Task<IActionResult> RegisterPrincipal([FromBody] RegisterModel? model)
         {
             if (!ModelState.IsValid)
             {
@@ -581,17 +587,17 @@ namespace Primary.Controllers
         [Route("refresh-token")]
         public async Task<IActionResult> RefreshToken(TokenModel tokenModel)
         {
-            if (tokenModel is null || tokenModel.accessToken is null || tokenModel.refreshToken is null)
+            if (tokenModel is null || tokenModel.access_token is null || tokenModel.refresh_token is null)
             {
                 return BadRequest("tokenmodel");
             }
 
             try
             {
-                string? accessToken = tokenModel.accessToken;
-                string? refreshToken = tokenModel.refreshToken;
+                string? access_token = tokenModel.access_token;
+                string? refresh_token = tokenModel.refresh_token;
 
-                var principal = GetPrincipalFromExpiredToken(accessToken);
+                var principal = GetPrincipalFromExpiredToken(access_token);
                 if (principal == null || principal.Identity == null || principal.Identity.Name == null)
                 {
                     return BadRequest("Invalid access token or refresh token");
@@ -601,7 +607,7 @@ namespace Primary.Controllers
 
                 var user = await _userManager.FindByNameAsync(username ?? throw new ArgumentNullException("principal.Identity.Name"));
 
-                if (user == null || user.RefreshToken != refreshToken)
+                if (user == null || user.RefreshToken != refresh_token)
                 {
                     return BadRequest("Invalid access token or refresh token");
                 }
@@ -625,11 +631,11 @@ namespace Primary.Controllers
                     }
                 }
 
-                return Ok(new
+                return Ok(new TokenModel
                 {
-                    accesstoken = new JwtSecurityTokenHandler().WriteToken(token),
-                    refreshtoken = newRefreshToken,
-                    validTo = token.ValidTo
+                    access_token = new JwtSecurityTokenHandler().WriteToken(token),
+                    refresh_token = newRefreshToken,
+                    valid_to = token.ValidTo
                 });
             }
             catch(Exception ex)

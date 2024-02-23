@@ -233,18 +233,18 @@ namespace Authentication.Controllers
                 return BadRequest("Invalid client request");
             }
 
-            if (tokenModel.accessToken is null)
+            if (tokenModel.access_token is null)
             {
                 return BadRequest("Invalid token");
             }
 
-            if (tokenModel.refreshToken is null)
+            if (tokenModel.refresh_token is null)
             {
                 return BadRequest("Invalid refresh token");
             }
 
-            string? accessToken = tokenModel.accessToken;
-            string? refreshToken = tokenModel.refreshToken;
+            string? accessToken = tokenModel.access_token;
+            string? refreshToken = tokenModel.refresh_token;
 
             var principal = GetPrincipalFromExpiredToken(accessToken);
             if (principal == null)

@@ -2,10 +2,10 @@
 {
     public class TokenModel
     {
-        public string? accessToken { get; set; }
-        public string? refreshToken { get; set; }
-        public DateTimeOffset? validTo { get; set; }
-        public string? entityId { get; set; }
+        public string? access_token { get; set; }
+        public string? refresh_token { get; set; }
+        public DateTimeOffset? valid_to { get; set; }
+        public string? entity_id { get; set; }
     }
 }
 

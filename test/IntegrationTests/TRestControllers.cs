@@ -6,6 +6,9 @@ using System.Text.Json;
 using System.Text;
 using Support.Model;
 using System.Net.Http.Headers;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 //using EasyNetQ;
 // FK_ContactMethod_Tenants_TenantId
 // FK_Address_Tenants_TenantId
@@ -32,7 +35,7 @@ namespace IntegrationTests
                         response.EnsureSuccessStatusCode();
                         var responseString = await response.Content.ReadAsStringAsync();
                         var tokenModel = JsonSerializer.Deserialize<TokenModel>(responseString);
-                        token = tokenModel.accessToken;
+                        token = tokenModel.access_token;
                     }).Wait();
                 }
                 catch (Exception ex)
@@ -59,25 +62,25 @@ namespace IntegrationTests
             if (practitioner != null)
             {
                 practitioner.Name.TenantId = tenantid;
-                practitioner.Name.OwnerId = practitioner.EntityId;
+                practitioner.Name.OwnerId = Guid.Parse(practitioner.EntityId);
                 practitioner.Name.Prefix.Add("Dr");
                 practitioner.Name.GivenName.Add("Jing Wu");
                 practitioner.Name.MiddleName = "Blink";
                 practitioner.Name.FamilyName = "Ma";
                 practitioner.Name.Suffix.Add("MD");
 
-                practitioner.ContactMethods.Add(new ContactMethod(tenantid, practitioner.EntityId)
+                practitioner.ContactMethods.Add(new ContactMethod(tenantid, Guid.Parse(practitioner.EntityId))
                 {
-                    Phone = new Phone(tenantid, practitioner.EntityId)
+                    Phone = new Phone(tenantid, Guid.Parse(practitioner.EntityId))
                     {
                         Number = "603-555-1212",
                         Priority = PhonePriority.Primary
                     }
                 });
 
-                practitioner.ContactMethods.Add(new ContactMethod(tenantid, practitioner.EntityId)
+                practitioner.ContactMethods.Add(new ContactMethod(tenantid, Guid.Parse(practitioner.EntityId))
                 {
-                    Email = new Email(tenantid, practitioner.EntityId)
+                    Email = new Email(tenantid, Guid.Parse(practitioner.EntityId))
                     {
                         Address = "ma@hospital.com",
                     }
@@ -93,7 +96,7 @@ namespace IntegrationTests
             {
                 // TODO: there's got to be a better waay to do this
                 patient.Name.TenantId = tenantid;
-                patient.Name.OwnerId = patient.EntityId;
+                patient.Name.OwnerId = Guid.Parse(patient.EntityId);
 
                 patient.Name.Prefix.Add("Ms");
                 patient.Name.Prefix.Add("Dr");
@@ -104,7 +107,7 @@ namespace IntegrationTests
                 patient.Name.Suffix.Add("MD");
                 patient.Name.Suffix.Add("PhD");
 
-                patient.Addresses.Add(new Address(patient.TenantId, patient.EntityId)
+                patient.Addresses.Add(new Address(patient.TenantId, Guid.Parse(patient.EntityId))
                 {
                     City = "New York",
                     Country = "USA",
@@ -114,7 +117,7 @@ namespace IntegrationTests
                     AddressType = AddressType.Primary
                 });
 
-                patient.Addresses.Add(new Address(patient.TenantId, patient.EntityId)
+                patient.Addresses.Add(new Address(patient.TenantId, Guid.Parse(patient.EntityId))
                 {
                     City = "Plymouth",
                     Country = "USA",
@@ -127,7 +130,7 @@ namespace IntegrationTests
                 patient.BirthDate = new DateTimeOffset(1980, 12, 21, 18, 26, 0, TimeSpan.Zero);
                 patient.Gender = Gender.Female;
 
-                patient.Practitioners.Add(new PatientPractitioner(tenantid, patient.EntityId)
+                patient.Practitioners.Add(new PatientPractitioner(tenantid, Guid.Parse(patient.EntityId))
                 {
                     Practitioner = practitioner,
                     Relationship = PractitionerRelationship.Primary,
@@ -136,7 +139,7 @@ namespace IntegrationTests
                 });
 
 
-               
+
             }
             else
             {
@@ -235,6 +238,53 @@ namespace IntegrationTests
                     Assert.Fail(ex.Message);
                 }
             }
+        }
+
+        [Fact]
+        public async Task TestMiddleware_ExpectedResponse()
+        {
+            /*
+                using var host = await new HostBuilder()
+                    .ConfigureWebHost(webBuilder =>
+                    {
+                        webBuilder
+                            .UseTestServer()
+                            .ConfigureServices(services =>
+                            {
+                                services.AddMyServices();
+                            })
+                            .Configure(app =>
+                            {
+                                app.UseMiddleware<MyMiddleware>();
+                            });
+                    })
+                    .StartAsync();
+
+                var server = host.GetTestServer();
+                server.BaseAddress = new Uri("https://example.com/A/Path/");
+
+                var context = await server.SendAsync(c =>
+                {
+                    c.Request.Method = HttpMethods.Post;
+                    c.Request.Path = "/and/file.txt";
+                    c.Request.QueryString = new QueryString("?and=query");
+                });
+
+                Assert.True(context.RequestAborted.CanBeCanceled);
+                Assert.Equal(HttpProtocol.Http11, context.Request.Protocol);
+                Assert.Equal("POST", context.Request.Method);
+                Assert.Equal("https", context.Request.Scheme);
+                Assert.Equal("example.com", context.Request.Host.Value);
+                Assert.Equal("/A/Path", context.Request.PathBase.Value);
+                Assert.Equal("/and/file.txt", context.Request.Path.Value);
+                Assert.Equal("?and=query", context.Request.QueryString.Value);
+                Assert.NotNull(context.Request.Body);
+                Assert.NotNull(context.Request.Headers);
+                Assert.NotNull(context.Response.Headers);
+                Assert.NotNull(context.Response.Body);
+                Assert.Equal(404, context.Response.StatusCode);
+                Assert.Null(context.Features.Get<IHttpResponseFeature>().ReasonPhrase);
+                */
         }
     }
 }
