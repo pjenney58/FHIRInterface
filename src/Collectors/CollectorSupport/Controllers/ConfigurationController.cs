@@ -40,9 +40,9 @@ namespace Collectors.Controllers
         }
 
         [HttpGet("Reset/{configid}")]
-        public async Task<ActionResult<string>> Reset(Guid id)
+        public async Task<ActionResult<string>> Reset(string id)
         {
-            if(id == Guid.Empty)
+            if(string.IsNullOrEmpty(id))
             {
                 return BadRequest("Invalid id");
             }

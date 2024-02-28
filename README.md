@@ -115,3 +115,27 @@ This will work on Windows, Windows/WSL, Linux, and macOS and the overhead is low
 
 You can also run any of the other DevTests to add other types of data. 
 
+# Setting Up Dotnet Developer Certs
+
+## Reset your development environment certs
+1. Clear developer certificate: dotnet dev-certs https --clean
+2. Generate a developer certificate: dotnet dev-certs https
+3. Trust developer certificate: dotnet dev-certs https --trust
+
+## Start the Primary/Gateway Controller using https
+Select "C# Primary [https]" and execute
+
+You will see this:
+
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: https://localhost:7276
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5040
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /{path to project}/src/PrimaryControllers
+
+Use localhost:7276 for all API calls

@@ -18,7 +18,7 @@ namespace Support.Model
                 {
                     if (i.Key.ToLower().Contains("primarysid"))
                     {
-                        return Guid.Parse(i.Value.ToString());
+                        return Guid.Parse(i.Value.ToString()?? throw new InvalidDataException("JwtToken Incomplete"));
                     }
                 }
             }

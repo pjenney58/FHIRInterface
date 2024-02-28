@@ -86,8 +86,8 @@ public class Program
 
         /*
        .AddCookie()
-       .AddOpenIdConnect(options =>
-       {
+        .AddOpenIdConnect(options =>
+        {
            options.SignInScheme = "Cookies";
            options.Authority = "-your-identity-provider-";
            options.RequireHttpsMetadata = true;
@@ -97,7 +97,7 @@ public class Program
            options.UsePkce = true;
            options.Scope.Add("profile");
            options.SaveTokens = true;
-       });
+       });   
         */
 
         builder.Services.AddSwaggerGen(c =>

@@ -91,13 +91,16 @@ namespace Primary.Controllers
 
                 if (user != null && await _userManager.CheckPasswordAsync(user, login.Password))
                 {
-                    var userRoles = await _userManager.GetRolesAsync(user);
+                    var userRoles = await _userManager.GetRolesAsync(user) ?? throw new ArgumentNullException("userRoles");
+
+                    var Id = user.EntityId ?? user.Id;
 
                     var authClaims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name, login.Username),
                         new Claim(ClaimTypes.PrimarySid, user.TenantId.ToString()),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        new Claim(ClaimTypes.NameIdentifier, Id)
                     };
 
                     foreach (var userRole in userRoles)
@@ -107,17 +110,9 @@ namespace Primary.Controllers
 
                     var token = CreateToken(authClaims);
                     var refreshToken = GenerateRefreshToken();
-                    
-                    user.RefreshToken = refreshToken;
 
-#if DEBUG
-                    int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
-                    user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
-#else
-                    long.TryParse(_configuration["JWT:RefreshTokenValidityInSeconds"], out long refreshTokenValidityInSeconds);
-                    user.RefreshTokenExpiryTime = DateTime.Now.AddSeconds(refreshTokenValidityInSeconds); 
-#endif
-                         
+                    user.RefreshToken = refreshToken;
+                    user.RefreshTokenExpiryTime = token.ValidTo;
                     user.EntityId = entityId;
 
                     var result = await _userManager.UpdateAsync(user);
@@ -137,7 +132,7 @@ namespace Primary.Controllers
                     {
                         access_token = new JwtSecurityTokenHandler().WriteToken(token),
                         refresh_token = refreshToken,
-                        valid_to = token.ValidTo,
+                        valid_to = user.RefreshTokenExpiryTime,
                         entity_id = entityId ?? user.Id.ToString()
                     });
                 }
@@ -616,7 +611,7 @@ namespace Primary.Controllers
                 var newRefreshToken = GenerateRefreshToken();
 
                 user.RefreshToken = newRefreshToken;
-                user.RefreshTokenExpiryTime = token.ValidFrom;
+                user.RefreshTokenExpiryTime = token.ValidTo;
 
                 Debug.WriteLine($"New refresh token is: {newRefreshToken}");
 
@@ -638,7 +633,7 @@ namespace Primary.Controllers
                     valid_to = token.ValidTo
                 });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
             }
@@ -691,25 +686,31 @@ namespace Primary.Controllers
             return false;
         }
 
-        internal JwtSecurityToken CreateToken(List<Claim> authClaims)
+        internal SecurityToken CreateToken(List<Claim> authClaims)
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"] ?? throw new ArgumentNullException("JWT:Secret")));
-            if (!double.TryParse(_configuration["JWT:TokenValidityInSeconds"], out double tokenValidityInSeconds))
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var timeout = _configuration["JWT:TokenValidityInSeconds"] ?? "20";
+
+#if DEBUG           // Set the token expiration for debugging
+           double.TryParse(_configuration["JWT:TokenValidityInDays"] ?? "7", out double refreshTokenValidityTime);
+           timeout = DateTime.Now.AddDays(refreshTokenValidityTime).ToString();
+#else
+            double.TryParse(_configuration["JWT:TokenValidityInSeconds"] ?? "60", out double refreshTokenValidityTime);
+            timeout = DateTime.Now.AddSeconds(refreshTokenValidityTime).ToString();  
+#endif
+            var secret = _configuration["JWT:Secret"] ?? throw new ArgumentNullException("JWT:Secret");
+
+            var tokenDescriptor = new SecurityTokenDescriptor()
             {
-                tokenValidityInSeconds = 10;
-            }
+                Subject = new ClaimsIdentity(authClaims),
+                Expires = DateTime.Parse(timeout),
+                Issuer = _configuration["JWT:ValidIssuer"] ?? "https://palisaid.com",
+                Audience = _configuration["JWT:ValidAudience"] ?? "https://palisaid.com/practicemanagement",
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)), SecurityAlgorithms.HmacSha256Signature),
+                IssuedAt = DateTime.Now,
+            };
 
-            var validTo = DateTime.Now.ToLocalTime().AddSeconds(tokenValidityInSeconds);
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["JWT:ValidIssuer"],
-                audience: _configuration["JWT:ValidAudience"],
-                expires: validTo,
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                );
-
-            return token;
+            return tokenHandler.CreateToken(tokenDescriptor);
         }
 
         internal static string GenerateRefreshToken()
