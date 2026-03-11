@@ -11,4 +11,3 @@ namespace Support.Model
         public string? Password { get; set; }
     }
 }
-

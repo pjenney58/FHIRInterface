@@ -50,12 +50,12 @@ namespace PalisaidMeta.Model
         public string? Units { get; set; }
         public string? System { get; set; }
 
-        public Code() 
-        {}
+        public Code()
+        { }
 
         public Code(Guid tenantId, Guid ownerId)
-            : base(tenantId, ownerId) 
-            { }
+            : base(tenantId, ownerId)
+        { }
 
         protected override void Dispose(bool disposing)
         {
@@ -68,6 +68,6 @@ namespace PalisaidMeta.Model
                 Value = null;
                 Units = null;
             }
-        }    
+        }
     }
 }

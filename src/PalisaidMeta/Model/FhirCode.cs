@@ -6,7 +6,8 @@
         public string? Description { get; set; }
         public string? Value { get; set; }
 
-        public MetaCode() { }
+        public MetaCode()
+        { }
 
         public void Dispose()
         {

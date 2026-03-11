@@ -1,10 +1,7 @@
-﻿using Confluent.Kafka;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PalisaidMeta.Model;
+﻿using PalisaidMeta.Model;
 using Support.Interface;
 using Support.Model;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 
 namespace Transporters.Model
 {
@@ -22,7 +19,7 @@ namespace Transporters.Model
         public byte[] ApiKey { get; set; } = null!;
         public X509Certificate2? Certificate { get; set; }
 
-        public MllpClient(CollectorConfig cconfig, Guid tenantid, string commandbus, string payloadbus) 
+        public MllpClient(CollectorConfig cconfig, Guid tenantid, string commandbus, string payloadbus)
                        : base(cconfig, tenantid, commandbus, payloadbus)
         { }
 
@@ -90,7 +87,8 @@ namespace Transporters.Model
             }
         }
         */
-        public async override Task<string> Write(string message)
+
+        public override async Task<string> Write(string message)
         {
             using (var client = InternalConnect())
             {

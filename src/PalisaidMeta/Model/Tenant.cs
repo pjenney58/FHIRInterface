@@ -41,9 +41,9 @@ namespace PalisaidMeta.Model
         public DisposableList<Address>? Addresses { get; set; } = new();
         public DisposableList<Contact>? Contacts { get; set; } = new();
         public DisposableList<PaymentMethod>? PaymentMethods { get; set; } = new();
-        
-        public Tenant() { }
-       
+
+        public Tenant()
+        { }
 
         /// <summary>
         /// The root object for each partition
@@ -51,8 +51,7 @@ namespace PalisaidMeta.Model
         /// <param name="key"> </param>
         public Tenant(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
-    
-        
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

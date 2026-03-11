@@ -41,11 +41,11 @@ namespace PalisaidMeta.Model
     [Serializable]
     public class Location : Entity
     {
-        public Location() { }
-      
+        public Location()
+        { }
+
         public Location(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
-
 
         public string? Name { get; set; }
         public string? Description { get; set; }

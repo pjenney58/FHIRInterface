@@ -25,15 +25,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Support.Model;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Support.Model;
-using Microsoft.EntityFrameworkCore;
-using PalisaidMeta.Model;
 
 namespace Authentication.Controllers
 {
@@ -70,7 +69,7 @@ namespace Authentication.Controllers
 
             try
             {
-                var user = await _userManager.Users.FirstAsync(u => u.UserName == model.Username);               
+                var user = await _userManager.Users.FirstAsync(u => u.UserName == model.Username);
 
                 if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
                 {

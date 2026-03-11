@@ -1,14 +1,13 @@
-﻿using System;
-using Collectors.Interface;
+﻿using Collectors.Interface;
 using PalisaidMeta.Model;
 
 namespace Collectors.Model
 {
-	public class X12Collector : ICollector
-	{
-		public X12Collector()
-		{
-		}
+    public class X12Collector : ICollector
+    {
+        public X12Collector()
+        {
+        }
 
         public Task Configure()
         {
@@ -71,4 +70,3 @@ namespace Collectors.Model
         }
     }
 }
-

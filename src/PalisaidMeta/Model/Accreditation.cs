@@ -27,6 +27,7 @@ namespace PalisaidMeta.Model
         public Accreditation(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
 
-        public Accreditation() { }
+        public Accreditation()
+        { }
     }
 }

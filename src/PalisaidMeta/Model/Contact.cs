@@ -42,8 +42,9 @@ namespace PalisaidMeta.Model
         public Address? Address { get; set; } = new();
         public DisposableList<ContactMethod> ContactMethods { get; set; } = new();
 
-        public Contact() { }
-        
+        public Contact()
+        { }
+
         public Contact(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
 

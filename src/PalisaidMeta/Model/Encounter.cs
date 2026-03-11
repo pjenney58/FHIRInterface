@@ -36,10 +36,12 @@ namespace PalisaidMeta.Model
     {
         // For filtering
         Undefined = -1,
+
         Ignored,
 
         // Actual event types
         Scheduled,
+
         Appointment,
         Office,
         OfficeVisit,
@@ -89,10 +91,11 @@ namespace PalisaidMeta.Model
     /// </summary>
     public class Encounter : Entity
     {
-        public Encounter() {}
+        public Encounter()
+        { }
 
         public Encounter(Guid tenantId, Guid ownerId)
-            : base(tenantId, ownerId) {}
+            : base(tenantId, ownerId) { }
 
         public List<string> EncounterIdString { get; set; } = new();
         public List<string> EncounterReasonString { get; set; } = new();
@@ -133,13 +136,16 @@ namespace PalisaidMeta.Model
         public DateTimeOffset StopDate { get; set; }
 
         [NotMapped]
-        public TimeSpan Duration { get => StopDate - StartDate; set { } }
+        public TimeSpan Duration
+        { get => StopDate - StartDate; set { } }
 
         public DisposableList<Code> Codes { get; set; } = new();
         public DisposableList<Patient> Patients { get; set; } = new();
         public DisposableList<Practitioner> Practitioners { get; set; } = new();
+
         //public DisposableList<Practitioner> ReferringPractitioners { get; set; } = new();
         public DisposableList<Participant> Participants { get; set; } = new();
+
         public DisposableList<Location> Locations { get; set; } = new();
         public DisposableList<Diagnosis> Diagnoses { get; set; } = new();
         public DisposableList<Observation> Observations { get; set; } = new();

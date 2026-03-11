@@ -1,10 +1,9 @@
-﻿using System;
-namespace PalisaidMeta.Model
+﻿namespace PalisaidMeta.Model
 {
-	public class Duration : Entity
-	{
-		public DateTimeOffset StartDate { get; set; }
-		public DateTimeOffset EndDate { get; set; }
+    public class Duration : Entity
+    {
+        public DateTimeOffset StartDate { get; set; }
+        public DateTimeOffset EndDate { get; set; }
         public TimeSpan Length { get => EndDate - StartDate; }
 
         public Duration()
@@ -16,9 +15,8 @@ namespace PalisaidMeta.Model
 
         protected override void Dispose(bool disposing)
         {
-			StartDate = DateTimeOffset.MinValue;
-			EndDate = DateTimeOffset.MinValue;
+            StartDate = DateTimeOffset.MinValue;
+            EndDate = DateTimeOffset.MinValue;
         }
     }
 }
-

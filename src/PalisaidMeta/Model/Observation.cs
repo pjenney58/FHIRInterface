@@ -21,8 +21,9 @@ namespace PalisaidMeta.Model
 {
     public class Observation : Entity
     {
-        public Observation() { }
-       
+        public Observation()
+        { }
+
         public Observation(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
 

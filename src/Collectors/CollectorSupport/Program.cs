@@ -1,8 +1,7 @@
-﻿
-using Collectors.Data;
+﻿using Collectors.Data;
+using Collectors.Messaging;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using Collectors.Messaging;
 
 namespace Collectors.Model
 {
@@ -35,7 +34,6 @@ namespace Collectors.Model
                 .Remove((IRequestCultureProvider)typeof(AcceptLanguageHeaderRequestCultureProvider));
             });
 
-            
             builder.Services.AddTransient<MessageService>();
 
             // Add services to the container.
@@ -68,4 +66,3 @@ namespace Collectors.Model
         }
     }
 }
-

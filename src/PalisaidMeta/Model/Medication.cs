@@ -21,12 +21,12 @@ namespace PalisaidMeta.Model
 {
     public class Medication : Entity
     {
-        public Medication() { }
+        public Medication()
+        { }
 
         public Medication(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
 
-       
         public string MedicationId { get => EntityId; set => EntityId = value; }
 
         public string? MedicationCode { get; set; }
@@ -44,9 +44,8 @@ namespace PalisaidMeta.Model
         public string? ShortVisualDescription { get; set; }
         public string? LongVisualDescription { get; set; }
         public string? SpecialInstructions { get; set; }
-        public string? Schedule { get; set; }       
+        public string? Schedule { get; set; }
         public string? RxCuiCode { get; set; }
-
 
         protected override void Dispose(bool disposing)
         {
@@ -65,6 +64,6 @@ namespace PalisaidMeta.Model
                 LongVisualDescription = null;
                 Schedule = null;
             }
-        }       
+        }
     }
 }

@@ -1,24 +1,21 @@
-
+using Hl7.Fhir.Model;
+using Hl7.Fhir.Rest;
+using PalisaidMeta.Model;
 using Support.Interface;
 using Support.Model;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading;
-using Hl7.Fhir.Rest;
-using Hl7.Fhir.Model;
 using Task = System.Threading.Tasks.Task;
-using PalisaidMeta.Model;
-using Confluent.Kafka;
 
 namespace Transporters.Model
-{ 
+{
     public class Fhir4Client : Transporter
     {
         private IBaseEventLogger logger = new BaseEventLogger(nameof(Fhir4Client));
         private FhirClient client;
 
-        CollectorConfig cconfig;
+        private CollectorConfig cconfig;
 
-        public Fhir4Client(CollectorConfig cconfig, Guid tenantid, string commandbus, string payloadbus) 
+        public Fhir4Client(CollectorConfig cconfig, Guid tenantid, string commandbus, string payloadbus)
             : base(cconfig, tenantid, commandbus, payloadbus)
         {
             this.cconfig = cconfig;
@@ -33,7 +30,7 @@ namespace Transporters.Model
         public byte[]? ApiKey { get; set; }
         public X509Certificate2 Certificate { get; set; }
 
-        public async override Task Connect()
+        public override async Task Connect()
         {
             try
             {
@@ -48,7 +45,6 @@ namespace Transporters.Model
                     PreferredFormat = ResourceFormat.Json,
                     VerifyFhirVersion = true,
                     ReturnPreference = ReturnPreference.Minimal,
-                    
                 };
 
                 await Task.Run(() => client = new FhirClient(cconfig.TargetUri, settings));
@@ -59,7 +55,7 @@ namespace Transporters.Model
             }
         }
 
-        public async override Task<IEnumerable<string>> Read()
+        public override async Task<IEnumerable<string>> Read()
         {
             // Break the bundle into individual messages -- Should we do it here or in the transformer?
             throw new NotImplementedException();
@@ -77,7 +73,7 @@ namespace Transporters.Model
 
         public Task Disconnect()
         {
-            if(client != null)
+            if (client != null)
             {
                 client.Dispose();
             }
@@ -90,13 +86,13 @@ namespace Transporters.Model
         /// </summary>
         /// <returns>IEnumerable[string]</returns>
         public Bundle? Read(string bundleid)
-        {        
-            if(client != null)
+        {
+            if (client != null)
             {
-                return client.Read<Bundle>(bundleid);    
+                return client.Read<Bundle>(bundleid);
             }
 
-            return default;    
+            return default;
         }
 
         public override void Dispose()
@@ -104,5 +100,4 @@ namespace Transporters.Model
             client.Dispose();
         }
     }
-
 }

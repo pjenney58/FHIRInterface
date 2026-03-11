@@ -11,4 +11,3 @@
     "identity": "Host=joey;port=5432;Database=Identity;User Id=palisaid;Password=topsecret;sslmode=Require;Trust Server Certificate=true"
   }
 }
-

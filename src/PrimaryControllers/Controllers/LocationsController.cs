@@ -1,10 +1,8 @@
-﻿using PalisaidMeta.Model;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Support.Model;
 using Microsoft.EntityFrameworkCore;
-using LinqKit;
-using NLog.LayoutRenderers;
+using PalisaidMeta.Model;
+using Support.Model;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -124,7 +122,6 @@ namespace Primary.Controllers
                                                                             .Include(cm => cm.ContactMethods)
                                                                             .Include(cn => cn.Contacts)
                                                                             .FirstOrDefault()));
-
                     }
                 }
                 catch (Exception ex)
@@ -136,7 +133,6 @@ namespace Primary.Controllers
 
             return BadRequest();
         }
-
 
         [HttpPost]
         [Authorize(Roles = "PalisaidRootAdministrator, PalisaidTenantAdministrator")]
@@ -214,7 +210,7 @@ namespace Primary.Controllers
                     location.MarkAsDeleted();
                     await _context.SaveChangesAsync();
                     return Ok();
-                }               
+                }
 
                 return Problem("Null Error");
             }
@@ -248,7 +244,7 @@ namespace Primary.Controllers
                     await _context.SaveChangesAsync();
                     return Ok(location);
                 }
-                
+
                 return Problem("Null Error");
             }
             catch (Exception ex)
@@ -257,8 +253,7 @@ namespace Primary.Controllers
                 return BadRequest("Error");
             }
         }
+
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 }
-
-

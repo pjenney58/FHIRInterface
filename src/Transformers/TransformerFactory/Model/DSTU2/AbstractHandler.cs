@@ -1,8 +1,4 @@
-﻿
-
-using PalisaidMeta.Model;
-
-namespace Transformers.Model.Dstu2
+﻿namespace Transformers.Model.Dstu2
 {
     /*
     internal class AbstractHandler

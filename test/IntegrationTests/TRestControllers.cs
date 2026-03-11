@@ -1,14 +1,9 @@
-﻿
-using System.ComponentModel;
-using Microsoft.AspNetCore;
-using PalisaidMeta.Model;
-using System.Text.Json;
-using System.Text;
+﻿using PalisaidMeta.Model;
 using Support.Model;
 using System.Net.Http.Headers;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
+using System.Text;
+using System.Text.Json;
+
 //using EasyNetQ;
 // FK_ContactMethod_Tenants_TenantId
 // FK_Address_Tenants_TenantId
@@ -17,11 +12,12 @@ namespace IntegrationTests
 {
     public class TRestControllers
     {
-        string token = string.Empty;
-        Patient gPatient = null;
-        Guid tenantid = Guid.NewGuid();
+        private string token = string.Empty;
+        private Patient gPatient = null;
+        private Guid tenantid = Guid.NewGuid();
 
-        string url = "http://localhost:5080/api/";
+        private string url = "http://localhost:5080/api/";
+
         public TRestControllers()
         {
             using (var client = new HttpClient())
@@ -137,9 +133,6 @@ namespace IntegrationTests
                     StartDate = new DateTimeOffset(1990, 11, 21, 0, 0, 0, TimeSpan.Zero),
                     StopDate = DateTimeOffset.MinValue
                 });
-
-
-
             }
             else
             {

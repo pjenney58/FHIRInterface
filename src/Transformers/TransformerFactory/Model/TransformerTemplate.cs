@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-using Transformers.Interface;
-
 namespace Transformers.Model
 {
     public class TransformerTemplate<IEntity, OEntity> : ITransformer
@@ -34,6 +32,7 @@ namespace Transformers.Model
         private OEntity? payloadOUT;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity?> TaskDelegate();
 
         public Guid tenant { get; set; }
@@ -119,7 +118,6 @@ namespace Transformers.Model
             // var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
             throw new NotImplementedException();
         }
-
 
         public async Task<object?> Transform(object payload)
         {

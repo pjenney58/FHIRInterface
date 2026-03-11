@@ -21,8 +21,9 @@ namespace PalisaidMeta.Model
 {
     public class Treatment : Entity
     {
-        public Treatment() { }
-       
+        public Treatment()
+        { }
+
         public Treatment(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
 
@@ -63,6 +64,6 @@ namespace PalisaidMeta.Model
                 StartDate = DateTimeOffset.MinValue;
                 StopDate = DateTimeOffset.MinValue;
             }
-        }       
+        }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Reflection.Emit;
-using PalisaidMeta.Model;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Collectors.Data
 {
@@ -39,7 +37,7 @@ namespace Collectors.Data
               .Build();
 
             connectionString = config.GetConnectionString("default");
-        
+
             base.OnConfiguring(options);
         }
     }

@@ -1,9 +1,8 @@
-﻿
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using PalisaidMeta.Model;
 using Support.Model;
+
 //using ChainOfResponsibility.Model;
 //using ChainOfResponsibility.Interface;
 
@@ -15,10 +14,10 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-         var dataconnection = builder.Configuration.GetConnectionString(AppRunningIn.Docker 
-                        ? "containerdefault" 
-                        : "default")
-                        ?? throw new InvalidOperationException("Connection string 'default' not found.");
+        var dataconnection = builder.Configuration.GetConnectionString(AppRunningIn.Docker
+                       ? "containerdefault"
+                       : "default")
+                       ?? throw new InvalidOperationException("Connection string 'default' not found.");
 
         // Add services to the container.
         builder.Services.AddDbContext<PalisaidMetaContext>(options =>
@@ -30,17 +29,17 @@ public class Program
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-         builder.Services.AddSwaggerGen(c =>
-        {
-            c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
-            {
-                Type = SecuritySchemeType.Http,
-                Scheme = "bearer",
-                BearerFormat = "JWT",
-                Description = "JWT Authorization header using the Bearer scheme."
-            });
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
+        builder.Services.AddSwaggerGen(c =>
+       {
+           c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
+           {
+               Type = SecuritySchemeType.Http,
+               Scheme = "bearer",
+               BearerFormat = "JWT",
+               Description = "JWT Authorization header using the Bearer scheme."
+           });
+           c.AddSecurityRequirement(new OpenApiSecurityRequirement
+           {
                 {
                     new OpenApiSecurityScheme
                     {
@@ -48,9 +47,8 @@ public class Program
                     },
                     new string[] {}
                 }
-            });
-        });
-
+           });
+       });
 
         var app = builder.Build();
 
@@ -65,10 +63,8 @@ public class Program
 
         app.UseAuthorization();
 
-
         app.MapControllers();
 
         app.Run();
     }
 }
-

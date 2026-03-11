@@ -29,8 +29,9 @@ namespace PalisaidMeta.Model
 
     public class PatientPractitioner : Entity
     {
-        public PatientPractitioner() { }
-     
+        public PatientPractitioner()
+        { }
+
         public PatientPractitioner(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
 

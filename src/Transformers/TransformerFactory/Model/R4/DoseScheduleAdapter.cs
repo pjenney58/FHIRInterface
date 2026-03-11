@@ -17,9 +17,6 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using Hl7.Fhir.Validation;
-using Transformers.Interface;
-
 namespace Transformers.Model.R4
 {
     public class DoseScheduleTransformer<IEntity, OEntity> : ITransformer
@@ -47,13 +44,13 @@ namespace Transformers.Model.R4
         private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Dosage;
-            if(fhir == null)
+            if (fhir == null)
             {
                 throw new ArgumentNullException(nameof(fhir));
             }
 
             var meta = new PalisaidMeta.Model.DoseSchedule();
-            if(meta == null)
+            if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
             }
@@ -73,13 +70,13 @@ namespace Transformers.Model.R4
         private async Task<OEntity?> ConvertMetaToFhir()
         {
             var meta = payloadIN as PalisaidMeta.Model.DoseSchedule;
-            if(meta == null)
+            if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
             }
 
             var fhir = new Hl7.Fhir.Model.Dosage();
-            if(fhir == null)
+            if (fhir == null)
             {
                 throw new ArgumentNullException(nameof(fhir));
             }
@@ -97,14 +94,14 @@ namespace Transformers.Model.R4
         }
 
         public async Task<object?> Transform(object payload)
-        {     
+        {
             payloadIN = payload as IEntity;
 
             // Use full names to differenciate
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
                 { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.DoseSchedule => PalisaidMeta.Model.DoseSchedule", InputVersion.HL7FhirR4), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.DoseSchedule => Hl7.Fhir.Model.DoseSchedule", InputVersion.HL7FhirR4), ConvertMetaToFhir }            
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.DoseSchedule => Hl7.Fhir.Model.DoseSchedule", InputVersion.HL7FhirR4), ConvertMetaToFhir }
             };
 
             var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);

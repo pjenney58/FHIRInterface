@@ -21,10 +21,11 @@ namespace PalisaidMeta.Model
 {
     public class Allergy : Entity
     {
-        public Allergy() { }
+        public Allergy()
+        { }
 
         public Allergy(Guid tenantId, Guid ownerId)
-            : base(tenantId, ownerId) {}
+            : base(tenantId, ownerId) { }
 
         public string? Icd9Code { get; set; }
         public string? Icd9ShortDescription { get; set; }

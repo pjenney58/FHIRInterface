@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Collectors.Data;
 using Microsoft.AspNetCore.Mvc;
-
-using Collectors.Data;
-using PalisaidMeta.Model;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,7 +20,7 @@ namespace Collectors.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<CollectorDataContext>>> GetTargets()
         {
-            if(_context.Configs == null)
+            if (_context.Configs == null)
             {
                 return Problem("Internal data error");
             }
@@ -33,7 +29,7 @@ namespace Collectors.Controllers
             {
                 return Ok(_context.Configs.OrderBy(n => n.TargetName).ToList());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Problem(ex.Message);
             }
@@ -42,7 +38,7 @@ namespace Collectors.Controllers
         [HttpGet("Reset/{configid}")]
         public async Task<ActionResult<string>> Reset(string id)
         {
-            if(string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(id))
             {
                 return BadRequest("Invalid id");
             }
@@ -64,7 +60,7 @@ namespace Collectors.Controllers
                 var val = await _context.FindAsync<CollectorDataContext>(targetid);
                 return Ok(val);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -116,4 +112,3 @@ namespace Collectors.Controllers
         }
     }
 }
-

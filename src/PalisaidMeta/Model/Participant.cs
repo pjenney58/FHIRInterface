@@ -1,8 +1,4 @@
-﻿using System;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Xml.Linq;
-
-/*
+﻿/*
 MIT License - Encounter.cs
 
 Copyright (c) 2021 - Present by Sand Drift Software, LLC
@@ -28,7 +24,8 @@ namespace PalisaidMeta.Model
     /// </summary>
     public class Participant : Entity
     {
-        public Participant() { }
+        public Participant()
+        { }
 
         public Guid Id { get; set; }
         public string? IdString { get; set; }
@@ -38,7 +35,4 @@ namespace PalisaidMeta.Model
         public DateTimeOffset StartDate { get; set; }
         public DateTimeOffset StopDate { get; set; }
     }
-
 }
-
-

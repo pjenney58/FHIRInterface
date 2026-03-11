@@ -1,11 +1,10 @@
-﻿
-using Collectors.Interface;
+﻿using Collectors.Interface;
 using Collectors.Model;
 using PalisaidMeta.Model;
 
 namespace Collectors
 {
-    public static class CollectorFactory 
+    public static class CollectorFactory
     {
         public static ICollector Create(DataProtocol protocol)
         {
@@ -78,7 +77,5 @@ namespace Collectors
                     return default;
             }
         }
-        
     }
 }
-

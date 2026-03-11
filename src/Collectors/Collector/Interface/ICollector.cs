@@ -1,22 +1,27 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Collectors.Interface
+﻿namespace Collectors.Interface
 {
-	public interface ICollector
-	{
-		Task RegisterCollector();
-		Task RegisterTransporter();
-		Task RegisterTransformer(PalisaidMeta.Model.DataProtocol dataProtocolIn);
-		Task RegisterScheduler();
+    public interface ICollector
+    {
+        Task RegisterCollector();
 
-		Task Connect();
-		Task Deploy();
-		Task Configure();
-		Task Panic();
-		Task<string> Retrieve();
-		Task Persist();
-		Task Destroy();
-	}
+        Task RegisterTransporter();
+
+        Task RegisterTransformer(PalisaidMeta.Model.DataProtocol dataProtocolIn);
+
+        Task RegisterScheduler();
+
+        Task Connect();
+
+        Task Deploy();
+
+        Task Configure();
+
+        Task Panic();
+
+        Task<string> Retrieve();
+
+        Task Persist();
+
+        Task Destroy();
+    }
 }
-

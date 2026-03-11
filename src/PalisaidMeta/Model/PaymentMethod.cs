@@ -39,8 +39,8 @@ namespace PalisaidMeta.Model
         public string? CVV2 { get; set; }
         public DateTimeOffset ExpDate { get; set; }
 
-        public PaymentMethod() { }
-        
+        public PaymentMethod()
+        { }
 
         /// <summary>
         /// Payment type specificsß

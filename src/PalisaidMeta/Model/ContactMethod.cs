@@ -21,7 +21,8 @@ namespace PalisaidMeta.Model
 {
     public class ContactMethod : Entity
     {
-        public ContactMethod() { }
+        public ContactMethod()
+        { }
 
         public ContactMethod(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }

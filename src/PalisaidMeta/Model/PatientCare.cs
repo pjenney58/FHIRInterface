@@ -36,9 +36,9 @@ namespace PalisaidMeta.Model
 
     public class PatientCare : Entity
     {
+        public PatientCare()
+        { }
 
-        public PatientCare() { }
-       
         public PatientCare(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
 

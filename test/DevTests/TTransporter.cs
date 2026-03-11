@@ -1,6 +1,4 @@
-﻿using System.Net;
-using Transporters.Model;
-using Transporters.Interface;
+﻿using Transporters.Model;
 
 namespace DevTests.Transporter
 {

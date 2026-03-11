@@ -17,8 +17,6 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using Transformers.Interface;
-
 namespace Transformers.Model.R4
 {
     public class AdditionalInfoAdapter<IEntity, OEntity> : ITransformer
@@ -29,6 +27,7 @@ namespace Transformers.Model.R4
         private OEntity? payloadOUT;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity?> TaskDelegate();
 
         public InputVersion version { get; set; }
@@ -47,13 +46,13 @@ namespace Transformers.Model.R4
         private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Extension;
-            if(fhir == null)
+            if (fhir == null)
             {
                 throw new ArgumentNullException(nameof(fhir));
             }
 
             var meta = new PalisaidMeta.Model.AdditionalInfo();
-            if(meta == null)
+            if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
             }
@@ -62,11 +61,9 @@ namespace Transformers.Model.R4
             {
             });
 
-
             return meta as OEntity;
         }
 
-    
         private async Task<OEntity> ConvertMetaToFhir()
         {
             // var fhir = payloadIN as PalisaidMeta.Model.{Type}; var meta = new Hl7.Fhir.Model.{Type}();

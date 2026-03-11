@@ -26,7 +26,8 @@ namespace PalisaidMeta.Model
         private string? ShortDescription { get; set; }
         private string? LongDescription { get; set; }
 
-        public DiagnosisCode() { }
+        public DiagnosisCode()
+        { }
 
         /// <summary>
         /// Coding system and code
@@ -55,10 +56,8 @@ namespace PalisaidMeta.Model
                 default:
                     break;
             }
-            
         }
 
-        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -44,7 +44,6 @@ namespace PalisaidMeta.Model
         Both
     };
 
-
     public class Address : Entity
     {
         public Address()
@@ -53,7 +52,7 @@ namespace PalisaidMeta.Model
         public Address(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId)
         {
-        }       
+        }
 
         public AddressUse Use { get; set; }
         public AddressType AddressType { get; set; }
@@ -71,6 +70,7 @@ namespace PalisaidMeta.Model
         /// Time at address
         /// </summary>
         public DateTimeOffset StartDate { get; set; }
+
         public DateTimeOffset StopDate { get; set; }
 
         public string HL7AddressCode { get; set; } = "L";
@@ -87,6 +87,6 @@ namespace PalisaidMeta.Model
             Country = null;
             StartDate = DateTimeOffset.MinValue;
             StopDate = DateTimeOffset.MinValue;
-        }        
+        }
     }
 }

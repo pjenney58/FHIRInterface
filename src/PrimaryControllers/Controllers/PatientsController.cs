@@ -1,10 +1,9 @@
-
-using PalisaidMeta.Model;
+using LinqKit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Support.Model;
 using Microsoft.EntityFrameworkCore;
-using LinqKit;
+using PalisaidMeta.Model;
+using Support.Model;
 
 namespace Primary.Controllers
 {
@@ -395,6 +394,7 @@ namespace Primary.Controllers
 
             return BadRequest();
         }
+
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 }

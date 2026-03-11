@@ -22,10 +22,8 @@
  * SOFTWARE.
  */
 
-using System.Diagnostics;
 using System.Text.Json.Serialization;
 using System.Xml.Serialization;
-using Support.Interface;
 
 namespace Collectors.Model
 {

@@ -29,20 +29,19 @@
  *  It's not too bad ...
  */
 
-using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using PalisaidMeta.Model;
+using Support.Model;
 using System.Data;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using PalisaidMeta.Model;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Support.Model;
 
 namespace Primary.Controllers
 {
@@ -692,11 +691,11 @@ namespace Primary.Controllers
             var timeout = _configuration["JWT:TokenValidityInSeconds"] ?? "20";
 
 #if DEBUG           // Set the token expiration for debugging
-           double.TryParse(_configuration["JWT:TokenValidityInDays"] ?? "7", out double refreshTokenValidityTime);
-           timeout = DateTime.Now.AddDays(refreshTokenValidityTime).ToString();
+            double.TryParse(_configuration["JWT:TokenValidityInDays"] ?? "7", out double refreshTokenValidityTime);
+            timeout = DateTime.Now.AddDays(refreshTokenValidityTime).ToString();
 #else
             double.TryParse(_configuration["JWT:TokenValidityInSeconds"] ?? "60", out double refreshTokenValidityTime);
-            timeout = DateTime.Now.AddSeconds(refreshTokenValidityTime).ToString();  
+            timeout = DateTime.Now.AddSeconds(refreshTokenValidityTime).ToString();
 #endif
             var secret = _configuration["JWT:Secret"] ?? throw new ArgumentNullException("JWT:Secret");
 

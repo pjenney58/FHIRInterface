@@ -1,14 +1,13 @@
-﻿using PalisaidMeta.Model;
-using Authentication.Data;
+﻿using Authentication.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using Support.Model;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.OpenApi.Models;
 using Npgsql;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using PalisaidMeta.Model;
+using Support.Model;
+using System.Text;
 
 namespace Data;
 
@@ -25,13 +24,11 @@ public class Program
         ConfigurationManager configuration = builder.Configuration;
         //configuration.AddJsonFile("controllerappsettings.json", optional: false, reloadOnChange: true);
 
-
         var dataconnection = builder.Configuration.GetConnectionString(AppRunningIn.Docker ? "containerdefault" : "default")
                         ?? throw new InvalidOperationException("Connection string 'default' not found.");
 
         var idconnection = builder.Configuration.GetConnectionString(AppRunningIn.Docker ? "containeridentity" : "identity")
                         ?? throw new InvalidOperationException("Connection string 'identity' not found.");
-
 
         // Add services to the container.
         builder.Services.AddDbContext<PalisaidMetaContext>(options =>
@@ -97,7 +94,7 @@ public class Program
            options.UsePkce = true;
            options.Scope.Add("profile");
            options.SaveTokens = true;
-       });   
+       });
         */
 
         builder.Services.AddSwaggerGen(c =>
@@ -132,7 +129,6 @@ public class Program
 
         var app = builder.Build();
 
-
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
@@ -142,7 +138,7 @@ public class Program
                 var dbContext = scope.ServiceProvider.GetRequiredService<IdentityDataContext>();
                 dbContext.Database.Migrate();
                 dbContext.Database.EnsureCreated();
-                
+
                 var services = scope.ServiceProvider;
                 SeedRoles.Initialize(services);
                 SeedUsers.Initialize(services);
@@ -198,7 +194,7 @@ public class Program
                     }
                     catch
                     {
-                        // hit constraint 
+                        // hit constraint
                     }
                 }
             }
@@ -228,7 +224,7 @@ public class Program
         public static void Initialize(IServiceProvider serviceProvider)
         {
             using (UserManager<ApplicationUser> _userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>())
-            {     
+            {
                 // Create root user
                 var user = new RegisterAdminModel()
                 {
@@ -237,7 +233,6 @@ public class Program
                     Email = "root@palisaid.com",
                     Phone = "603.264.3961"
                 };
-
 
                 if (!_userManager.Users.Any(r => r.UserName == user.Username))
                 {

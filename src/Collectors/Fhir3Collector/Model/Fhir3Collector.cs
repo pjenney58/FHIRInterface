@@ -1,14 +1,13 @@
-﻿
-using Collectors.Interface;
+﻿using Collectors.Interface;
 using PalisaidMeta.Model;
 
 namespace Collectors.Model
 {
-	public class Fhir3Collector : ICollector
+    public class Fhir3Collector : ICollector
     {
-		public Fhir3Collector()
-		{
-		}
+        public Fhir3Collector()
+        {
+        }
 
         public Task Configure()
         {
@@ -71,4 +70,3 @@ namespace Collectors.Model
         }
     }
 }
-

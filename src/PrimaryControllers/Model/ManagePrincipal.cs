@@ -1,13 +1,12 @@
-﻿using System;
-using System.Security.Principal;
+﻿using System.Security.Principal;
 
 namespace Primary.Model
 {
-	public class ManagePrincipal
-	{
-		public ManagePrincipal()
-		{
-		}
+    public class ManagePrincipal
+    {
+        public ManagePrincipal()
+        {
+        }
 
         public void SetPrincipal(IPrincipal principal)
         {/*
@@ -20,4 +19,3 @@ namespace Primary.Model
         }
     }
 }
-

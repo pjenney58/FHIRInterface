@@ -5,7 +5,7 @@
         public string? Name { get; set; }
         public string? IdString { get; set; }
 
-        public ServiceProvider() { }
+        public ServiceProvider()
+        { }
     }
 }
-

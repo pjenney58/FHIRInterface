@@ -17,10 +17,8 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using PalisaidMeta.Model;
 using Hl7.Fhir.Model;
 using Task = System.Threading.Tasks.Task;
-using Transformers.Interface;
 
 namespace Transformers.Model.Stu3
 {

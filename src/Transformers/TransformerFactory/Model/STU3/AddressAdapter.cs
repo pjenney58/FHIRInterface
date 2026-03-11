@@ -23,18 +23,13 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 //extern alias stu3;
 //extern alias dstu2;
 
-using Hl7.Fhir.Model;
-
 //using R5 = r5::Hl7.Fhir.Model;
 //using R4 = r4::Hl7.Fhir.Model;
 //using R4b = r4b::Hl7.Fhir.Model;
 //using Stu3 = stu3::Hl7.Fhir.Model;
 //using Dstu2 = dstu2::Hl7.Fhir.Model;
 
-using PalisaidMeta.Model;
-
 using Task = System.Threading.Tasks.Task;
-using Transformers.Interface;
 
 namespace Transformers.Model.Stu3
 {
@@ -46,6 +41,7 @@ namespace Transformers.Model.Stu3
         private OEntity? payloadOUT;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity> TaskDelegate();
 
         public InputVersion version { get; set; }
@@ -166,9 +162,8 @@ namespace Transformers.Model.Stu3
 
             {
                 { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Address => PalisaidMeta.Model..Address", InputVersion.HL7HhirStu3), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model..Address => Hl7.Fhir.Model.Address", InputVersion.HL7HhirStu3), ConvertMetaToFhir }            
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model..Address => Hl7.Fhir.Model.Address", InputVersion.HL7HhirStu3), ConvertMetaToFhir }
             };
-
 
             var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);
 

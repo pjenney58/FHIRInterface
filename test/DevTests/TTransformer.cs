@@ -1,8 +1,4 @@
-﻿using System.Net;
-using Transformers.Model;
-using Transformers.Interface;
-using Transporters.Model;
-using PalisaidMeta.Model;
+﻿using PalisaidMeta.Model;
 using Support.Model;
 
 namespace DevTests.Transporter
@@ -24,7 +20,7 @@ namespace DevTests.Transporter
                 Line = new List<string>() { "123 Main Street" },
                 City = "Boston",
                 State = "MA",
-            };          
+            };
 
             var transformer = TransformerFactory.Create<Hl7.Fhir.Model.Address, PalisaidMeta.Model.Address>(tenantid, InputFormat.HL7Fhir, InputVersion.HL7FhirR4, SourceSystems.Epic);
             var meta = await transformer.Transform(fhiraddress);

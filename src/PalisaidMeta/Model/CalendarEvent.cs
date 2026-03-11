@@ -81,7 +81,8 @@ namespace PalisaidMeta.Model
         public DisposableList<Patient> PatientParticipants { get; set; } = new();
         public DisposableList<Practitioner> PractitionerParticipants { get; set; } = new();
 
-        public CalendarEvent() { }
+        public CalendarEvent()
+        { }
 
         public CalendarEvent(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }

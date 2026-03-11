@@ -49,8 +49,9 @@ namespace PalisaidMeta.Model
     {
         public bool IsRefering { get; set; }
 
-        public Practitioner() { }
-        
+        public Practitioner()
+        { }
+
         /// <summary>
         /// Any provider type
         /// </summary>

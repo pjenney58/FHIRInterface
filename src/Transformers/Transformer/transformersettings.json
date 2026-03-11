@@ -13,7 +13,7 @@
     "dockerIdentity": "Host=localhost;port=5432;Database=Palisaid;User Id=palisaid;Password=password",
     "migrating": "Host=localhost;port=5432;Database=Palisaid;User Id=palisaid;Password=password"
   },
-  "RabbitMQDefaults": { 
+  "RabbitMQDefaults": {
     "Host": "localhost",
     "Port": 5672,
     "UserName": "guest",

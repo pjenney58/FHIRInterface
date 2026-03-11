@@ -1,6 +1,6 @@
-﻿using PalisaidMeta.Model;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PalisaidMeta.Model;
 
 namespace Administration.Controllers
 {
@@ -23,7 +23,6 @@ namespace Administration.Controllers
 
         [HttpGet]
         [Authorize(Policy = "PalisaidTenantAdministrator")]
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<ActionResult<IEnumerable<Tenant>>> GetTenants()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
@@ -41,7 +40,9 @@ namespace Administration.Controllers
                 return Problem(ex.Message);
             }
         }
+
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
+
         [HttpGet("{id}")]
         [Authorize(Policy = "PalisaidTenantAdministrator")]
         public async Task<ActionResult<Tenant>> GetTenant(Guid id)
@@ -156,6 +157,7 @@ namespace Administration.Controllers
                 return Problem(ex.Message);
             }
         }
+
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
     }
 }

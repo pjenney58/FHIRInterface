@@ -11,4 +11,3 @@
     "postgres": "Host=postgres;port=5432;Database=CollectorConfigs;User Id=palisaid;Password=password"
   }
 }
-

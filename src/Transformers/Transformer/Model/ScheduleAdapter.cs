@@ -1,13 +1,4 @@
-
-
 // https://qnetconfluence.cms.gov/display/ELDF/Documentation+Repository
-
-using PalisaidMeta.Model;
-using Location = PalisaidMeta.Model.Location;
-using Observation = PalisaidMeta.Model.Observation;
-using Patient = PalisaidMeta.Model.Patient;
-using Practitioner = PalisaidMeta.Model.Practitioner;
-using Task = System.Threading.Tasks.Task;
 
 namespace Transformers.Model
 {
@@ -18,6 +9,7 @@ namespace Transformers.Model
         private IEntity? payloadIN;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity> TaskDelegate();
 
         public InputVersion version { get; set; }
@@ -149,7 +141,7 @@ namespace Transformers.Model
             var msgType = msh.MessageType;
             return $"{msgType.MessageType.value.ToUpper(System.Globalization.CultureInfo.InvariantCulture)}^{msgType.TriggerEvent.value.ToUpper(System.Globalization.CultureInfo.InvariantCulture)}";
         }
-        
+
         private async Task<OEntity> ConvertV2_SRM_ToMeta()
         {
             // SRM^S01-S04,S06 - nHAPI only supports SRM^S01, presumably that's enough
@@ -188,7 +180,6 @@ namespace Transformers.Model
             return default;
         }
 
-        
         // Create a skeleton practitioner
         private Practitioner AddPractitioner(NHapi.Model.V231.Datatype.XCN doc)
         {
@@ -518,6 +509,7 @@ namespace Transformers.Model
             throw new InvalidDataException($"Expected SIU or SRM, Got {messagekeys.Item1}^{messagekeys.Item2}");
         }
         */
+
         private async Task<OEntity> ConvertMeta_ToV2_SIU()
         {
             throw new NotImplementedException();
@@ -530,7 +522,6 @@ namespace Transformers.Model
 
         public async Task<OEntity> Convert(IEntity payload)
         {
-           
             Dictionary<string, TaskDelegate> jumpTable = new Dictionary<string, TaskDelegate>()
             {
                 //{ @"SIU_S12/CareEvent", ConvertV2_SIU_ToMeta },

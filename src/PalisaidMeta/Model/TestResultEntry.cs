@@ -62,6 +62,7 @@ namespace PalisaidMeta.Model
     {
         // Test Metadata
         public Guid TestedPatientId { get; set; }
+
         public Guid RequestedByPractionerId { get; set; }
         public Guid TestLocationId { get; set; }
         public Guid TestEncounterId { get; set; }

@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using PalisaidMeta.Model;
-using System.Threading.Tasks;
+﻿using PalisaidMeta.Model;
 
 namespace IntegrationTests
 {
@@ -9,10 +6,10 @@ namespace IntegrationTests
     // by installing the corresponding NuGet package.
     public class TDatabase
     {
-        PalisaidMetaContext _context;
-        Guid _entityId;
-        Guid _tenantId;
-        Guid _ownerId = Guid.Empty;
+        private PalisaidMetaContext _context;
+        private Guid _entityId;
+        private Guid _tenantId;
+        private Guid _ownerId = Guid.Empty;
 
         public TDatabase()
         {
@@ -66,7 +63,7 @@ namespace IntegrationTests
             catch (System.Exception ex)
             {
                 Assert.Fail(ex.Message);
-            }   
+            }
         }
 
         private async Task UpdatePatient()
@@ -76,7 +73,7 @@ namespace IntegrationTests
                 var patient = await _context.Patients.FindAsync(_entityId);
                 Assert.NotNull(patient);
 
-                patient.Name.MiddleName = "Q"; 
+                patient.Name.MiddleName = "Q";
                 patient.Name.FamilyName = "Doe";
 
                 await _context.SaveChangesAsync();
@@ -101,6 +98,6 @@ namespace IntegrationTests
             {
                 Assert.Fail(ex.Message);
             }
-        }   
+        }
     }
 }

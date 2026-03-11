@@ -23,7 +23,8 @@ namespace PalisaidMeta.Model
 {
     public class Patient : Entity
     {
-        public Patient() { }
+        public Patient()
+        { }
 
         public Patient(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
@@ -73,7 +74,7 @@ namespace PalisaidMeta.Model
         [NotMapped]
         public SpokenLanguage? PrimaryLanguage
         {
-            get => Languages != null &&  Languages.Count  > 0
+            get => Languages != null && Languages.Count > 0
                 ? Languages?.FirstOrDefault(l => l.Use == SpokenLanguageUse.Primary)
                 : new SpokenLanguage(this.TenantId, this.OwnerId);
         }
@@ -167,6 +168,6 @@ namespace PalisaidMeta.Model
                 AdmissionDate = DateTime.MinValue;
                 DischargeDate = DateTime.MinValue;
             }
-        }        
+        }
     }
 }

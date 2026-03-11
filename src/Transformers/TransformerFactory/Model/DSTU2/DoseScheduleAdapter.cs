@@ -17,10 +17,6 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using PalisaidMeta.Model;
-using Hl7.Fhir.Validation;
-using Transformers.Interface;
-
 namespace Transformers.Model.Dstu2
 {
     public class DoseScheduleAdapter<IEntity, OEntity> : ITransformer
@@ -84,7 +80,7 @@ namespace Transformers.Model.Dstu2
             // Override this with the appropriate key conditions - replace MSG as desired. There may
             // be several similar messages required, e.g. SIU & SRM
             payloadIN = payload as IEntity;
-           
+
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
                 { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Dosage => PalisaidMeta.Model.DoseSchdule", InputVersion.HL7FhirDstu2), ConvertFhirToMeta },

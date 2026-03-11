@@ -1,29 +1,23 @@
-﻿using Hl7.Fhir.Model;
-using Hl7.Fhir.Rest;
-using Task = System.Threading.Tasks.Task;
-using Collectors.Interface;
-using Collectors.Model;
+﻿using Task = System.Threading.Tasks.Task;
 
 // Public Test Servers:
 //		https://wiki.hl7.org/index.php?title=Publicly_Available_FHIR_Servers_for_testing
 
-
 namespace DevTests
 {
-	public class TFhirClient
-	{
-		const string hapiserver = "http://hapi.fhir.org/baseR4";
-		const string hapiserverpatients = "http://hapi.fhir.org/baseR4/Patient";
+    public class TFhirClient
+    {
+        private const string hapiserver = "http://hapi.fhir.org/baseR4";
+        private const string hapiserverpatients = "http://hapi.fhir.org/baseR4/Patient";
 
         public TFhirClient()
-		{
-		}
+        {
+        }
 
-
-		[Fact]
-		public async Task Connect()
-		{
-			/*
+        [Fact]
+        public async Task Connect()
+        {
+            /*
 			try
 			{
 				var client = new GenericFhirClient();
@@ -36,32 +30,32 @@ namespace DevTests
 				Assert.Fail(ex.Message);
 			}
 			*/
-		}
+        }
 
-/*
-		[Fact]
-		public void LoadCollector()
-		{
-			try
-			{
-				var c = CollectorFactory.Create("Fhir4");
-				Assert.NotNull(c);
-			}
-			catch(Exception ex)
-			{
-				Assert.Fail(ex.Message);
-			}
-		}
-*/
-		[Fact]
-		public  async Task QueryForBob()
-		{
-			/*
+        /*
+                [Fact]
+                public void LoadCollector()
+                {
+                    try
+                    {
+                        var c = CollectorFactory.Create("Fhir4");
+                        Assert.NotNull(c);
+                    }
+                    catch(Exception ex)
+                    {
+                        Assert.Fail(ex.Message);
+                    }
+                }
+        */
+
+        [Fact]
+        public async Task QueryForBob()
+        {
+            /*
 			try
 			{
 				var client = new GenericFhirClient();
 				await client.Connect(new Uri(hapiserver));
-				
 
 				var q = new SearchParams()
 						.Where("family:exact=Alexander")
@@ -78,8 +72,8 @@ namespace DevTests
 			{
 				Console.WriteLine(ex);
 			}
-          
-            //var stuff = 
+
+            //var stuff =
             //var name = parsedBundle.Entry.ByResourceType<HumanName>();
 
             // /api/FHIR/R4/List?code={code}&identifier={identifier}
@@ -88,4 +82,3 @@ namespace DevTests
         }
     }
 }
-

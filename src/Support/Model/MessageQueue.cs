@@ -1,16 +1,16 @@
-﻿using System.Diagnostics;
-using EasyNetQ;
+﻿using EasyNetQ;
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
 
 namespace Support.Model
 {
     public delegate void MQCommandHandler(string command);
+
     public delegate void MQTransformHandler(TransformerPayload payload);
 
-
     public abstract class PalisaidMessageQueue : IDisposable
-	{
-        IConfiguration? config;      
+    {
+        private IConfiguration? config;
 
         protected void GetApplicationConfig(string configname)
         {
@@ -36,11 +36,11 @@ namespace Support.Model
         protected bool running = false;
         protected bool cancelled = false;
 
-        MQCommandHandler? mqcommandhandler;
-        MQTransformHandler? mqtransformhandler;
+        private MQCommandHandler? mqcommandhandler;
+        private MQTransformHandler? mqtransformhandler;
 
         public PalisaidMessageQueue(Guid tenantid, string commandbus, string payloadbus, string? username = null, string? password = null)
-		{   
+        {
             GetApplicationConfig("messagequeuesettings.json");
 
             this.tenantid = tenantid;
@@ -54,13 +54,12 @@ namespace Support.Model
             mqtransformhandler = DefaultTransformHandler;
 
             taskFactory = new TaskFactory();
-            
+
             Trace.WriteLine("Starting Command Handler Task");
             taskFactory.StartNew(() => WaitForCommandRequest());
 
             Trace.WriteLine("Starting Transform Request Handler");
             taskFactory.StartNew(() => WaitForTransformRequest());
-
         }
 
         private void DefaultTransformHandler(TransformerPayload payload)
@@ -81,12 +80,12 @@ namespace Support.Model
         protected virtual void RegisterTransformHandler(MQTransformHandler mqtransformhandler)
         {
             this.mqtransformhandler = mqtransformhandler ?? throw new ArgumentNullException(nameof(MQTransformHandler));
-        }        
+        }
 
         protected virtual void WaitForTransformRequest()
         {
             // Listening for configuration commands
-            using (var bus = RabbitHutch.CreateBus(AppRunningIn.Docker ? "host=rabbitmq" : "host=localhost" ))
+            using (var bus = RabbitHutch.CreateBus(AppRunningIn.Docker ? "host=rabbitmq" : "host=localhost"))
             {
                 payloadSubscription = bus.PubSub.Subscribe<TransformerPayload>(payloadbus, new Action<TransformerPayload>(mqtransformhandler ?? throw new ArgumentNullException(nameof(mqcommandhandler))));
                 Debug.WriteLine("Listening for transform messages");
@@ -96,7 +95,7 @@ namespace Support.Model
         }
 
         protected virtual void WaitForCommandRequest()
-        {      
+        {
             using (var bus = RabbitHutch.CreateBus(AppRunningIn.Docker ? "host=rabbitmq" : "host=localhost"))
             {
                 commandSubscription = bus.PubSub.Subscribe<string>(commandbus, new Action<string>(mqcommandhandler ?? throw new ArgumentNullException(nameof(mqcommandhandler))));
@@ -171,4 +170,3 @@ namespace Support.Model
         }
     }
 }
-

@@ -33,8 +33,9 @@ namespace PalisaidMeta.Model
 {
     public class Note : Entity
     {
-        public Note() { }
-        
+        public Note()
+        { }
+
         public Note(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
 
@@ -53,6 +54,6 @@ namespace PalisaidMeta.Model
                 Author = null;
                 Reference = null;
             }
-        }        
+        }
     }
 }

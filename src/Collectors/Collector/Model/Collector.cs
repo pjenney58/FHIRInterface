@@ -1,20 +1,20 @@
-﻿using System.Diagnostics;
-using Collectors.Interface;
-using Confluent.Kafka;
-using PalisaidMeta.Model;
+﻿using Collectors.Interface;
 using EasyNetQ;
+using PalisaidMeta.Model;
+using Support.Model;
+using System.Diagnostics;
 using Transformers.Interface;
 using Transformers.Model;
 using Transporters.Interface;
 using Transporters.Model;
 using Task = System.Threading.Tasks.Task;
-using Support.Model;
 
 namespace Collectors.Model
 {
     public abstract class Collector<T> : PalisaidMessageQueue, ICollector, IDisposable
     {
         #region strings
+
         private readonly string Name = "Name";
         private readonly string Version = "Version";
         private readonly string Description = "Description";
@@ -37,6 +37,7 @@ namespace Collectors.Model
             { "TenantDescription", "value" },
             { "Transform", "value" }
         };
+
         #endregion strings
 
         protected IConfiguration? config;
@@ -45,17 +46,17 @@ namespace Collectors.Model
         protected List<ITransformer?> transformers = new();
         protected IScheduler? scheduler;
 
-        SubscriptionResult? payloadSubscription;
-        SubscriptionResult? commandSubscription;
+        private SubscriptionResult? payloadSubscription;
+        private SubscriptionResult? commandSubscription;
 
-        TaskFactory? taskFactory = null;
-        Task? commandTask;
-        Task? transformTask;
+        private TaskFactory? taskFactory = null;
+        private Task? commandTask;
+        private Task? transformTask;
 
-        bool running = false;
-        bool cancelled = false;
+        private bool running = false;
+        private bool cancelled = false;
 
-        public Collector(Guid tenantid, string name) 
+        public Collector(Guid tenantid, string name)
                   : base(tenantid, $"command-{name}", $"transform-{name}")
         {
             config = AppConfig.Get("collectorsettings.json");
@@ -79,7 +80,7 @@ namespace Collectors.Model
             Trace.WriteLine("Starting Collector");
             ProcessCommand("Start");
         }
-   
+
         public void RegisterTransporter(CollectorConfig cconfig, Guid tenantid, string commandbus, string payloadbus)
         {
             // Create the transporter
@@ -104,7 +105,7 @@ namespace Collectors.Model
 
             switch (command.ToUpperInvariant())
             {
-                case"SHUTDOWN":
+                case "SHUTDOWN":
                     Dispose();
                     Environment.Exit(0);
                     break;
@@ -141,9 +142,9 @@ namespace Collectors.Model
 
                 default:
                     break;
-            }  
+            }
         }
-        
+
         private void ProcessTransform(TransformerPayload payload)
         {
             Debug.WriteLine($"Collector Transform Request: {payload}");
@@ -239,7 +240,6 @@ namespace Collectors.Model
         {
             throw new NotImplementedException();
         }
-
 
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }

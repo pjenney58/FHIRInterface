@@ -39,9 +39,8 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
  */
 
 using Bogus;
-using System.Text.Json.Serialization;
 using System.Text.Json;
-using RandomDataGenerator;
+using System.Text.Json.Serialization;
 
 namespace RandomDataGenerator
 {

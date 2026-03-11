@@ -20,16 +20,17 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 namespace PalisaidMeta.Model
 {
     public class Version : Entity
-	{
-		public Version() { }
-	
-		public Version(Guid tenantId, Guid ownerId)
+    {
+        public Version()
+        { }
+
+        public Version(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
 
         public Code? Type { get; set; }
-		public string? Identifier { get; set; }
-		public DateTimeOffset InstallDate { get; set; } = DateTimeOffset.Now;
-		public string? Value { get; set; }
+        public string? Identifier { get; set; }
+        public DateTimeOffset InstallDate { get; set; } = DateTimeOffset.Now;
+        public string? Value { get; set; }
 
         protected override void Dispose(bool disposing)
         {
@@ -40,4 +41,3 @@ namespace PalisaidMeta.Model
         }
     }
 }
-

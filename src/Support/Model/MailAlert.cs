@@ -17,9 +17,9 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
-using Microsoft.Extensions.Configuration;
 
 namespace Support.Model
 {

@@ -1,20 +1,20 @@
 {
-    "Logging": {
-      "LogLevel": {
-        "Default": "Information",
-        "Microsoft.AspNetCore": "Warning"
-      }
-    },
-    "AllowedHosts": "*",
-    "Username": "palisaid",
-    "Password": "password",
-    "ConnectionStrings": {
-    },
-    "OrganizationName" : "Palisaid",
-    "SmtpServerName" : "smtp.gmail.com",
-    "SmtpTargetAddress" : "mail@palisaid.com",
-    "SmtpPort" : 587,
-    "SmtpUsername" : "mail@palisaid.com",
-    "SmtpPassword" : "password",
-    "SmtpUseSSL" : true
-  }
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "Username": "palisaid",
+  "Password": "password",
+  "ConnectionStrings": {
+  },
+  "OrganizationName": "Palisaid",
+  "SmtpServerName": "smtp.gmail.com",
+  "SmtpTargetAddress": "mail@palisaid.com",
+  "SmtpPort": 587,
+  "SmtpUsername": "mail@palisaid.com",
+  "SmtpPassword": "password",
+  "SmtpUseSSL": true
+}

@@ -1,6 +1,6 @@
-﻿using Support.Model;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Support.Model;
 
 namespace Authentication.Data
 {

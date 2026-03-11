@@ -1,11 +1,10 @@
-﻿using System.Diagnostics;
-using PalisaidMeta.Model;
-using Hl7.Fhir.Model;
+﻿using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
-using Npgsql;
-using RandomDataGenerator;
 using Microsoft.EntityFrameworkCore;
-
+using Npgsql;
+using PalisaidMeta.Model;
+using RandomDataGenerator;
+using System.Diagnostics;
 
 /*
 extern alias r5;
@@ -23,7 +22,6 @@ namespace DevTests
 {
     public class TFhirParser
     {
-
         private readonly string sourcedir = "../../../../../data/test/Patients_fhir_0fded401-29da-4937-887f-24b9a446194d";
 
         private PalisaidMetaContext _context;
@@ -39,7 +37,6 @@ namespace DevTests
 
             _context.Database.Migrate();
             _context.Database.EnsureCreated();
-
 
             if (Directory.Exists(sourcedir) == false)
             {
@@ -517,10 +514,8 @@ namespace DevTests
                             }
                             Debug.WriteLine(ex.Message);
                         }
-
                     }
                 }
-
             }
         }
 
@@ -533,7 +528,6 @@ namespace DevTests
         {
             try
             {
-
                 var data = getFhirData();
 
                 foreach (var file in files)
@@ -571,7 +565,6 @@ namespace DevTests
 
                                     var observations = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Observation>();
                                     Assert.NotNull(observations);
-
 
                                     if (observations.Any())
                                     {
@@ -613,7 +606,6 @@ namespace DevTests
                                     {
                                         Debug.WriteLine(ex);
                                     }
-
                                 }
                             }
                         }
@@ -838,7 +830,6 @@ namespace DevTests
                     var observations = parsedBundle.Entry.ByResourceType<Hl7.Fhir.Model.Observation>();
                     Assert.NotNull(observations);
 
-
                     foreach (var observation in observations)
                     {
                         Assert.NotNull(observation);
@@ -856,7 +847,6 @@ namespace DevTests
                         {
                             Debug.WriteLine(ex.Message);
                         }
-
                     }
                 }
             }

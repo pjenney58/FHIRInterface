@@ -18,7 +18,6 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using Task = System.Threading.Tasks.Task;
-using Transformers.Interface;
 
 namespace Transformers.Model.Dstu2
 {
@@ -29,6 +28,7 @@ namespace Transformers.Model.Dstu2
         private IEntity? payloadIN;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity?> TaskDelegate();
 
         public InputVersion version { get; set; }
@@ -50,7 +50,7 @@ namespace Transformers.Model.Dstu2
         private async Task<OEntity> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Observation;
-            if(fhir == null)
+            if (fhir == null)
             {
                 throw new ArgumentNullException(nameof(fhir));
             }
@@ -61,10 +61,10 @@ namespace Transformers.Model.Dstu2
                 EntityId = fhir.Id ?? Guid.NewGuid().ToString()
             };
 
-            if(meta == null)
+            if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
-            } 
+            }
 
             await Task.Run(() =>
             {
@@ -112,7 +112,6 @@ namespace Transformers.Model.Dstu2
         {
             // Override this with the appropriate key conditions - replace MSG as desired. There may
             // be several similar messages required, e.g. SIU & SRM
-
 
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {

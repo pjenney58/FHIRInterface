@@ -1,8 +1,5 @@
-﻿using Collectors.Interface;
-using RabbitMQ;
-using PalisaidMeta.Model;
+﻿using PalisaidMeta.Model;
 using Transporters.Model;
-using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 
 namespace Collectors.Model
 {

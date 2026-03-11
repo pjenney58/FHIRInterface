@@ -25,7 +25,8 @@ namespace PalisaidMeta.Model
     /// </summary>
     public class Diagnosis : Entity
     {
-        public Diagnosis() { }
+        public Diagnosis()
+        { }
 
         public Diagnosis(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
@@ -34,6 +35,7 @@ namespace PalisaidMeta.Model
         /// Unique name for the diagnosis
         /// </summary>
         public string? DiagnosisName { get; set; }
+
         public Patient Patient { get; set; } = new();
 
         public DisposableList<Code>? Codes { get; set; } = new();
@@ -49,8 +51,8 @@ namespace PalisaidMeta.Model
         /// <summary>
         /// Condition begin and end, if ended
         /// </summary>
-        public Duration Duration {get;set; }  = new();
-        
+        public Duration Duration { get; set; } = new();
+
         // Calculate this from the practioner list ...
         /// <summary>
         /// Tests, consults, visits, ...

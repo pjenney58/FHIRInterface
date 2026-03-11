@@ -18,19 +18,9 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using Hl7.Fhir.Model;
-using Hl7.Fhir.Validation;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Newtonsoft.Json.Linq;
-using PalisaidMeta.Model;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using Transformers.Interface;
 
 namespace Transformers.Model.R4
 {
-
-
     public class ObservationAdapter<IEntity, OEntity> : ITransformer
         where OEntity : class, new()
         where IEntity : class, new()
@@ -39,6 +29,7 @@ namespace Transformers.Model.R4
         private OEntity? payloadOUT;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity> TaskDelegate();
 
         public InputVersion version { get; set; }
@@ -54,7 +45,7 @@ namespace Transformers.Model.R4
             this.source = source;
         }
 
-        CodingSystem GetCodingSystem(string system)
+        private CodingSystem GetCodingSystem(string system)
         {
             return system switch
             {
@@ -76,7 +67,7 @@ namespace Transformers.Model.R4
             };
         }
 
-        PalisaidMeta.Model.Code SetValues(PalisaidMeta.Model.Code code, DataType data)
+        private PalisaidMeta.Model.Code SetValues(PalisaidMeta.Model.Code code, DataType data)
         {
             foreach (KeyValuePair<string, object> set in data)
             {
@@ -98,8 +89,8 @@ namespace Transformers.Model.R4
 
             return code;
         }
-       
-        KeyValuePair<string,string>? GetValue(KeyValuePair<string, object> set)
+
+        private KeyValuePair<string, string>? GetValue(KeyValuePair<string, object> set)
         {
             switch (set.Key.ToLower())
             {
@@ -128,7 +119,7 @@ namespace Transformers.Model.R4
             {
                 throw new Exception("Invalid payload type");
             }
-            
+
             var meta = new PalisaidMeta.Model.Observation()
             {
                 TenantId = tenant,
@@ -140,14 +131,14 @@ namespace Transformers.Model.R4
             }
 
             meta.TenantId = tenant;
-            
-            if(fhir.HasVersionId)
+
+            if (fhir.HasVersionId)
             {
                 meta.Version = long.Parse(fhir.VersionId);
             }
 
             // Fhir doesn't necessarily use a uuid for the key, so we need to be able to set capture it as a long
-            if(!string.IsNullOrEmpty(fhir.Id))
+            if (!string.IsNullOrEmpty(fhir.Id))
             {
                 meta.EntityId = fhir.Id ?? Guid.NewGuid().ToString();
             }
@@ -165,7 +156,7 @@ namespace Transformers.Model.R4
                             CodingSystem = GetCodingSystem(coding.System),
                             System = coding.System
                         };
-                        
+
                         meta.Codes.Add(Code);
                     }
                 }
@@ -182,11 +173,11 @@ namespace Transformers.Model.R4
                         CodingSystem = GetCodingSystem(code.System),
                         System = code.System
                     };
-                    
-                    meta.Codes.Add(Code);                  
+
+                    meta.Codes.Add(Code);
                 }
             }
-            
+
             if (fhir.Component != null && fhir.Component.Any())
             {
                 foreach (var component in fhir.Component)
@@ -216,7 +207,7 @@ namespace Transformers.Model.R4
                             TypeName = item.Key,
                             TenantId = tenant
                         };
-                        
+
                         observationitem.Code.Name = item.Value.ToString();
                         observationitem.Timestamp = DateTime.Now;
                         meta.Items.Add(observationitem);
@@ -228,13 +219,13 @@ namespace Transformers.Model.R4
             {
                 foreach (var item in fhir.Effective)
                 {
-                    if(fhir.Effective is FhirDateTime)
+                    if (fhir.Effective is FhirDateTime)
                     {
                         meta.StartDate = DateTimeOffset.Parse(fhir.Effective.ToString());
                     }
-                    else if(fhir.Effective is Period)
+                    else if (fhir.Effective is Period)
                     {
-                        if(meta.StartDate == DateTimeOffset.MinValue)
+                        if (meta.StartDate == DateTimeOffset.MinValue)
                         {
                             meta.StartDate = DateTimeOffset.Parse(fhir.Effective.ToString());
                         }
@@ -261,21 +252,20 @@ namespace Transformers.Model.R4
                     meta.Items.Add(observationitem);
                 }
             }
-            
+
             if (fhir.Subject != null && fhir.Subject.Any())
             {
                 foreach (var item in fhir.Subject)
                 {
-                    
-                    if(fhir.Subject is Hl7.Fhir.Model.Patient)
+                    if (fhir.Subject is Hl7.Fhir.Model.Patient)
                     {
                         meta.PatientId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
                     }
-                    else if(fhir.Subject is Hl7.Fhir.Model.Location)
+                    else if (fhir.Subject is Hl7.Fhir.Model.Location)
                     {
                         meta.LocationId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
                     }
-                    else if(fhir.Subject is Hl7.Fhir.Model.Practitioner)
+                    else if (fhir.Subject is Hl7.Fhir.Model.Practitioner)
                     {
                         meta.PractitionerId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
                     }
@@ -352,7 +342,7 @@ namespace Transformers.Model.R4
                     meta.Items.Add(observationitem);
                 }
             }
-            
+
             if (fhir.Performer != null && fhir.Performer.Any())
             {
                 foreach (var item in fhir.Performer)
@@ -368,7 +358,7 @@ namespace Transformers.Model.R4
                     }
                 }
             }
-           
+
             if (fhir.Note != null && fhir.Note.Any())
             {
                 foreach (var item in fhir.Note)
@@ -378,13 +368,12 @@ namespace Transformers.Model.R4
                         TypeName = "Note",
                         TenantId = tenant
                     };
-                              
+
                     observationitem.Code.Name = item.TypeName;
                     observationitem.Timestamp = DateTime.Now;
                     meta.Items.Add(observationitem);
                 }
             }
-            
 
             // Id - Item Reference? Subject - Patient? BasedOn
 
@@ -397,13 +386,10 @@ namespace Transformers.Model.R4
             return meta as OEntity;
         }
 
-
-
         public ObservationAdapter(InputVersion version)
         {
             this.version = version;
         }
-
 
         public async Task<object?> Transform(object payload)
         {

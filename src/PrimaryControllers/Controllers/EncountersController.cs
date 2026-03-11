@@ -1,12 +1,12 @@
-﻿using PalisaidMeta.Model;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PalisaidMeta.Model;
 using Support.Model;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Primary.Controllers
-{  
+{
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -103,9 +103,7 @@ namespace Primary.Controllers
                 return BadRequest("Error");
             }
         }
+
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 }
-
-
-

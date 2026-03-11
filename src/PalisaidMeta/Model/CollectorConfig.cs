@@ -97,6 +97,7 @@ namespace PalisaidMeta.Model
         // DataProtocolOut = DataProtocol.HL7v2; TransportProtocolIn = TransportProtocol.MMLP;
         // NetworkProtocolIn = NetworkProtocol.TCP;
         public DataProtocol DataProtocolOut { get; set; }
+
         public NetworkProtocol NetworkProtocolOut { get; set; }
         public TransportPrototcol TransportPrototcolOut { get; set; }
 
@@ -144,8 +145,7 @@ namespace PalisaidMeta.Model
         public async Task<string> UpdateLog(string log)
         { throw new NotImplementedException(nameof(UpdateLog)); }
 
-        #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
-
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 
     public enum LogRecordState
@@ -162,6 +162,7 @@ namespace PalisaidMeta.Model
     {
         [Key]
         public Guid EntityId { get; set; }
+
         public DateTimeOffset Timestamp { get; set; }
         public LogRecordState State { get; set; }
         public string? TargetName { get; set; }

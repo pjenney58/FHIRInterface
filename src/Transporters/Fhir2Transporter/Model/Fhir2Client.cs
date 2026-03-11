@@ -1,12 +1,9 @@
-﻿using Confluent.Kafka;
+﻿using Hl7.Fhir.Model;
+using Hl7.Fhir.Rest;
+using PalisaidMeta.Model;
 using Support.Interface;
 using Support.Model;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading;
-using Hl7.Fhir.Rest;
-using Hl7.Fhir;
-using Hl7.Fhir.Model;
-using PalisaidMeta.Model;
 
 namespace Transporters.Model
 {

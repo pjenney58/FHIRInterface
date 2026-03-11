@@ -75,7 +75,8 @@ namespace PalisaidMeta.Model
 
     public class Prescription : Entity
     {
-        public Prescription() { }
+        public Prescription()
+        { }
 
         private void Init(Guid tenantId, Guid ownerId)
         {
@@ -98,7 +99,7 @@ namespace PalisaidMeta.Model
         public string? PriorPrescriptionName { get; set; }
 
         public List<string>? StatusReasons { get; set; } = new();
-        public List<PrescriptionCatagory> Catagories {get;set;} = new();
+        public List<PrescriptionCatagory> Catagories { get; set; } = new();
 
         public PrescriptionIntent Intent { get; set; }
         public PrescriptionCatagory Catagory { get; set; }

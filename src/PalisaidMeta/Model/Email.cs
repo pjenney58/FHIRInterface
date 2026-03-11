@@ -32,11 +32,11 @@ namespace PalisaidMeta.Model
         public EmailType Type { get; set; }
         public int Priority { get; set; }
 
-        public Email() { }
-       
+        public Email()
+        { }
+
         public Email(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
-
 
         protected override void Dispose(bool disposing)
         {

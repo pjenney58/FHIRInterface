@@ -17,8 +17,6 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using Transformers.Interface;
-
 namespace Transformers.Model.Stu3
 {
     public class LocationAdapter<IEntity, OEntity> : ITransformer
@@ -29,6 +27,7 @@ namespace Transformers.Model.Stu3
         private OEntity? payloadOUT;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity> TaskDelegate();
 
         public InputVersion version { get; set; }
@@ -85,7 +84,6 @@ namespace Transformers.Model.Stu3
             throw new NotImplementedException();
         }
 
-
         public async Task<object?> Transform(object payload)
         {
             // Override this with the appropriate key conditions - replace MSG as desired. There may
@@ -94,7 +92,6 @@ namespace Transformers.Model.Stu3
             // messages required, e.g. SIU & SRM
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
-
                 { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Location => PalisaidMeta.Model.Location", InputVersion.HL7HhirStu3), ConvertFhirToMeta },
                 { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Location => Hl7.Fhir.Model.Location", InputVersion.HL7HhirStu3), ConvertMetaToFhir }
             };

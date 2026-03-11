@@ -1,5 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Localization;
+﻿using Microsoft.Extensions.Localization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Collectors.Messaging
 {

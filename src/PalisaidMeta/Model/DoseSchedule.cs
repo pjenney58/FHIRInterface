@@ -23,7 +23,8 @@ namespace PalisaidMeta.Model
 {
     public class DoseSchedule : Entity
     {
-        public DoseSchedule() { }
+        public DoseSchedule()
+        { }
 
         public DoseSchedule(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
@@ -91,6 +92,7 @@ namespace PalisaidMeta.Model
 
         [NotMapped]
         public bool IsTitrating { get => DoseDays.GroupBy(p => p.DailyQty).Count() > 0; }
+
         public bool IsPrn { get; set; }
 
         private string? _dayOfMonthList;
@@ -98,7 +100,7 @@ namespace PalisaidMeta.Model
         /// <summary>
         /// Dose days of month
         /// </summary>
-        
+
         [NotMapped]
         public string? DayOfMonthList // 1,6,9,22
         {

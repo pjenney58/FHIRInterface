@@ -18,10 +18,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using Hl7.Fhir.Model;
-using PalisaidMeta.Model;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Task = System.Threading.Tasks.Task;
-using Transformers.Interface;
 
 namespace Transformers.Model.R4
 {

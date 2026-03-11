@@ -17,8 +17,6 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using Transformers.Interface;
-
 namespace Transformers.Model.R4
 {
     public class PractitionerAdapter<IEntity, OEntity> : ITransformer
@@ -49,7 +47,7 @@ namespace Transformers.Model.R4
 
             meta.EntityId = fhir.Id ?? Guid.NewGuid().ToString();
             meta.TenantId = tenant;
-            
+
             var n = TransformerFactory.Create<Hl7.Fhir.Model.HumanName, PalisaidMeta.Model.PersonName>(tenant, format, version, source);
             foreach (var name in fhir.Name)
             {
@@ -69,7 +67,6 @@ namespace Transformers.Model.R4
 
             return meta as OEntity;
         }
-
 
         private async Task<OEntity> ConvertMetaToFhir()
         {

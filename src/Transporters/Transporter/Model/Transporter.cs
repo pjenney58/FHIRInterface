@@ -1,33 +1,26 @@
-﻿
-using Confluent.Kafka;
-using PalisaidMeta.Model;
-using EasyNetQ;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using EasyNetQ;
 using Microsoft.Extensions.Configuration;
-using NLog.Common;
+using PalisaidMeta.Model;
 using Support.Model;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
-using Transporters.Interface;
-using System.ComponentModel.DataAnnotations;
 
 namespace Transporters.Model
 {
-    
     delegate void TransporterConnectionHandler();
 
     public class Transporter : PalisaidMessageQueue, IDisposable
-    {     
+    {
         protected readonly IConfiguration? config;
         protected readonly CollectorConfig? cconfig;
         TransporterConnectionHandler? client;
 
-        public Transporter(CollectorConfig cconfig, Guid tenantid, string commandbus, string payloadbus) 
-            : base(tenantid, commandbus, payloadbus) 
+        public Transporter(CollectorConfig cconfig, Guid tenantid, string commandbus, string payloadbus)
+            : base(tenantid, commandbus, payloadbus)
         {
             config = AppConfig.Get("transportersettings.json");
-            
+
             this.cconfig = cconfig;
 
             // Register ConnectionHandler
@@ -50,9 +43,9 @@ namespace Transporters.Model
         {
             try
             {
-                switch(cconfig.NetworkProtocolIn)
+                switch (cconfig.NetworkProtocolIn)
                 {
-                    case NetworkProtocol.TCP:                  
+                    case NetworkProtocol.TCP:
                         Connect();
                         break;
 
@@ -79,7 +72,7 @@ namespace Transporters.Model
                     case NetworkProtocol.GRPC:
                         Connect();
                         break;
-                       
+
                     default:
                         break;
                 }

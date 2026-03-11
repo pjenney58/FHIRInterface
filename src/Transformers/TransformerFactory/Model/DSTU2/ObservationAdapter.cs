@@ -17,9 +17,6 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using PalisaidMeta.Model;
-using Transformers.Interface;
-
 namespace Transformers.Model.Dstu2
 {
     public class ObservationAdapter<IEntity, OEntity> : ITransformer
@@ -30,6 +27,7 @@ namespace Transformers.Model.Dstu2
         private OEntity? payloadOUT;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity> TaskDelegate();
 
         public InputVersion version { get; set; }

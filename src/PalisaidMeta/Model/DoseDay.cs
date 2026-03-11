@@ -23,10 +23,11 @@ namespace PalisaidMeta.Model
 {
     public class DoseDay : Entity
     {
-        public DoseDay() {}
-        
+        public DoseDay()
+        { }
+
         public DoseDay(Guid tenantId, Guid ownerId)
-            : base(tenantId, ownerId) {}
+            : base(tenantId, ownerId) { }
 
         public DateTimeOffset ThisDoseDay { get; set; }
         public int DayOfMonth { get => ThisDoseDay.Day; }

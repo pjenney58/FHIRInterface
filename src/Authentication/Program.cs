@@ -1,13 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Authentication.Data;
-using Microsoft.AspNetCore.Identity;
+﻿using Authentication.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-
-using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-
+using Microsoft.OpenApi.Models;
 using Support.Model;
+using System.Text;
 
 namespace Authentication
 {
@@ -54,7 +52,7 @@ namespace Authentication
                    ValidIssuer = configuration["JWT:ValidIssuer"],
                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"] ?? throw new ArgumentNullException("JWT:Secret")))
                };
-            });
+           });
 
             builder.Services.AddAuthorization(options =>
             {
@@ -67,7 +65,6 @@ namespace Authentication
                 options.AddPolicy("TenantGroupMember", policy => policy.RequireClaim("TenantGroupMember"));
                 options.AddPolicy("TenantUser", policy => policy.RequireClaim("TenantUser"));
             });
-
 
             builder.Services.AddSwaggerGen(c =>
             {

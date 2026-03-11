@@ -1,5 +1,4 @@
-﻿
-namespace Calendar;
+﻿namespace Calendar;
 
 public class Program
 {
@@ -27,10 +26,8 @@ public class Program
 
         app.UseAuthorization();
 
-
         app.MapControllers();
 
         app.Run();
     }
 }
-

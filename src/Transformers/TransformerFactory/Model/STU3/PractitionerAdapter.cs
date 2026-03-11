@@ -17,8 +17,6 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using Transformers.Interface;
-
 namespace Transformers.Model.Stu3
 {
     public class PractitionerAdapter<IEntity, OEntity> : ITransformer
@@ -55,17 +53,17 @@ namespace Transformers.Model.Stu3
         private async Task<OEntity> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Practitioner;
-            if(fhir == null)
+            if (fhir == null)
             {
                 throw new ArgumentNullException(nameof(fhir));
             }
 
             var meta = new PalisaidMeta.Model.Practitioner();
-            if(meta == null)
+            if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
             }
-            
+
             meta.EntityId = fhir.Id ?? Guid.NewGuid().ToString();
 
             var n = TransformerFactory.Create<Hl7.Fhir.Model.HumanName, PalisaidMeta.Model.PersonName>(tenant, format, version, source);
@@ -93,7 +91,6 @@ namespace Transformers.Model.Stu3
             // var p = payloadIN as PalisaidMeta.Model.{Type}; var o = new Hl7.Fhir.Model.{Type}();
             throw new NotImplementedException();
         }
-
 
         public async Task<object?> Transform(object payload)
         {

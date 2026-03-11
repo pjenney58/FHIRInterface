@@ -21,8 +21,9 @@ namespace PalisaidMeta.Model
 {
     public class DoseEvent : Entity
     {
-        public DoseEvent() { }
-              
+        public DoseEvent()
+        { }
+
         public DoseEvent(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
 
@@ -39,6 +40,6 @@ namespace PalisaidMeta.Model
             MaxmumCount = 0;
             Instruction = null;
             Observation = null;
-        }        
+        }
     }
 }

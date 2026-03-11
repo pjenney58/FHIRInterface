@@ -1,7 +1,7 @@
-﻿using Support.Interface;
+﻿using PalisaidMeta.Model;
+using Support.Interface;
 using Support.Model;
 using System.Security.Cryptography.X509Certificates;
-using PalisaidMeta.Model;
 
 namespace Transporters.Model
 {

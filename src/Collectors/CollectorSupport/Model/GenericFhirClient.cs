@@ -1,6 +1,4 @@
-﻿using System;
-using Collectors.Interface;
-using Hl7.Fhir.Model;
+﻿using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 
 using Task = System.Threading.Tasks.Task;

@@ -1,6 +1,6 @@
-﻿using PalisaidMeta.Model;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PalisaidMeta.Model;
 using Support.Model;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,7 +20,6 @@ namespace Administration.Controllers
         }
 
         [HttpGet]
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<IActionResult> Get()
 
         {
@@ -45,6 +44,7 @@ namespace Administration.Controllers
         {
             return BadRequest("Not Implemented");
         }
+
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 }

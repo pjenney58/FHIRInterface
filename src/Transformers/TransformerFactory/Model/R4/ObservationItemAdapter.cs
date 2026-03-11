@@ -18,7 +18,6 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using Task = System.Threading.Tasks.Task;
-using Transformers.Interface;
 
 namespace Transformers.Model.R4
 {
@@ -29,6 +28,7 @@ namespace Transformers.Model.R4
         private IEntity? payloadIN;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity?> TaskDelegate();
 
         public InputVersion version { get; set; }
@@ -42,18 +42,18 @@ namespace Transformers.Model.R4
             this.format = format;
             this.version = version;
             this.source = source;
-        }    
+        }
 
         private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Observation;
-            if(fhir == null)
+            if (fhir == null)
             {
                 throw new ArgumentNullException(nameof(fhir));
             }
 
             var meta = new PalisaidMeta.Model.ObservationItem();
-            if(meta == null)
+            if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
             }
@@ -83,17 +83,17 @@ namespace Transformers.Model.R4
         private async Task<OEntity?> ConvertMetaToFhir()
         {
             var meta = payloadIN as PalisaidMeta.Model.ObservationItem; ;
-            if(meta == null)
+            if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
             }
 
             var fhir = new Hl7.Fhir.Model.Observation();
-            if(fhir == null)
+            if (fhir == null)
             {
                 throw new ArgumentNullException(nameof(fhir));
             }
-            
+
             fhir.Id = meta.EntityId;
 
             await Task.Run(() =>

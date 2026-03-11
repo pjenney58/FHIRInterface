@@ -3,21 +3,20 @@
 //  2. Gets messages from MQ creates the proper transformation using the TransformerFactory
 //  3. Returns converted data to the MQ
 
-using System.Diagnostics;
 using EasyNetQ;
 using Microsoft.Extensions.Configuration;
-
+using System.Diagnostics;
 
 namespace Transformers.Model
 {
     public class Transformer : PalisaidMessageQueue, IDisposable
     {
-        IConfiguration? config;      
-        ITransformer? transformer;
-     
+        private IConfiguration? config;
+        private ITransformer? transformer;
+
         public Transformer(Guid tenantid, string commandbus, string payloadbus)
                     : base(tenantid, commandbus, payloadbus)
-        {            
+        {
             // Get the configuration
             config = AppConfig.Get("transformersettings.json");
 
@@ -84,7 +83,7 @@ namespace Transformers.Model
                 Debug.WriteLine($"Error: {ex.Message}");
             }
         }
-        
+
         // Command Handler
         internal void ProcessCommand(string payload)
         {

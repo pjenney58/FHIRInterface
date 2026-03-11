@@ -23,18 +23,13 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 //extern alias stu3;
 //extern alias dstu2;
 
-using Hl7.Fhir.Model;
-
 //using R5 = r5::Hl7.Fhir.Model;
 //using R4 = r4::Hl7.Fhir.Model;
 //using R4b = r4b::Hl7.Fhir.Model;
 //using Stu3 = stu3::Hl7.Fhir.Model;
 //using Dstu2 = dstu2::Hl7.Fhir.Model;
 
-using PalisaidMeta.Model;
-using Transformers.Interface;
 using Task = System.Threading.Tasks.Task;
-
 
 namespace Transformers.Model.Dstu2
 {
@@ -77,7 +72,7 @@ namespace Transformers.Model.Dstu2
 
             meta.TenantId = this.tenant;
             meta.EntityId = fhir.ElementId ?? Guid.NewGuid().ToString();
-            
+
             await Task.Run(() =>
             {
                 if (fhir.Line != null)
@@ -117,17 +112,17 @@ namespace Transformers.Model.Dstu2
         private async Task<OEntity?> ConvertMetaToFhir()
         {
             var meta = payloadIN as PalisaidMeta.Model.Address;
-            if(meta == null)
+            if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
             }
 
             var fhir = new Hl7.Fhir.Model.Address();
-            if(fhir == null)
+            if (fhir == null)
             {
                 throw new ArgumentNullException(nameof(fhir));
             }
-            
+
             fhir.ElementId = meta.EntityId;
 
             await Task.Run(() =>
@@ -138,7 +133,6 @@ namespace Transformers.Model.Dstu2
                     !string.IsNullOrEmpty(meta.Address2) ? meta.Address2 : "Empty",
                     !string.IsNullOrEmpty(meta.Address3) ? meta.Address3 : "Empty"
                 };
-                
 
                 fhir.Line = lines as IEnumerable<string>;
                 fhir.City = meta.City;
@@ -158,8 +152,6 @@ namespace Transformers.Model.Dstu2
             return meta as OEntity;
         }
 
-       
-
         public async Task<object?> Transform(object payload)
         {
             this.payloadIN = payload as IEntity;
@@ -169,7 +161,7 @@ namespace Transformers.Model.Dstu2
 
             {
                 { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Address => PalisaidMeta.Model..Address", InputVersion.HL7FhirDstu2), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model..Address => Hl7.Fhir.Model.Address", InputVersion.HL7FhirDstu2), ConvertMetaToFhir }            
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model..Address => Hl7.Fhir.Model.Address", InputVersion.HL7FhirDstu2), ConvertMetaToFhir }
             };
 
             var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);

@@ -37,8 +37,9 @@ namespace PalisaidMeta.Model
 
     public class Phone : Entity
     {
-        public Phone() { }
-      
+        public Phone()
+        { }
+
         public Phone(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
 

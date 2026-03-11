@@ -18,10 +18,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using Hl7.Fhir.Model;
-using PalisaidMeta.Model;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Task = System.Threading.Tasks.Task;
-using Transformers.Interface;
 
 namespace Transformers.Model.Dstu2
 {
@@ -140,7 +137,6 @@ namespace Transformers.Model.Dstu2
                 {
                     foreach (var code in rc.Coding)
                     {
-
                         var cd = new PalisaidMeta.Model.Code()
                         {
                             CodingSystem = GetCodingSystem(code.System),
@@ -214,7 +210,6 @@ namespace Transformers.Model.Dstu2
                 CreateDate = DateTimeOffset.UtcNow,
                 LastUpdate = DateTimeOffset.UtcNow
             };
-
 
             meta.EncounterStatus = (EncounterStatus)fhir.Status;
 
@@ -368,7 +363,6 @@ namespace Transformers.Model.Dstu2
 
             return meta as OEntity;
         }
-
 
         private async Task<OEntity> ConvertMetaToFhir()
         {

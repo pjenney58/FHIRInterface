@@ -31,11 +31,7 @@ using R4 = r4::Hl7.Fhir.Model;
 using Stu3 = stu3::Hl7.Fhir.Model;
 */
 
-using PalisaidMeta.Model;
 using Hl7.Fhir.Model;
-using Task = System.Threading.Tasks.Task;
-using Transformers.Model;
-using Transformers.Interface;
 
 namespace Transformers.Model.Dstu2
 {
@@ -134,8 +130,6 @@ namespace Transformers.Model.Dstu2
 
             return meta as OEntity;
         }
-
-       
 
         private async Task<OEntity> ConvertMetaToR3Fhir()
         {

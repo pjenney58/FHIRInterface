@@ -24,8 +24,9 @@ namespace PalisaidMeta.Model
     [Serializable]
     public class PersonName : Entity
     {
-        public PersonName() { }
-        
+        public PersonName()
+        { }
+
         public PersonName(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
 
@@ -52,6 +53,7 @@ namespace PalisaidMeta.Model
 
         [NotMapped]
         public string? MiddleInitial { get => !string.IsNullOrEmpty(MiddleName) ? MiddleName?.Substring(0, 1).ToUpper() : null; }
+
         public string? KnownByName { get; set; }
         public List<string?>? Suffix { get; set; } = new();
 
@@ -66,6 +68,7 @@ namespace PalisaidMeta.Model
         /// How long this name was used/has been used
         /// </summary>
         public DateTimeOffset StartDate { get; set; }
+
         public DateTimeOffset StopDate { get; set; }
 
         /// <summary>

@@ -1,11 +1,9 @@
-﻿using System;
-namespace PalisaidMeta.Model
+﻿namespace PalisaidMeta.Model
 {
-	public class Appointment
-	{
-		public Appointment()
-		{
-		}
-	}
+    public class Appointment
+    {
+        public Appointment()
+        {
+        }
+    }
 }
-

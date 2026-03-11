@@ -16,8 +16,6 @@ OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO 
 BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-using Transformers.Interface;
-using Support;
 
 namespace Transformers.Model.R4
 {
@@ -29,6 +27,7 @@ namespace Transformers.Model.R4
         private OEntity? payloadOUT;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity> TaskDelegate();
 
         public InputVersion version { get; set; }
@@ -47,6 +46,7 @@ namespace Transformers.Model.R4
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+
         private async Task<OEntity> ConvertR2FhirToMeta()
 
         {
@@ -57,16 +57,17 @@ namespace Transformers.Model.R4
         {
             throw new NotImplementedException();
         }
+
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
         private async Task<OEntity> ConvertFhirToMeta()
         {
             logger.ReportInfo("Hl7.Fhir.Model.Location to PalisaidMeta.Model.Location");
-            
+
             var fhir = payloadIN as Hl7.Fhir.Model.Location;
             if (fhir == null)
             {
-                throw new ArgumentNullException(logger.ReportError("FHIR payload is null",false));
+                throw new ArgumentNullException(logger.ReportError("FHIR payload is null", false));
             }
 
             var meta = new PalisaidMeta.Model.Location()
@@ -80,7 +81,7 @@ namespace Transformers.Model.R4
 
             if (meta == null)
             {
-                throw new ArgumentNullException(logger.ReportError("Meta payload is null",false));
+                throw new ArgumentNullException(logger.ReportError("Meta payload is null", false));
             }
 
             meta.Name = fhir.Name;
@@ -98,7 +99,7 @@ namespace Transformers.Model.R4
                 var address = await addressTransformer.Transform(fhir.Address);
                 if (address != null)
                 {
-                    meta.Addresses?.Add(await addressTransformer.Transform(fhir.Address) as Address ?? new Address(){ Address1 = "Bogus" });
+                    meta.Addresses?.Add(await addressTransformer.Transform(fhir.Address) as Address ?? new Address() { Address1 = "Bogus" });
                 }
             }
             catch (Exception ex)
@@ -107,10 +108,11 @@ namespace Transformers.Model.R4
                 logger.ReportDebug($"Location Adapter/Address Exception: {ex.Message}");
             }
 
-            return meta as OEntity ?? throw new ArgumentNullException(logger.ReportError("meta is null",false));
+            return meta as OEntity ?? throw new ArgumentNullException(logger.ReportError("meta is null", false));
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+
         private async Task<OEntity> ConvertR5FhirToMeta()
 
         {
@@ -155,6 +157,7 @@ namespace Transformers.Model.R4
             // var meta = new PalisaidMeta.Model.{Type}(); var message = payloadIN as NHapi.Model.{Version}.Message.{MSG};
             throw new NotImplementedException();
         }
+
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
         public async Task<object?> Transform(object payload)

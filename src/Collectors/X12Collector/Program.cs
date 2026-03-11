@@ -1,7 +1,4 @@
-﻿
-
-
-public class Program
+﻿public class Program
 {
     public static void Main(string[] args)
     {
@@ -26,10 +23,8 @@ public class Program
 
         app.UseAuthorization();
 
-
         app.MapControllers();
 
         app.Run();
     }
 }
-

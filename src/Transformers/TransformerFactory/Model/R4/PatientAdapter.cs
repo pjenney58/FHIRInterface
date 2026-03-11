@@ -31,10 +31,7 @@ using R4 = r4::Hl7.Fhir.Model;
 using Stu3 = stu3::Hl7.Fhir.Model;
 */
 
-using PalisaidMeta.Model;
 using Hl7.Fhir.Model;
-using Transformers.Interface;
-using Task = System.Threading.Tasks.Task;
 
 namespace Transformers.Model.R4
 {
@@ -45,6 +42,7 @@ namespace Transformers.Model.R4
         private IEntity? payloadIN;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity> TaskDelegate();
 
         public InputVersion version { get; set; }
@@ -150,7 +148,7 @@ namespace Transformers.Model.R4
             // Override this with the appropriate key conditions - replace MSG as desired. There may
             // be several similar messages required, e.g. SIU & SRM
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
-            {         
+            {
                 { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Patient => PalisaidMeta.Model.Patient", InputVersion.HL7FhirR4), ConvertFhirToMeta },
                 { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Patient => Hl7.Fhir.Model.Patient", InputVersion.HL7FhirR4), ConvertMetaToFhir }
             };

@@ -17,8 +17,6 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using Transformers.Interface;
-
 namespace Transformers.Model.R4
 {
     public class NameAdapter<IEntity, OEntity> : ITransformer
@@ -29,6 +27,7 @@ namespace Transformers.Model.R4
         private OEntity? payloadOUT;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity> TaskDelegate();
 
         public InputVersion version { get; set; }
@@ -94,7 +93,7 @@ namespace Transformers.Model.R4
             }
 
             var fhir = new Hl7.Fhir.Model.HumanName();
-            if(fhir == null)
+            if (fhir == null)
             {
                 throw new ArgumentNullException(nameof(fhir));
             }
@@ -122,7 +121,7 @@ namespace Transformers.Model.R4
             {
                 if (fhir.Period == null)
                 {
-                  //  fhir.Period = new Duration(); 
+                    //  fhir.Period = new Duration();
                 }
 
                 fhir.Period.Start = meta.StartDate.ToString("yyyyMMdd");

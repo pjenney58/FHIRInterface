@@ -1,9 +1,7 @@
-﻿using Support.Model;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
-using System.Reflection.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Support.Model;
 
 namespace Authentication.Data
 {
@@ -16,7 +14,7 @@ namespace Authentication.Data
         {
         }
     }
-    
+
     /// <summary>
     /// IdentityDbContext - Supports Azure Identity Management in our PostgreSQL db
     /// </summary>

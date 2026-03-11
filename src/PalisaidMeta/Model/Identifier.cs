@@ -30,7 +30,8 @@ namespace PalisaidMeta.Model
         public DateTimeOffset StartDate { get; set; }
         public DateTimeOffset StopDate { get; set; }
 
-        public Identifier() { }
+        public Identifier()
+        { }
 
         public Identifier(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }

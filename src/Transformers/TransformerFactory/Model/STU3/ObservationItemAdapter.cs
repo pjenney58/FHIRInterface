@@ -18,7 +18,6 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 */
 
 using Task = System.Threading.Tasks.Task;
-using Transformers.Interface;
 
 namespace Transformers.Model.Stu3
 {
@@ -29,6 +28,7 @@ namespace Transformers.Model.Stu3
         private IEntity? payloadIN;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity?> TaskDelegate();
 
         public InputVersion version { get; set; }
@@ -47,13 +47,13 @@ namespace Transformers.Model.Stu3
         private async Task<OEntity?> ConvertFhirToMeta()
         {
             var fhir = payloadIN as Hl7.Fhir.Model.Observation;
-            if(fhir == null)
+            if (fhir == null)
             {
                 throw new ArgumentNullException(nameof(fhir));
             }
 
             var meta = new PalisaidMeta.Model.ObservationItem();
-            if(meta == null)
+            if (meta == null)
             {
                 throw new ArgumentNullException(nameof(meta));
             }
@@ -82,14 +82,14 @@ namespace Transformers.Model.Stu3
 
         private async Task<OEntity?> ConvertMetaToFhir()
         {
-            var meta = payloadIN as PalisaidMeta.Model.ObservationItem; 
-            if(meta == null || meta.Value == null)
+            var meta = payloadIN as PalisaidMeta.Model.ObservationItem;
+            if (meta == null || meta.Value == null)
             {
                 throw new ArgumentNullException(nameof(meta));
             }
 
             var fhir = new Hl7.Fhir.Model.Observation();
-            if(fhir == null)
+            if (fhir == null)
             {
                 throw new ArgumentNullException(nameof(fhir));
             }
@@ -117,7 +117,7 @@ namespace Transformers.Model.Stu3
             // Override this with the appropriate key conditions - replace MSG as desired. There may
             // be several similar messages required, e.g. SIU & SRM
             payloadIN = payload as IEntity;
-           
+
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
                 { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.ObservationItem => PalisaidMeta.Model.ObservationItem", InputVersion.HL7FhirR4), ConvertFhirToMeta },

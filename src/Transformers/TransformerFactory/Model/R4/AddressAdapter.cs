@@ -23,17 +23,13 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 //extern alias stu3;
 //extern alias dstu2;
 
-using Hl7.Fhir.Model;
-
 //using R5 = r5::Hl7.Fhir.Model;
 //using R4 = r4::Hl7.Fhir.Model;
 //using R4b = r4b::Hl7.Fhir.Model;
 //using Stu3 = stu3::Hl7.Fhir.Model;
 //using Dstu2 = dstu2::Hl7.Fhir.Model;
 
-using PalisaidMeta.Model;
 using Task = System.Threading.Tasks.Task;
-using Transformers.Interface;
 
 namespace Transformers.Model.R4
 {
@@ -53,7 +49,6 @@ namespace Transformers.Model.R4
         public Guid tenant { get; set; }
 
         private readonly IBaseEventLogger logger = new BaseEventLogger(nameof(AddressTransformer<IEntity, OEntity>));
-
 
         public AddressTransformer(Guid tenant, InputFormat format, InputVersion version, SourceSystems source)
         {
@@ -116,12 +111,10 @@ namespace Transformers.Model.R4
             return meta as OEntity;
         }
 
-
         private async Task<OEntity?> ConvertMetaToFhir()
         {
-            
             var fhir = new Hl7.Fhir.Model.Address();
-        
+
             if (fhir == null)
             {
                 throw new ArgumentNullException(nameof(fhir));
@@ -162,7 +155,6 @@ namespace Transformers.Model.R4
             return meta as OEntity;
         }
 
-
         public async Task<object?> Transform(object payload)
         {
             payloadIN = payload as IEntity;
@@ -171,7 +163,7 @@ namespace Transformers.Model.R4
             Dictionary<Tuple<string, InputVersion>, TaskDelegate> jumpTable = new()
             {
                 { new Tuple<string, InputVersion>(@"Hl7.Fhir.Model.Address => PalisaidMeta.Model.Address", InputVersion.HL7FhirR4), ConvertFhirToMeta },
-                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Address => Hl7.Fhir.Model.Address", InputVersion.HL7FhirR4), ConvertMetaToFhir }            
+                { new Tuple<string, InputVersion>(@"PalisaidMeta.Model.Address => Hl7.Fhir.Model.Address", InputVersion.HL7FhirR4), ConvertMetaToFhir }
             };
 
             var jumpkey = new Tuple<string, InputVersion>($"{typeof(IEntity).FullName} => {typeof(OEntity).FullName}", version);

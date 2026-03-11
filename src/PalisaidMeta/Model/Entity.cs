@@ -2,70 +2,71 @@
 using System.Security.Cryptography;
 using System.Text;
 
-
 namespace PalisaidMeta.Model
 {
     public abstract class Entity : IDisposable
-	{
-		public Entity()
-		{
-			if (string.IsNullOrEmpty(EntityId))
-			{
-				EntityId = Guid.NewGuid().ToString();
-			}
+    {
+        public Entity()
+        {
+            if (string.IsNullOrEmpty(EntityId))
+            {
+                EntityId = Guid.NewGuid().ToString();
+            }
 
-			TenantId = BaseConstants.DefaultTenantId;
-			OwnerId = TenantId;
-			
-			CreateDate = DateTimeOffset.Now;
-			LastUpdate = DateTimeOffset.Now;
-			IsActive = true;
-		}
+            TenantId = BaseConstants.DefaultTenantId;
+            OwnerId = TenantId;
 
-		public Entity(Guid tenantId, Guid ownerId)
-		{
-			if (string.IsNullOrEmpty(EntityId))
-			{
-				EntityId = Guid.NewGuid().ToString();
-			}
+            CreateDate = DateTimeOffset.Now;
+            LastUpdate = DateTimeOffset.Now;
+            IsActive = true;
+        }
 
-			OwnerId = ownerId;
-			TenantId = tenantId;
+        public Entity(Guid tenantId, Guid ownerId)
+        {
+            if (string.IsNullOrEmpty(EntityId))
+            {
+                EntityId = Guid.NewGuid().ToString();
+            }
 
-			if (tenantId == Guid.Empty)
-			{
-				TenantId = BaseConstants.DefaultTenantId;
-			}
+            OwnerId = ownerId;
+            TenantId = tenantId;
 
-			if (ownerId == Guid.Empty)
-			{
-				OwnerId = TenantId;
-			}
-		}
+            if (tenantId == Guid.Empty)
+            {
+                TenantId = BaseConstants.DefaultTenantId;
+            }
 
-		#region internalkeys
-		string _entityId = string.Empty;
-		
-		[Key]
-		public string EntityId 
-		{ 
-			get => _entityId; 
-			set => _entityId = value ?? Guid.NewGuid().ToString(); 
-		}
+            if (ownerId == Guid.Empty)
+            {
+                OwnerId = TenantId;
+            }
+        }
 
-		public Guid OwnerId { get; set; } = Guid.Empty;
-		public Guid TenantId { get; set; } = Guid.Empty;
-		#endregion internalkeys
+        #region internalkeys
 
-		/// <summary>
-		/// The hash of the original data that was used to create this entity. This is used to determine if the data has changed, 
-		/// and if so, the entity needs to be updated.
-		/// </summary>
-		public string OriginHash { get; set; } = string.Empty;
+        private string _entityId = string.Empty;
 
-		public string GenerateOriginHash(string data)
-		{
-			HashAlgorithm hashAlgorithm = SHA256.Create();
+        [Key]
+        public string EntityId
+        {
+            get => _entityId;
+            set => _entityId = value ?? Guid.NewGuid().ToString();
+        }
+
+        public Guid OwnerId { get; set; } = Guid.Empty;
+        public Guid TenantId { get; set; } = Guid.Empty;
+
+        #endregion internalkeys
+
+        /// <summary>
+        /// The hash of the original data that was used to create this entity. This is used to determine if the data has changed,
+        /// and if so, the entity needs to be updated.
+        /// </summary>
+        public string OriginHash { get; set; } = string.Empty;
+
+        public string GenerateOriginHash(string data)
+        {
+            HashAlgorithm hashAlgorithm = SHA256.Create();
 
             // Convert the input string to a byte array and compute the hash.
             byte[] bytes = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(data));
@@ -83,49 +84,50 @@ namespace PalisaidMeta.Model
 
             // Return the hexadecimal string.
             return sBuilder.ToString();
-		}
-		
-		public long Version { get; set; }
+        }
 
-		public DateTimeOffset CreateDate { get; set; }
-		public DateTimeOffset LastUpdate { get; set; }
+        public long Version { get; set; }
 
-		public bool IsActive { get; set; } = true;
-		public bool IsDeleted { get; set; } = false;
+        public DateTimeOffset CreateDate { get; set; }
+        public DateTimeOffset LastUpdate { get; set; }
 
-		public void MarkAsUpdated()
-		{
-			Version++;
-			LastUpdate = DateTimeOffset.Now;
-		}
+        public bool IsActive { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
 
-		public void MarkAsDeleted()
-		{
-			MarkAsUpdated();
-			IsActive = false;
-			IsDeleted = true;
-		}
+        public void MarkAsUpdated()
+        {
+            Version++;
+            LastUpdate = DateTimeOffset.Now;
+        }
 
-		public void MarkAsUnDeleted()
-		{
-			MarkAsUpdated();
-			IsDeleted = false;
-			IsActive = true;
-		}
+        public void MarkAsDeleted()
+        {
+            MarkAsUpdated();
+            IsActive = false;
+            IsDeleted = true;
+        }
 
-		#region dispose
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposing)
-			{ }
-		}
+        public void MarkAsUnDeleted()
+        {
+            MarkAsUpdated();
+            IsDeleted = false;
+            IsActive = true;
+        }
 
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-		#endregion dispose
-	}
+        #region dispose
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            { }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion dispose
+    }
 }
-

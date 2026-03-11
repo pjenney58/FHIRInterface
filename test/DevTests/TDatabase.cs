@@ -1,12 +1,10 @@
-﻿
-namespace DevTests
+﻿namespace DevTests
 {
     public class TDatabase
     {
         [Fact]
         public void TestSqlSettingsDb()
         {
-           
         }
     }
 }

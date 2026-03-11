@@ -1,27 +1,23 @@
-﻿
-using NLog.Filters;
-using Transformers.Interface;
-
-namespace Transformers.Model
-{    
-    public static class TransformerFactory 
+﻿namespace Transformers.Model
+{
+    public static class TransformerFactory
     {
         private static InputFormat format = InputFormat.HL7Fhir;
         private static SourceSystems source = SourceSystems.Epic;
         private static readonly IBaseEventLogger eventLogger = new BaseEventLogger("TransformerFactory");
         private static Guid TenantId = Constants.Transform;
 
-        public static ITransformer Create<IEntity,OEntity>(Guid tenant, InputVersion version) 
+        public static ITransformer Create<IEntity, OEntity>(Guid tenant, InputVersion version)
             where OEntity : class, new()
             where IEntity : class, new()
         {
             return Create<IEntity, OEntity>(tenant, InputFormat.HL7Fhir, version, SourceSystems.Epic);
         }
 
-        public static ITransformer Create<IEntity, OEntity>(Guid tenant, 
-                                                            InputFormat fmt, 
-                                                            InputVersion version, 
-                                                            SourceSystems src)     
+        public static ITransformer Create<IEntity, OEntity>(Guid tenant,
+                                                            InputFormat fmt,
+                                                            InputVersion version,
+                                                            SourceSystems src)
             where OEntity : class, new()
             where IEntity : class, new()
         {

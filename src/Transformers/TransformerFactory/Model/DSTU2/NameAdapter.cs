@@ -17,10 +17,6 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CON
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-using System;
-using PalisaidMeta.Model;
-using Transformers.Interface;
-
 namespace Transformers.Model.Dstu2
 {
     public class NameAdapter<IEntity, OEntity> : ITransformer
@@ -31,6 +27,7 @@ namespace Transformers.Model.Dstu2
         private OEntity? payloadOUT;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity> TaskDelegate();
 
         public InputVersion version { get; set; }
@@ -51,7 +48,7 @@ namespace Transformers.Model.Dstu2
             var fhir = payloadIN as Hl7.Fhir.Model.HumanName;
             var meta = new PalisaidMeta.Model.PersonName();
 
-            meta.EntityId = fhir.ElementId ?? Guid.NewGuid().ToString();       
+            meta.EntityId = fhir.ElementId ?? Guid.NewGuid().ToString();
             meta.TenantId = tenant;
 
             foreach (var given in fhir.Given)
@@ -96,7 +93,7 @@ namespace Transformers.Model.Dstu2
             }
 
             var fhir = new Hl7.Fhir.Model.HumanName();
-            if(fhir == null)
+            if (fhir == null)
             {
                 throw new ArgumentNullException(nameof(fhir));
             }
@@ -124,7 +121,7 @@ namespace Transformers.Model.Dstu2
             {
                 if (fhir.Period == null)
                 {
-                  //  fhir.Period = new Duration(); 
+                    //  fhir.Period = new Duration();
                 }
 
                 fhir.Period.Start = meta.StartDate.ToString("yyyyMMdd");

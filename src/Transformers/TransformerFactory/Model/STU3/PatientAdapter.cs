@@ -31,9 +31,7 @@ using R4 = r4::Hl7.Fhir.Model;
 using Stu3 = stu3::Hl7.Fhir.Model;
 */
 
-using PalisaidMeta.Model;
 using Hl7.Fhir.Model;
-using Transformers.Interface;
 
 namespace Transformers.Model.Stu3
 {
@@ -44,6 +42,7 @@ namespace Transformers.Model.Stu3
         private IEntity? payloadIN;
 
         public delegate OEntity VoidDelegate();
+
         public delegate Task<OEntity> TaskDelegate();
 
         public InputVersion version { get; set; }
@@ -86,7 +85,7 @@ namespace Transformers.Model.Stu3
             }
 
             // Known addresses
-            if(meta.Addresses == null)
+            if (meta.Addresses == null)
             {
                 meta.Addresses = new();
             }
@@ -98,11 +97,11 @@ namespace Transformers.Model.Stu3
             }
 
             // Practitioners ...
-            if(meta.Practitioners == null)
+            if (meta.Practitioners == null)
             {
                 meta.Practitioners = new();
             }
-            
+
             var pr = TransformerFactory.Create<Hl7.Fhir.Model.Practitioner, PalisaidMeta.Model.Practitioner>(tenant, format, version, source);
             foreach (var practioner in fhir.GeneralPractitioner)
             {

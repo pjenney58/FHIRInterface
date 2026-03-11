@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Support.Model
+﻿namespace Support.Model
 {
     public static class AppRunningIn
     {

@@ -32,10 +32,10 @@ namespace PalisaidMeta.Model
         public string? NativeLanguageName { get; set; }    // Deutsch
         public int Fluency { get; set; }   // 1-10
 
-
         public SpokenLanguageUse Use { get; set; }
 
-        public SpokenLanguage() {}
+        public SpokenLanguage()
+        { }
 
         public SpokenLanguage(Guid tenantId, Guid ownerId)
             : base(tenantId, ownerId) { }
