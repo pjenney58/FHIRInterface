@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.5.33627.172
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11527.330 d18.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{B34119C0-F7E1-4492-83B3-B5DDDFA6EDB5}"
 EndProject
@@ -60,7 +60,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Settings", "Settings", "{96F36EF1-9168-47A5-A688-1EDF07FA30FA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollectorsController", "src\Collectors\CollectorsController\CollectorsController.csproj", "{A99AE01B-B1B8-4EF2-98EB-87F482FC024E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollectorController", "src\Collectors\CollectorsController\CollectorController.csproj", "{A99AE01B-B1B8-4EF2-98EB-87F482FC024E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Support", "src\Support\Support.csproj", "{9B1F66E8-0507-4B99-9738-3A94A773CF68}"
 EndProject
@@ -131,6 +131,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransformerControler", "src\Transformers\TransformerControler\TransformerControler.csproj", "{DCC4ED3D-1150-463A-908F-1278473F79EA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransporterController", "src\Transporters\TransporterController\TransporterController.csproj", "{EF410A2B-3639-4563-B6C8-5F8D7339D7B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestBase", "test\UnitTestBase\UnitTestBase.csproj", "{A1DD0F40-D86E-4F94-A0C4-B4DF4CD51DDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -350,6 +352,10 @@ Global
 		{EF410A2B-3639-4563-B6C8-5F8D7339D7B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF410A2B-3639-4563-B6C8-5F8D7339D7B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF410A2B-3639-4563-B6C8-5F8D7339D7B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1DD0F40-D86E-4F94-A0C4-B4DF4CD51DDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1DD0F40-D86E-4F94-A0C4-B4DF4CD51DDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1DD0F40-D86E-4F94-A0C4-B4DF4CD51DDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1DD0F40-D86E-4F94-A0C4-B4DF4CD51DDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -410,6 +416,7 @@ Global
 		{E8C07491-C321-4F2C-892A-06835389AB49} = {C03741A2-205B-4EFD-95C0-3B32BEA88BC2}
 		{DCC4ED3D-1150-463A-908F-1278473F79EA} = {E7F6ECFE-FB80-4848-BB50-6BD47292ACC7}
 		{EF410A2B-3639-4563-B6C8-5F8D7339D7B7} = {B7E8A843-0394-4C7A-A81C-7A2012053F1F}
+		{A1DD0F40-D86E-4F94-A0C4-B4DF4CD51DDF} = {7DF53970-678F-4077-AC87-C93175309E34}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EAF7E0B8-93D7-418C-BF95-D02B4EFAD949}

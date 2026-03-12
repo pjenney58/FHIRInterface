@@ -209,7 +209,7 @@ namespace Collectors.Model
 
         protected void Dispose(SubscriptionResult? subscription)
         {
-            subscription?.Dispose();
+           // subscription?.Dispose();
         }
 
         public void Dispose()

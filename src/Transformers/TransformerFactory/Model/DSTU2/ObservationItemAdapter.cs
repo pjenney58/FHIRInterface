@@ -72,13 +72,14 @@ namespace Transformers.Model.Dstu2
 
                 if (fhir.Value != null)
                 {
-                    foreach (var val in fhir.Value)
+                    // TODO: Fix Observation conversion
+                    /*foreach (var val in fhir.Value)
                     {
                         if (val.Value != null)
                         {
                             meta.Value += $"{val.Key}:{val.Value.ToString()} ";
                         }
-                    }
+                    }*/
                 }
             });
 

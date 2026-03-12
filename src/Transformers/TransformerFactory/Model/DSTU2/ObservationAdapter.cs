@@ -73,7 +73,8 @@ namespace Transformers.Model.Dstu2
 
             if (fhir.Value != null)
             {
-                foreach (var val in fhir.Value)
+                var values = fhir.Value.EnumerateElements();
+                foreach (var val in values)
                 {
                     if (val.Value != null)
                     {
@@ -82,22 +83,26 @@ namespace Transformers.Model.Dstu2
                 }
             }
 
-            foreach (var code in fhir.Code.Coding)
+            if (fhir.Code.Coding != null)
             {
-                var obi = new ObservationItem()
+                foreach (var code in fhir.Code.Coding)
                 {
-                    //Code = code.CodeElement.value,
-                    Description = code.Display,
-                    Value = Text,
-                    Timestamp = DateTime.Now
-                };
+                    var obi = new ObservationItem()
+                    {
+                        //Code = code.CodeElement.value,
+                        Description = code.Display,
+                        Value = Text,
+                        Timestamp = DateTime.Now
+                    };
 
-                meta.Items.Add(obi);
+                    meta.Items.Add(obi);
+                }
             }
 
             if (fhir.Effective != null)
             {
-                foreach (var e in fhir.Effective)
+                var effectives = fhir.Effective.EnumerateElements();
+                foreach (var e in effectives)
                 {
                     var foo = new KeyValuePair<string, object>(e.Key, e.Value);
                 }
@@ -105,8 +110,10 @@ namespace Transformers.Model.Dstu2
 
             if (fhir.Encounter != null)
             {
+                var encounters = fhir.Encounter.EnumerateElements();
+
                 // These might map to events
-                foreach (var e in fhir.Encounter)
+                foreach (var e in encounters)
                 {
                     var bar = new KeyValuePair<string, object>(e.Key, e.Value);
                 }
@@ -114,12 +121,17 @@ namespace Transformers.Model.Dstu2
 
             if (fhir.Subject != null)
             {
-                // handle prefix: urn:uuid:
-                var str = fhir.Subject.FirstOrDefault().Value.ToString().Contains("urn")
-                    ? fhir.Subject.FirstOrDefault().Value.ToString().Substring(9)
-                    : fhir.Subject.FirstOrDefault().Value.ToString();
+                var subjects = fhir.Subject.EnumerateElements();
 
-                meta.OwnerId = Guid.Parse(str);
+                if (subjects.First().Value != null)
+                {
+                    // handle prefix: urn:uuid:
+                    var str = subjects.First().Value.ToString().Contains("urn")
+                                ? subjects.First().Value.ToString().Substring(9)
+                                : subjects.First().Value.ToString();
+
+                    meta.OwnerId = Guid.Parse(str);
+                }
             }
 
             if (fhir.Performer != null && fhir.Performer.Count > 0)
@@ -127,21 +139,20 @@ namespace Transformers.Model.Dstu2
                 meta.PractitionerId = Guid.Parse(fhir.Performer.FirstOrDefault().ReferenceElement.Value);
             }
 
-            if (fhir.Note != null)
+            if (fhir.Note != null && fhir.Note.Count > 0)
             {
                 foreach (var n in fhir.Note)
                 {
-                    foreach (var n2 in n)
+                    var obi = new ObservationItem()
                     {
-                        var obi = new ObservationItem()
-                        {
-                            //Code = n2.Key,
-                            Value = n2.Value.ToString(),
-                            ObservationType = PalisaidMeta.Model.ObservationType.Note
-                        };
+                        //Code = n2.Key,
+                        // FhirDateTime conversion
+                        // TODO: Timestamp = n.TimeElement.TryToDateTimeOffset(this)
+                        Author = n.Author.ToString(),
+                        ObservationType = PalisaidMeta.Model.ObservationType.Note
+                    };
 
-                        meta.Items.Add(obi);
-                    }
+                    meta.Items.Add(obi);
                 }
             }
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using PalisaidMeta.Model;
 using Support.Model;
 
@@ -31,14 +31,14 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
        {
-           c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
+           c.AddSecurityDefinition("bearerAuth", new Microsoft.OpenApi.OpenApiSecurityScheme
            {
                Type = SecuritySchemeType.Http,
                Scheme = "bearer",
                BearerFormat = "JWT",
                Description = "JWT Authorization header using the Bearer scheme."
            });
-           c.AddSecurityRequirement(new OpenApiSecurityRequirement
+           /*c.AddSecurityRequirement(new OpenApiSecurityRequirement
            {
                 {
                     new OpenApiSecurityScheme
@@ -47,7 +47,7 @@ public class Program
                     },
                     new string[] {}
                 }
-           });
+           });*/
        });
 
         var app = builder.Build();

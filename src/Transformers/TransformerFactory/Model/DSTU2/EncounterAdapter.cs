@@ -302,27 +302,36 @@ namespace Transformers.Model.Dstu2
                 }
 
                 // Subjects are patients
-                if (fhir.Subject.Count() > 0)
+                if (fhir.Subject != null)
                 {
-                    foreach (var pair in fhir.Subject)
+                    var subjects = fhir.Subject.EnumerateElements().ToList();
+                    if (subjects.Count > 0)
                     {
-                        var p = new Participant();
-
-                        if (pair.Key.ToLower() == "reference")
+                        foreach (var pair in subjects)
                         {
-                            p.Name = fhir.Subject.Display;
-                            p.type = typeof(PalisaidMeta.Model.Patient);
-                            p.Id = Guid.Parse(pair.Value.ToString().Substring("urn:uuid:".Length));
+                            var p = new Participant();
 
-                            meta.Participants.Add(p);
+                            if (pair.Key.ToLower() == "reference")
+                            {
+                                p.Name = fhir.Subject.Display;
+                                p.type = typeof(PalisaidMeta.Model.Patient);
+                                p.Id = Guid.Parse(pair.Value.ToString().Substring("urn:uuid:".Length));
 
-                            // meta.Patients.Add(Guid.Parse(pair.value.ToString().Substring("urn:uuid:".Length)));
+                                meta.Participants.Add(p);
+
+                                // meta.Patients.Add(Guid.Parse(pair.value.ToString().Substring("urn:uuid:".Length)));
+                            }
                         }
                     }
                 }
 
                 foreach (var location in fhir.Location)
                 {
+                    if (location.Location == null)
+                    {
+                        continue;
+                    }
+
                     meta.Participants.Add(new Participant()
                     {
                         type = typeof(PalisaidMeta.Model.Location),
@@ -334,15 +343,20 @@ namespace Transformers.Model.Dstu2
                 var sp = new Participant();
                 sp.type = typeof(PalisaidMeta.Model.ServiceProvider);
 
-                foreach (var pair in fhir.ServiceProvider)
+                if (fhir.ServiceProvider != null)
                 {
-                    if (pair.Key.ToLower() == "reference")
+                    var service_providers = fhir.ServiceProvider.EnumerateElements().ToList()
+                                            ?? throw new NullReferenceException("fhir.ServiceProvider");
+                    foreach (var pair in service_providers)
                     {
-                        sp.Id = Guid.Parse(pair.Value.ToString().Substring(pair.Value.ToString().IndexOf('|') + 1));
-                    }
-                    else if (pair.Key.ToLower() == "display")
-                    {
-                        sp.Name = pair.Value.ToString();
+                        if (pair.Key.ToLower() == "reference")
+                        {
+                            sp.Id = Guid.Parse(pair.Value.ToString().Substring(pair.Value.ToString().IndexOf('|') + 1));
+                        }
+                        else if (pair.Key.ToLower() == "display")
+                        {
+                            sp.Name = pair.Value.ToString();
+                        }
                     }
                 }
 

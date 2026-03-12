@@ -94,12 +94,12 @@ namespace Transformers.Model.Dstu2
                 meta.Priority = _priority;
             }
 
-            if (fhir.StatusReason != null && fhir.StatusReason.Count() > 0)
+            if (fhir.StatusReason != null)
             {
-                foreach (var reason in fhir.StatusReason)
-                {
-                    meta.StatusReasons.Add(reason.Value.ToString());
-                }
+                //foreach (var reason in fhir.StatusReason)
+                //{
+                    meta.StatusReasons?.Add(fhir.StatusReason.ToString());
+                //}
             }
 
             if (fhir.Category != null)

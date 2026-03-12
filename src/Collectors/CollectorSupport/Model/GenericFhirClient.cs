@@ -43,9 +43,9 @@ namespace Collectors.Model
             }
         }
 
-        public Bundle GetData<T>(string res)
+        public Bundle? GetData<T>(string res)
         {
-            var data = client.Read<Bundle>(res);
+            var data = client.ReadAsync<Bundle>(res).Result;
             return data;
         }
 

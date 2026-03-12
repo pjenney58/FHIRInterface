@@ -10,18 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hl7.Fhir.R4" Version="5.4.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="xunit" Version="2.6.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.5">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="6.0.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Bogus" Version="35.0.1" />
+    <PackageReference Include="Hl7.Fhir.R4" Version="6.1.0" />
+    <PackageReference Include="Bogus" Version="35.6.5" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="appdataconfig.json" />
@@ -40,5 +30,6 @@
     <ProjectReference Include="..\..\src\Transporters\Transporter\Transporter.csproj" />
     <ProjectReference Include="..\..\src\Collectors\Collector\Collector.csproj" />
     <ProjectReference Include="..\..\src\Transporters\Fhir4Transporter\Fhir4Transporter.csproj" />
+    <ProjectReference Include="..\UnitTestBase\UnitTestBase.csproj" />
   </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Npgsql;
 using PalisaidMeta.Model;
 using Support.Model;
@@ -106,7 +106,7 @@ public class Program
                 BearerFormat = "JWT",
                 Description = "JWT Authorization header using the Bearer scheme."
             });
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            /*c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
                     new OpenApiSecurityScheme
@@ -115,7 +115,7 @@ public class Program
                     },
                     new string[] {}
                 }
-            });
+            });*/
         });
 
         builder.Services.AddControllers().AddJsonOptions(options =>

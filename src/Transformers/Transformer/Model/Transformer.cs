@@ -67,16 +67,16 @@ namespace Transformers.Model
             { }
         }
 
-        // Transform Handler
+        // Transform Handler TODO: Fix RabbitHutch.CreateBus to work with the new RabbitMQ connection string format
         internal void ProcessTransform(TransformerPayload payload)
         {
             try
             {
-                var result = Transform(payload);
-                using (var bus = RabbitHutch.CreateBus(AppRunningIn.Docker ? "host=rabbitmq" : "host=localhost"))
-                {
-                    bus.PubSub.Publish(result, payloadbus);
-                }
+               // var result = Transform(payload);
+               // using (var bus = RabbitHutch.CreateBus(AppRunningIn.Docker ? "host=rabbitmq" : "host=localhost"))
+               // {
+               //     bus.PubSub.Publish(result, payloadbus);
+               // }
             }
             catch (Exception ex)
             {
