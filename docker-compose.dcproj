@@ -9,6 +9,7 @@
     <DockerServiceName>Palisaid</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include=".github\upgrades\scenarios\new-dotnet-version_b874d8\plan.md" />
     <None Include="docker-compose.yml" />
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
