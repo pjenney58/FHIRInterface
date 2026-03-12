@@ -77,7 +77,7 @@ namespace Administration.Controllers
                 {
                     Name = name ?? "NoName",
                     TenantId = Guid.NewGuid(),
-                    EntityId = Guid.NewGuid(),
+                    EntityId = Guid.NewGuid().ToString(),
                     OwnerId = Root
                 };
 

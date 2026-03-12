@@ -29,7 +29,7 @@ namespace IntegrationTests
         private async Task CreatePatient()
         {
             var patient = new Patient(_ownerId, _tenantId);
-            _entityId = patient.EntityId;
+            _entityId = new Guid(patient.EntityId);
 
             patient.Name.GivenName.Add("John");
             patient.Name.FamilyName = "Doe";
