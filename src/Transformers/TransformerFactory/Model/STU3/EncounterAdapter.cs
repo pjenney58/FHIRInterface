@@ -287,9 +287,10 @@ namespace Transformers.Model.Stu3
                 }
 
                 // Subjects are patients
-                if (fhir.Subject.Count() > 0)
+                if (fhir.Subject != null && fhir.Subject.EnumerateElements().Count() > 0)
                 {
-                    foreach (var pair in fhir.Subject)
+                    var items = fhir.Subject.EnumerateElements().ToList();
+                    foreach (var pair in items)
                     {
                         var p = new Participant();
 
@@ -319,18 +320,22 @@ namespace Transformers.Model.Stu3
                 var sp = new Participant();
                 sp.type = typeof(PalisaidMeta.Model.ServiceProvider);
 
-                foreach (var pair in fhir.ServiceProvider)
+                if (fhir.ServiceProvider != null && fhir.ServiceProvider.EnumerateElements().Count() > 0)
                 {
-                    if (pair.Key.ToLower() == "reference")
+                    var items = fhir.ServiceProvider.EnumerateElements().ToList();
+                    foreach (var pair in items)
                     {
-                        sp.Id = Guid.Parse(pair.Value.ToString().Substring(pair.Value.ToString().IndexOf('|') + 1));
-                    }
-                    else if (pair.Key.ToLower() == "display")
-                    {
-                        sp.Name = pair.Value.ToString();
+                        if (pair.Key.ToLower() == "reference")
+                        {
+                            sp.Id = Guid.Parse(pair.Value.ToString().Substring(pair.Value.ToString().IndexOf('|') + 1));
+                        }
+                        else if (pair.Key.ToLower() == "display")
+                        {
+                            sp.Name = pair.Value.ToString();
+                        }
                     }
                 }
-
+                
                 meta.Participants.Add(sp);
 
                 // Process the Appointments, there may be several and will result in the same care

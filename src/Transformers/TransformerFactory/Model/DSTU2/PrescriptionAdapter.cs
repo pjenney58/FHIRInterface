@@ -142,9 +142,12 @@ namespace Transformers.Model.Dstu2
 
                             foreach (var dose in instruction.DoseAndRate)
                             {
+                                var _dose = dose.Dose.EnumerateElements();
+
                                 day.DoseEvents.Add(new DoseEvent()
                                 {
-                                    MaxmumCount = (decimal)dose.Dose.ElementAt(0).Value,
+                                    
+                                    MaxmumCount = (decimal)_dose.ElementAt(0).Value,
                                     Time = DateTime.Parse(time).TimeOfDay
                                 });
                             }

@@ -25,7 +25,7 @@
 using System.Text.Json.Serialization;
 using System.Xml.Serialization;
 
-namespace Collectors.Model
+namespace Collector.Model
 {
     [Serializable]
     public class Token : IDisposable

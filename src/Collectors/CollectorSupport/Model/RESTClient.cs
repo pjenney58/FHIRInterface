@@ -1,6 +1,6 @@
-﻿using Collectors.Messaging;
+﻿using Collector.Messaging;
 
-namespace Collectors.Model
+namespace Collector.Model
 {
     public class RESTClient //: IClient
     {

@@ -1,4 +1,4 @@
-﻿using Collectors.Interface;
+﻿using Collector.Interface;
 using EasyNetQ;
 using PalisaidMeta.Model;
 using Support.Model;
@@ -9,7 +9,7 @@ using Transporters.Interface;
 using Transporters.Model;
 using Task = System.Threading.Tasks.Task;
 
-namespace Collectors.Model
+namespace Collector.Model
 {
     public abstract class Collector<T> : PalisaidMessageQueue, ICollector, IDisposable
     {

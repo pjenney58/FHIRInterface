@@ -67,7 +67,8 @@ namespace Transformers.Model.R4
 
                 if (fhir.Value != null)
                 {
-                    foreach (var val in fhir.Value)
+                    var items = fhir.Value.EnumerateElements().ToList();
+                    foreach (var val in items)
                     {
                         if (val.Value != null)
                         {

@@ -94,9 +94,10 @@ namespace Transformers.Model.Stu3
                 meta.Priority = _priority;
             }
 
-            if (fhir.StatusReason != null && fhir.StatusReason.Count() > 0)
+            if (fhir.StatusReason != null && fhir.StatusReason.EnumerateElements().Count() > 0)
             {
-                foreach (var reason in fhir.StatusReason)
+                var items = fhir.StatusReason.EnumerateElements().ToList();
+                foreach (var reason in items)
                 {
                     meta.StatusReasons.Add(reason.Value.ToString());
                 }
@@ -140,7 +141,7 @@ namespace Transformers.Model.Stu3
                                 IsActive = true
                             };
 
-                            foreach (var dose in instruction.DoseAndRate)
+                            foreach (var dose in time)
                             {
                                 day.DoseEvents.Add(new DoseEvent()
                                 {

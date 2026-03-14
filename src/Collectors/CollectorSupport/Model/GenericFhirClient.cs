@@ -3,7 +3,7 @@ using Hl7.Fhir.Rest;
 
 using Task = System.Threading.Tasks.Task;
 
-namespace Collectors.Model
+namespace Collector.Model
 {
     public class GenericFhirClient //: IClient
     {

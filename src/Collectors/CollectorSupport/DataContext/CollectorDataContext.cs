@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Collectors.Data
+namespace Collector.Data
 {
     public class CollectorDataContext : DbContext
     {

@@ -69,7 +69,7 @@ namespace Transformers.Model.R4
 
         private PalisaidMeta.Model.Code SetValues(PalisaidMeta.Model.Code code, DataType data)
         {
-            foreach (KeyValuePair<string, object> set in data)
+            foreach (KeyValuePair<string, object> set in data.EnumerateElements())
             {
                 switch (set.Key.ToLower())
                 {
@@ -132,10 +132,10 @@ namespace Transformers.Model.R4
 
             meta.TenantId = tenant;
 
-            if (fhir.HasVersionId)
-            {
+            //if (fhir.HasVersionId)
+            //{
                 meta.Version = long.Parse(fhir.VersionId);
-            }
+            //}
 
             // Fhir doesn't necessarily use a uuid for the key, so we need to be able to set capture it as a long
             if (!string.IsNullOrEmpty(fhir.Id))
@@ -200,7 +200,7 @@ namespace Transformers.Model.R4
             {
                 foreach (var contained in fhir.Contained)
                 {
-                    foreach (var item in contained)
+                    foreach (var item in contained.EnumerateElements())
                     {
                         var observationitem = new ObservationItem
                         {
@@ -215,31 +215,33 @@ namespace Transformers.Model.R4
                 }
             }
 
-            if (fhir.Effective != null && fhir.Effective.Any())
+            if (fhir.Effective != null && fhir.Effective.EnumerateElements().Any())
             {
-                foreach (var item in fhir.Effective)
+                var items = fhir.Effective.EnumerateElements();
+                foreach (var item in items)
                 {
-                    if (fhir.Effective is FhirDateTime)
+                    if (item.Value is FhirDateTime)
                     {
-                        meta.StartDate = DateTimeOffset.Parse(fhir.Effective.ToString());
+                        meta.StartDate = DateTimeOffset.Parse(item.Value.ToString());
                     }
-                    else if (fhir.Effective is Period)
+                    else if (item.Value is Period)
                     {
                         if (meta.StartDate == DateTimeOffset.MinValue)
                         {
-                            meta.StartDate = DateTimeOffset.Parse(fhir.Effective.ToString());
+                            meta.StartDate = DateTimeOffset.Parse(item.Value.ToString());
                         }
                         else
                         {
-                            meta.StopDate = DateTimeOffset.Parse(fhir.Effective.ToString());
+                            meta.StopDate = DateTimeOffset.Parse(item.Value.ToString());
                         }
                     }
                 }
             }
 
-            if (fhir.Encounter != null && fhir.Encounter.Any())
+            if (fhir.Encounter != null && fhir.Encounter.EnumerateElements().Any())
             {
-                foreach (var item in fhir.Encounter)
+                var items = fhir.Encounter.EnumerateElements();
+                foreach (var item in items)
                 {
                     var observationitem = new ObservationItem
                     {
@@ -253,21 +255,22 @@ namespace Transformers.Model.R4
                 }
             }
 
-            if (fhir.Subject != null && fhir.Subject.Any())
+            if (fhir.Subject != null && fhir.Subject.EnumerateElements().Any())
             {
-                foreach (var item in fhir.Subject)
+                var items = fhir.Subject.EnumerateElements();
+                foreach (var item in items)
                 {
-                    if (fhir.Subject is Hl7.Fhir.Model.Patient)
+                    if (item.Value is Hl7.Fhir.Model.Patient)
                     {
-                        meta.PatientId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                        meta.PatientId = Guid.Parse(item.Value.ToString());
                     }
-                    else if (fhir.Subject is Hl7.Fhir.Model.Location)
+                    else if (item.Value is Hl7.Fhir.Model.Location)
                     {
-                        meta.LocationId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                        meta.LocationId = Guid.Parse(item.Value.ToString());
                     }
-                    else if (fhir.Subject is Hl7.Fhir.Model.Practitioner)
+                    else if (item.Value is Hl7.Fhir.Model.Practitioner)
                     {
-                        meta.PractitionerId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
+                        meta.PractitionerId = Guid.Parse(item.Value.ToString());
                     }
                     /*
                     else if(fhir.Subject is Hl7.Fhir.Model.Group)
@@ -327,7 +330,7 @@ namespace Transformers.Model.R4
                         meta.SubstanceId = Guid.Parse(fhir.Subject.ReferenceElement.Value);
                     }
                     */
-
+                
                     var observationitem = new ObservationItem
                     {
                         TypeName = item.Key,
@@ -341,7 +344,7 @@ namespace Transformers.Model.R4
                     observationitem.Timestamp = DateTime.Now;
                     meta.Items.Add(observationitem);
                 }
-            }
+            
 
             if (fhir.Performer != null && fhir.Performer.Any())
             {
@@ -382,6 +385,7 @@ namespace Transformers.Model.R4
             // Encounter Note Performer value
 
             // Status
+            }
 
             return meta as OEntity;
         }

@@ -1,5 +1,5 @@
-﻿using Collectors.Interface;
-using Collectors.Model;
+﻿using Collector.Interface;
+using Collector.Model;
 using PalisaidMeta.Model;
 
 namespace Collectors

@@ -1,6 +1,6 @@
 ﻿using Collectors;
-using Collectors.Interface;
-using Collectors.Model;
+using Collector.Interface;
+using Collector.Model;
 
 namespace CollectorTests
 {

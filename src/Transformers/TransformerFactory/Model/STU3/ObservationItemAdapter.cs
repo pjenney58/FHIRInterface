@@ -67,7 +67,8 @@ namespace Transformers.Model.Stu3
 
                 if (fhir.Value != null)
                 {
-                    foreach (var val in fhir.Value)
+                    var items = fhir.Value.EnumerateElements().ToList();
+                    foreach (var val in items)
                     {
                         if (val.Value != null)
                         {

@@ -1,9 +1,9 @@
-﻿using Collectors.Data;
-using Collectors.Messaging;
+﻿using Collector.Data;
+using Collector.Messaging;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 
-namespace Collectors.Model
+namespace Collector.Model
 {
     public class Program
     {

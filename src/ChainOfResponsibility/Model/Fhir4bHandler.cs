@@ -1,6 +1,6 @@
 using PalisaidMeta.Model;
 using ChainOfResponsibility.Interface;
-using Collectors.Interface;
+using Collector.Interface;
 
 namespace ChainOfResponsibility.Model
 {

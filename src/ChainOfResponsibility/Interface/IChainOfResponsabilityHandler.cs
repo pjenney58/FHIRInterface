@@ -1,6 +1,6 @@
 ﻿using PalisaidMeta.Model;
 using Microsoft.AspNetCore.Identity;
-using Collectors.Interface;
+using Collector.Interface;
 
 namespace ChainOfResponsibility.Interface
 {

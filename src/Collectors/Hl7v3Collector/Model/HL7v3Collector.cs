@@ -1,7 +1,7 @@
-﻿using Collectors.Interface;
+﻿using Collector.Interface;
 using PalisaidMeta.Model;
 
-namespace Collectors.Model
+namespace Collector.Model
 {
     public class HL7v3Collector : ICollector
     {

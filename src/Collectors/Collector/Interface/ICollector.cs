@@ -1,4 +1,4 @@
-﻿namespace Collectors.Interface
+﻿namespace Collector.Interface
 {
     public interface ICollector
     {

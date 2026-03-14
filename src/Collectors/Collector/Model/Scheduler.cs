@@ -1,6 +1,6 @@
 ﻿using System.Timers;
 
-namespace Collectors.Model
+namespace Collector.Model
 {
     public class Scheduler : IDisposable
     {

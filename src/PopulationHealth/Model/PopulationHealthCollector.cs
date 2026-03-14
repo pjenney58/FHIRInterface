@@ -1,4 +1,4 @@
-﻿using Collectors.Interface;
+﻿using Collector.Interface;
 using PalisaidMeta.Model;
 
 namespace Collector.Model

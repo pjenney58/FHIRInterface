@@ -1,7 +1,7 @@
 ﻿using PalisaidMeta.Model;
 using Transporters.Model;
 
-namespace Collectors.Model
+namespace Collector.Model
 {
     public class HL7v2Collector : Collector<HL7v2Collector>
     {
@@ -18,7 +18,7 @@ namespace Collectors.Model
         {
             GetApplicationConfig("hl7v2settings.json");
 
-            var collectorconfig = context?.Collectors.Find(tenantid);
+            var collectorconfig = context?.Collector.Find(tenantid);
 
             if (collectorconfig != null && collectorconfig.DataProtocolIn == DataProtocol.HL7v2 && collectorconfig.IsActive)
             {

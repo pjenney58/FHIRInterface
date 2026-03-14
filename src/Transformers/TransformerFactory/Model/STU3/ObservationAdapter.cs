@@ -71,9 +71,10 @@ namespace Transformers.Model.Stu3
 
             string Text = "";
 
-            if (fhir.Value != null)
+            if (fhir.Value != null && fhir.Value.EnumerateElements().Count() > 0)
             {
-                foreach (var val in fhir.Value)
+                var items = fhir.Value.EnumerateElements().ToList();
+                foreach (var val in items)
                 {
                     if (val.Value != null)
                     {
@@ -97,7 +98,8 @@ namespace Transformers.Model.Stu3
 
             if (fhir.Effective != null)
             {
-                foreach (var e in fhir.Effective)
+                var items = fhir.Effective.EnumerateElements().ToList();
+                foreach (var e in items)
                 {
                     var foo = new KeyValuePair<string, object>(e.Key, e.Value);
                 }
@@ -105,8 +107,9 @@ namespace Transformers.Model.Stu3
 
             if (fhir.Encounter != null)
             {
+                var items = fhir.Encounter.EnumerateElements().ToList();
                 // These might map to events
-                foreach (var e in fhir.Encounter)
+                foreach (var e in items)
                 {
                     var bar = new KeyValuePair<string, object>(e.Key, e.Value);
                 }
@@ -114,17 +117,25 @@ namespace Transformers.Model.Stu3
 
             if (fhir.Subject != null)
             {
+                var subject = fhir.Subject.ToString();
+                
                 // handle prefix: urn:uuid:
-                var str = fhir.Subject.FirstOrDefault().Value.ToString().Contains("urn")
-                    ? fhir.Subject.FirstOrDefault().Value.ToString().Substring(9)
-                    : fhir.Subject.FirstOrDefault().Value.ToString();
+                var str = subject.Contains("urn")
+                    ? subject.Substring(9)
+                    : subject;
 
                 meta.OwnerId = Guid.Parse(str);
             }
 
             if (fhir.Performer != null && fhir.Performer.Count > 0)
             {
-                meta.PractitionerId = Guid.Parse(fhir.Performer.FirstOrDefault().ReferenceElement.Value);
+                var performer = fhir.Performer.First().ToString();
+                // handle prefix: urn:uuid:
+                var str = performer.Contains("urn")
+                    ? performer.Substring(9)
+                    : performer;
+
+                meta.PractitionerId = Guid.Parse(str);
             }
 
             if (fhir.Note != null)

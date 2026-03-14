@@ -1,4 +1,4 @@
-﻿namespace Collectors.Model;
+﻿namespace Collector.Model;
 
 public class Program
 {

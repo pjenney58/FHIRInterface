@@ -1,4 +1,4 @@
-﻿using Collectors.Model;
+﻿using Collector.Model;
 using System.Diagnostics;
 
 namespace DevTests

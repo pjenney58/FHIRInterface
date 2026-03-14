@@ -91,7 +91,7 @@ services:
         - "5001:8080"
         build:
             context: .
-            dockerfile: src/Collectors/CollectorsController/Dockerfile
+            dockerfile: src/Collectors/CollectorController/Dockerfile
         networks:
         - backend-network
 

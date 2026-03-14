@@ -284,21 +284,25 @@ namespace Transformers.Model.R4
                 }
 
                 // Subjects are patients
-                if (fhir.Subject.Count() > 0)
+                if(fhir.Subject != null)
                 {
-                    foreach (var pair in fhir.Subject)
+                    var items = fhir.Subject.EnumerateElements();
+                    if (items.Count() > 0)
                     {
-                        var p = new Participant();
-
-                        if (pair.Key.ToLower() == "reference")
+                        foreach (var pair in items)
                         {
-                            p.Name = fhir.Subject.Display;
-                            p.type = typeof(PalisaidMeta.Model.Patient);
-                            p.Id = Guid.Parse(pair.Value.ToString().Substring("urn:uuid:".Length));
+                            var p = new Participant();
 
-                            meta.Participants.Add(p);
+                            if (pair.Key.ToLower() == "reference")
+                            {
+                                p.Name = fhir.Subject.Display;
+                                p.type = typeof(PalisaidMeta.Model.Patient);
+                                p.Id = Guid.Parse(pair.Value.ToString().Substring("urn:uuid:".Length));
 
-                            // meta.Patients.Add(Guid.Parse(pair.value.ToString().Substring("urn:uuid:".Length)));
+                                meta.Participants.Add(p);
+
+                                // meta.Patients.Add(Guid.Parse(pair.value.ToString().Substring("urn:uuid:".Length)));
+                            }
                         }
                     }
                 }
@@ -316,20 +320,26 @@ namespace Transformers.Model.R4
                 var sp = new Participant();
                 sp.type = typeof(PalisaidMeta.Model.ServiceProvider);
 
-                foreach (var pair in fhir.ServiceProvider)
+                if(fhir.ServiceProvider != null)
                 {
-                    if (pair.Key.ToLower() == "reference")
+                    var items = fhir.ServiceProvider.EnumerateElements();
+                    foreach (var pair in items)
                     {
-                        var val = pair.Value.ToString();
-                        sp.Id = Guid.Parse(val.Substring(val.IndexOf('|') + 1));
+                        if (pair.Key.ToLower() == "reference")
+                        {
+                            var val = pair.Value.ToString();
+                            sp.Id = Guid.Parse(val.Substring(val.IndexOf('|') + 1));
+                        }
+                        else if (pair.Key.ToLower() == "display")
+                        {
+                            sp.Name = pair.Value.ToString();
+                        }
                     }
-                    else if (pair.Key.ToLower() == "display")
-                    {
-                        sp.Name = pair.Value.ToString();
-                    }
+                    
+                    meta.Participants.Add(sp);
                 }
 
-                meta.Participants.Add(sp);
+                
 
                 // Process the Appointments, there may be several and will result in the same care
                 // event just with a different appointment status
